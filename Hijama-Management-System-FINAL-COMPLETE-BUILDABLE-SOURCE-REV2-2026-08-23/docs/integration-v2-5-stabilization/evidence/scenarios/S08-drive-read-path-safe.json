@@ -1,0 +1,9 @@
+{
+  "id": "S08-drive-read-path-safe",
+  "title": "Download/list/delete do not force folder create; delete uses findFileByPath",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "safeRead": true
+  }
+}

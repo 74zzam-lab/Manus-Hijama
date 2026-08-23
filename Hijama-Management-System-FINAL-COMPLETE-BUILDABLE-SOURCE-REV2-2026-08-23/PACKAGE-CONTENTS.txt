@@ -1,0 +1,4 @@
+Included: complete application source, assets, docs required by tests, tests, scripts,
+package-lock, build configuration, migrations, database, Electron, cloud, license.
+Excluded only: generated node_modules and dist; previous audit/remediation outputs;
+coverage/cache/crash files. No product source directory was excluded.

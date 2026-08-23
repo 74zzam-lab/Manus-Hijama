@@ -1,0 +1,34 @@
+{
+  "device": "A",
+  "role": "production-release-primary-uat",
+  "startedAt": "2026-08-23T13:57:31.171Z",
+  "finishedAt": "2026-08-23T13:57:33.124Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "exits": {
+    "artifacts": 0,
+    "migration": null,
+    "lifecycle": 0,
+    "scenarios": 1,
+    "unit": 1
+  },
+  "build": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102",
+    "winUnpacked": {
+      "path": "dist/win-unpacked/Hijama Management System.exe",
+      "size": 225949696,
+      "sha256": "cfa2e3aef69addcc99b65cc09d888510b171fa60f21a7da8ed09d6a905a4251c"
+    },
+    "installer": {
+      "path": "dist/HijamaManagement-Setup-2.0.1.exe",
+      "size": 554408,
+      "sha256": "ea1e6346d50189eeb8d4b72c1a0b1c9f621a740a348bfba1f318906303716ce6"
+    }
+  },
+  "result": "FAIL"
+}

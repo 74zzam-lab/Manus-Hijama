@@ -1,0 +1,16 @@
+{
+  "id": "S02-device-c-catchup",
+  "title": "Device C catch-up",
+  "result": "PASS",
+  "ms": 17,
+  "evidence": {
+    "applied": [
+      {
+        "table": "clientsRegistry",
+        "revision": 1,
+        "duplicate": false
+      }
+    ],
+    "got": true
+  }
+}

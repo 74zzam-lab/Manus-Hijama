@@ -1,0 +1,9 @@
+{
+  "at": "2026-07-30T20:50:33.788Z",
+  "scenarios": [
+    "B02-cloud-upload-and-quota",
+    "B05-upload-resume",
+    "S03-offline-queue-reconnect"
+  ],
+  "result": "PASS"
+}

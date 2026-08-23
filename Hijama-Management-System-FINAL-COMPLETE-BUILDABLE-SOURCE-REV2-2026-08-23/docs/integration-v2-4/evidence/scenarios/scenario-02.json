@@ -1,0 +1,11 @@
+{
+  "id": 2,
+  "name": "device_enrollment",
+  "result": "PASS",
+  "ms": 7037,
+  "detail": {
+    "blocked": true,
+    "approved": true
+  },
+  "secretsPrinted": false
+}

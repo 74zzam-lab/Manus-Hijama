@@ -1,0 +1,4380 @@
+{
+  "generatedAt": "2026-07-01T12:39:04.576Z",
+  "version": "1.2.0",
+  "gate": "enterprise-acceptance",
+  "approved": true,
+  "clonePath": "/tmp/tadawi-accept-NumrLt/repo",
+  "summary": {
+    "passed": 851,
+    "failed": 0,
+    "warned": 0
+  },
+  "sections": {
+    "Clean Environment": {
+      "passed": 3,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "fresh-clone",
+          "status": "PASS",
+          "detail": "/tmp/tadawi-accept-NumrLt/repo"
+        },
+        {
+          "id": "npm-ci",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "license:generate",
+          "status": "PASS",
+          "detail": "ok"
+        }
+      ]
+    },
+    "Runtime Validation": {
+      "passed": 17,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generate",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CXU"
+        },
+        {
+          "id": "activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "renew",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "upgrade",
+          "status": "PASS",
+          "detail": "04"
+        },
+        {
+          "id": "upgrade-key",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "downgrade",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "suspend",
+          "status": "PASS",
+          "detail": "blocks upgrade"
+        },
+        {
+          "id": "resume",
+          "status": "PASS",
+          "detail": "upgrade after active"
+        },
+        {
+          "id": "repair",
+          "status": "PASS",
+          "detail": "bundle rebuilt"
+        },
+        {
+          "id": "export-import",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "backup-restore-delete-recover",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "offline-activation",
+          "status": "PASS",
+          "detail": "disk bundle"
+        },
+        {
+          "id": "bundle-regeneration",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "migration",
+          "status": "PASS",
+          "detail": "dry-run ok"
+        },
+        {
+          "id": "migration-backup",
+          "status": "PASS",
+          "detail": "exported"
+        },
+        {
+          "id": "migration-rollback",
+          "status": "PASS",
+          "detail": "restore backup"
+        },
+        {
+          "id": "registry-regeneration",
+          "status": "PASS",
+          "detail": "ok"
+        }
+      ]
+    },
+    "Feature Validation": {
+      "passed": 564,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "dynamic-count",
+          "status": "PASS",
+          "detail": "72"
+        },
+        {
+          "id": "001:registry",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:uuid",
+          "status": "PASS",
+          "detail": "5af80ebc-c8d2-4ea7-a5cb-84ff1ca935fd"
+        },
+        {
+          "id": "001:v1",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:runtime-enable",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:bundle",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "001:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "002:registry",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:uuid",
+          "status": "PASS",
+          "detail": "ac5ecd68-bd16-4fea-a1f9-0e54bce9dbf4"
+        },
+        {
+          "id": "002:v1",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:runtime-enable",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:bundle",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "002:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "002:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "003:registry",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:uuid",
+          "status": "PASS",
+          "detail": "65b505ed-0975-4034-85e7-7c15898fe126"
+        },
+        {
+          "id": "003:v1",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:runtime-enable",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:bundle",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "003:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "003:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "004:registry",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:uuid",
+          "status": "PASS",
+          "detail": "63f1ed9d-7d3c-4b44-ac95-af8990d2da9d"
+        },
+        {
+          "id": "004:v1",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:runtime-enable",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:bundle",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "004:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "004:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "005:registry",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:uuid",
+          "status": "PASS",
+          "detail": "bc47b186-e2b2-447a-bbb8-1bc550d2bf54"
+        },
+        {
+          "id": "005:v1",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:runtime-enable",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:bundle",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "005:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "005:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "006:registry",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:uuid",
+          "status": "PASS",
+          "detail": "dd9b017f-ef13-4fa6-8302-ca4d43f7efb1"
+        },
+        {
+          "id": "006:v1",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:runtime-enable",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:bundle",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "006:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "007:registry",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:uuid",
+          "status": "PASS",
+          "detail": "a6b7a64b-9dd9-4cf0-912c-2f66cfbfcd08"
+        },
+        {
+          "id": "007:v1",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:runtime-enable",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:bundle",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "007:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "007:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "008:registry",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:uuid",
+          "status": "PASS",
+          "detail": "120b37e0-e5c9-4c74-afc5-5f1070787dd7"
+        },
+        {
+          "id": "008:v1",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:runtime-enable",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:bundle",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "008:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "008:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "009:registry",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:uuid",
+          "status": "PASS",
+          "detail": "c1ec17f9-65cd-41bc-9fed-32947a8b53a6"
+        },
+        {
+          "id": "009:v1",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:runtime-enable",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:bundle",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "009:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "009:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "010:registry",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:uuid",
+          "status": "PASS",
+          "detail": "96fec28e-6434-4c61-945c-2064df415e1e"
+        },
+        {
+          "id": "010:v1",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:runtime-enable",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:bundle",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "010:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "010:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "011:registry",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:uuid",
+          "status": "PASS",
+          "detail": "d8d38ced-4a42-462e-83e8-d3434da7cd4c"
+        },
+        {
+          "id": "011:v1",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:runtime-enable",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:bundle",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "011:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "011:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "012:registry",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:uuid",
+          "status": "PASS",
+          "detail": "0d329c69-2e7a-42d7-904b-08339cdd49fa"
+        },
+        {
+          "id": "012:v1",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:bundle",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "012:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "012:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "013:registry",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:uuid",
+          "status": "PASS",
+          "detail": "f2e53b07-4a27-4484-9f54-e25d2386c3b3"
+        },
+        {
+          "id": "013:v1",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:bundle",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "013:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "013:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "014:registry",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:uuid",
+          "status": "PASS",
+          "detail": "e4e63f30-607f-4b0f-bbd5-b8df0315feeb"
+        },
+        {
+          "id": "014:v1",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:bundle",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "014:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "014:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "015:registry",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:uuid",
+          "status": "PASS",
+          "detail": "9a549420-ed49-46fc-98f3-c7f8b724ee00"
+        },
+        {
+          "id": "015:v1",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:bundle",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "015:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "015:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "016:registry",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:uuid",
+          "status": "PASS",
+          "detail": "cf6b1146-c189-4792-bb64-3a57b2687fa5"
+        },
+        {
+          "id": "016:v1",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:bundle",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "016:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "016:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "017:registry",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:uuid",
+          "status": "PASS",
+          "detail": "c58d9ec9-4dee-4746-9411-f4146a77073b"
+        },
+        {
+          "id": "017:v1",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:bundle",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "017:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "017:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "018:registry",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:uuid",
+          "status": "PASS",
+          "detail": "be45cd39-88dd-43a8-80a0-cc97454258fe"
+        },
+        {
+          "id": "018:v1",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:bundle",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "018:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "018:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "019:registry",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:uuid",
+          "status": "PASS",
+          "detail": "8620e6a8-b30c-4776-b963-cd6cf6789633"
+        },
+        {
+          "id": "019:v1",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:bundle",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "019:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "019:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "020:registry",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:uuid",
+          "status": "PASS",
+          "detail": "d42a7275-2342-4847-838b-f18ebe7e471c"
+        },
+        {
+          "id": "020:v1",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:bundle",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "020:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "020:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "021:registry",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:uuid",
+          "status": "PASS",
+          "detail": "16c56b4e-fe6a-499c-a12f-23a0d534b78f"
+        },
+        {
+          "id": "021:v1",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:runtime-enable",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:bundle",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "021:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "021:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "022:registry",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:uuid",
+          "status": "PASS",
+          "detail": "29b7f362-f708-42ce-9a1a-46d4bc3f90ca"
+        },
+        {
+          "id": "022:v1",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:runtime-enable",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:bundle",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "022:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "022:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "023:registry",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:uuid",
+          "status": "PASS",
+          "detail": "3469bfff-9e75-48cc-a42a-d4d0697bce29"
+        },
+        {
+          "id": "023:v1",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:bundle",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "023:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "023:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "024:registry",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:uuid",
+          "status": "PASS",
+          "detail": "afbfb49a-88f2-490f-974d-0ea748873cec"
+        },
+        {
+          "id": "024:v1",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:bundle",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "024:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "024:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "025:registry",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:uuid",
+          "status": "PASS",
+          "detail": "37cc8acf-dc1b-4bfa-a9aa-274eae8e38c9"
+        },
+        {
+          "id": "025:v1",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:bundle",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "025:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "025:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "026:registry",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:uuid",
+          "status": "PASS",
+          "detail": "65cb1d42-dbb5-423c-b397-13afac2744d7"
+        },
+        {
+          "id": "026:v1",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:bundle",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "026:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "026:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "027:registry",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:uuid",
+          "status": "PASS",
+          "detail": "f416dd6c-d35e-485b-b62d-6510b2489bd1"
+        },
+        {
+          "id": "027:v1",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:bundle",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "027:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "027:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "028:registry",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:uuid",
+          "status": "PASS",
+          "detail": "faa3ab4f-2d6d-4b8e-a624-316ccbffbe87"
+        },
+        {
+          "id": "028:v1",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:bundle",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "028:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "028:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "029:registry",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:uuid",
+          "status": "PASS",
+          "detail": "6ed28f4f-49fc-4682-9afd-822463f88366"
+        },
+        {
+          "id": "029:v1",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:bundle",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "029:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "029:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "030:registry",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:uuid",
+          "status": "PASS",
+          "detail": "74b96755-17b7-4951-ab69-446a2c6e5f32"
+        },
+        {
+          "id": "030:v1",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:bundle",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "030:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "030:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "031:registry",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:uuid",
+          "status": "PASS",
+          "detail": "f7a9bc7a-374e-479a-b3be-8ede123d2d74"
+        },
+        {
+          "id": "031:v1",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:bundle",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "031:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "031:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "032:registry",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:uuid",
+          "status": "PASS",
+          "detail": "02bf6632-721e-4ce2-9c67-cb56fcc22d0e"
+        },
+        {
+          "id": "032:v1",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:bundle",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "032:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "032:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "033:registry",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:uuid",
+          "status": "PASS",
+          "detail": "a8bcd1d9-ffd8-4896-84ea-bfe9882727d9"
+        },
+        {
+          "id": "033:v1",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:bundle",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "033:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "033:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "034:registry",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:uuid",
+          "status": "PASS",
+          "detail": "0bb03c66-4289-4d3a-a52f-522b91d33905"
+        },
+        {
+          "id": "034:v1",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:runtime-enable",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:bundle",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "034:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "034:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "035:registry",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:uuid",
+          "status": "PASS",
+          "detail": "8b403194-e2cf-4acb-beed-f212e41f4212"
+        },
+        {
+          "id": "035:v1",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:runtime-enable",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:bundle",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "035:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "035:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "036:registry",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:uuid",
+          "status": "PASS",
+          "detail": "2f6c46aa-19c1-492e-bd19-8322cfa90658"
+        },
+        {
+          "id": "036:v1",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:bundle",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "036:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "036:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "037:registry",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:uuid",
+          "status": "PASS",
+          "detail": "5e3159ca-bc8d-42bc-87bd-160426feb45f"
+        },
+        {
+          "id": "037:v1",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:runtime-enable",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:bundle",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "037:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "037:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "038:registry",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:uuid",
+          "status": "PASS",
+          "detail": "d204c249-fa63-4eaf-b97e-b28fcaab5356"
+        },
+        {
+          "id": "038:v1",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:runtime-enable",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:bundle",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "038:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "038:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "039:registry",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:uuid",
+          "status": "PASS",
+          "detail": "41882bcb-69fc-42de-ad8c-021426c9d926"
+        },
+        {
+          "id": "039:v1",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:runtime-enable",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:bundle",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "039:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "039:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "040:registry",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:uuid",
+          "status": "PASS",
+          "detail": "dc75ad92-acb0-451e-a87d-fae7d645202f"
+        },
+        {
+          "id": "040:v1",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:bundle",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "040:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "040:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "041:registry",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:uuid",
+          "status": "PASS",
+          "detail": "192bea9f-b500-43e4-81fa-b8df39eb6730"
+        },
+        {
+          "id": "041:v1",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:runtime-enable",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:bundle",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "041:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "041:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "042:registry",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:uuid",
+          "status": "PASS",
+          "detail": "dc4eacc0-5b28-434a-b70d-29537e3728c0"
+        },
+        {
+          "id": "042:v1",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:runtime-enable",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:bundle",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "042:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "042:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "043:registry",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:uuid",
+          "status": "PASS",
+          "detail": "31118064-ad4b-4ecb-9adc-be3ff19cc8e4"
+        },
+        {
+          "id": "043:v1",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:bundle",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "043:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "043:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "044:registry",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:uuid",
+          "status": "PASS",
+          "detail": "19bf74a8-3c4d-49ee-87e2-d54f0d6f0039"
+        },
+        {
+          "id": "044:v1",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:runtime-enable",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:bundle",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "044:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "044:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "045:registry",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:uuid",
+          "status": "PASS",
+          "detail": "b551414a-cf10-49ea-acdd-563bce28468d"
+        },
+        {
+          "id": "045:v1",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:runtime-enable",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:bundle",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "045:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "045:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "046:registry",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:uuid",
+          "status": "PASS",
+          "detail": "a885e801-63f0-45b5-bd27-9ea4bf8f7ed1"
+        },
+        {
+          "id": "046:v1",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:runtime-enable",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:bundle",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "046:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "046:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "047:registry",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:uuid",
+          "status": "PASS",
+          "detail": "df5c01b6-dd94-4e93-aefe-892ac5324d2a"
+        },
+        {
+          "id": "047:v1",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:bundle",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "047:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "047:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "048:registry",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:uuid",
+          "status": "PASS",
+          "detail": "9dda7d0b-3541-4262-b3c9-10b98a121193"
+        },
+        {
+          "id": "048:v1",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:runtime-enable",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:bundle",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "048:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "048:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "049:registry",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:uuid",
+          "status": "PASS",
+          "detail": "28476afe-81b4-4add-b9ce-c21ebe15276f"
+        },
+        {
+          "id": "049:v1",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:runtime-enable",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:bundle",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "049:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "049:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "050:registry",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:uuid",
+          "status": "PASS",
+          "detail": "85bbb1a1-b1bc-472c-ab93-ebac7c66315a"
+        },
+        {
+          "id": "050:v1",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:runtime-enable",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:bundle",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "050:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "050:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "051:registry",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:uuid",
+          "status": "PASS",
+          "detail": "37a7e41b-3398-48b2-a175-3abc4650c129"
+        },
+        {
+          "id": "051:v1",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:bundle",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "051:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "051:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "052:registry",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:uuid",
+          "status": "PASS",
+          "detail": "9c864083-3c65-4e28-9043-5605f3be1c5a"
+        },
+        {
+          "id": "052:v1",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:bundle",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "052:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "052:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "053:registry",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:uuid",
+          "status": "PASS",
+          "detail": "f0dde31f-3a2f-4f45-9753-3cdd6b50becf"
+        },
+        {
+          "id": "053:v1",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:bundle",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "053:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "053:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "054:registry",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:uuid",
+          "status": "PASS",
+          "detail": "0afc817a-4560-4b74-9d5e-08a8c43607bf"
+        },
+        {
+          "id": "054:v1",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:bundle",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "054:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "054:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "055:registry",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:uuid",
+          "status": "PASS",
+          "detail": "45cb4c49-ef4c-43fc-8082-9aa4cac79174"
+        },
+        {
+          "id": "055:v1",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:bundle",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "055:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "055:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "056:registry",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:uuid",
+          "status": "PASS",
+          "detail": "916e21f0-6e74-4967-a991-0f15830213df"
+        },
+        {
+          "id": "056:v1",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:bundle",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "056:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "056:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "057:registry",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:uuid",
+          "status": "PASS",
+          "detail": "1a8c17eb-0f4a-4da7-991a-bca9cc8805d7"
+        },
+        {
+          "id": "057:v1",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:bundle",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "057:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "057:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "058:registry",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:uuid",
+          "status": "PASS",
+          "detail": "f55d73d1-ef63-491b-a61b-9519639504d2"
+        },
+        {
+          "id": "058:v1",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:bundle",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "058:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "058:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "059:registry",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:uuid",
+          "status": "PASS",
+          "detail": "98ef3736-d77b-4ed0-a76b-9517f861ebbd"
+        },
+        {
+          "id": "059:v1",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:bundle",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "059:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "059:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "060:registry",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:uuid",
+          "status": "PASS",
+          "detail": "bd6338fd-3d53-4494-b0f1-dccd2bc84d4a"
+        },
+        {
+          "id": "060:v1",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded"
+        },
+        {
+          "id": "060:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "061:registry",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:uuid",
+          "status": "PASS",
+          "detail": "e17858ec-3e42-43ae-9e9e-ffa19aeea4ec"
+        },
+        {
+          "id": "061:v1",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:bundle",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "061:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "061:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "062:registry",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:uuid",
+          "status": "PASS",
+          "detail": "69406769-22d8-4575-8e60-a43ac64de3ce"
+        },
+        {
+          "id": "062:v1",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:bundle",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "062:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "062:template-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "063:registry",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:uuid",
+          "status": "PASS",
+          "detail": "37f24a34-4f9a-4c97-baa7-41f4a97bf55b"
+        },
+        {
+          "id": "063:v1",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded"
+        },
+        {
+          "id": "063:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "064:registry",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:uuid",
+          "status": "PASS",
+          "detail": "f6c5e4c7-97a9-44d0-baa9-08a1df0675db"
+        },
+        {
+          "id": "064:v1",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded"
+        },
+        {
+          "id": "064:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "065:registry",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:uuid",
+          "status": "PASS",
+          "detail": "7f1406da-2f2b-4fbd-935d-c5fe05165e2d"
+        },
+        {
+          "id": "065:v1",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:bundle",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "065:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "065:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "066:registry",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:uuid",
+          "status": "PASS",
+          "detail": "d1aa1124-3c76-480d-99b6-0d0d3b5364d0"
+        },
+        {
+          "id": "066:v1",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded"
+        },
+        {
+          "id": "066:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "067:registry",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:uuid",
+          "status": "PASS",
+          "detail": "07b1075a-9bf1-4385-ae40-c2d5810db6cd"
+        },
+        {
+          "id": "067:v1",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:bundle",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "067:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "067:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "068:registry",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:uuid",
+          "status": "PASS",
+          "detail": "0360e6da-99a9-41a8-a5d5-f5532cc48ffe"
+        },
+        {
+          "id": "068:v1",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:bundle",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "068:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "068:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "069:registry",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:uuid",
+          "status": "PASS",
+          "detail": "4f94ce1c-40a2-4016-b7d4-d0188da83568"
+        },
+        {
+          "id": "069:v1",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:bundle",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "069:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "069:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "070:registry",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:uuid",
+          "status": "PASS",
+          "detail": "079e914c-8c88-4d4b-87c8-1c9522a25f30"
+        },
+        {
+          "id": "070:v1",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:bundle",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "070:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "070:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "071:registry",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:uuid",
+          "status": "PASS",
+          "detail": "6654134c-36d1-41c8-a6ba-1110e48cf2c4"
+        },
+        {
+          "id": "071:v1",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:bundle",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "071:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "071:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "072:registry",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:uuid",
+          "status": "PASS",
+          "detail": "7fe30f60-e0f8-4225-b434-a36d6668a717"
+        },
+        {
+          "id": "072:v1",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:bundle",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "072:package-inclusion",
+          "status": "PASS",
+          "detail": "yes"
+        },
+        {
+          "id": "072:template-inclusion",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "commercial-bridge",
+          "status": "PASS",
+          "detail": "ok"
+        }
+      ]
+    },
+    "Package Validation": {
+      "passed": 28,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "Starter:expand",
+          "status": "PASS",
+          "detail": "18 features"
+        },
+        {
+          "id": "Starter:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P01AA-"
+        },
+        {
+          "id": "Starter:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Standard:expand",
+          "status": "PASS",
+          "detail": "30 features"
+        },
+        {
+          "id": "Standard:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P02AA-"
+        },
+        {
+          "id": "Standard:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Standard:upgrade-path",
+          "status": "PASS",
+          "detail": "inherits 01"
+        },
+        {
+          "id": "Professional:expand",
+          "status": "PASS",
+          "detail": "53 features"
+        },
+        {
+          "id": "Professional:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-"
+        },
+        {
+          "id": "Professional:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Professional:upgrade-path",
+          "status": "PASS",
+          "detail": "inherits 02"
+        },
+        {
+          "id": "Enterprise:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "Enterprise:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P04AA-"
+        },
+        {
+          "id": "Enterprise:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Enterprise:upgrade-path",
+          "status": "PASS",
+          "detail": "inherits 03"
+        },
+        {
+          "id": "Ultimate:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "Ultimate:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P05AA-"
+        },
+        {
+          "id": "Ultimate:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Ultimate:upgrade-path",
+          "status": "PASS",
+          "detail": "inherits 04"
+        },
+        {
+          "id": "Developer:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "Developer:activate",
+          "status": "PASS",
+          "detail": "TDWI2-P06AA-"
+        },
+        {
+          "id": "Developer:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "Developer:upgrade-path",
+          "status": "PASS",
+          "detail": "inherits 05"
+        },
+        {
+          "id": "Custom:expand",
+          "status": "PASS",
+          "detail": "8 features"
+        },
+        {
+          "id": "Custom:activate",
+          "status": "PASS",
+          "detail": "CP104"
+        },
+        {
+          "id": "template:hijama_starter",
+          "status": "PASS",
+          "detail": "18 features"
+        },
+        {
+          "id": "template:clinic_medium",
+          "status": "PASS",
+          "detail": "31 features"
+        },
+        {
+          "id": "template:dental_pro",
+          "status": "PASS",
+          "detail": "54 features"
+        }
+      ]
+    },
+    "License Builder Validation": {
+      "passed": 9,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "TOTAL_STEPS = 6",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-prev",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-next",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-cancel",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-copy-key",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-export-json",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-v2-export-pdf",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "buildPreviewHtml",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "formatSummaryText",
+          "status": "PASS",
+          "detail": "present"
+        }
+      ]
+    },
+    "Upgrade Wizard Validation": {
+      "passed": 20,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "upgrade_only",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "upgrade_renew",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "upgrade_extend",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "upgrade_lifetime",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "keepExpiration",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "keepDevices",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "keepBranches",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "compareFeatureSets",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "runtime:upgrade_only",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CXU"
+        },
+        {
+          "id": "key:upgrade_only",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "compare-features",
+          "status": "PASS",
+          "detail": "+23"
+        },
+        {
+          "id": "runtime:upgrade_renew",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CXU"
+        },
+        {
+          "id": "key:upgrade_renew",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "runtime:upgrade_extend",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CN9"
+        },
+        {
+          "id": "key:upgrade_extend",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "runtime:upgrade_lifetime",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-ETD"
+        },
+        {
+          "id": "key:upgrade_lifetime",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "runtime:upgrade_only",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-ETD"
+        },
+        {
+          "id": "key:upgrade_only",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "compare-features",
+          "status": "PASS",
+          "detail": "+23"
+        }
+      ]
+    },
+    "Package Builder Validation": {
+      "passed": 9,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "saveToPackageRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "saveCustomPackage",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "appendPackageToRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "exportCustomJson",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "collectFeatureIds",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "preview",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "append-registry",
+          "status": "PASS",
+          "detail": "31 features"
+        },
+        {
+          "id": "activate-new-pkg",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "custom-cp-activate",
+          "status": "PASS",
+          "detail": "ok"
+        }
+      ]
+    },
+    "Diagnostics Validation": {
+      "passed": 14,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "registry-health",
+          "status": "PASS",
+          "detail": "1.2.0"
+        },
+        {
+          "id": "bundle-health",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "cache-invalidation",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "feature-resolver",
+          "status": "PASS",
+          "detail": "resolves"
+        },
+        {
+          "id": "package-resolver",
+          "status": "PASS",
+          "detail": "via featureResolver"
+        },
+        {
+          "id": "license-resolver",
+          "status": "PASS",
+          "detail": "validates"
+        },
+        {
+          "id": "commercial-bridge",
+          "status": "PASS",
+          "detail": "bridge"
+        },
+        {
+          "id": "router-v5",
+          "status": "PASS",
+          "detail": "detects"
+        },
+        {
+          "id": "generator",
+          "status": "PASS",
+          "detail": "module loaded"
+        },
+        {
+          "id": "codec",
+          "status": "PASS",
+          "detail": "decodes"
+        },
+        {
+          "id": "audit-log",
+          "status": "PASS",
+          "detail": "readable"
+        },
+        {
+          "id": "backup",
+          "status": "PASS",
+          "detail": "created"
+        },
+        {
+          "id": "restore",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "corruption-detected",
+          "status": "PASS",
+          "detail": "tampered registry rejected"
+        }
+      ]
+    },
+    "System Diagnostics Validation": {
+      "passed": 4,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "licRenderDiagnostics",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "lic-tab-diagnostics",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "licRunIntegrityCheck",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "verifyRestoredDataIntegrity",
+          "status": "PASS",
+          "detail": "present"
+        }
+      ]
+    },
+    "Key Validation": {
+      "passed": 12,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "v5-standard",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "v5-lifetime",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "v5-developer",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "v5-custom",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "v4",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "v3",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "legacy",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "reject:malformed",
+          "status": "PASS",
+          "detail": "format"
+        },
+        {
+          "id": "reject:malformed-short",
+          "status": "PASS",
+          "detail": "format"
+        },
+        {
+          "id": "reject:tampered-v5",
+          "status": "PASS",
+          "detail": "signature"
+        },
+        {
+          "id": "reject:expired",
+          "status": "PASS",
+          "detail": "expired"
+        },
+        {
+          "id": "batch-100",
+          "status": "PASS",
+          "detail": "107 validated"
+        }
+      ]
+    },
+    "Registry Validation": {
+      "passed": 154,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "feature:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "feature:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "capability:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "capability:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "package:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "package:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "subscription:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "subscription:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "action:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "action:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "template:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "template:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "licenseIndex:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "licenseIndex:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "audit:sig",
+          "status": "PASS",
+          "detail": "valid"
+        },
+        {
+          "id": "audit:schema",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "uuid:001",
+          "status": "PASS",
+          "detail": "5af80ebc-c8d2-4ea7-a5cb-84ff1ca935fd"
+        },
+        {
+          "id": "uuid:002",
+          "status": "PASS",
+          "detail": "ac5ecd68-bd16-4fea-a1f9-0e54bce9dbf4"
+        },
+        {
+          "id": "uuid:003",
+          "status": "PASS",
+          "detail": "65b505ed-0975-4034-85e7-7c15898fe126"
+        },
+        {
+          "id": "uuid:004",
+          "status": "PASS",
+          "detail": "63f1ed9d-7d3c-4b44-ac95-af8990d2da9d"
+        },
+        {
+          "id": "uuid:005",
+          "status": "PASS",
+          "detail": "bc47b186-e2b2-447a-bbb8-1bc550d2bf54"
+        },
+        {
+          "id": "uuid:006",
+          "status": "PASS",
+          "detail": "dd9b017f-ef13-4fa6-8302-ca4d43f7efb1"
+        },
+        {
+          "id": "uuid:007",
+          "status": "PASS",
+          "detail": "a6b7a64b-9dd9-4cf0-912c-2f66cfbfcd08"
+        },
+        {
+          "id": "uuid:008",
+          "status": "PASS",
+          "detail": "120b37e0-e5c9-4c74-afc5-5f1070787dd7"
+        },
+        {
+          "id": "uuid:009",
+          "status": "PASS",
+          "detail": "c1ec17f9-65cd-41bc-9fed-32947a8b53a6"
+        },
+        {
+          "id": "uuid:010",
+          "status": "PASS",
+          "detail": "96fec28e-6434-4c61-945c-2064df415e1e"
+        },
+        {
+          "id": "uuid:011",
+          "status": "PASS",
+          "detail": "d8d38ced-4a42-462e-83e8-d3434da7cd4c"
+        },
+        {
+          "id": "uuid:012",
+          "status": "PASS",
+          "detail": "0d329c69-2e7a-42d7-904b-08339cdd49fa"
+        },
+        {
+          "id": "uuid:013",
+          "status": "PASS",
+          "detail": "f2e53b07-4a27-4484-9f54-e25d2386c3b3"
+        },
+        {
+          "id": "uuid:014",
+          "status": "PASS",
+          "detail": "e4e63f30-607f-4b0f-bbd5-b8df0315feeb"
+        },
+        {
+          "id": "uuid:015",
+          "status": "PASS",
+          "detail": "9a549420-ed49-46fc-98f3-c7f8b724ee00"
+        },
+        {
+          "id": "uuid:016",
+          "status": "PASS",
+          "detail": "cf6b1146-c189-4792-bb64-3a57b2687fa5"
+        },
+        {
+          "id": "uuid:017",
+          "status": "PASS",
+          "detail": "c58d9ec9-4dee-4746-9411-f4146a77073b"
+        },
+        {
+          "id": "uuid:018",
+          "status": "PASS",
+          "detail": "be45cd39-88dd-43a8-80a0-cc97454258fe"
+        },
+        {
+          "id": "uuid:019",
+          "status": "PASS",
+          "detail": "8620e6a8-b30c-4776-b963-cd6cf6789633"
+        },
+        {
+          "id": "uuid:020",
+          "status": "PASS",
+          "detail": "d42a7275-2342-4847-838b-f18ebe7e471c"
+        },
+        {
+          "id": "uuid:021",
+          "status": "PASS",
+          "detail": "16c56b4e-fe6a-499c-a12f-23a0d534b78f"
+        },
+        {
+          "id": "uuid:022",
+          "status": "PASS",
+          "detail": "29b7f362-f708-42ce-9a1a-46d4bc3f90ca"
+        },
+        {
+          "id": "uuid:023",
+          "status": "PASS",
+          "detail": "3469bfff-9e75-48cc-a42a-d4d0697bce29"
+        },
+        {
+          "id": "uuid:024",
+          "status": "PASS",
+          "detail": "afbfb49a-88f2-490f-974d-0ea748873cec"
+        },
+        {
+          "id": "uuid:025",
+          "status": "PASS",
+          "detail": "37cc8acf-dc1b-4bfa-a9aa-274eae8e38c9"
+        },
+        {
+          "id": "uuid:026",
+          "status": "PASS",
+          "detail": "65cb1d42-dbb5-423c-b397-13afac2744d7"
+        },
+        {
+          "id": "uuid:027",
+          "status": "PASS",
+          "detail": "f416dd6c-d35e-485b-b62d-6510b2489bd1"
+        },
+        {
+          "id": "uuid:028",
+          "status": "PASS",
+          "detail": "faa3ab4f-2d6d-4b8e-a624-316ccbffbe87"
+        },
+        {
+          "id": "uuid:029",
+          "status": "PASS",
+          "detail": "6ed28f4f-49fc-4682-9afd-822463f88366"
+        },
+        {
+          "id": "uuid:030",
+          "status": "PASS",
+          "detail": "74b96755-17b7-4951-ab69-446a2c6e5f32"
+        },
+        {
+          "id": "uuid:031",
+          "status": "PASS",
+          "detail": "f7a9bc7a-374e-479a-b3be-8ede123d2d74"
+        },
+        {
+          "id": "uuid:032",
+          "status": "PASS",
+          "detail": "02bf6632-721e-4ce2-9c67-cb56fcc22d0e"
+        },
+        {
+          "id": "uuid:033",
+          "status": "PASS",
+          "detail": "a8bcd1d9-ffd8-4896-84ea-bfe9882727d9"
+        },
+        {
+          "id": "uuid:034",
+          "status": "PASS",
+          "detail": "0bb03c66-4289-4d3a-a52f-522b91d33905"
+        },
+        {
+          "id": "uuid:035",
+          "status": "PASS",
+          "detail": "8b403194-e2cf-4acb-beed-f212e41f4212"
+        },
+        {
+          "id": "uuid:036",
+          "status": "PASS",
+          "detail": "2f6c46aa-19c1-492e-bd19-8322cfa90658"
+        },
+        {
+          "id": "uuid:037",
+          "status": "PASS",
+          "detail": "5e3159ca-bc8d-42bc-87bd-160426feb45f"
+        },
+        {
+          "id": "uuid:038",
+          "status": "PASS",
+          "detail": "d204c249-fa63-4eaf-b97e-b28fcaab5356"
+        },
+        {
+          "id": "uuid:039",
+          "status": "PASS",
+          "detail": "41882bcb-69fc-42de-ad8c-021426c9d926"
+        },
+        {
+          "id": "uuid:040",
+          "status": "PASS",
+          "detail": "dc75ad92-acb0-451e-a87d-fae7d645202f"
+        },
+        {
+          "id": "uuid:041",
+          "status": "PASS",
+          "detail": "192bea9f-b500-43e4-81fa-b8df39eb6730"
+        },
+        {
+          "id": "uuid:042",
+          "status": "PASS",
+          "detail": "dc4eacc0-5b28-434a-b70d-29537e3728c0"
+        },
+        {
+          "id": "uuid:043",
+          "status": "PASS",
+          "detail": "31118064-ad4b-4ecb-9adc-be3ff19cc8e4"
+        },
+        {
+          "id": "uuid:044",
+          "status": "PASS",
+          "detail": "19bf74a8-3c4d-49ee-87e2-d54f0d6f0039"
+        },
+        {
+          "id": "uuid:045",
+          "status": "PASS",
+          "detail": "b551414a-cf10-49ea-acdd-563bce28468d"
+        },
+        {
+          "id": "uuid:046",
+          "status": "PASS",
+          "detail": "a885e801-63f0-45b5-bd27-9ea4bf8f7ed1"
+        },
+        {
+          "id": "uuid:047",
+          "status": "PASS",
+          "detail": "df5c01b6-dd94-4e93-aefe-892ac5324d2a"
+        },
+        {
+          "id": "uuid:048",
+          "status": "PASS",
+          "detail": "9dda7d0b-3541-4262-b3c9-10b98a121193"
+        },
+        {
+          "id": "uuid:049",
+          "status": "PASS",
+          "detail": "28476afe-81b4-4add-b9ce-c21ebe15276f"
+        },
+        {
+          "id": "uuid:050",
+          "status": "PASS",
+          "detail": "85bbb1a1-b1bc-472c-ab93-ebac7c66315a"
+        },
+        {
+          "id": "uuid:051",
+          "status": "PASS",
+          "detail": "37a7e41b-3398-48b2-a175-3abc4650c129"
+        },
+        {
+          "id": "uuid:052",
+          "status": "PASS",
+          "detail": "9c864083-3c65-4e28-9043-5605f3be1c5a"
+        },
+        {
+          "id": "uuid:053",
+          "status": "PASS",
+          "detail": "f0dde31f-3a2f-4f45-9753-3cdd6b50becf"
+        },
+        {
+          "id": "uuid:054",
+          "status": "PASS",
+          "detail": "0afc817a-4560-4b74-9d5e-08a8c43607bf"
+        },
+        {
+          "id": "uuid:055",
+          "status": "PASS",
+          "detail": "45cb4c49-ef4c-43fc-8082-9aa4cac79174"
+        },
+        {
+          "id": "uuid:056",
+          "status": "PASS",
+          "detail": "916e21f0-6e74-4967-a991-0f15830213df"
+        },
+        {
+          "id": "uuid:057",
+          "status": "PASS",
+          "detail": "1a8c17eb-0f4a-4da7-991a-bca9cc8805d7"
+        },
+        {
+          "id": "uuid:058",
+          "status": "PASS",
+          "detail": "f55d73d1-ef63-491b-a61b-9519639504d2"
+        },
+        {
+          "id": "uuid:059",
+          "status": "PASS",
+          "detail": "98ef3736-d77b-4ed0-a76b-9517f861ebbd"
+        },
+        {
+          "id": "uuid:060",
+          "status": "PASS",
+          "detail": "bd6338fd-3d53-4494-b0f1-dccd2bc84d4a"
+        },
+        {
+          "id": "uuid:061",
+          "status": "PASS",
+          "detail": "e17858ec-3e42-43ae-9e9e-ffa19aeea4ec"
+        },
+        {
+          "id": "uuid:062",
+          "status": "PASS",
+          "detail": "69406769-22d8-4575-8e60-a43ac64de3ce"
+        },
+        {
+          "id": "uuid:063",
+          "status": "PASS",
+          "detail": "37f24a34-4f9a-4c97-baa7-41f4a97bf55b"
+        },
+        {
+          "id": "uuid:064",
+          "status": "PASS",
+          "detail": "f6c5e4c7-97a9-44d0-baa9-08a1df0675db"
+        },
+        {
+          "id": "uuid:065",
+          "status": "PASS",
+          "detail": "7f1406da-2f2b-4fbd-935d-c5fe05165e2d"
+        },
+        {
+          "id": "uuid:066",
+          "status": "PASS",
+          "detail": "d1aa1124-3c76-480d-99b6-0d0d3b5364d0"
+        },
+        {
+          "id": "uuid:067",
+          "status": "PASS",
+          "detail": "07b1075a-9bf1-4385-ae40-c2d5810db6cd"
+        },
+        {
+          "id": "uuid:068",
+          "status": "PASS",
+          "detail": "0360e6da-99a9-41a8-a5d5-f5532cc48ffe"
+        },
+        {
+          "id": "uuid:069",
+          "status": "PASS",
+          "detail": "4f94ce1c-40a2-4016-b7d4-d0188da83568"
+        },
+        {
+          "id": "uuid:070",
+          "status": "PASS",
+          "detail": "079e914c-8c88-4d4b-87c8-1c9522a25f30"
+        },
+        {
+          "id": "uuid:071",
+          "status": "PASS",
+          "detail": "6654134c-36d1-41c8-a6ba-1110e48cf2c4"
+        },
+        {
+          "id": "uuid:072",
+          "status": "PASS",
+          "detail": "7fe30f60-e0f8-4225-b434-a36d6668a717"
+        },
+        {
+          "id": "inheritance",
+          "status": "PASS",
+          "detail": "no cycles"
+        },
+        {
+          "id": "pkg:01:ref:009",
+          "status": "PASS",
+          "detail": "009"
+        },
+        {
+          "id": "pkg:01:ref:010",
+          "status": "PASS",
+          "detail": "010"
+        },
+        {
+          "id": "pkg:01:ref:011",
+          "status": "PASS",
+          "detail": "011"
+        },
+        {
+          "id": "pkg:01:ref:015",
+          "status": "PASS",
+          "detail": "015"
+        },
+        {
+          "id": "pkg:01:ref:016",
+          "status": "PASS",
+          "detail": "016"
+        },
+        {
+          "id": "pkg:01:ref:025",
+          "status": "PASS",
+          "detail": "025"
+        },
+        {
+          "id": "pkg:01:ref:027",
+          "status": "PASS",
+          "detail": "027"
+        },
+        {
+          "id": "pkg:01:ref:028",
+          "status": "PASS",
+          "detail": "028"
+        },
+        {
+          "id": "pkg:01:ref:052",
+          "status": "PASS",
+          "detail": "052"
+        },
+        {
+          "id": "pkg:01:ref:054",
+          "status": "PASS",
+          "detail": "054"
+        },
+        {
+          "id": "pkg:02:ref:012",
+          "status": "PASS",
+          "detail": "012"
+        },
+        {
+          "id": "pkg:02:ref:014",
+          "status": "PASS",
+          "detail": "014"
+        },
+        {
+          "id": "pkg:02:ref:021",
+          "status": "PASS",
+          "detail": "021"
+        },
+        {
+          "id": "pkg:02:ref:026",
+          "status": "PASS",
+          "detail": "026"
+        },
+        {
+          "id": "pkg:02:ref:029",
+          "status": "PASS",
+          "detail": "029"
+        },
+        {
+          "id": "pkg:02:ref:033",
+          "status": "PASS",
+          "detail": "033"
+        },
+        {
+          "id": "pkg:02:ref:041",
+          "status": "PASS",
+          "detail": "041"
+        },
+        {
+          "id": "pkg:02:ref:042",
+          "status": "PASS",
+          "detail": "042"
+        },
+        {
+          "id": "pkg:02:ref:045",
+          "status": "PASS",
+          "detail": "045"
+        },
+        {
+          "id": "pkg:02:ref:048",
+          "status": "PASS",
+          "detail": "048"
+        },
+        {
+          "id": "pkg:02:ref:055",
+          "status": "PASS",
+          "detail": "055"
+        },
+        {
+          "id": "pkg:02:ref:062",
+          "status": "PASS",
+          "detail": "062"
+        },
+        {
+          "id": "pkg:03:ref:017",
+          "status": "PASS",
+          "detail": "017"
+        },
+        {
+          "id": "pkg:03:ref:018",
+          "status": "PASS",
+          "detail": "018"
+        },
+        {
+          "id": "pkg:03:ref:019",
+          "status": "PASS",
+          "detail": "019"
+        },
+        {
+          "id": "pkg:03:ref:020",
+          "status": "PASS",
+          "detail": "020"
+        },
+        {
+          "id": "pkg:03:ref:023",
+          "status": "PASS",
+          "detail": "023"
+        },
+        {
+          "id": "pkg:03:ref:030",
+          "status": "PASS",
+          "detail": "030"
+        },
+        {
+          "id": "pkg:03:ref:031",
+          "status": "PASS",
+          "detail": "031"
+        },
+        {
+          "id": "pkg:03:ref:032",
+          "status": "PASS",
+          "detail": "032"
+        },
+        {
+          "id": "pkg:03:ref:034",
+          "status": "PASS",
+          "detail": "034"
+        },
+        {
+          "id": "pkg:03:ref:035",
+          "status": "PASS",
+          "detail": "035"
+        },
+        {
+          "id": "pkg:03:ref:036",
+          "status": "PASS",
+          "detail": "036"
+        },
+        {
+          "id": "pkg:03:ref:037",
+          "status": "PASS",
+          "detail": "037"
+        },
+        {
+          "id": "pkg:03:ref:039",
+          "status": "PASS",
+          "detail": "039"
+        },
+        {
+          "id": "pkg:03:ref:043",
+          "status": "PASS",
+          "detail": "043"
+        },
+        {
+          "id": "pkg:03:ref:044",
+          "status": "PASS",
+          "detail": "044"
+        },
+        {
+          "id": "pkg:03:ref:046",
+          "status": "PASS",
+          "detail": "046"
+        },
+        {
+          "id": "pkg:03:ref:047",
+          "status": "PASS",
+          "detail": "047"
+        },
+        {
+          "id": "pkg:03:ref:049",
+          "status": "PASS",
+          "detail": "049"
+        },
+        {
+          "id": "pkg:03:ref:050",
+          "status": "PASS",
+          "detail": "050"
+        },
+        {
+          "id": "pkg:03:ref:056",
+          "status": "PASS",
+          "detail": "056"
+        },
+        {
+          "id": "pkg:04:ref:013",
+          "status": "PASS",
+          "detail": "013"
+        },
+        {
+          "id": "pkg:04:ref:024",
+          "status": "PASS",
+          "detail": "024"
+        },
+        {
+          "id": "pkg:04:ref:038",
+          "status": "PASS",
+          "detail": "038"
+        },
+        {
+          "id": "pkg:04:ref:040",
+          "status": "PASS",
+          "detail": "040"
+        },
+        {
+          "id": "pkg:04:ref:051",
+          "status": "PASS",
+          "detail": "051"
+        },
+        {
+          "id": "pkg:04:ref:053",
+          "status": "PASS",
+          "detail": "053"
+        },
+        {
+          "id": "pkg:04:ref:057",
+          "status": "PASS",
+          "detail": "057"
+        },
+        {
+          "id": "pkg:04:ref:058",
+          "status": "PASS",
+          "detail": "058"
+        },
+        {
+          "id": "pkg:04:ref:059",
+          "status": "PASS",
+          "detail": "059"
+        },
+        {
+          "id": "pkg:04:ref:065",
+          "status": "PASS",
+          "detail": "065"
+        },
+        {
+          "id": "pkg:04:ref:067",
+          "status": "PASS",
+          "detail": "067"
+        },
+        {
+          "id": "pkg:04:ref:068",
+          "status": "PASS",
+          "detail": "068"
+        },
+        {
+          "id": "pkg:04:ref:069",
+          "status": "PASS",
+          "detail": "069"
+        },
+        {
+          "id": "pkg:04:ref:070",
+          "status": "PASS",
+          "detail": "070"
+        },
+        {
+          "id": "pkg:04:ref:071",
+          "status": "PASS",
+          "detail": "071"
+        },
+        {
+          "id": "pkg:04:ref:072",
+          "status": "PASS",
+          "detail": "072"
+        },
+        {
+          "id": "pkg:05:ref:022",
+          "status": "PASS",
+          "detail": "022"
+        },
+        {
+          "id": "pkg:05:ref:061",
+          "status": "PASS",
+          "detail": "061"
+        },
+        {
+          "id": "pkg:06:ref:060",
+          "status": "PASS",
+          "detail": "060"
+        },
+        {
+          "id": "pkg:06:ref:063",
+          "status": "PASS",
+          "detail": "063"
+        },
+        {
+          "id": "pkg:06:ref:064",
+          "status": "PASS",
+          "detail": "064"
+        },
+        {
+          "id": "pkg:06:ref:066",
+          "status": "PASS",
+          "detail": "066"
+        },
+        {
+          "id": "pkg:11:ref:032",
+          "status": "PASS",
+          "detail": "032"
+        }
+      ]
+    },
+    "Developer Experience": {
+      "passed": 5,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generator-script",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "npm-run-generate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "dynamic-feature-registry",
+          "status": "PASS",
+          "detail": "073 added"
+        },
+        {
+          "id": "dynamic-feature-resolver",
+          "status": "PASS",
+          "detail": "accept_test_feature"
+        },
+        {
+          "id": "dynamic-feature-rollback",
+          "status": "PASS",
+          "detail": "reverted"
+        }
+      ]
+    },
+    "Performance Validation": {
+      "passed": 3,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "stress-5000",
+          "status": "PASS",
+          "detail": "59.67ms avg"
+        },
+        {
+          "id": "timing-stable",
+          "status": "PASS",
+          "detail": "59.38→60.29"
+        },
+        {
+          "id": "memory-stable",
+          "status": "PASS",
+          "detail": "17.4MB"
+        }
+      ]
+    },
+    "Production Acceptance": {
+      "passed": 9,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "no-todo-fixme",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "app:isFeatureEnabled",
+          "status": "PASS",
+          "detail": "integrated"
+        },
+        {
+          "id": "app:licResolveLicensedFeatures",
+          "status": "PASS",
+          "detail": "integrated"
+        },
+        {
+          "id": "app:_licApplyCode",
+          "status": "PASS",
+          "detail": "integrated"
+        },
+        {
+          "id": "app:CommercialLicense",
+          "status": "PASS",
+          "detail": "integrated"
+        },
+        {
+          "id": "license:test",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "license:validate",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "license:certify",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "license:verify",
+          "status": "PASS",
+          "detail": "exit 0"
+        }
+      ]
+    }
+  },
+  "performance": {
+    "stress": 5000,
+    "totalMs": 298368,
+    "avgMs": 59.67,
+    "first100": 59.38,
+    "last100": 60.29,
+    "heapMb": 17.4
+  },
+  "keyStats": {
+    "generated": 107,
+    "validated": 107,
+    "rejected": 4
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "P02-full-scale-dataset",
+  "title": "FULL 100k/500k/50k/50k/10k scale dataset",
+  "result": "FAIL",
+  "ms": 26,
+  "evidence": {},
+  "error": "scale-dataset profile=FULL targets={\"clients\":100000,\"visits\":500000,\"invoices\":50000,\"appointments\":50000,\"attachments\":10000}\n"
+}

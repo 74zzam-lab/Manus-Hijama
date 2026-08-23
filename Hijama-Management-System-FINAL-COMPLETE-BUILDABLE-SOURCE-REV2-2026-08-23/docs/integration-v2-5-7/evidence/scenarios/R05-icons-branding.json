@@ -1,0 +1,16 @@
+{
+  "id": "R05-icons-branding",
+  "title": "Icon paths exist + PE icon inspect when EXE present",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "exists": {
+      "appIcon": true,
+      "winIcon": true,
+      "installerIcon": true,
+      "uninstallerIcon": true,
+      "installerHeaderIcon": true
+    },
+    "iconInspectOk": true
+  }
+}

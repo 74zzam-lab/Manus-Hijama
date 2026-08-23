@@ -1,0 +1,61 @@
+{
+  "company": {
+    "name": "NajjarTech",
+    "tagline": "Software Solutions",
+    "website": "https://najjartech.com",
+    "websiteDisplay": "www.najjartech.com",
+    "supportEmail": "support@najjartech.com",
+    "copyright": "© 2026 NajjarTech. All rights reserved."
+  },
+  "product": {
+    "name": "Hijama Management System",
+    "nameAr": "نظام إدارة الحجامة",
+    "description": "Professional clinic and cupping center management software",
+    "descriptionAr": "نظام إدارة احترافي للمراكز الطبية وعيادات الحجامة",
+    "dbSchemaVersion": 4
+  },
+  "assets": {
+    "companyLogo": "assets/NajjarTech-Logo.png",
+    "centerLogo": "branding/Center-Logo.png",
+    "logo": "assets/NajjarTech-Logo.png",
+    "logoAlt": "NajjarTech"
+  },
+  "buildIcons": {
+    "programIcon": "build/Program-Icon.ico",
+    "iconSource": "branding/Center-Logo.png"
+  },
+  "ui": {
+    "showPublicContact": false
+  },
+  "installer": {
+    "background": {
+      "dark": { "r": 12, "g": 16, "b": 22 },
+      "accentBlue": { "r": 0, "g": 140, "b": 255, "a": 0.12 },
+      "accentOrange": { "r": 255, "g": 120, "b": 40, "a": 0.1 }
+    },
+    "sidebar": {
+      "width": 164,
+      "height": 314,
+      "logoMaxWidth": 130,
+      "logoMaxHeight": 220,
+      "padding": 8
+    },
+    "header": {
+      "width": 150,
+      "height": 57,
+      "logoMaxWidth": 120,
+      "logoMaxHeight": 44,
+      "padding": 4
+    },
+    "welcome": {
+      "titleEn": "Welcome to Hijama Management System",
+      "bodyEn": "Thank you for choosing NajjarTech solutions.\n\nThis system was designed to deliver a professional, secure experience for managing medical centers and clinics - with a focus on performance, reliability, and ease of use.\nWe wish you a successful experience and are always happy to develop technology solutions that help improve your business.",
+      "bodyAr": "مرحباً بك في برنامج Hijama Management System\nشكراً لاختياركم حلول NajjarTech.\nتم تصميم هذا النظام لتقديم تجربة احترافية وآمنة لإدارة المراكز الطبية والعيادات، مع التركيز على الأداء، والموثوقية، وسهولة الاستخدام.\nنتمنى لكم تجربة ناجحة، ونسعد دائماً بتطوير حلول تقنية تساعد على تحسين أعمالكم."
+    },
+    "finish": {
+      "titleEn": "Installation Complete",
+      "bodyEn": "Hijama Management System has been installed successfully.",
+      "bodyAr": "تم تثبيت نظام إدارة الحجامة بنجاح."
+    }
+  }
+}

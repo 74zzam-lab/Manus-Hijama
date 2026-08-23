@@ -1,0 +1,20 @@
+{
+  "at": "2026-07-30T05:40:00.000Z",
+  "oauthSourceScan": "PASS",
+  "clientIdDiscovered": true,
+  "clientSecretDiscovered": true,
+  "refreshTokenDiscovered": false,
+  "refreshTokenGenerated": "WAITING_GOOGLE_CONSENT",
+  "credentialsValidatedAgainstGoogleOAuth": "PENDING_REFRESH",
+  "googleDriveApiCall": "PENDING_REFRESH",
+  "githubEnvironmentConfigured": false,
+  "githubEnvironmentError": "HTTP 403 Resource not accessible by integration",
+  "localSecureStoreReady": true,
+  "secretsExposedInLogsArtifactsChat": false,
+  "consentStatus": "WAITING_GOOGLE_CONSENT",
+  "consentRedirect": "http://127.0.0.1:42813/oauth/callback",
+  "consentScope": "https://www.googleapis.com/auth/drive.file",
+  "consentPkce": true,
+  "screenEvidence": "docs/integration-v2-4/evidence/oauth-consent-screen.png",
+  "commit": "662710a"
+}

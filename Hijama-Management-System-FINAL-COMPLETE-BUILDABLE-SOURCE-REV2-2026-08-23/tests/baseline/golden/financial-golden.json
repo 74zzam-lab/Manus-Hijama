@@ -1,0 +1,61 @@
+{
+  "settings": {
+    "threshold": 3,
+    "commissionRate": 5,
+    "insuranceMode": "pct",
+    "insuranceVal": 9.75,
+    "cupPrice": 50,
+    "vatRate": 15
+  },
+  "services": [
+    { "name": "حجامة", "commissionMode": "global" },
+    { "name": "تدليك", "commissionMode": "fixed", "commission": 20 },
+    { "name": "باقة", "commissionMode": "pct", "commission": 10 },
+    { "name": "كؤوس", "commissionMode": "per_cup", "commission": 4 }
+  ],
+  "cases": {
+    "fixedSession": { "commissionType": "fixed-session", "commAmt": 15 },
+    "fixedCup": { "commissionType": "fixed-cup", "commAmt": 3 },
+    "fixedCupThreshold": { "commissionType": "fixed-cup-threshold", "commAmt": 4, "commThreshold": 2 },
+    "pctSession": { "commissionType": "pct-session", "commPct": 20 },
+    "progressive": {
+      "commissionType": "progressive",
+      "commTier1Cups": 3,
+      "commTier1Amt": 2,
+      "commTier2Amt": 5
+    },
+    "progressiveSessions": {
+      "commissionType": "progressive-sessions",
+      "commTier1Cups": 2,
+      "commTier1Amt": 5,
+      "commTier2Amt": 10
+    },
+    "pctAfterSessions": { "commissionType": "pct-after-sessions", "commPct": 10, "commThreshold": 2 },
+    "pctAfterRevenue": { "commissionType": "pct-after-revenue", "commPct": 15, "commRevenue": 200 },
+    "retroactive": { "commissionType": "retroactive", "commPct": 10, "commThreshold": 3 }
+  },
+  "expectations": {
+    "globalService_5cups": 10,
+    "fixedService": 20,
+    "pctService_100": 10,
+    "perCupService_5cups": 8,
+    "fixedSession": 15,
+    "fixedCup_5": 15,
+    "fixedCupThreshold_5": 12,
+    "pctSession_200": 40,
+    "progressive_5cups": 16,
+    "progressiveSessions_session1": 5,
+    "progressiveSessions_session3": 10,
+    "monthly_pctAfterSessions": 45,
+    "monthly_pctAfterRevenue": 37.5,
+    "monthly_retroactive": 45,
+    "monthly_belowGoal": 0,
+    "insurance_pct": 682.5,
+    "insurance_fixed": 100,
+    "insurance_disabled": 0,
+    "payroll_net": 6517.5,
+    "invoice_counter_7": "TM-2026-0007",
+    "vat_inclusive_115": { "preTax": 100, "vat": 15, "total": 115 },
+    "vat_exclusive_170": { "preTax": 170, "vat": 25.5, "total": 195.5 }
+  }
+}

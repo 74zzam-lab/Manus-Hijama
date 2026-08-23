@@ -1,0 +1,30 @@
+{
+  "at": "2026-08-23T13:57:32.816Z",
+  "commit": "UNKNOWN",
+  "archive": {
+    "path": "docs/integration-v2-5-7/evidence/source-release-UNKNOWN.tar.gz",
+    "sizeBytes": 692623,
+    "sha256": "929c31dcca3c09b0f4b3d64e33c605924764da8101d2c5c14281f7d89c4523b9",
+    "mtime": "2026-08-23T13:57:32.810Z",
+    "ok": true
+  },
+  "method": "tar",
+  "paths": [
+    "package.json",
+    "package-lock.json",
+    "electron",
+    "database",
+    "cloud",
+    "build",
+    "license",
+    "renderer",
+    "scripts/verify-v2-5-7-completion.cjs",
+    "scripts/v2-5-7-release-artifacts.cjs",
+    "scripts/v2-5-7-migration-harness.cjs",
+    "scripts/v2-5-7-lifecycle-matrix.cjs",
+    "docs/integration-v2-5-7/00-CURRENT-REALITY.md",
+    "docs/integration-v2-5-7/01-TARGET-DESIGN.md",
+    "docs/integration-v2-5-7/09-RELEASE-READINESS.md",
+    "docs/integration-v2-5-7/REQUIREMENTS-TRACEABILITY.md"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-07-21T13:53:17.349Z",
+  "fpvSummary": {
+    "pass": 133,
+    "fail": 10,
+    "warn": 15,
+    "total": 158,
+    "pct": 92,
+    "suites": {
+      "pat": {
+        "pass": 38,
+        "fail": 4,
+        "warn": 6,
+        "skip": 0,
+        "total": 48,
+        "pct": 90
+      },
+      "fpa": {
+        "pass": 8,
+        "fail": 5,
+        "warn": 3,
+        "total": 16,
+        "pct": 67
+      },
+      "brand": {
+        "pass": 24,
+        "fail": 0,
+        "warn": 0,
+        "total": 24,
+        "pct": 100
+      }
+    }
+  },
+  "rcDecision": "BLOCKED"
+}

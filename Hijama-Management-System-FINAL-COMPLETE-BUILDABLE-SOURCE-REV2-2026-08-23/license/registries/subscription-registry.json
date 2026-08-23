@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.2.0",
+  "generatedAt": "2026-08-23T14:07:15.237Z",
+  "migratedFrom": null,
+  "subscriptions": [
+    {
+      "id": "01",
+      "key": "trial",
+      "name": "تجريبي",
+      "nameEn": "Trial",
+      "days": 7,
+      "renewable": false,
+      "upgradeAllowed": false,
+      "downgradeAllowed": false,
+      "trial": true,
+      "internal": false
+    },
+    {
+      "id": "02",
+      "key": "monthly",
+      "name": "شهري",
+      "nameEn": "Monthly",
+      "days": 30,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "03",
+      "key": "quarterly",
+      "name": "ربع سنوي",
+      "nameEn": "Quarterly",
+      "days": 90,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "04",
+      "key": "semi_annual",
+      "name": "نصف سنوي",
+      "nameEn": "Semi Annual",
+      "days": 180,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "05",
+      "key": "annual",
+      "name": "سنوي",
+      "nameEn": "Annual",
+      "days": 365,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "06",
+      "key": "two_years",
+      "name": "سنتان",
+      "nameEn": "Two Years",
+      "days": 730,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "07",
+      "key": "three_years",
+      "name": "ثلاث سنوات",
+      "nameEn": "Three Years",
+      "days": 1095,
+      "renewable": true,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "08",
+      "key": "lifetime",
+      "name": "مدى الحياة",
+      "nameEn": "Lifetime",
+      "days": 0,
+      "renewable": false,
+      "upgradeAllowed": true,
+      "downgradeAllowed": false,
+      "trial": false,
+      "internal": false
+    },
+    {
+      "id": "09",
+      "key": "custom",
+      "name": "مخصص",
+      "nameEn": "Custom",
+      "days": null,
+      "renewable": false,
+      "upgradeAllowed": true,
+      "downgradeAllowed": true,
+      "trial": false,
+      "internal": false
+    }
+  ],
+  "registrySig": "1f255cf3ad7046ace39c1c6a71d25132c624f88ec712d9f24d5f173a1d664729"
+}

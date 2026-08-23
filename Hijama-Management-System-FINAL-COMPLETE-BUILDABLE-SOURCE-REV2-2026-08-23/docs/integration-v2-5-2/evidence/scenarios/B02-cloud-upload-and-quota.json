@@ -1,0 +1,11 @@
+{
+  "id": "B02-cloud-upload-and-quota",
+  "title": "Cloud upload success + quota local-ok",
+  "result": "PASS",
+  "ms": 418,
+  "evidence": {
+    "cloudOk": true,
+    "quotaLocalOk": true,
+    "quota": true
+  }
+}

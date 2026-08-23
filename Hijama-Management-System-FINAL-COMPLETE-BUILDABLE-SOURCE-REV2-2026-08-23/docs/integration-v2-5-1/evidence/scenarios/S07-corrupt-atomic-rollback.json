@@ -1,0 +1,11 @@
+{
+  "id": "S07-corrupt-atomic-rollback",
+  "title": "Corrupt reject + failpoint rollback",
+  "result": "PASS",
+  "ms": 135,
+  "evidence": {
+    "corruptRejected": true,
+    "reopenCalled": true,
+    "diagnosticPresent": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "suites": [],
+  "assertions": {
+    "passed": 128,
+    "failed": 0,
+    "skipped": 0
+  },
+  "files": {
+    "license/registries/feature-registry.json": "verified",
+    "license/registries/capability-registry.json": "verified",
+    "license/registries/package-registry.json": "verified",
+    "license/registries/subscription-registry.json": "verified",
+    "license/registries/action-registry.json": "verified",
+    "license/registries/template-registry.json": "verified",
+    "license/data/license-registry/index.json": "verified",
+    "license/data/audit-log.json": "verified",
+    "/workspace/license/data/license-registry/L000001.json": "created",
+    "/workspace/license/data/activations/L000001.bundle.json": "created"
+  },
+  "generatedAt": "2026-07-05T15:54:50.853Z",
+  "total": 128
+}

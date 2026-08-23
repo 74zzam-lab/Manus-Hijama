@@ -1,0 +1,71 @@
+{
+  "phase": "V2-5.4",
+  "startedAt": "2026-08-23T13:57:28.215Z",
+  "finishedAt": "2026-08-23T13:57:28.277Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "id": "R01-inventory-snapshot",
+      "title": "RBAC inventory snapshot complete",
+      "result": "PASS",
+      "ms": 27,
+      "evidence": {
+        "roles": 6,
+        "perms": 7,
+        "ipc": 17
+      }
+    },
+    {
+      "id": "R02-tamper-and-deny-audit",
+      "title": "Tampered role/branch denied + audited",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "unitOk": true
+      }
+    },
+    {
+      "id": "R03-ipc-session-policy",
+      "title": "IPC session required + rank policy",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "ownerWipeRank": 6,
+        "deniedWithoutSession": true
+      }
+    },
+    {
+      "id": "R04-scoped-repo-and-export",
+      "title": "Scoped repository + export path wiring",
+      "result": "PASS",
+      "ms": 4,
+      "evidence": {
+        "exportGuarded": true,
+        "scoped": true
+      }
+    },
+    {
+      "id": "R05-role-scope-matrix",
+      "title": "Owner/admin/reception/accountant/employee/custom scopes",
+      "result": "PASS",
+      "ms": 27,
+      "evidence": {
+        "rolesCovered": [
+          "owner",
+          "admin",
+          "reception",
+          "accountant",
+          "employee",
+          "custom"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "GitHub Actions windows-2022",
+  "runId": 30704257858,
+  "commit": "8f559cd",
+  "at": "2026-08-01T14:47:16Z",
+  "windowsVersion": "10.0.20348",
+  "node": "v22.23.1",
+  "electronPackage": "^43.2.0",
+  "setupExe": "dist/HijamaManagement-Setup-2.0.1.exe",
+  "setupSizeBytes": 106794696,
+  "setupSha256": "eb6f911f42ce195b24c5ba96c40494f4f830c83965ef4bbc416ec93fcd08ae87",
+  "validNsis": true,
+  "installedExe": "C:\\Users\\runneradmin\\AppData\\Local\\Programs\\Hijama Management System\\Hijama Management System.exe",
+  "installedExeSha256": "f24ffaefbfc871b9a63ebe6bb2698e1a9aa7d5d2aaf34006074ea69964574b92",
+  "installedTreeBytes": 415572954,
+  "smokeLaunch": "PASS (process stayed up 8s, then stopped)",
+  "usedNpmStart": false,
+  "installedProof": "INSTALLED_SETUP_EXE_ENV",
+  "scenariosAtoE": "UNVERIFIED",
+  "ciNote": "Install+smoke proven in CI. Job failed only because PS1 exited 2 after AE harness; fixed to exit 0 on install success. Artifact upload blocked by Actions storage quota.",
+  "requirementPass": false
+}

@@ -1,0 +1,8 @@
+{
+  "at": "2026-08-23T13:57:28.478Z",
+  "scenarios": [
+    "R02-tamper-and-deny-audit",
+    "R03-ipc-session-policy"
+  ],
+  "result": "PASS"
+}

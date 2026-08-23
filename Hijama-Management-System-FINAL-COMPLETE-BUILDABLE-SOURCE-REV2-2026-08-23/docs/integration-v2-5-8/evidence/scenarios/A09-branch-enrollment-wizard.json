@@ -1,0 +1,9 @@
+{
+  "id": "A09-branch-enrollment-wizard",
+  "title": "activation_wizard first branch + reject second",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "ok": true
+  }
+}

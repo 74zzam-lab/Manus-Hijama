@@ -1,0 +1,115 @@
+{
+  "summary": {
+    "pass": 12,
+    "fail": 2,
+    "warn": 0,
+    "total": 14,
+    "pct": 86,
+    "consoleErrors": [
+      "Fetch API cannot load file:///workspace/license/registries/feature-registry.json. URL scheme \"file\" is not supported.",
+      "Fetch API cannot load file:///workspace/branding.config.json. URL scheme \"file\" is not supported.",
+      "Fetch API cannot load file:///workspace/license/registries/feature-registry.json. URL scheme \"file\" is not supported.",
+      "Fetch API cannot load file:///workspace/license/registries/feature-registry.json. URL scheme \"file\" is not supported."
+    ]
+  },
+  "results": [
+    {
+      "report": "DCP",
+      "id": "DCP-01",
+      "name": "Developer login → manage panel",
+      "status": "FAIL",
+      "detail": ""
+    },
+    {
+      "report": "DCP",
+      "id": "DCP-02",
+      "name": "License summary card rendered",
+      "status": "PASS",
+      "detail": "1493 chars"
+    },
+    {
+      "report": "DCP",
+      "id": "DCP-03",
+      "name": "Commercial tools grid rendered",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "report": "DCP",
+      "id": "DCP-04",
+      "name": "Diagnostics tab active",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "report": "DCP",
+      "id": "DCP-05",
+      "name": "Diagnostics KPI dashboard (8 cards)",
+      "status": "PASS",
+      "detail": "8 cards"
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevUpdateDiagnostics",
+      "name": "Update Diagnostics",
+      "status": "PASS",
+      "detail": "✅ تم تحديث التشخيص"
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevDataIntegrity",
+      "name": "Data Integrity Check",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevCopyDeviceId",
+      "name": "Copy Device ID",
+      "status": "PASS",
+      "detail": "✅ تم نسخ معرف الجهاز"
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevRegistryHealth",
+      "name": "Registry Health",
+      "status": "PASS",
+      "detail": "ℹ️ Registry: تحقق جزئي في المتصفح — التحقق الكامل في Electron"
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevBundleHealth",
+      "name": "Bundle Health",
+      "status": "PASS",
+      "detail": "ℹ️ لا توجد حزم تفعيل"
+    },
+    {
+      "report": "DIAG",
+      "id": "DIAG-licDevCacheStatus",
+      "name": "Cache Status",
+      "status": "PASS",
+      "detail": "ℹ️ Cache: 0 session · registry غير محمّل"
+    },
+    {
+      "report": "UI",
+      "id": "UI-02",
+      "name": "Renew tool opens inline workspace",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "report": "UI",
+      "id": "UI-01",
+      "name": "License Builder modal opens",
+      "status": "FAIL",
+      "detail": "no_overlay"
+    },
+    {
+      "report": "COMPAT",
+      "id": "CMP-01",
+      "name": "Package Builder disabled in browser",
+      "status": "PASS",
+      "detail": "هذه الوظيفة متاحة فقط في تطبيق Electron لسطح المكتب.\nThis feature is available only in the Electron desktop application."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+'use strict';
+
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
+const source = fs.readFileSync(path.join(__dirname, '..', '..', 'cloud', 'sync-baseline.js'), 'utf8');
+let state = null;
+let fail = false;
+const sandbox = {
+  globalThis: {
+    DB: {
+      get: (_key, fallback) => state || fallback,
+      set: async (_key, next) => {
+        if (fail) return { ok: false, error: 'simulated_sqlite_failure' };
+        state = next;
+        return { ok: true, authoritative: true };
+      },
+    },
+  },
+};
+sandbox.window = sandbox.globalThis;
+vm.runInNewContext(source, sandbox, { filename: 'sync-baseline.js' });
+const baseline = sandbox.globalThis.SyncBaseline;
+
+(async () => {
+  fail = true;
+  const failed = await baseline.markBaselineKnown({ branchId: 'BR-A', remoteRevision: 4, integrityPass: true });
+  assert.strictEqual(failed.ok, false, 'baseline must expose failed authoritative commit');
+  assert.strictEqual(baseline.isPushAllowed({ branchId: 'BR-A' }).ok, false, 'failed commit must leave push blocked');
+
+  fail = false;
+  const known = await baseline.markBaselineKnown({ branchId: 'BR-A', remoteRevision: 4, integrityPass: true });
+  assert.strictEqual(known.ok, true);
+  const ready = await baseline.markReady({ operationId: 'OP-1' });
+  assert.strictEqual(ready.ok, true, 'READY must follow a persisted baseline');
+  assert.strictEqual(baseline.isPushAllowed({ branchId: 'BR-A' }).ok, true);
+  console.log('PASS remediation:sync-lifecycle-authoritative-commit');
+})().catch((error) => { console.error(error.stack || error); process.exit(1); });

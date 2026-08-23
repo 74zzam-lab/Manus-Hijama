@@ -1,0 +1,157 @@
+{
+  "at": "2026-08-22T23:12:28.948Z",
+  "program": "v2-5.10",
+  "suite": "setupstate-runtime-evidence",
+  "platform": "linux",
+  "checks": [
+    {
+      "name": "file:cloud/setup-state-service.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/setup-state-service.js"
+    },
+    {
+      "name": "file:cloud/setup-state-dom.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/setup-state-dom.js"
+    },
+    {
+      "name": "file:cloud/sync-engine.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/sync-engine.js"
+    },
+    {
+      "name": "file:cloud/config-layer.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/config-layer.js"
+    },
+    {
+      "name": "file:cloud/boot-flow-ui.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/boot-flow-ui.js"
+    },
+    {
+      "name": "file:cloud/activation-sync-defaults.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/activation-sync-defaults.js"
+    },
+    {
+      "name": "file:cloud/owner-hub.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/owner-hub.js"
+    },
+    {
+      "name": "file:cloud/backup-layer.js",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/cloud/backup-layer.js"
+    },
+    {
+      "name": "file:index.html",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/index.html"
+    },
+    {
+      "name": "file:docs/integration-v2-5-10/SETUP-STATE-UI-INVENTORY.md",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/docs/integration-v2-5-10/SETUP-STATE-UI-INVENTORY.md"
+    },
+    {
+      "name": "index_loads_setup_state_dom",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "screens_use_setup_state_dom",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "settings_surface_ids",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "getReadiness_detailed_ar_labels",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "password_merge_revision_aware",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "auto_backup_services_started_with_interval",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "installed_exe_present_or_non_windows",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "restart_loop_five_consume_once",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "owner_password_newer_wins_after_pull",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "owner_password_old_rejected_after_pull",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "local_backup_file_restorable",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/docs/integration-v2-5-10/evidence/runtime-backup-proof/local-1787440348953.json"
+    },
+    {
+      "name": "cloud_shaped_backup_file_restorable",
+      "ok": true,
+      "detail": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/docs/integration-v2-5-10/evidence/runtime-backup-proof/Auto/cloud-auto.json"
+    },
+    {
+      "name": "inventory_class_KEEP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "inventory_class_HIDE_AFTER_COMPLETE",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "inventory_class_ADVANCED_ONLY",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "inventory_class_DELETE",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "inventory_class_MERGE",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "nested_unit_proof_suite",
+      "ok": true,
+      "detail": "PASS v2-5.10:setupstate-runtime-proof (SoT wiring, password merge, readiness labels, restart loop, backup files, inventory)\n"
+    }
+  ],
+  "journeys": {
+    "new_client_to_dashboard": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE",
+    "existing_client": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE",
+    "restore": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE",
+    "logout_login": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE",
+    "device_a_b_owner_password": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE_GOOGLE",
+    "live_google_auto_cloud_backup": "UNVERIFIED_NEEDS_OPERATOR_INSTALLED_EXE_GOOGLE"
+  },
+  "ok": true
+}

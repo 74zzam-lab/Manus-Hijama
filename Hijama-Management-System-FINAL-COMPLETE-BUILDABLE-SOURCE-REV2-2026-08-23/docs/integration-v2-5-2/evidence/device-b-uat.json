@@ -1,0 +1,17 @@
+{
+  "device": "B",
+  "role": "peer-roundtrip-offline-uat",
+  "startedAt": "2026-07-30T20:50:30.125Z",
+  "finishedAt": "2026-07-30T20:50:33.788Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+"
+  },
+  "scenarios": [
+    "S01-ab-roundtrip",
+    "S02-device-c-catchup",
+    "S03-offline-queue-reconnect"
+  ],
+  "result": "PASS"
+}

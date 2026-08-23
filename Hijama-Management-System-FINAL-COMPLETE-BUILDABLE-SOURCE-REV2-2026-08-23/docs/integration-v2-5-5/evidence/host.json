@@ -1,0 +1,15 @@
+{
+  "phase": "V2-5.5",
+  "recordedAt": "2026-08-18T19:27:52.661Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+",
+    "node": "v22.14.0",
+    "cpus": 4,
+    "cpuModel": "Intel(R) Xeon(R) Processor",
+    "totalMemMb": 16014,
+    "freeMemMb": 15120,
+    "hostname": "cursor"
+  }
+}

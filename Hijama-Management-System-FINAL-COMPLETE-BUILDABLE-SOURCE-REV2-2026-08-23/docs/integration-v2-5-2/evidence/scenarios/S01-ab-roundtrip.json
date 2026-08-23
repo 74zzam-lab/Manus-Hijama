@@ -1,0 +1,14 @@
+{
+  "id": "S01-ab-roundtrip",
+  "title": "A↔B FileRemote round trip",
+  "result": "PASS",
+  "ms": 20,
+  "evidence": {
+    "flushAOk": true,
+    "pullBOk": true,
+    "flushBOk": true,
+    "pullAOk": true,
+    "fromA": true,
+    "fromB": true
+  }
+}

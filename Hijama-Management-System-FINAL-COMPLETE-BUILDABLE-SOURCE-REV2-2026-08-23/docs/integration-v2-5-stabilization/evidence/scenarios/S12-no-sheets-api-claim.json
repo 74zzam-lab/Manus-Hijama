@@ -1,0 +1,9 @@
+{
+  "id": "S12-no-sheets-api-claim",
+  "title": "No in-process Google Sheets API client in Electron providers",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "sheetsApiAbsent": true
+  }
+}

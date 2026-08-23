@@ -1,0 +1,257 @@
+/**
+ * Renderer mirror of database/sync-baseline.js
+ */
+(function (global) {
+  'use strict';
+
+  const LIFECYCLE = Object.freeze({
+    UNINITIALIZED: 'UNINITIALIZED',
+    HYDRATING: 'HYDRATING',
+    BASELINE_KNOWN: 'BASELINE_KNOWN',
+    READY: 'READY',
+    RECONCILIATION_REQUIRED: 'RECONCILIATION_REQUIRED',
+  });
+
+  const STATE_KEY = '__tdw_sync_lifecycle__';
+
+  function defaultState() {
+    return {
+      lifecycle: LIFECYCLE.UNINITIALIZED,
+      baselineKnown: false,
+      baselineRevisionByBranch: {},
+      integrityPass: false,
+      organizationResolved: false,
+      branchResolved: false,
+      hydrateComplete: false,
+      updatedAt: null,
+      operationId: null,
+    };
+  }
+
+  function load() {
+    try {
+      const raw = global.DB?.get?.(STATE_KEY, null);
+      return { ...defaultState(), ...(raw && typeof raw === 'object' ? raw : {}) };
+    } catch {
+      return defaultState();
+    }
+  }
+
+  async function save(partial) {
+    const next = { ...load(), ...(partial || {}), updatedAt: new Date().toISOString() };
+    try {
+      const committed = await Promise.resolve(global.DB?.set?.(STATE_KEY, next));
+      if (committed?.ok === false) return { ok: false, error: committed.error || 'sync_lifecycle_commit_failed', state: next };
+      return { ok: true, state: next };
+    } catch (error) {
+      return { ok: false, error: error?.code || 'sync_lifecycle_commit_failed', state: next };
+    }
+  }
+
+  function getLifecycle() {
+    return load().lifecycle || LIFECYCLE.UNINITIALIZED;
+  }
+
+  async function markUninitialized() {
+    return save({ ...defaultState(), lifecycle: LIFECYCLE.UNINITIALIZED });
+  }
+
+  async function markHydrating(meta) {
+    meta = meta || {};
+    return save({
+      lifecycle: LIFECYCLE.HYDRATING,
+      hydrateComplete: false,
+      baselineKnown: false,
+      organizationResolved: meta.organizationResolved === true,
+      branchResolved: meta.branchResolved === true,
+    });
+  }
+
+  async function markBaselineKnown(options) {
+    options = options || {};
+    const branchId = String(options.branchId || '').trim();
+    const remoteRevision = Number(options.remoteRevision);
+    if (!branchId) return { ok: false, code: 'branch_required' };
+    if (!Number.isFinite(remoteRevision) || remoteRevision < 0) {
+      return { ok: false, code: 'baseline_revision_unknown' };
+    }
+    if (options.integrityPass !== true) {
+      return { ok: false, code: 'integrity_check_required' };
+    }
+
+    const state = load();
+    const baselineRevisionByBranch = { ...(state.baselineRevisionByBranch || {}) };
+    baselineRevisionByBranch[branchId] = remoteRevision;
+
+    const committed = await save({
+      lifecycle: LIFECYCLE.BASELINE_KNOWN,
+      baselineKnown: true,
+      baselineRevisionByBranch,
+      integrityPass: true,
+      organizationResolved: options.organizationResolved !== false,
+      branchResolved: options.branchResolved !== false,
+      hydrateComplete: true,
+      lastBaselineAt: new Date().toISOString(),
+      operationId: options.operationId || state.operationId || null,
+    });
+    return committed.ok ? { ok: true, branchId, remoteRevision } : committed;
+  }
+
+  async function markReady(options) {
+    options = options || {};
+    const state = load();
+    if (!state.baselineKnown) return { ok: false, code: 'baseline_required' };
+    const committed = await save({
+      lifecycle: LIFECYCLE.READY,
+      readyAt: new Date().toISOString(),
+      operationId: options.operationId || state.operationId || null,
+    });
+    return committed.ok ? { ok: true } : committed;
+  }
+
+  async function enterReconciliationRequired(options) {
+    options = options || {};
+    return save({
+      lifecycle: LIFECYCLE.RECONCILIATION_REQUIRED,
+      reconcileRequiredAt: new Date().toISOString(),
+      pushBlockedUntilReconcile: true,
+      operationId: options.operationId || null,
+    });
+  }
+
+  async function completeReconciliation(options) {
+    options = options || {};
+    const branchId = String(options.branchId || '').trim();
+    const remoteRevision = Number(options.remoteRevision);
+    const patch = {
+      lifecycle: LIFECYCLE.READY,
+      pushBlockedUntilReconcile: false,
+      reconciledAt: new Date().toISOString(),
+      operationId: options.operationId || null,
+    };
+    if (branchId && Number.isFinite(remoteRevision) && remoteRevision >= 0) {
+      const state = load();
+      patch.baselineRevisionByBranch = {
+        ...(state.baselineRevisionByBranch || {}),
+        [branchId]: remoteRevision,
+      };
+      patch.baselineKnown = true;
+    }
+    const committed = await save(patch);
+    return committed.ok ? { ok: true } : committed;
+  }
+
+  function getBaselineRevision(branchId) {
+    const state = load();
+    const bid = String(branchId || '').trim();
+    if (!bid) return null;
+    const value = state.baselineRevisionByBranch?.[bid];
+    return Number.isFinite(Number(value)) ? Number(value) : null;
+  }
+
+  function isPushAllowed(options) {
+    options = options || {};
+    if (options.force === true) return { ok: true, forced: true };
+
+    const state = load();
+    const lifecycle = state.lifecycle || LIFECYCLE.UNINITIALIZED;
+
+    if (lifecycle === LIFECYCLE.UNINITIALIZED || lifecycle === LIFECYCLE.HYDRATING) {
+      return {
+        ok: false,
+        blocked: true,
+        code: 'sync_lifecycle_push_blocked',
+        reason: 'sync_lifecycle_push_blocked',
+        lifecycle,
+      };
+    }
+
+    if (lifecycle === LIFECYCLE.RECONCILIATION_REQUIRED || state.pushBlockedUntilReconcile === true) {
+      return {
+        ok: false,
+        blocked: true,
+        code: 'reconciliation_required',
+        reason: 'reconciliation_required',
+        lifecycle,
+      };
+    }
+
+    if (!state.baselineKnown) {
+      return {
+        ok: false,
+        blocked: true,
+        code: 'baseline_unknown',
+        reason: 'baseline_unknown',
+        lifecycle,
+      };
+    }
+
+    if (state.integrityPass !== true) {
+      return {
+        ok: false,
+        blocked: true,
+        code: 'integrity_check_failed',
+        reason: 'integrity_check_failed',
+        lifecycle,
+      };
+    }
+
+    const branchId = String(options.branchId || '').trim();
+    if (branchId) {
+      const baseline = getBaselineRevision(branchId);
+      if (baseline == null) {
+        return {
+          ok: false,
+          blocked: true,
+          code: 'baseline_revision_unknown',
+          reason: 'baseline_revision_unknown',
+          branchId,
+          lifecycle,
+        };
+      }
+    }
+
+    return { ok: true, lifecycle, baselineRevisionByBranch: { ...(state.baselineRevisionByBranch || {}) } };
+  }
+
+  function assertPushAllowed(options) {
+    return isPushAllowed(options);
+  }
+
+  async function updateBaselineAfterVerifiedPush(branchId, remoteRevision, operationId) {
+    const bid = String(branchId || '').trim();
+    const rev = Number(remoteRevision);
+    if (!bid || !Number.isFinite(rev) || rev < 0) {
+      return { ok: false, code: 'baseline_update_invalid' };
+    }
+    const state = load();
+    const baselineRevisionByBranch = { ...(state.baselineRevisionByBranch || {}) };
+    baselineRevisionByBranch[bid] = rev;
+    const committed = await save({
+      baselineRevisionByBranch,
+      baselineKnown: true,
+      lastVerifiedPushAt: new Date().toISOString(),
+      operationId: operationId || state.operationId || null,
+    });
+    return committed.ok ? { ok: true, branchId: bid, remoteRevision: rev } : committed;
+  }
+
+  global.SyncBaseline = {
+    STATE_KEY,
+    LIFECYCLE,
+    defaultState,
+    load,
+    save,
+    getLifecycle,
+    markUninitialized,
+    markHydrating,
+    markBaselineKnown,
+    markReady,
+    enterReconciliationRequired,
+    completeReconciliation,
+    getBaselineRevision,
+    isPushAllowed,
+    assertPushAllowed,
+    updateBaselineAfterVerifiedPush,
+  };
+})(typeof window !== 'undefined' ? window : globalThis);

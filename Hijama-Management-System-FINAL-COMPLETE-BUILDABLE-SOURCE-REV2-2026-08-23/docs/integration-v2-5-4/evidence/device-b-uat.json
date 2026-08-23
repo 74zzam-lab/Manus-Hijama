@@ -1,0 +1,16 @@
+{
+  "device": "B",
+  "role": "adversarial-ipc-uat",
+  "startedAt": "2026-08-23T13:57:28.198Z",
+  "finishedAt": "2026-08-23T13:57:28.478Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "scenarios": [
+    "R02-tamper-and-deny-audit",
+    "R03-ipc-session-policy"
+  ],
+  "result": "PASS"
+}

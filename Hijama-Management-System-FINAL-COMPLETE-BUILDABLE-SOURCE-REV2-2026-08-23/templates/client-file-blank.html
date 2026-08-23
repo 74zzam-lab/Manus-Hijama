@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ملف عميل فارغ — مركز الحجامة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --emerald:#0B6E5F;--emerald-dark:#064E44;--emerald-soft:#E6F2F0;--emerald-line:#0B6E5F33;
+  --maroon:#8B1E2D;--gold:#C6A15B;--ink:#0E1B1A;--muted:#6B7280;--cream:#FAF7F1;--light:#F4F7F6;
+  --tear:88mm;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{background:#e9ecef;font-family:'Cairo','Inter',sans-serif;color:var(--ink);direction:rtl}
+.page{width:210mm;height:297mm;background:#fff;margin:10mm auto;padding:7mm 9mm 0;display:flex;flex-direction:column;box-shadow:0 6px 30px rgba(0,0,0,.10);page-break-after:always}
+.page:last-child{page-break-after:auto}
+.page-body{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.tear-off{flex:0 0 var(--tear);height:var(--tear);max-height:var(--tear);display:flex;flex-direction:column;min-height:var(--tear)}
+.cut-line{flex:0 0 auto;border-top:0.7pt dashed var(--maroon);margin:0;position:relative;height:0}
+.cut-line::before{content:"✂  قص من هنا  ·  CUT HERE";position:absolute;top:-2.4mm;left:50%;transform:translateX(-50%);background:#fff;padding:0 2.5mm;color:var(--maroon);font-size:7pt;font-weight:700;white-space:nowrap}
+.tear-inner{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:1.5mm;overflow:hidden}
+.tear-content{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+@page{size:A4 portrait;margin:0}
+@media print{html,body{background:#fff}.page{margin:0;box-shadow:none}}
+
+.header{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:3mm;padding-bottom:2.5mm;border-bottom:0.8pt solid var(--emerald);margin-bottom:1.5mm;position:relative}
+.header::after{content:"";position:absolute;left:0;right:0;bottom:-1mm;height:0.4mm;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.meta,.session-meta{display:flex;flex-direction:column;justify-content:center;gap:2mm}
+.meta .row,.price-row{display:flex;align-items:center;gap:1.5mm;font-size:8pt}
+.meta .row .lbl,.price-row .lbl{color:var(--emerald);font-weight:700;min-width:17mm;font-size:7.8pt;flex-shrink:0}
+.meta .row .lbl .en,.price-row .lbl .en{display:block;font-family:'Inter',sans-serif;font-size:5.8pt;color:var(--muted);font-weight:500}
+.box,.input{flex:1;min-height:6.5mm;border-radius:4pt;background:var(--cream);border:0.5pt solid var(--emerald-line)}
+.box.filled,.input.filled{display:flex;align-items:center;padding:0 1.8mm;font-weight:700;font-size:8.5pt;color:var(--ink)}
+.price-row .box.filled{border-color:rgba(198,161,91,.55);background:#FFFBF1}
+.brand{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4mm;padding:0 2mm}
+.logo-box{width:15mm;height:15mm;border:0.5pt dashed var(--emerald-line);border-radius:50%;background:var(--emerald-soft);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.logo-box.has-logo img{width:100%;height:100%;object-fit:contain}
+.logo-box.logo-empty::after{content:"";width:8mm;height:8mm;border-radius:50%;background:var(--emerald-line)}
+.brand h1{font-size:15pt;color:var(--emerald);font-weight:800;line-height:1.1;margin-top:0.5mm}
+.brand .brand-en-name{font-family:'Inter',sans-serif;font-size:8pt;color:var(--maroon);letter-spacing:1.5px;font-weight:800;text-transform:uppercase}
+.session-meta{display:flex;flex-direction:column;gap:2mm;width:100%}
+
+.sec{margin-top:2mm}
+.sec-head{display:flex;align-items:center;gap:2.5mm;margin-bottom:1.5mm}
+.sec-head.compact{margin-bottom:1mm}
+.sec-num{width:6mm;height:6mm;border-radius:5pt;background:var(--emerald);color:#fff;font-weight:800;font-size:9pt;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
+.sec-num.alt{background:var(--maroon)}
+.sec-title .ar{color:var(--emerald-dark);font-weight:800;font-size:10pt;line-height:1.1}
+.sec-title .ar.alt{color:var(--maroon)}
+.sec-title .en{font-family:'Inter',sans-serif;font-size:6.5pt;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.sec-rule{flex:1;height:0.3pt;background:var(--emerald-line)}
+.card{border:0.5pt solid var(--emerald-line);border-radius:8pt;padding:3mm 3.5mm}
+.card.tinted{background:var(--emerald-soft)}
+.card.alt{border-color:#8B1E2D33}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 4mm}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5mm 3mm}
+.field-full{grid-column:1/-1}
+.field{display:flex;align-items:center;gap:1.5mm;font-size:8.5pt;min-height:5.5mm}
+.field label{color:var(--emerald-dark);font-weight:700;font-size:8pt;min-width:20mm;line-height:1.05}
+.field label .en{display:block;font-family:'Inter',sans-serif;font-size:6pt;color:var(--muted)}
+.field .input{flex:1;height:5.5mm;border:0.5pt solid var(--emerald-line);border-radius:3pt;background:var(--cream)}
+.chk-group{display:flex;flex-wrap:wrap;gap:3.5mm;align-items:center;font-size:8pt}
+.chk{width:3.2mm;height:3.2mm;border:0.5pt solid var(--emerald);border-radius:1.2pt;display:inline-block;background:#fff;margin-inline-end:1mm;vertical-align:middle}
+.chk.on{background:var(--emerald);box-shadow:inset 0 0 0 0.65mm #fff}
+.sig-row{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:2.5mm}
+.sig .line{height:8mm;border:0.5pt solid var(--emerald-line);border-radius:3pt;background:var(--cream)}
+.sig .line.sig-name{display:flex;align-items:center;justify-content:center;font-weight:700;font-size:9pt;color:var(--emerald-dark)}
+.sig .lbl{font-weight:700;text-align:center;font-size:8.5pt;margin-top:0.8mm;color:var(--emerald-dark)}
+.sig .en{font-family:'Inter',sans-serif;color:var(--muted);font-size:6pt;text-align:center}
+
+.bottom-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:3mm;flex:1;min-height:0}
+.follow-wrap,.care-wrap{min-height:0;display:flex;flex-direction:column}
+table.followup{width:100%;border-collapse:collapse;font-size:7.8pt;border:0.5pt solid var(--emerald-line);border-radius:6pt;overflow:hidden;table-layout:fixed}
+table.followup th{background:var(--emerald);color:#fff;font-weight:700;padding:1.2mm 1mm;font-size:7.5pt}
+table.followup th .en{display:block;font-family:'Inter',sans-serif;font-size:5.8pt;color:#D8EAE7;font-weight:500}
+table.followup td{border-top:0.35pt solid var(--emerald-line);padding:1mm 0.8mm;height:5.5mm;vertical-align:middle;font-size:7.5pt;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+table.followup .c-num{width:12%;text-align:center;font-weight:700}
+table.followup .c-date{width:26%}
+table.followup .c-spec{width:38%}
+table.followup .c-att{width:24%}
+table.followup tbody tr:nth-child(odd) td{background:var(--light)}
+.care{border:0.5pt solid var(--gold);border-radius:5pt;padding:2mm 2.5mm;background:#FFFDF7;font-size:6.8pt;line-height:1.2;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.care ol{padding-inline-start:3mm;display:flex;flex-direction:column;gap:0.3mm;flex:1;overflow:hidden}
+.care li{display:flex;flex-direction:column;gap:0.1mm}
+.care .prec-ar{font-weight:600;font-size:7pt}
+.care .prec-en{font-family:'Inter',sans-serif;font-size:6pt;color:var(--muted);line-height:1.15}
+.care .note{margin-top:1mm;padding-top:1mm;border-top:0.3pt dotted var(--emerald-line);font-size:6.5pt;color:var(--muted);flex-shrink:0}
+.care .note .en{font-family:'Inter',sans-serif;font-style:normal}
+
+.footer{flex:0 0 20mm;margin-top:1.5mm;padding:2mm 3mm;border-radius:6pt;background:linear-gradient(135deg,var(--emerald-soft) 0%,#FFFDF7 45%,var(--emerald-soft) 100%);border:0.6pt solid var(--emerald-line);display:grid;grid-template-columns:auto 1fr auto;gap:3mm;align-items:center;box-shadow:inset 0 0 0 0.4pt rgba(255,255,255,.8)}
+.foot-col{text-align:center}
+.qr{width:16mm;height:16mm;border:0.5pt dashed var(--gold);border-radius:4pt;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#FFFDF7}
+.qr img{width:100%;height:100%;object-fit:contain}
+.qr-ph{font-size:6pt;color:var(--muted)}
+.foot-col .lbl{font-weight:700;font-size:8pt;color:var(--emerald-dark)}
+.foot-col .en{font-family:'Inter',sans-serif;font-size:6pt;color:var(--muted)}
+.addr-block{text-align:center;font-size:8pt;line-height:1.35}
+.addr-block .ttl{color:var(--maroon);font-weight:800;font-size:8.5pt}
+.addr-block .ttl .en{display:block;font-family:'Inter',sans-serif;font-size:6pt;color:var(--muted)}
+.addr-block .phone{margin-top:1mm;display:inline-flex;font-family:'Inter',sans-serif;direction:ltr;font-weight:700;color:#fff;background:var(--emerald);padding:1mm 3mm;border-radius:12pt;font-size:8pt}
+
+.back-head{text-align:center;padding:1.5mm 0 2mm;border-bottom:0.6pt solid var(--emerald);margin-bottom:1.5mm;flex-shrink:0}
+.back-head h2{color:var(--emerald-dark);font-size:13pt;font-weight:800}
+.back-head .en{font-family:'Inter',sans-serif;font-size:7.5pt;color:var(--maroon);letter-spacing:1.5px}
+.map-legend-inline{display:flex;justify-content:center;gap:4mm;margin-top:1.5mm;font-size:7pt;flex-wrap:wrap}
+.map-legend-inline span{display:inline-flex;align-items:center;gap:1mm}
+.leg-dot{display:inline-block;width:2.5mm;height:2.5mm;border-radius:50%;border:0.4pt solid #fff;box-shadow:0 0 0 0.3pt rgba(0,0,0,.2)}
+.leg-session{background:#1565C0}.leg-saved{background:#C6A15B}.leg-atlas{background:rgba(11,110,95,.4)}
+.maps-full{flex:1;min-height:0;position:relative}
+.tear-maps{display:flex;flex-direction:column;min-height:0}
+.mini-map-head{display:flex;justify-content:space-between;align-items:center;font-size:8pt;font-weight:800;color:var(--emerald-dark);margin-bottom:1mm;flex-shrink:0}
+.mini-map-head .en{font-family:'Inter',sans-serif;font-size:6pt;color:var(--muted);font-weight:600}
+.mini-map-box{flex:1;min-height:0;border:0.5pt solid var(--emerald-line);border-radius:6pt;padding:1.5mm;background:#fff;display:flex;flex-direction:column}
+.mini-map-box .inner{flex:1;min-height:52mm;position:relative;overflow:hidden;border-radius:4pt;background:var(--light)}
+.client-file-maps .cf-map-lbl,.client-file-maps .cf-mini-lbl,.client-file-maps .map-cell-lbl{display:none!important}
+
+${MAP_CSS}
+@media print{html,body{background:#fff}.page{margin:0;box-shadow:none}}
+  </style>
+</head>
+<body>
+
+    <div class="page">
+      <div class="page-body">
+        <header class="header">
+          <div class="meta">
+            <div class="row"><div class="lbl">رقم الملف<span class="en">FILE</span></div><div class="box"></div></div>
+            <div class="row"><div class="lbl">التاريخ<span class="en">DATE</span></div><div class="box"></div></div>
+          </div>
+          <div class="brand">
+            <div class="logo-box logo-empty"></div>
+            <h1>مركز الحجامة للحجامة</h1>
+            <div class="en brand-en-name">Cupping Center</div>
+          </div>
+          <div class="session-meta">
+            <div class="price-row"><div class="lbl">عدد الكاسات<span class="en">CUPS</span></div><div class="box"></div></div>
+            <div class="price-row"><div class="lbl">السعر<span class="en">PRICE</span></div><div class="box filled"></div></div>
+          </div>
+        </header>
+
+        <section class="sec">
+          <div class="sec-head">
+            <div class="sec-num">1</div>
+            <div class="sec-title"><span class="ar">بيانات العميل</span><span class="en">Patient Information</span></div>
+            <div class="sec-rule"></div>
+          </div>
+          <div class="card tinted">
+            <div class="grid-2">
+              <div class="field"><label>الاسم<span class="en">Full Name</span></label><span class="input"></span></div>
+              <div class="field"><label>الجنسية<span class="en">Nationality</span></label><span class="input"></span></div>
+              <div class="field"><label>العمر<span class="en">Age</span></label><span class="input"></span></div>
+              <div class="field"><label>رقم الجوال<span class="en">Mobile</span></label><span class="input"></span></div>
+              <div class="field field-full"><label>العنوان<span class="en">Address</span></label><span class="input"></span></div>
+              <div class="field"><label>جهة طوارئ<span class="en">Emergency</span></label><span class="input"></span></div>
+              <div class="field">
+                <label>الجنس<span class="en">Gender</span></label>
+                <div class="chk-group">
+                  <span><span class="chk"></span>ذكر / M</span>
+                  <span><span class="chk"></span>أنثى / F</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>الحمل<span class="en">Pregnancy</span></label>
+                <div class="chk-group">
+                  <span><span class="chk"></span>نعم / Yes</span>
+                  <span><span class="chk"></span>لا / No</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sec">
+          <div class="sec-head">
+            <div class="sec-num alt">2</div>
+            <div class="sec-title"><span class="ar alt">التقييم الطبي</span><span class="en">Medical Assessment</span></div>
+            <div class="sec-rule alt"></div>
+          </div>
+          <div class="card alt">
+            <div class="grid-3">
+              <div class="field"><label>ضغط الدم<span class="en">BP</span></label><span class="input"></span></div>
+              <div class="field"><label>السكر<span class="en">Glucose</span></label><span class="input"></span></div>
+              <div class="field">
+                <label>سيولة الدم<span class="en">Anticoag.</span></label>
+                <div class="chk-group">
+                  <span><span class="chk"></span>نعم</span>
+                  <span><span class="chk"></span>لا</span>
+                </div>
+              </div>
+              <div class="field field-full"><label>أمراض مزمنة<span class="en">Chronic</span></label><span class="input"></span></div>
+              <div class="field field-full"><label>أمراض مؤقتة<span class="en">Acute</span></label><span class="input"></span></div>
+              <div class="field field-full"><label>حساسية<span class="en">Allergies</span></label><span class="input"></span></div>
+              <div class="field field-full"><label>الأعراض الحالية<span class="en">Symptoms</span></label><span class="input"></span></div>
+              <div class="field">
+                <label>حجامة سابقة<span class="en">Prior</span></label>
+                <div class="chk-group">
+                  <span><span class="chk"></span>نعم / Yes</span>
+                  <span><span class="chk"></span>لا / No</span>
+                </div>
+              </div>
+              <div class="field field-full">
+                <label>غرض الحجامة<span class="en">Purpose</span></label>
+                <div class="chk-group">
+                  <span><span class="chk"></span>وقائية / Preventive</span>
+                  <span><span class="chk"></span>علاجية / Therapeutic</span>
+                </div>
+              </div>
+            </div>
+            <div class="sig-row">
+              <div class="sig">
+                <div class="line sig-name"></div>
+                <div class="lbl">الأخصائي</div>
+                <div class="en">SPECIALIST</div>
+              </div>
+              <div class="sig">
+                <div class="line"></div>
+                <div class="lbl">توقيع العميل</div>
+                <div class="en">PATIENT SIGNATURE</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="tear-off">
+        <div class="cut-line"></div>
+        <div class="tear-inner">
+          <div class="tear-content">
+            <div class="bottom-grid">
+              <div class="follow-wrap">
+                <div class="sec-head compact">
+                  <div class="sec-num">3</div>
+                  <div class="sec-title"><span class="ar">جدول المتابعة</span><span class="en">Follow-up</span></div>
+                  <div class="sec-rule"></div>
+                </div>
+                <table class="followup">
+      <thead><tr>
+        <th>تسلسل<span class="en">No</span></th>
+        <th>تاريخ الجلسة<span class="en">Date</span></th>
+        <th>الأخصائي<span class="en">Specialist</span></th>
+        <th>الحضور<span class="en">Attend.</span></th>
+      </tr></thead>
+      <tbody><tr>
+      <td class="c-num">1</td>
+      <td class="c-date" dir="ltr">&nbsp;</td>
+      <td class="c-spec">&nbsp;</td>
+      <td class="c-att">&nbsp;</td>
+    </tr><tr>
+      <td class="c-num">2</td>
+      <td class="c-date" dir="ltr">&nbsp;</td>
+      <td class="c-spec">&nbsp;</td>
+      <td class="c-att">&nbsp;</td>
+    </tr><tr>
+      <td class="c-num">3</td>
+      <td class="c-date" dir="ltr">&nbsp;</td>
+      <td class="c-spec">&nbsp;</td>
+      <td class="c-att">&nbsp;</td>
+    </tr><tr>
+      <td class="c-num">4</td>
+      <td class="c-date" dir="ltr">&nbsp;</td>
+      <td class="c-spec">&nbsp;</td>
+      <td class="c-att">&nbsp;</td>
+    </tr></tbody>
+    </table>
+              </div>
+              <div class="care-wrap">
+                <div class="sec-head compact">
+                  <div class="sec-num alt">4</div>
+                  <div class="sec-title"><span class="ar alt">احتياطات ما بعد الحجامة</span><span class="en">Post-Care</span></div>
+                  <div class="sec-rule alt"></div>
+                </div>
+                <div class="care">
+                  <ol><li><span class="prec-ar">الإكثار من شرب الماء والسوائل الدافئة.</span><span class="prec-en">Drink plenty of water and warm fluids.</span></li><li><span class="prec-ar">تجنب التعرض لأشعة الشمس المباشرة والحرارة العالية.</span><span class="prec-en">Avoid direct sun exposure and high heat.</span></li><li><span class="prec-ar">تجنب المجهود البدني الشديد لمدة 24 ساعة.</span><span class="prec-en">Avoid strenuous activity for 24 hours.</span></li><li><span class="prec-ar">تجنب الاستحمام بالماء الساخن لمدة 24 ساعة.</span><span class="prec-en">Avoid hot showers or baths for 24 hours.</span></li><li><span class="prec-ar">تناول غذاء صحي خفيف وتجنب الأطعمة الدسمة.</span><span class="prec-en">Eat light, healthy meals; avoid heavy or fatty food.</span></li><li><span class="prec-ar">النوم المبكر وأخذ قسط كافٍ من الراحة.</span><span class="prec-en">Get adequate rest and sleep early.</span></li><li><span class="prec-ar">عند الشعور بدوخة أو تعب شديد، استرح وأخبر الأخصائي.</span><span class="prec-en">If dizzy or very tired, rest and inform your specialist.</span></li></ol>
+                  <div class="note">للمساعدة فقط — لا تغني عن استشارة الطبيب.<span class="en"> Guidance only.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="footer">
+            <div class="foot-col"><div class="qr qr-ph">QR</div><div class="lbl">واتساب</div><div class="en">WHATSAPP</div></div>
+            <div class="addr-block">
+              <div class="ttl">عنوان المركز<span class="en">ADDRESS</span></div>
+              <div class="addr">عنوان المركز — يُعبَّأ من الإعدادات</div>
+              <div class="phone" dir="ltr">📞 05xxxxxxxx</div>
+            </div>
+            <div class="foot-col"><div class="qr qr-ph">QR</div><div class="lbl">الموقع</div><div class="en">LOCATION</div></div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <div class="page">
+      <div class="page-body">
+        <div class="back-head">
+          <h2>خريطة الجسم — مواضع الحجامة</h2>
+          <div class="en">Body Map · Cupping Points</div>
+        </div>
+        <div class="maps-grid client-file-maps"><div class="map-cell">
+        <div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div>
+      </div><div class="map-cell">
+        <div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div>
+      </div><div class="map-cell">
+        <div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div>
+      </div><div class="map-cell">
+        <div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div>
+      </div></div>
+      </div>
+      <div class="tear-off tear-off--maps">
+        <div class="cut-line"></div>
+        <div class="tear-inner tear-maps">
+          <div class="mini-map-head">
+            <span>خريطة الجلسة (الجزء المقصوص)</span>
+            <span class="en">SESSION MAP · TEAR-OFF</span>
+          </div>
+          <div class="mini-map-box">
+            <div class="inner"><div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div><div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div><div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div><div class="cup-img-map" style="aspect-ratio:1;background:#f4f7f6;border-radius:3pt"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

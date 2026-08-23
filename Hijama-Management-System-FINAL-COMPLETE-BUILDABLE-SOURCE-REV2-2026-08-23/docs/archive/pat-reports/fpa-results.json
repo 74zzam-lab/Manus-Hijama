@@ -1,0 +1,211 @@
+{
+  "summary": {
+    "pass": 17,
+    "fail": 3,
+    "warn": 3,
+    "total": 23,
+    "pct": 86
+  },
+  "results": [
+    {
+      "phase": "1 — Thermal Stress",
+      "id": "T-58-struct",
+      "name": "Thermal 58mm stress receipt",
+      "status": "FAIL",
+      "detail": "rows:124 vals:32 QR:true",
+      "ts": "2026-07-21T13:58:33.137Z"
+    },
+    {
+      "phase": "1 — Thermal Stress",
+      "id": "T-80-struct",
+      "name": "Thermal 80mm stress receipt",
+      "status": "FAIL",
+      "detail": "rows:124 vals:32 QR:true",
+      "ts": "2026-07-21T13:58:33.138Z"
+    },
+    {
+      "phase": "1 — Thermal Stress",
+      "id": "T-58-layout",
+      "name": "Thermal 58mm DOM metrics",
+      "status": "PASS",
+      "detail": "util:100% wrap:0 rows:61",
+      "ts": "2026-07-21T13:58:33.181Z"
+    },
+    {
+      "phase": "1 — Thermal Stress",
+      "id": "T-80-layout",
+      "name": "Thermal 80mm DOM metrics",
+      "status": "PASS",
+      "detail": "util:100% wrap:0 rows:61",
+      "ts": "2026-07-21T13:58:33.181Z"
+    },
+    {
+      "phase": "2 — Typography",
+      "id": "TY-01",
+      "name": "Multi-page overflow scan",
+      "status": "PASS",
+      "detail": "0 overflows",
+      "ts": "2026-07-21T13:58:34.081Z"
+    },
+    {
+      "phase": "2 — Typography",
+      "id": "TY-02",
+      "name": "Multi-page wrap scan",
+      "status": "PASS",
+      "detail": "0 wrap hints",
+      "ts": "2026-07-21T13:58:34.081Z"
+    },
+    {
+      "phase": "3 — Product Tour",
+      "id": "TOUR-OFF",
+      "name": "Disabled: no JS/DOM/listeners",
+      "status": "PASS",
+      "detail": "{\"hasTourScript\":false,\"tourDom\":false,\"tourStyles\":false,\"productTourGlobal\":false,\"tourBtnVisible\":false,\"loadedTourScript\":false,\"tourDomAfter\":false,\"scriptsDelta\":0}",
+      "ts": "2026-07-21T13:58:34.444Z"
+    },
+    {
+      "phase": "3 — Product Tour",
+      "id": "TOUR-OFF-UI",
+      "name": "Disabled: UI hidden",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:34.444Z"
+    },
+    {
+      "phase": "4 — Setup Wizard",
+      "id": "WIZ-01",
+      "name": "Wizard independent of tour",
+      "status": "FAIL",
+      "detail": "{\"tourLoaded\":false,\"wizardDom\":false,\"tourDom\":false,\"wizardBody\":0,\"tourStillNotLoaded\":true,\"setupWizardFeat\":false,\"tourFeat\":false}",
+      "ts": "2026-07-21T13:58:36.922Z"
+    },
+    {
+      "phase": "3 — Product Tour",
+      "id": "TOUR-ON",
+      "name": "Enabled: single script load",
+      "status": "PASS",
+      "detail": "scripts:1",
+      "ts": "2026-07-21T13:58:37.590Z"
+    },
+    {
+      "phase": "3 — Product Tour",
+      "id": "TOUR-ON-DUP",
+      "name": "No duplicate overlay",
+      "status": "PASS",
+      "detail": "overlays:1",
+      "ts": "2026-07-21T13:58:37.590Z"
+    },
+    {
+      "phase": "3 — Product Tour",
+      "id": "TOUR-ON-AUDIT",
+      "name": "Audit log on start",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:37.590Z"
+    },
+    {
+      "phase": "5 — Licenses",
+      "id": "LIC-01",
+      "name": "Feature registry",
+      "status": "PASS",
+      "detail": "74 keys",
+      "ts": "2026-07-21T13:58:37.592Z"
+    },
+    {
+      "phase": "5 — Licenses",
+      "id": "LIC-02",
+      "name": "Product tour opt-in default",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:37.592Z"
+    },
+    {
+      "phase": "5 — Licenses",
+      "id": "LIC-03",
+      "name": "DOM feature gates",
+      "status": "PASS",
+      "detail": "45 data-feature",
+      "ts": "2026-07-21T13:58:37.592Z"
+    },
+    {
+      "phase": "5 — Licenses",
+      "id": "LIC-04",
+      "name": "Ungated addons (module-level)",
+      "status": "WARN",
+      "detail": "book_schedule, book_confirm, book_no_show, ops_map_editor, rep_sales, tech_print_pdf, att_daily, att_leave, hr_leave_requests, pay_salary, pay_commission, hw_thermal, bk_local, bk_cloud, bk_drive",
+      "ts": "2026-07-21T13:58:37.592Z"
+    },
+    {
+      "phase": "6 — Performance",
+      "id": "PERF-01",
+      "name": "Product tour not in index.html bundle",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.913Z"
+    },
+    {
+      "phase": "6 — Performance",
+      "id": "PERF-02",
+      "name": "Lazy scripts count",
+      "status": "PASS",
+      "detail": "119 modules",
+      "ts": "2026-07-21T13:58:39.914Z"
+    },
+    {
+      "phase": "7 — Electron",
+      "id": "E-01",
+      "name": "Electron runtime validation",
+      "status": "WARN",
+      "detail": "Manual — see checklist in report",
+      "ts": "2026-07-21T13:58:39.914Z"
+    },
+    {
+      "phase": "7 — Electron",
+      "id": "E-02",
+      "name": "electron/ package present",
+      "status": "PASS",
+      "detail": "electron/main.js present; cupping-product-tour.js lazy (not in index.html script tags); PASS: product-tour not statically bundled",
+      "ts": "2026-07-21T13:58:39.914Z"
+    },
+    {
+      "phase": "8 — Production Audit",
+      "id": "PA-01",
+      "name": "Product tour not in index.html",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.914Z"
+    },
+    {
+      "phase": "8 — Production Audit",
+      "id": "PA-LEG",
+      "name": "Legacy path",
+      "status": "WARN",
+      "detail": "dist/ (build artifact — not source of truth)",
+      "ts": "2026-07-21T13:58:39.914Z"
+    },
+    {
+      "phase": "8 — Production Audit",
+      "id": "PA-BR",
+      "name": "Branch diff",
+      "status": "PASS",
+      "detail": "diff vs main: 23 files changed, 1965 insertions(+), 345 deletions(-)",
+      "ts": "2026-07-21T13:58:39.914Z"
+    }
+  ],
+  "extra": {
+    "static": {
+      "legacy": [
+        "dist/ (build artifact — not source of truth)"
+      ],
+      "branches": [
+        "diff vs main: 23 files changed, 1965 insertions(+), 345 deletions(-)"
+      ],
+      "electron": [
+        "electron/main.js present",
+        "cupping-product-tour.js lazy (not in index.html script tags)",
+        "PASS: product-tour not statically bundled"
+      ]
+    }
+  },
+  "fixes": []
+}

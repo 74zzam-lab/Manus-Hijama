@@ -1,0 +1,105 @@
+{
+  "phase": "V2-5.7",
+  "at": "2026-08-23T13:57:32.388Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "total": 8,
+  "passed": 7,
+  "failed": 1,
+  "results": [
+    {
+      "id": "R01-release-artifacts",
+      "title": "Indexer finds setup/unpacked + checksums + portable policy",
+      "result": "PASS",
+      "ms": 419,
+      "evidence": {
+        "setup": true,
+        "distDeferred": false,
+        "portableSupported": false,
+        "checksums": true
+      }
+    },
+    {
+      "id": "R02-migration-preserve",
+      "title": "V2-4→V2-5 preserve records/attachments/outbox/owner/license",
+      "result": "FAIL",
+      "ms": 26,
+      "evidence": {},
+      "error": "migration harness fail"
+    },
+    {
+      "id": "R03-migration-failure",
+      "title": "Corrupt DB refuses empty replace via DatabaseOpenError",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "errorCode": "DATABASE_PRAGMA_FAILED",
+        "preserved": true
+      }
+    },
+    {
+      "id": "R04-lifecycle-matrix",
+      "title": "LIFE matrix uninstall/update/wipe/updater policies",
+      "result": "PASS",
+      "ms": 94,
+      "evidence": {
+        "passed": 13,
+        "total": 13
+      }
+    },
+    {
+      "id": "R05-icons-branding",
+      "title": "Icon paths exist + PE icon inspect when EXE present",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "exists": {
+          "appIcon": true,
+          "winIcon": true,
+          "installerIcon": true,
+          "uninstallerIcon": true,
+          "installerHeaderIcon": true
+        },
+        "iconInspectOk": true
+      }
+    },
+    {
+      "id": "R06-compat-matrix",
+      "title": "Windows 10/11 + scale/locale compat evidence",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "win11": "windows-2022",
+        "win10Policy": true
+      }
+    },
+    {
+      "id": "R07-no-secrets",
+      "title": "Evidence tree has no secrets / tokens",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "scanned": true,
+        "hits": 0
+      }
+    },
+    {
+      "id": "R08-prior-gates",
+      "title": "Prior phase release gates still exit 0",
+      "result": "PASS",
+      "ms": 123,
+      "evidence": {
+        "verify-v2-5-6-completion.cjs": 0,
+        "verify-v2-5-5-completion.cjs": 0,
+        "verify-v2-5-4-completion.cjs": 0,
+        "verify-v2-5-3-completion.cjs": 0,
+        "verify-v2-5-2-completion.cjs": 0,
+        "verify-v2-5-1-completion.cjs": 0,
+        "verify-v2-4-completion.cjs": 0
+      }
+    }
+  ],
+  "ok": false
+}

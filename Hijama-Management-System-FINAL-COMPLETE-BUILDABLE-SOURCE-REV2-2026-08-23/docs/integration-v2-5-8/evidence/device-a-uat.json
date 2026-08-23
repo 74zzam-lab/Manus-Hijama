@@ -1,0 +1,12 @@
+{
+  "device": "A",
+  "role": "activation-primary",
+  "startedAt": "2026-08-23T13:57:34.367Z",
+  "finishedAt": "2026-08-23T13:57:34.669Z",
+  "ok": true,
+  "platform": "linux",
+  "unitStatus": 0,
+  "scenariosStatus": 0,
+  "distPresent": true,
+  "note": "Windows artifacts present on host"
+}

@@ -1,0 +1,138 @@
+{
+  "at": "2026-08-18T19:27:48.697Z",
+  "pragmas": {
+    "journalMode": "wal",
+    "busyTimeout": 5000,
+    "foreignKeys": 1
+  },
+  "analyze": {
+    "ok": true,
+    "strategy": "full",
+    "table": null,
+    "ms": 1,
+    "policy": "run after bulk load / weekly idle; not every open"
+  },
+  "indexes": {
+    "ok": true,
+    "count": 13,
+    "indexes": [
+      {
+        "name": "idx_appointments_date",
+        "tableName": "appointments",
+        "sql": "CREATE INDEX idx_appointments_date ON appointments(date)"
+      },
+      {
+        "name": "idx_attendance_emp_date",
+        "tableName": "attendance",
+        "sql": "CREATE INDEX idx_attendance_emp_date ON attendance(employee_id, date)"
+      },
+      {
+        "name": "idx_clients_file_no",
+        "tableName": "clients",
+        "sql": "CREATE INDEX idx_clients_file_no ON clients(file_no)"
+      },
+      {
+        "name": "idx_clients_phone",
+        "tableName": "clients",
+        "sql": "CREATE INDEX idx_clients_phone ON clients(phone)"
+      },
+      {
+        "name": "idx_expenses_date",
+        "tableName": "expenses",
+        "sql": "CREATE INDEX idx_expenses_date ON expenses(date)"
+      },
+      {
+        "name": "idx_sync_audit_ts",
+        "tableName": "sync_audit",
+        "sql": "CREATE INDEX idx_sync_audit_ts ON sync_audit(timestamp_utc)"
+      },
+      {
+        "name": "idx_conflicts_open",
+        "tableName": "sync_conflicts",
+        "sql": "CREATE INDEX idx_conflicts_open\n  ON sync_conflicts(status, branch_id)"
+      },
+      {
+        "name": "idx_outbox_branch",
+        "tableName": "sync_outbox",
+        "sql": "CREATE INDEX idx_outbox_branch\n  ON sync_outbox(branch_id, status)"
+      },
+      {
+        "name": "idx_outbox_status_next",
+        "tableName": "sync_outbox",
+        "sql": "CREATE INDEX idx_outbox_status_next\n  ON sync_outbox(status, next_attempt_at)"
+      },
+      {
+        "name": "idx_outbox_table",
+        "tableName": "sync_outbox",
+        "sql": "CREATE INDEX idx_outbox_table\n  ON sync_outbox(table_name, branch_id)"
+      },
+      {
+        "name": "idx_visits_client",
+        "tableName": "visits",
+        "sql": "CREATE INDEX idx_visits_client ON visits(client_id)"
+      },
+      {
+        "name": "idx_visits_date",
+        "tableName": "visits",
+        "sql": "CREATE INDEX idx_visits_date ON visits(date)"
+      },
+      {
+        "name": "idx_visits_invoice",
+        "tableName": "visits",
+        "sql": "CREATE INDEX idx_visits_invoice ON visits(invoice)"
+      }
+    ]
+  },
+  "missing": {
+    "ok": true,
+    "expected": 9,
+    "missing": [],
+    "inventoryCount": 13
+  },
+  "foreignKeyCheck": {
+    "ok": true,
+    "violations": 0,
+    "rows": []
+  },
+  "integrityCheck": {
+    "ok": true,
+    "detail": "ok"
+  },
+  "wal": {
+    "ok": true,
+    "mode": "PASSIVE",
+    "ms": 3,
+    "result": [
+      {
+        "busy": 0,
+        "log": 150,
+        "checkpointed": 150
+      }
+    ],
+    "journalMode": "wal"
+  },
+  "vacuumPolicy": {
+    "autoVacuumOnEveryStart": false,
+    "reason": "VACUUM rewrites whole DB and can be slow/unsafe mid-session",
+    "allowedModes": [
+      "manual",
+      "scheduled_idle",
+      "vacuum_into_backup"
+    ],
+    "safe": true
+  },
+  "samplePlan": {
+    "ok": true,
+    "sql": "SELECT id, name, phone FROM clients WHERE phone = ?",
+    "plan": [
+      {
+        "id": 3,
+        "parent": 0,
+        "notused": 36,
+        "detail": "SEARCH clients USING INDEX idx_clients_phone (phone=?)"
+      }
+    ],
+    "usesIndex": true,
+    "tableScans": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "phase": "V2-5.7",
+  "note": "Evidence after Gate B–G. No secrets. Ready for main NO — independent review required (REL-257-019).",
+  "indexes": [
+    "release-artifacts.json",
+    "checksums.sha256",
+    "icons.json",
+    "migration-all.json",
+    "lifecycle-matrix.json",
+    "scenarios-all.json",
+    "device-a-uat.json",
+    "device-b-uat.json",
+    "compat.json",
+    "failure-recovery.json"
+  ]
+}

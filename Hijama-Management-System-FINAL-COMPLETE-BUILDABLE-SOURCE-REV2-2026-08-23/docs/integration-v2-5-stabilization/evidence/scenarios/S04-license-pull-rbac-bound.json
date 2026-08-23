@@ -1,0 +1,15 @@
+{
+  "id": "S04-license-pull-rbac-bound",
+  "title": "Cloud backup and license-cache mutations fail closed without an authenticated session; read path has no create side-effect",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "protectedChannels": [
+      "backup:listCloudBackups",
+      "backup:downloadCloudBackup",
+      "cache:writeLicense",
+      "backup:uploadCloud"
+    ],
+    "noCreateSideEffect": true
+  }
+}

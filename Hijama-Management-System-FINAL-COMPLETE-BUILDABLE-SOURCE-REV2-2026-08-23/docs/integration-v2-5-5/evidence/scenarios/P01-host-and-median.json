@@ -1,0 +1,8 @@
+{
+  "id": "P01-host-and-median",
+  "title": "Host documentation + median-of-3 harness",
+  "result": "FAIL",
+  "ms": 40,
+  "evidence": {},
+  "error": "unit_failed"
+}

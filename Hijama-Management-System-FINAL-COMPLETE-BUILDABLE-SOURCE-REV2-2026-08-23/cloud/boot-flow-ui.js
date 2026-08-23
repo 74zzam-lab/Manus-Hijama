@@ -1429,6 +1429,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
               setStatus('⚠️ مسار استعادة Backup V2 غير متاح — حدّث التطبيق', true);
               return;
             }
+            try { global.RestoreRuntimeRehydrate?.installRestoreRehydrateListener?.(); } catch { /* empty */ }
             restoreInFlight = true;
             try { global.OwnerManagement?.setSystemBusy?.('restore'); } catch { /* empty */ }
             setStatus('⏳ جارٍ تنزيل واستعادة Backup V2 (atomic — استبدال SQLite)…');

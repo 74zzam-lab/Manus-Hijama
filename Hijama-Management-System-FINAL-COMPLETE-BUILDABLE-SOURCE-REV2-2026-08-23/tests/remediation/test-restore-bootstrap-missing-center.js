@@ -172,8 +172,22 @@ async function main() {
     /requireScopeTruth:\s*context\s*===\s*'bootstrap'\s*\?\s*false/,
     'bootstrap restore must not require scopeTruth on legacy manifests'
   );
+  assert.match(
+    coordinatorSrc,
+    /context === 'bootstrap'[\s\S]*bootstrap_deferred/,
+    'bootstrap restore must defer blocking renderer rehydrate IPC'
+  );
+  assert.match(
+    coordinatorSrc,
+    /never roll back for renderer rehydrate-only failures/,
+    'bootstrap restore must not rollback SQLite on rehydrate-only failure'
+  );
   assert.match(bootSrc, /prepareBootSyncPrerequisites/, 'BootFlow must prepare sync prerequisites before readiness');
   assert.match(bootSrc, /hasBlockingSyncPrerequisites/, 'BootFlow must not hard-fail google_not_connected when settings show Google');
+  assert.match(bootSrc, /installRestoreRehydrateListener/, 'BootFlow must install restore rehydrate listener before cloud restore');
+
+  const discoverySrc = fs.readFileSync(path.join(__dirname, '../../cloud/cloud-data-discovery.js'), 'utf8');
+  assert.match(discoverySrc, /createRestoreProgressEmitter/, 'restore progress watchdog must not regress to download_db stage');
 
   fs.rmSync(root, { recursive: true, force: true });
   console.log('PASS: restore-bootstrap-missing-center (identity gate, full restore, bootstrap wiring)');

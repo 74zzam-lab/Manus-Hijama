@@ -327,6 +327,28 @@ async function restoreInternal(request = {}) {
     }
 
     const postCommitFailure = async (error, stage, extra = {}) => {
+      // Bootstrap BootFlow: SQLite is already committed — never roll back for renderer rehydrate-only failures.
+      if (context === 'bootstrap' && (stage === 'rehydrating_runtime' || stage === 'verifying_data')) {
+        return {
+          ok: true,
+          diagnosticId,
+          filePath: localPath,
+          remotePath: request.remotePath || downloadResult?.remotePath || null,
+          googleFileId: request.googleFileId || downloadResult?.googleFileId || null,
+          download: downloadResult,
+          restore: restoreRes,
+          rowCounts: sqliteCounts,
+          restoreVerified: false,
+          rehydrateDeferred: true,
+          rehydrateWarning: error,
+          stage,
+          preservedIdentity: identitySnapshot,
+          bootstrapRestore: true,
+          durationMs: Date.now() - startedMs,
+          stages: STAGES,
+          ...extra,
+        };
+      }
       let rollback = null;
       try {
         rollback = await deps.rollbackLocalRestore({
@@ -388,21 +410,29 @@ async function restoreInternal(request = {}) {
     const sqliteCounts = rowCountRes?.counts || restoreRes?.rowCounts || {};
 
     emit('rehydrating_runtime', { intraRatio: 0.05 });
-    const rehydrateRes = await deps.rehydrateRuntime?.({
-      diagnosticId,
-      webContentsId: request.webContentsId,
-      manifest: restoreRes?.manifest || downloadResult?.manifest || null,
-      scopeTruth: restoreRes?.scopeTruth || downloadResult?.scopeTruth || null,
-      rowCounts: sqliteCounts,
-      onSubstage: (_name, ratio) => emit('rehydrating_runtime', { intraRatio: Math.min(0.95, 0.1 + (ratio || 0) * 0.85) }),
-    }) || { ok: true, skipped: true };
-
-    if (!rehydrateRes || rehydrateRes.ok === false) {
-      return postCommitFailure(rehydrateRes?.error || 'restore_rehydrate_failed', 'rehydrating_runtime', {
-        restoreVerified: false,
-        rehydrate: rehydrateRes || null,
+    let rehydrateRes;
+    if (context === 'bootstrap') {
+      // Pre-login BootFlow: blocking renderer IPC rehydrate can stall until timeout even though
+      // SQLite restore already succeeded. Rehydrate runs in renderer via RestoreVerification instead.
+      rehydrateRes = { ok: true, skipped: true, deferred: true, reason: 'bootstrap_deferred' };
+      emit('rehydrating_runtime', { intraRatio: 1, deferred: true });
+    } else {
+      rehydrateRes = await deps.rehydrateRuntime?.({
+        diagnosticId,
+        webContentsId: request.webContentsId,
+        manifest: restoreRes?.manifest || downloadResult?.manifest || null,
+        scopeTruth: restoreRes?.scopeTruth || downloadResult?.scopeTruth || null,
         rowCounts: sqliteCounts,
-      });
+        onSubstage: (_name, ratio) => emit('rehydrating_runtime', { intraRatio: Math.min(0.95, 0.1 + (ratio || 0) * 0.85) }),
+      }) || { ok: true, skipped: true };
+
+      if (!rehydrateRes || rehydrateRes.ok === false) {
+        return postCommitFailure(rehydrateRes?.error || 'restore_rehydrate_failed', 'rehydrating_runtime', {
+          restoreVerified: false,
+          rehydrate: rehydrateRes || null,
+          rowCounts: sqliteCounts,
+        });
+      }
     }
     emit('rehydrating_runtime', {
       intraRatio: 1,
@@ -414,8 +444,8 @@ async function restoreInternal(request = {}) {
     const manifest = restoreRes?.manifest || downloadResult?.manifest || null;
     const scopeTruth = restoreRes?.scopeTruth || downloadResult?.scopeTruth || null;
     const countVerify = verifyCountsAgainstManifest(manifest, scopeTruth, sqliteCounts);
-    const memoryVerify = rehydrateRes.skipped
-      ? { ok: true, skipped: true }
+    const memoryVerify = (rehydrateRes.skipped || rehydrateRes.deferred)
+      ? { ok: true, skipped: true, deferred: !!rehydrateRes.deferred }
       : {
         ok: rehydrateRes.ok !== false,
         memoryCounts: rehydrateRes.memoryCounts,

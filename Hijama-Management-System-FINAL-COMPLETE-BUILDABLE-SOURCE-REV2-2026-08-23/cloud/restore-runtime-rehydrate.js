@@ -56,6 +56,23 @@
       try { options.onSubstage?.(name, ratio); } catch { /* observer */ }
     };
 
+    async function withTimeout(promise, ms, label) {
+      if (typeof setTimeout !== 'function' || !(Number(ms) > 0)) {
+        return promise;
+      }
+      let timer;
+      try {
+        return await Promise.race([
+          promise,
+          new Promise((resolve) => {
+            timer = setTimeout(() => resolve({ ok: false, error: 'restore_rehydrate_timeout', stage: label }), ms);
+          }),
+        ]);
+      } finally {
+        if (timer) clearTimeout(timer);
+      }
+    }
+
     emit('invalidate_caches', 0.05);
     try { global.SqliteBridge?.invalidateOperationalCaches?.(); } catch { /* empty */ }
 
@@ -63,7 +80,11 @@
     const bootFromRestoredDb = global.SqliteBridge?.bootFromSQLiteSoT
       || global.SqliteBridge?.bootFromSQLiteSoTOnce;
     if (bootFromRestoredDb) {
-      const boot = await bootFromRestoredDb.call(global.SqliteBridge);
+      const boot = await withTimeout(
+        bootFromRestoredDb.call(global.SqliteBridge),
+        Number(options.bootTimeoutMs) > 0 ? Number(options.bootTimeoutMs) : 45000,
+        'sqlite_boot'
+      );
       if (boot && boot.ok === false) {
         return { ok: false, error: boot.error || 'restore_rehydrate_boot_failed', stages };
       }
@@ -71,7 +92,11 @@
 
     emit('branch_rehydrate', 0.45);
     if (global.SqliteBridge?.rehydrateBranchView) {
-      const hyd = await global.SqliteBridge.rehydrateBranchView();
+      const hyd = await withTimeout(
+        global.SqliteBridge.rehydrateBranchView(),
+        Number(options.branchTimeoutMs) > 0 ? Number(options.branchTimeoutMs) : 30000,
+        'branch_rehydrate'
+      );
       if (hyd && hyd.ok === false) {
         return { ok: false, error: hyd.error || 'restore_rehydrate_branch_failed', stages };
       }

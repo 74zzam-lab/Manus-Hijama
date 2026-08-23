@@ -393,7 +393,42 @@
       filesTotal: extra.filesTotal || null,
       lastActivity: extra.lastActivity || stage?.label || '',
       diagnosticId: extra.diagnosticId || null,
+      stalled: extra.stalled === true,
     };
+  }
+
+  function createRestoreProgressEmitter(onProgress, started, diagnosticId) {
+    let lastProgressAt = Date.now();
+    let currentStageId = 'verify_point';
+    let lastStageRatio = 0.15;
+    const emit = (stageId, extra = {}) => {
+      currentStageId = stageId;
+      if (extra.stageRatio != null) lastStageRatio = extra.stageRatio;
+      lastProgressAt = Date.now();
+      const snap = buildProgressState(stageId, {
+        ...extra,
+        elapsedMs: Date.now() - started,
+        diagnosticId,
+      });
+      try { onProgress(snap); } catch { /* empty */ }
+      return snap;
+    };
+    const startWatchdog = () => setInterval(() => {
+      if (Date.now() - lastProgressAt > NO_PROGRESS_WATCHDOG_MS) {
+        emit(currentStageId, {
+          lastActivity: 'تحذير: لا يوجد تحديث منذ أكثر من 30 ثانية',
+          stageRatio: lastStageRatio,
+          stalled: true,
+        });
+      }
+    }, 5000);
+    return { emit, startWatchdog, touch: () => { lastProgressAt = Date.now(); } };
+  }
+
+  function resolveRestoreErrorMessage(errCode, fallback) {
+    const truth = global.OperationalErrorTruth?.present?.(errCode)
+      || global.OperationalErrorTruth?.resolve?.(errCode);
+    return truth?.userMessageAr || fallback || errCode || 'restore_failed';
   }
 
   /**
@@ -423,19 +458,8 @@
     const started = Date.now();
     const onProgress = typeof options.onProgress === 'function' ? options.onProgress : () => {};
     const diagnosticId = `RST-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-    let lastProgressAt = Date.now();
     let watchdog = null;
-
-    const emit = (stageId, extra = {}) => {
-      lastProgressAt = Date.now();
-      const snap = buildProgressState(stageId, {
-        ...extra,
-        elapsedMs: Date.now() - started,
-        diagnosticId,
-      });
-      try { onProgress(snap); } catch { /* empty */ }
-      return snap;
-    };
+    const { emit, startWatchdog } = createRestoreProgressEmitter(onProgress, started, diagnosticId);
 
     try {
       // Preserve current DB — never wipe on start
@@ -459,14 +483,7 @@
 
       emit('local_safety', { lastActivity: 'الاحتفاظ بالحالة المحلية الحالية' });
 
-      watchdog = setInterval(() => {
-        if (Date.now() - lastProgressAt > NO_PROGRESS_WATCHDOG_MS) {
-          emit('download_db', {
-            lastActivity: 'تحذير: لا يوجد تحديث منذ أكثر من 30 ثانية',
-            stageRatio: 0.2,
-          });
-        }
-      }, 5000);
+      watchdog = startWatchdog();
 
       let restoreResult = { ok: false };
 
@@ -532,9 +549,11 @@
         point,
       };
     } catch (err) {
+      const errCode = err?.code || err?.message || String(err);
       return {
         ok: false,
-        error: err.message || String(err),
+        error: errCode,
+        message: resolveRestoreErrorMessage(errCode, err?.message),
         diagnosticId,
         preserved: {
           license: !!global.LicenseCloud?.loadLocal?.(),
@@ -572,19 +591,8 @@
     const started = Date.now();
     const onProgress = typeof options.onProgress === 'function' ? options.onProgress : () => {};
     const diagnosticId = `BKP-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-    let lastProgressAt = Date.now();
     let watchdog = null;
-
-    const emit = (stageId, extra = {}) => {
-      lastProgressAt = Date.now();
-      const snap = buildProgressState(stageId, {
-        ...extra,
-        elapsedMs: Date.now() - started,
-        diagnosticId,
-      });
-      try { onProgress(snap); } catch { /* empty */ }
-      return snap;
-    };
+    const { emit, startWatchdog } = createRestoreProgressEmitter(onProgress, started, diagnosticId);
 
     try {
       const preSnapshot = {
@@ -614,14 +622,7 @@
         await global.RestoreReconciliation?.createMandatoryPreRestoreSnapshot?.({ allowEmptySkip: true });
       } catch { /* empty */ }
 
-      watchdog = setInterval(() => {
-        if (Date.now() - lastProgressAt > NO_PROGRESS_WATCHDOG_MS) {
-          emit('download_db', {
-            lastActivity: 'تحذير: لا يوجد تحديث منذ أكثر من 30 ثانية',
-            stageRatio: 0.2,
-          });
-        }
-      }, 5000);
+      watchdog = startWatchdog();
 
       const api = global.cuppingElectron?.backup || global.tadawiElectron?.backup || global.tadawi?.backup;
       if (!api?.v2RestoreFromCloudRemote && !api?.v2RestoreUnified) {
@@ -739,11 +740,10 @@
 
       if (!restoreRes?.ok) {
         const errCode = restoreRes?.error || 'backup_v2_restore_failed';
-        const errTruth = global.OperationalErrorTruth?.resolve?.(errCode) || null;
         return {
           ok: false,
           error: errCode,
-          message: restoreRes?.message || errTruth?.userMessageAr || errCode,
+          message: restoreRes?.message || resolveRestoreErrorMessage(errCode, null),
           stage: restoreRes?.stage || 'restoring',
           diagnosticId: restoreRes?.diagnosticId || diagnosticId,
           detail: restoreRes?.detail || null,
@@ -802,9 +802,11 @@
         point,
       };
     } catch (err) {
+      const errCode = err?.code || err?.message || String(err);
       return {
         ok: false,
-        error: err.message || String(err),
+        error: errCode,
+        message: resolveRestoreErrorMessage(errCode, err?.message),
         diagnosticId,
         preserved: {
           license: !!global.LicenseCloud?.loadLocal?.(),

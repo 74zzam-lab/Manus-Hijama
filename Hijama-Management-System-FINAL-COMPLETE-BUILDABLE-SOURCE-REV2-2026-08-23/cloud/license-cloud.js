@@ -86,6 +86,9 @@
       meta.centerId = doc.centerId;
       global.CloudMeta.saveMeta(meta);
     }
+    try {
+      global.DeviceCache?.syncLicenseToMainCache?.(doc)?.catch?.(() => {});
+    } catch { /* non-fatal */ }
     return doc;
   }
 

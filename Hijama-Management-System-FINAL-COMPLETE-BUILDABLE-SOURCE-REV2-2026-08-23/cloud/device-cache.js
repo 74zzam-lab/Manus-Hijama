@@ -81,10 +81,27 @@
     return api.getStatus(getCenterId());
   }
 
+  /** Push renderer license into main-process device cache (bootstrap restore authority). */
+  async function syncLicenseToMainCache(licenseDoc) {
+    const license = licenseDoc || global.LicenseCloud?.loadLocal?.();
+    const centerId = String(license?.centerId || getCenterId() || '').trim();
+    if (!license || !centerId) return { ok: false, error: 'no_license' };
+    const api = getCacheApi();
+    if (!api?.writeLicense) return { ok: false, skipped: true, reason: 'no_electron_cache' };
+    try {
+      const res = await api.writeLicense(centerId, license);
+      if (res && res.ok === false) return res;
+      return res || { ok: true, centerId };
+    } catch (err) {
+      return { ok: false, error: err?.message || String(err) };
+    }
+  }
+
   global.DeviceCache = {
     isElectron,
     getCenterId,
     snapshotFromLocal,
+    syncLicenseToMainCache,
     hydrateBranch,
     getStatus
   };

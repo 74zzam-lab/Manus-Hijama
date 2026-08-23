@@ -140,7 +140,28 @@
       saveState(state);
       if (state.pullDone && global.SyncBaseline?.completeReconciliation) {
         try {
-          const completed = await global.SyncBaseline.completeReconciliation({ source: 'restore_reconciliation' });
+          const branchId = String(
+            global.DeviceConfig?.getLockedBranchId?.()
+            || global.BranchScope?.getActiveBranchId?.()
+            || 'BR-MAIN'
+          ).trim();
+          let remoteRevision = 0;
+          const remote = await global.SyncEngine?.getRemoteBranchDatabaseRevision?.(branchId);
+          if (remote?.ok && Number.isFinite(Number(remote.remoteRevision))) {
+            remoteRevision = Number(remote.remoteRevision);
+          } else {
+            const local = global.VersionsIndex?.loadLocal?.() || {};
+            remoteRevision = Number(
+              local?.branches?.[branchId]?.databaseVersion
+              || local?.databaseVersion
+              || 0
+            );
+          }
+          const completed = await global.SyncBaseline.completeReconciliation({
+            branchId,
+            remoteRevision,
+            source: 'restore_reconciliation',
+          });
           if (completed?.ok === false) {
             state.pullDone = false;
             state.pushBlocked = true;
@@ -148,6 +169,10 @@
             state.error = completed.error || 'sync_lifecycle_commit_failed';
             saveState(state);
           }
+        } catch { /* empty */ }
+      } else if (state.pullDone && global.SyncBaseline?.establishFromLocalState) {
+        try {
+          await global.SyncBaseline.establishFromLocalState({ source: 'restore_reconciliation' });
         } catch { /* empty */ }
       }
       return { ok: state.pullDone !== false, state, pushAllowed: state.pushAllowed };

@@ -236,6 +236,71 @@
     return committed.ok ? { ok: true, branchId: bid, remoteRevision: rev } : committed;
   }
 
+  /**
+   * BootFlow / post-restore: mark baseline from local + optional remote revision.
+   * Idempotent — safe after hydrate, local DB, or empty start.
+   */
+  async function establishFromLocalState(options) {
+    options = options || {};
+    const branchId = String(
+      options.branchId
+      || global.DeviceConfig?.getLockedBranchId?.()
+      || global.BranchScope?.getActiveBranchId?.()
+      || 'BR-MAIN'
+    ).trim();
+    const centerId = String(
+      options.centerId
+      || global.CenterId?.getStoredCenterId?.()
+      || global.LicenseCloud?.loadLocal?.()?.centerId
+      || ''
+    ).trim();
+    if (!branchId) return { ok: false, code: 'branch_required' };
+
+    const localVersions = global.VersionsIndex?.loadLocal?.(centerId) || {};
+    let remoteRevision = Number(
+      localVersions?.branches?.[branchId]?.databaseVersion
+      || localVersions?.databaseVersion
+      || 0
+    );
+    if (options.remoteRevision != null && Number.isFinite(Number(options.remoteRevision))) {
+      remoteRevision = Number(options.remoteRevision);
+    } else if (global.SyncEngine?.getRemoteBranchDatabaseRevision) {
+      try {
+        const remote = await global.SyncEngine.getRemoteBranchDatabaseRevision(branchId);
+        if (remote?.ok && Number.isFinite(Number(remote.remoteRevision))) {
+          remoteRevision = Number(remote.remoteRevision);
+        }
+      } catch { /* keep local revision */ }
+    }
+
+    const integrityPass = global.OperationalDbHealth?.isOperationalAllowed?.()?.ok !== false;
+    if (options.requireIntegrity === true && !integrityPass) {
+      return { ok: false, code: 'integrity_check_required' };
+    }
+
+    const state = load();
+    if (state.lifecycle === LIFECYCLE.READY && state.baselineKnown === true) {
+      return { ok: true, skipped: true, branchId, remoteRevision };
+    }
+
+    const hydrating = await markHydrating({
+      organizationResolved: !!centerId,
+      branchResolved: !!branchId,
+    });
+    if (hydrating?.ok === false) return hydrating;
+
+    const baseline = await markBaselineKnown({
+      branchId,
+      remoteRevision: Math.max(0, remoteRevision),
+      integrityPass: true,
+      organizationResolved: !!centerId,
+      branchResolved: !!branchId,
+      operationId: options.operationId || null,
+    });
+    if (baseline?.ok === false) return baseline;
+    return markReady({ operationId: options.operationId || null });
+  }
+
   global.SyncBaseline = {
     STATE_KEY,
     LIFECYCLE,
@@ -249,6 +314,7 @@
     markReady,
     enterReconciliationRequired,
     completeReconciliation,
+    establishFromLocalState,
     getBaselineRevision,
     isPushAllowed,
     assertPushAllowed,

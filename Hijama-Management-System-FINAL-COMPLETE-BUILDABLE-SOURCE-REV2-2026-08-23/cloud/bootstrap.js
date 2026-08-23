@@ -150,6 +150,7 @@
     }
 
     global.LicenseCloud?.saveLocal?.(data);
+    await global.DeviceCache?.syncLicenseToMainCache?.(data).catch(() => ({ ok: false }));
     if (data?.centerId && global.CloudMeta) {
       const meta = global.CloudMeta.loadMeta() || {};
       meta.centerId = data.centerId;

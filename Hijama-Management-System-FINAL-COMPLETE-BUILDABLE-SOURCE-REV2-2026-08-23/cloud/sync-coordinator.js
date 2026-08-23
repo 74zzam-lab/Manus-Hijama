@@ -112,15 +112,32 @@
 
       if (options.afterRestore === true && pull?.ok !== false) {
         const branchId = global.SyncEngine?.getBranchId?.(options.branchId) || null;
+        let remoteRevision = 0;
         const remote = await global.SyncEngine.getRemoteBranchDatabaseRevision?.(branchId);
-        if (remote?.ok && branchId) {
+        if (remote?.ok && Number.isFinite(Number(remote.remoteRevision))) {
+          remoteRevision = Number(remote.remoteRevision);
+        } else {
+          const centerId = global.SyncEngine?.getCenterId?.() || '';
+          const local = global.VersionsIndex?.loadLocal?.(centerId) || {};
+          remoteRevision = Number(
+            local?.branches?.[branchId]?.databaseVersion
+            || local?.databaseVersion
+            || 0
+          );
+        }
+        if (branchId) {
           const completed = await global.SyncBaseline?.completeReconciliation?.({
             branchId,
-            remoteRevision: remote.remoteRevision,
+            remoteRevision,
             operationId,
           });
           if (completed?.ok === false) {
             pull = { ...pull, ok: false, error: completed.error || 'sync_lifecycle_commit_failed' };
+          }
+        } else if (global.SyncBaseline?.establishFromLocalState) {
+          const established = await global.SyncBaseline.establishFromLocalState({ operationId });
+          if (established?.ok === false) {
+            pull = { ...pull, ok: false, error: established.error || established.code || 'baseline_commit_failed' };
           }
         }
       }

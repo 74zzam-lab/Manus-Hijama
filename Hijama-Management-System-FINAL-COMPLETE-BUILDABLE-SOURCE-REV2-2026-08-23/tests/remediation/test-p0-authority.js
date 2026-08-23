@@ -57,6 +57,10 @@ const bootstrapLicenseChannels = [
   'backup:uploadCloud',
   'cache:writeLicense',
   'bootstrap:syncWizardState',
+  'backup:v2:pickFile',
+  'backup:v2:pickLatest',
+  'backup:v2:inspect',
+  'backup:v2:stageRemote',
 ];
 
 for (const channel of [

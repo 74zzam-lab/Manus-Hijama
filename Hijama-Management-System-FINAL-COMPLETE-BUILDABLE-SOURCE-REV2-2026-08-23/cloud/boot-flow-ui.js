@@ -162,6 +162,37 @@
     return ue;
   }
 
+  function bootstrapRestoreVerifyOptions(extra) {
+    return {
+      requireOwner: false,
+      requireData: false,
+      ...(extra || {}),
+    };
+  }
+
+  async function establishBootSyncBaseline() {
+    try {
+      await global.DeviceCache?.syncLicenseToMainCache?.();
+    } catch { /* non-fatal */ }
+    try {
+      return await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow' });
+    } catch {
+      return { ok: false };
+    }
+  }
+
+  function formatSyncCycleError(result) {
+    if (!result) return 'sync_failed';
+    const parts = [
+      result.error,
+      result.message,
+      result.pull?.error,
+      result.push?.error,
+      global.SyncCoordinator?.getLastCycleResult?.()?.error,
+    ].filter(Boolean);
+    return parts[0] || 'sync_cycle_failed';
+  }
+
   async function waitForSyncLifecycleReady(options = {}) {
     const maxMs = Number(options.maxMs) || 120000;
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -1194,6 +1225,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
           saveWizard(w2);
           setStatus(msg);
           renderNavButtons(loadWizard());
+          establishBootSyncBaseline().catch(() => {});
         };
 
         const renderProgress = (snap) => {
@@ -1454,8 +1486,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                 kind: 'cloud_hydrate',
                 point,
                 source: 'bootflow_cloud_restore',
-                requireOwner: false,
-                requireData: false,
+                ...bootstrapRestoreVerifyOptions(),
               });
               if (!verified?.verified) {
                 setStatus(
@@ -1520,8 +1551,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
               const verified = await global.RestoreVerification?.verifyPostRestore?.({
                 kind: 'local',
                 source: 'bootflow_local',
-                requireOwner: true,
-                requireData: false,
+                ...bootstrapRestoreVerifyOptions(),
               });
               if (!verified?.verified) {
                 setStatus('❌ فشل التحقق من البيانات المحلية: ' + (verified?.error || 'unknown'), true);
@@ -1585,6 +1615,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                   if (!bootstrapApi?.issueRestoreCapability) {
                     return { ok: false, error: 'bootstrap_restore_unavailable' };
                   }
+                  try { await global.DeviceCache?.syncLicenseToMainCache?.(lic); } catch { /* non-fatal */ }
                   const cap = await bootstrapApi.issueRestoreCapability({
                     bootFlow: true,
                     source: 'local',
@@ -1630,8 +1661,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                   kind: 'backup_v2',
                   restoreKind: 'backup_v2',
                   source: 'bootflow_local_file',
-                  requireOwner: true,
-                  requireData: false,
+                  ...bootstrapRestoreVerifyOptions(),
                 });
                 if (!verified?.verified) {
                   setStatus('❌ فشل التحقق: ' + (verified?.error || 'restore_verification_failed'), true);
@@ -1719,7 +1749,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                 direction: afterRestore ? 'pull' : undefined,
               });
               ok = r?.ok !== false;
-              if (!ok) setStatus(`⚠️ فشلت المزامنة: ${r?.error || r?.message || ''}`, true);
+              if (!ok) setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
               else {
                 setStatus('⏳ انتظار اكتمال دورة المزامنة…');
                 await waitForSyncLifecycleReady({ relaxedBaseline: true });

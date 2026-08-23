@@ -664,6 +664,8 @@
 
       emit('download_db', { lastActivity: 'تفويض استعادة Bootstrap (pre-login)', stageRatio: 0.32 });
 
+      try { await global.DeviceCache?.syncLicenseToMainCache?.(lic); } catch { /* non-fatal */ }
+
       let bootstrapRestoreCapabilityId = null;
       const bootstrapApi = global.cuppingElectron?.bootstrap || global.tadawiElectron?.bootstrap;
       if (!bootstrapApi?.issueRestoreCapability) {
@@ -765,7 +767,7 @@
           scopeTruth: restoreRes.scopeTruth,
         },
         source: 'bootflow_backup_v2_cloud',
-        requireOwner: true,
+        requireOwner: false,
         requireData: false,
       });
 
@@ -784,7 +786,6 @@
       if (global.RestoreReconciliation?.afterRestoreDataSourceSelected) {
         await global.RestoreReconciliation.afterRestoreDataSourceSelected('backup_v2');
       }
-      try { global.SyncBaseline?.enterReconciliationRequired?.({ source: 'backup_v2_restore' }); } catch { /* empty */ }
 
       if (opId !== restoreOpId) {
         return { ok: false, error: 'stale_restore', ignored: true, diagnosticId };

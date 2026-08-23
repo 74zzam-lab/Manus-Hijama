@@ -77,6 +77,10 @@ const CHANNEL_POLICY = {
   'backup:verifyDbBackup': { minRank: 4 },
   'backup:v2:readiness': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
   'backup:v2:listCloud': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
+  'backup:v2:pickFile': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
+  'backup:v2:pickLatest': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
+  'backup:v2:inspect': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
+  'backup:v2:stageRemote': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
   // Pre-login activation gate pushes signed license.json to Drive (PR38 public path).
   'backup:uploadCloud': { minRank: 4, allowWithoutSession: true, bootstrapOnly: true },
   'backup:uploadSyncFile': { minRank: 2, allowWithoutSession: true, bootstrapOnly: true },

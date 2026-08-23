@@ -193,6 +193,22 @@
     return parts[0] || 'sync_cycle_failed';
   }
 
+  async function prepareBootSyncPrerequisites() {
+    try { await refreshGoogleConnectionState(); } catch { /* non-fatal */ }
+    try { await global.DriveAdapter?.ensureConnected?.(); } catch { /* non-fatal */ }
+    try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
+    try { await establishBootSyncBaseline(); } catch { /* non-fatal */ }
+  }
+
+  function hasBlockingSyncPrerequisites(readiness) {
+    if (!readiness || readiness.ready) return [];
+    const googleConnected = hasGoogle() || readiness.googleConnected === true;
+    return (readiness.missing || []).filter((code) => {
+      if (code === 'google_not_connected' && googleConnected) return false;
+      return !['unsafe', 'UNSAFE', 'sync_paused', 'analysis_required', 'sync_guard_blocked', 'no_analysis'].includes(code);
+    });
+  }
+
   async function waitForSyncLifecycleReady(options = {}) {
     const maxMs = Number(options.maxMs) || 120000;
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -1732,10 +1748,11 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
           setStatus('⏳ جارٍ المزامنة...');
           try {
             let ok = true;
-            try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true, startBackup: true }); } catch { /* empty */ }
+            await prepareBootSyncPrerequisites();
             const ready = global.SyncEngine?.getReadiness?.({ force: true });
-            if (ready && !ready.ready) {
-              setStatus(`⚠️ ${ready.messageAr || ('غير جاهز: ' + (ready.missing || []).join(', '))}`, true);
+            const blockers = hasBlockingSyncPrerequisites(ready);
+            if (blockers.length) {
+              setStatus(`⚠️ ${ready?.messageAr || ('غير جاهز: ' + blockers.join(', '))}`, true);
               ok = false;
             } else if (global.SyncEngine?.runOnce) {
               if (!global.SyncEngine.isRunning?.()) {

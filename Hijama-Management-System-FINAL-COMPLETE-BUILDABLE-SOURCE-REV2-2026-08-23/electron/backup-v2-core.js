@@ -64,7 +64,12 @@ function assertRestoreIdentityAllowed(manifest, expected = {}) {
     : (backupBranch ? [backupBranch] : []);
 
   if (expected.allowMissingSourceMetadata === true) {
-    return { ok: true, skipped: 'allow_missing_source_metadata' };
+    return {
+      ok: true,
+      skipped: 'allow_missing_source_metadata',
+      centerId: backupCenter || expectedCenter || expectedOrg,
+      branchIds: backupBranches.length ? backupBranches : authorizedBranches,
+    };
   }
 
   if (!expectedCenter && !expectedOrg && !expectedBranch && !authorizedBranches.length) {
@@ -93,6 +98,14 @@ function assertRestoreIdentityAllowed(manifest, expected = {}) {
 
   if (expectedBranch || authorizedBranches.length) {
     if (!backupBranches.length) {
+      if (expected.allowLegacyBranchless === true) {
+        return {
+          ok: true,
+          skipped: 'missing_backup_branch_metadata',
+          centerId: backupCenter || expectedCenter || expectedOrg,
+          branchIds: authorizedBranches,
+        };
+      }
       const err = new Error('restore_branch_missing');
       err.code = 'restore_branch_missing';
       throw err;
@@ -887,7 +900,10 @@ async function restoreBackupFile(options) {
     throw restoreValidation.restoreError('backup_field_key_missing', 'backup_field_key_missing', restoreValidation.STAGES.VALIDATION);
   }
   emitProgress(options, 'checking_identity');
-  assertRestoreIdentityAllowed(inspected.manifest, options.expectedIdentity || {});
+  assertRestoreIdentityAllowed(inspected.manifest, {
+    ...(options.expectedIdentity || {}),
+    allowLegacyBranchless: options.allowLegacyBranchless !== false,
+  });
   restoreValidation.assertRestoreScopeTruthAllowed(inspected.manifest, {
     ...options.expectedIdentity,
     licensedBranchIds: options.licensedBranchIds,

@@ -197,6 +197,8 @@ const remediation = [
   ['tests/remediation/test-backup-v2-ui-workspace.js', 'remediation:backup-v2-ui-workspace'],
   ['tests/remediation/test-protection-ui-terminology.js', 'remediation:protection-ui-terminology'],
   ['tests/remediation/test-setup-licensing-google-forensic-closure.js', 'remediation:setup-licensing-google-forensic-closure'],
+  ['tests/remediation/test-restore-legacy-schema-integrity.js', 'remediation:restore-legacy-schema-integrity'],
+  ['tests/remediation/test-restore-bootstrap-missing-center.js', 'remediation:restore-bootstrap-missing-center'],
 ];
 
 const existing = [

@@ -304,7 +304,9 @@ async function restoreInternal(request = {}) {
       licensedBranchIds: request.licensedBranchIds,
       bootstrapRestoreCapabilityId,
       relaunch: request.relaunch === true,
-      requireScopeTruth: bootstrapRestoreCapabilityId ? true : request.requireScopeTruth === true,
+      allowMissingSourceMetadata: context === 'bootstrap' || request.allowMissingSourceMetadata === true,
+      requireScopeTruth: context === 'bootstrap' ? false : request.requireScopeTruth === true,
+      skipScopeTruth: context === 'bootstrap' ? true : request.skipScopeTruth === true,
       onProgress: (evt) => emit('restoring', { intraRatio: 0.5, restoreProgress: evt }),
     });
 

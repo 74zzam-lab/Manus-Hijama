@@ -804,7 +804,10 @@ function registerBackupV2Ipc({
         try { progressSender.send('backup:restoreProgress', snap); } catch { /* observer */ }
       }
     };
-    const identity = resolveIdentity(opts);
+    const identity = resolveIdentity({
+      ...opts,
+      allowMissingSourceMetadata: context === 'bootstrap' || opts.allowMissingSourceMetadata === true,
+    });
     const requestedLocalPath = opts.localPath || opts.filePath || null;
     const localPath = source === 'local' ? resolveManagedLocalBackup(requestedLocalPath) : null;
     return backupRestoreCoordinator.restore({

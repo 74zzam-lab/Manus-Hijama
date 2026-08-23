@@ -34,6 +34,81 @@
     }
   }
 
+  function countActiveUsers() {
+    try {
+      const users = global.AuthCredentialTruth?.readAuthoritativeUsers?.()
+        || global.DB?.get?.('users', []) || [];
+      if (!Array.isArray(users)) return 0;
+      return users.filter((u) => u && u.active !== false).length;
+    } catch {
+      return 0;
+    }
+  }
+
+  function normalizeSqliteRowCounts(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    return {
+      clients: Number(raw.clients ?? raw.clientsRegistry ?? 0),
+      visits: Number(raw.visits ?? raw.cases ?? 0),
+      invoices: Number(raw.invoices ?? 0),
+      bookings: Number(raw.bookings ?? 0),
+      employees: Number(raw.employees ?? raw.doctors ?? 0),
+      users: Number(raw.users ?? 0),
+      expenses: Number(raw.expenses ?? 0),
+      attendance: Number(raw.attendance ?? 0),
+      payments: Number(raw.payments ?? 0),
+      services: Number(raw.services ?? 0),
+    };
+  }
+
+  async function collectRestoreCounts(options) {
+    options = options || {};
+    const fromBackup = normalizeSqliteRowCounts(options.sqliteRowCounts);
+    let fromStatus = null;
+    try {
+      const api = global.cuppingElectron?.database || global.tadawiElectron?.database || global.tadawi?.database;
+      if (api?.status) {
+        const st = await api.status();
+        if (st?.counts) {
+          fromStatus = normalizeSqliteRowCounts(st.counts);
+        }
+      }
+    } catch { /* empty */ }
+
+    const merged = { ...(fromStatus || {}), ...(fromBackup || {}) };
+    const memory = {
+      clients: countRecords('clientsRegistry'),
+      visits: countRecords('cases'),
+      bookings: countRecords('bookings'),
+      employees: countRecords('doctors'),
+      expenses: countRecords('expenses'),
+      attendance: countRecords('attendance'),
+      users: countActiveUsers(),
+    };
+
+    const pick = (key) => {
+      const sqliteVal = Number(merged[key]);
+      if (Number.isFinite(sqliteVal) && sqliteVal > 0) return sqliteVal;
+      const memVal = Number(memory[key]);
+      return Number.isFinite(memVal) ? memVal : 0;
+    };
+
+    return {
+      clients: pick('clients'),
+      visits: pick('visits'),
+      invoices: pick('invoices') || pick('visits'),
+      bookings: pick('bookings'),
+      employees: pick('employees'),
+      users: pick('users') || memory.users,
+      expenses: pick('expenses'),
+      attendance: pick('attendance'),
+      payments: pick('payments'),
+      services: pick('services'),
+      licenseBranches: 0,
+      backupBranches: 0,
+    };
+  }
+
   function extractExpectedCounts(options) {
     options = options || {};
     const point = options.point || {};
@@ -69,7 +144,6 @@
 
   async function rehydrateOperationalCaches() {
     try {
-      // The boot promise is memoized, so a stale one would keep pre-restore rows in memory.
       global.SqliteBridge?.invalidateOperationalCaches?.();
       if (global.SqliteBridge?.bootFromSQLiteSoTOnce) {
         await global.SqliteBridge.bootFromSQLiteSoTOnce();
@@ -85,6 +159,28 @@
       if (typeof global.reloadClientStoreFromDb === 'function') global.reloadClientStoreFromDb();
       if (typeof global.syncAppGlobals === 'function') global.syncAppGlobals();
     } catch { /* empty */ }
+  }
+
+  function formatCountLine(counts, expectedCounts) {
+    const c = counts || {};
+    const exp = expectedCounts || {};
+    const fmt = (label, value, expected) => {
+      const got = Number(value) || 0;
+      if (Number.isFinite(Number(expected)) && Number(expected) >= 0 && Number(expected) > 0) {
+        return `${label}: ${got}/${expected}`;
+      }
+      return `${label}: ${got}`;
+    };
+    return [
+      fmt('العملاء', c.clients, exp.clients),
+      fmt('الجلسات', c.visits, exp.visits),
+      fmt('الفواتير', c.invoices, exp.visits),
+      fmt('الحجوزات', c.bookings, exp.bookings),
+      fmt('الموظفون', c.employees),
+      fmt('المستخدمون', c.users),
+      fmt('المصروفات', c.expenses),
+      fmt('الحضور', c.attendance),
+    ].join(' · ');
   }
 
   /**
@@ -113,13 +209,9 @@
       || options.point?.scopeTruth?.includedBranchIds
       || null;
 
-    const counts = {
-      clients: countRecords('clientsRegistry'),
-      visits: countRecords('cases'),
-      bookings: countRecords('bookings'),
-      licenseBranches: Array.isArray(licenseBranches) ? licenseBranches.length : 0,
-      backupBranches: Array.isArray(backupBranches) ? backupBranches.length : 0,
-    };
+    const counts = await collectRestoreCounts(options);
+    counts.licenseBranches = Array.isArray(licenseBranches) ? licenseBranches.length : 0;
+    counts.backupBranches = Array.isArray(backupBranches) ? backupBranches.length : 0;
 
     const kind = options.kind || options.restoreKind || null;
     const isCloudHydrate = kind === 'cloud_hydrate' || options.source === 'bootflow_cloud_restore';
@@ -178,16 +270,13 @@
   function formatSummaryHtml(summary) {
     if (!summary) return '';
     const c = summary.counts || {};
-    const exp = summary.expectedCounts || {};
     const ownerLine = summary.ownerDeferred
       ? 'Owner: سيُؤكَّد بعد المزامنة الكاملة'
       : `Owner: ${summary.ownerUsername || '—'}`;
     const branchLine = summary.branchesInBackup > 0 && summary.branchesInLicense !== summary.branchesInBackup
       ? `الفروع: ${c.licenseBranches ?? '—'} (في الترخيص) · ${summary.branchesInBackup} (في النسخة)`
       : `الفروع: ${c.licenseBranches ?? summary.branchesInBackup ?? '—'}`;
-    const countLine = (exp.clients >= 0 && exp.clients > 0)
-      ? `العملاء: ${c.clients ?? 0}/${exp.clients} · الجلسات: ${c.visits ?? 0}/${exp.visits >= 0 ? exp.visits : '—'} · الحجوزات: ${c.bookings ?? 0}/${exp.bookings >= 0 ? exp.bookings : '—'}`
-      : `العملاء: ${c.clients ?? '—'} · الجلسات: ${c.visits ?? '—'} · الحجوزات: ${c.bookings ?? '—'} · ${branchLine}`;
+    const countLine = formatCountLine(c, summary.expectedCounts);
     const kindLabel = summary.backupV2 || summary.restoreKind === 'backup_v2'
       ? 'تم استعادة Backup V2 والتحقق منه ✓'
       : (summary.cloudHydrate
@@ -197,7 +286,8 @@
       <strong>${kindLabel}</strong><br>
       Center: <code dir="ltr">${summary.centerId || '—'}</code><br>
       ${ownerLine}<br>
-      ${countLine}
+      ${countLine}<br>
+      <span class="bf-source-meta">${branchLine}</span>
     </div>`;
   }
 
@@ -207,6 +297,8 @@
     rehydrateOperationalCaches,
     extractExpectedCounts,
     compareExpectedCounts,
+    collectRestoreCounts,
+    formatCountLine,
   };
 
   if (typeof module !== 'undefined' && module.exports) {

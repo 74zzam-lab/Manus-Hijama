@@ -55,14 +55,19 @@
     }
   }
 
+  function isGoogleConnectedForLifecycle() {
+    if (global.DriveAdapter?.isConnected?.()) return true;
+    const snap = global.DriveAdapter?.authoritySnapshot?.();
+    if (snap?.verified && snap?.connected && !snap?.needsReauth && !snap?.stale) return true;
+    const prov = global.settings?.backup?.providers?.google;
+    return !!(prov?.connected && !prov?.userDisconnected && prov?.oauth !== false);
+  }
+
   function isOffline() {
     try {
       if (typeof navigator !== 'undefined' && navigator.onLine === false) return true;
     } catch { /* empty */ }
-    const googleOk = !!global.DriveAdapter?.isConnected?.()
-      || !!(global.settings?.backup?.providers?.google?.connected
-        && !global.settings?.backup?.providers?.google?.userDisconnected);
-    return !googleOk;
+    return !isGoogleConnectedForLifecycle();
   }
 
   /**

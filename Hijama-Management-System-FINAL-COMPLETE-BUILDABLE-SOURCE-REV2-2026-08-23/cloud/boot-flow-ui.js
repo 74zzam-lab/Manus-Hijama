@@ -183,19 +183,46 @@
 
   function formatSyncCycleError(result) {
     if (!result) return 'sync_failed';
+    const code = result.error || result.pull?.error || result.push?.error
+      || global.SyncCoordinator?.getLastCycleResult?.()?.error;
+    const truth = code && global.OperationalErrorTruth?.present?.(code);
+    if (truth?.userMessageAr) return truth.userMessageAr;
     const parts = [
-      result.error,
       result.message,
-      result.pull?.error,
-      result.push?.error,
-      global.SyncCoordinator?.getLastCycleResult?.()?.error,
+      result.messageAr,
+      result.pull?.message,
+      result.push?.message,
+      code,
     ].filter(Boolean);
     return parts[0] || 'sync_cycle_failed';
+  }
+
+  function ensureBootSyncBranchContext() {
+    const lic = global.LicenseCloud?.loadLocal?.() || null;
+    const cfg = global.DeviceConfig?.load?.() || {};
+    let branchId = cfg.lockedBranchId
+      || global.DeviceConfig?.getLockedBranchId?.()
+      || global.BranchScope?.getActiveBranchId?.()
+      || null;
+    if (!branchId && Array.isArray(lic?.branches) && lic.branches.length) {
+      const active = lic.branches.find((b) => b && b.active !== false);
+      branchId = active?.id || lic.branches[0]?.id || null;
+    }
+    if (branchId) {
+      try {
+        if (global.DeviceConfig?.lockBranch && !cfg.lockedBranchId) {
+          global.DeviceConfig.lockBranch(branchId);
+        }
+      } catch { /* empty */ }
+      try { global.BranchScope?.setActiveBranchId?.(branchId); } catch { /* empty */ }
+    }
+    return branchId;
   }
 
   async function prepareBootSyncPrerequisites() {
     try { await refreshGoogleConnectionState(); } catch { /* non-fatal */ }
     try { await global.DriveAdapter?.ensureConnected?.(); } catch { /* non-fatal */ }
+    try { ensureBootSyncBranchContext(); } catch { /* non-fatal */ }
     try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
     try { await establishBootSyncBaseline(); } catch { /* non-fatal */ }
   }
@@ -1724,7 +1751,10 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
         break;
       }
       case 'sync': {
-        const lifecycle = global.SyncLifecycle?.resolveLifecycle?.() || null;
+        void prepareBootSyncPrerequisites().then(() => {
+          try { renderStepUI(loadWizard()); } catch { /* empty */ }
+        });
+        const lifecycle = global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true }) || null;
         content.innerHTML = `<p>نفّذ المزامنة الأولية بعد الاستعادة/البدء.</p>
           <div class="bf-source-meta" id="bf-sync-readiness">${
             lifecycle
@@ -1767,6 +1797,9 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                 direction: afterRestore ? 'pull' : undefined,
               });
               ok = r?.ok !== false;
+              if (!ok && afterRestore && (r?.pull?.recovered || r?.pull?.softFail)) {
+                ok = true;
+              }
               if (!ok) setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
               else {
                 setStatus('⏳ انتظار اكتمال دورة المزامنة…');

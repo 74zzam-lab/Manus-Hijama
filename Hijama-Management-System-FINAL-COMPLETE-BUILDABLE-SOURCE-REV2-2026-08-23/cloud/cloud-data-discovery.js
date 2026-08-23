@@ -769,6 +769,7 @@
         source: 'bootflow_backup_v2_cloud',
         requireOwner: false,
         requireData: false,
+        sqliteRowCounts: restoreRes.rowCounts || restoreRes.restore?.rowCounts || null,
       });
 
       if (!verified?.verified) {

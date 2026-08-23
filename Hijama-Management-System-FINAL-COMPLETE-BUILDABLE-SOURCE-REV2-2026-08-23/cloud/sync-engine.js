@@ -49,7 +49,15 @@
     if (!msg) return true;
     const m = String(msg).toLowerCase();
     if (BENIGN_SYNC_ERRORS.has(m)) return true;
-    return /^(no_remote_versions|no_versions_path|not_found|offline|no_center_id)$/i.test(m);
+    return /^(no_remote_versions|no_versions_path|not_found|offline|no_center_id|branch_pull_incomplete)$/i.test(m);
+  }
+
+  function isAfterRestorePullRecoverable(result, options) {
+    if (!options?.afterRestore) return false;
+    const err = String(result?.error || result?.reason || result?.code || '').toLowerCase();
+    if (isBenignSyncError(err)) return true;
+    if (result?.blocked || result?.hasConflict) return true;
+    return false;
   }
 
   function isEnabled() {
@@ -684,10 +692,12 @@
 
   async function applyRemoteVersions(remote, options) {
     options = options || {};
+    const afterRestore = options.afterRestore === true;
     const centerId = getCenterId();
     const local = global.VersionsIndex?.loadLocal?.(centerId);
     const changes = global.VersionsIndex?.diff?.(remote, local) || [];
     const pulled = [];
+    const skipped = [];
     const scopeBranch = options.branchId || getSyncBranchScope();
 
     for (const ch of changes) {
@@ -695,15 +705,31 @@
       if (ch.layer === 'branch') {
         const file = CONFIG_FIELD_FILES[ch.field];
         if (file && ch.branchId) {
+          if (afterRestore && ch.field === 'databaseVersion') {
+            skipped.push({ type: 'operational', branchId: ch.branchId, field: ch.field, reason: 'after_restore_local_authoritative' });
+            continue;
+          }
           const result = await pullConfigFile(ch.branchId, file);
           if (!result?.ok) {
-            return { ok: false, error: 'remote_pull_failed', failed: { type: 'config', file, branchId: ch.branchId, result }, pulled };
+            if (isAfterRestorePullRecoverable(result, options)) {
+              skipped.push({ type: 'config', file, branchId: ch.branchId, result, reason: 'after_restore_recoverable' });
+              continue;
+            }
+            return { ok: false, error: 'remote_pull_failed', failed: { type: 'config', file, branchId: ch.branchId, result }, pulled, skipped };
           }
           pulled.push({ type: 'config', file, branchId: ch.branchId });
         } else if (ch.field === 'databaseVersion' && ch.branchId) {
+          if (afterRestore) {
+            skipped.push({ type: 'operational', branchId: ch.branchId, field: ch.field, reason: 'after_restore_local_authoritative' });
+            continue;
+          }
           const result = await pullBranchDatabase(ch.branchId);
           if (!result?.ok) {
-            return { ok: false, error: 'remote_pull_failed', failed: { type: 'operational', branchId: ch.branchId, result }, pulled };
+            if (isAfterRestorePullRecoverable(result, options)) {
+              skipped.push({ type: 'operational', branchId: ch.branchId, result, reason: 'after_restore_recoverable' });
+              continue;
+            }
+            return { ok: false, error: 'remote_pull_failed', failed: { type: 'operational', branchId: ch.branchId, result }, pulled, skipped };
           }
           pulled.push({ type: 'operational', branchId: ch.branchId });
         }
@@ -713,7 +739,11 @@
           const bid = scopeBranch || getBranchId();
           const result = await pullConfigFile(bid, file);
           if (!result?.ok) {
-            return { ok: false, error: 'remote_pull_failed', failed: { type: 'config', file, branchId: bid, result }, pulled };
+            if (isAfterRestorePullRecoverable(result, options)) {
+              skipped.push({ type: 'config', file, branchId: bid, result, reason: 'after_restore_recoverable' });
+              continue;
+            }
+            return { ok: false, error: 'remote_pull_failed', failed: { type: 'config', file, branchId: bid, result }, pulled, skipped };
           }
           pulled.push({ type: 'config', file, branchId: bid });
         }
@@ -724,7 +754,14 @@
       global.VersionsIndex?.saveLocal?.({ ...local, ...remote, centerId: centerId || local?.centerId });
     }
 
-    return { ok: true, changes: changes.length, pulled };
+    return {
+      ok: true,
+      changes: changes.length,
+      pulled,
+      skipped,
+      partial: skipped.length > 0,
+      afterRestore,
+    };
   }
 
   async function _pollInternal(options) {
@@ -737,9 +774,12 @@
       if (!centerId) return { ok: false, error: 'no_center_id' };
 
       if (!global.DriveAdapter?.isConnected?.()) {
+        await global.DriveAdapter?.ensureConnected?.().catch(() => false);
+      }
+      if (!global.DriveAdapter?.isConnected?.()) {
         global.SyncState?.setOnline?.(false);
         global.SyncState?.clearError?.();
-        return { ok: false, offline: true };
+        return { ok: false, offline: true, error: 'offline' };
       }
 
       if (global.LicenseIdentity?.verifyGoogleBinding) {
@@ -763,7 +803,7 @@
         return remoteRes || { ok: false, error: 'no_remote_versions' };
       }
 
-      const result = await applyRemoteVersions(remoteRes.data);
+      const result = await applyRemoteVersions(remoteRes.data, options);
       global.SyncState?.touchPoll?.();
       emit('synced', { direction: 'poll', ...result });
       return { ok: true, ...result };

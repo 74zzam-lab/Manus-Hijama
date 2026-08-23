@@ -110,6 +110,33 @@
         }
       }
 
+      if (options.afterRestore === true && pull?.ok === false) {
+        const recoverable = new Set([
+          'remote_pull_failed',
+          'branch_pull_incomplete',
+          'no_remote_versions',
+          'not_found',
+          'offline',
+          'branch_context_required',
+        ]);
+        const pullErr = String(pull?.error || pull?.failed?.result?.error || '').trim();
+        if (recoverable.has(pullErr) || pull?.offline === true) {
+          const established = await global.SyncBaseline?.establishFromLocalState?.({
+            operationId,
+            source: 'after_restore_pull_soft_fail',
+          });
+          if (established?.ok !== false) {
+            pull = {
+              ...pull,
+              ok: true,
+              recovered: true,
+              softFail: pullErr || pull.error || null,
+              baseline: established,
+            };
+          }
+        }
+      }
+
       if (options.afterRestore === true && pull?.ok !== false) {
         const branchId = global.SyncEngine?.getBranchId?.(options.branchId) || null;
         let remoteRevision = 0;

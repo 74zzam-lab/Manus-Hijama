@@ -213,6 +213,14 @@ function parseUserRole(payloadJson) {
   }
 }
 
+/**
+ * Findings that describe pre-existing data untidiness rather than an unsafe restore.
+ * Blocking these makes a clinic's own backup permanently unrestorable, so they are
+ * reported for post-restore maintenance instead. Identity and branch-scope findings
+ * stay blocking — those are authorization boundaries, not data hygiene.
+ */
+const REPAIRABLE_INVARIANT_CODES = new Set(['orphan_visit_client']);
+
 function validateStagedSemanticInvariants(databasePath, options = {}) {
   const allowedBranchIds = uniqueIds(options.allowedBranchIds || options.includedBranchIds || []);
   const allowLegacyBranchless = options.allowLegacyBranchless !== false;
@@ -220,6 +228,7 @@ function validateStagedSemanticInvariants(databasePath, options = {}) {
   let db;
   let ownerCount = 0;
   let hqCount = 0;
+  const findings = [];
   const violations = [];
   try {
     db = new Database(databasePath, { readonly: true, fileMustExist: true, timeout: 5000 });
@@ -273,7 +282,7 @@ function validateStagedSemanticInvariants(databasePath, options = {}) {
         `SELECT v.id FROM visits v LEFT JOIN clients c ON c.id = v.client_id WHERE v.client_id IS NOT NULL AND v.client_id != '' AND c.id IS NULL LIMIT 5`
       ).all();
       if (orphanVisits.length) {
-        violations.push({ code: 'orphan_visit_client', count: orphanVisits.length, sample: orphanVisits.map((r) => r.id) });
+        findings.push({ code: 'orphan_visit_client', count: orphanVisits.length, sample: orphanVisits.map((r) => r.id) });
       }
     } catch {
       /* ignore */
@@ -294,16 +303,19 @@ function validateStagedSemanticInvariants(databasePath, options = {}) {
     try { db?.close(); } catch { /* ignore */ }
   }
 
-  if (violations.length) {
+  const blocking = violations.filter((v) => !REPAIRABLE_INVARIANT_CODES.has(v.code));
+  const warnings = findings.concat(violations.filter((v) => REPAIRABLE_INVARIANT_CODES.has(v.code)));
+
+  if (blocking.length) {
     throwRestore(
       'restore_semantic_invariant_failed',
       'restore_semantic_invariant_failed',
       STAGES.INTEGRITY,
-      { violations, ownerCount, hqCount }
+      { violations: blocking, warnings, ownerCount, hqCount }
     );
   }
 
-  return { ok: true, ownerCount, hqCount };
+  return { ok: true, ownerCount, hqCount, warnings };
 }
 
 function assertSafetySnapshotOk(emergencyResult, options = {}) {

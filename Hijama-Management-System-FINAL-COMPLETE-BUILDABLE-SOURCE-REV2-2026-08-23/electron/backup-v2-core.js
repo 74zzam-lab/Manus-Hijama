@@ -340,20 +340,56 @@ function collectDirectory(sourceRoot, archiveRoot, entries) {
   }
 }
 
-function databaseHealth(databasePath) {
+/**
+ * Health modes decide which findings abort the pipeline:
+ * - `source`   — live database being copied into a backup. Only real corruption may abort;
+ *                orphan rows and pending migrations must still be preservable.
+ * - `archive`  — database inside a backup package, before `migrateStagedDatabase` runs.
+ *                An older schema is expected and gets migrated; a newer one cannot.
+ * - `strict`   — database already migrated and swapped in. Schema must match the app.
+ */
+const HEALTH_MODES = Object.freeze({
+  source: { allowSchemaMismatch: true, allowForeignKeyViolations: true },
+  archive: { allowSchemaMismatch: true, allowForeignKeyViolations: true },
+  strict: { allowSchemaMismatch: false, allowForeignKeyViolations: true },
+});
+
+function databaseHealthError(assessment, mode) {
+  if (assessment.schemaAheadOfApplication) return 'backup_schema_newer_than_application';
+  if (assessment.reasons.includes('integrity_check_failed')) {
+    return mode === 'strict' ? 'restored_sqlite_integrity_failed' : 'backup_database_corrupted';
+  }
+  if (assessment.reasons.includes('schema_version_mismatch')) return 'backup_database_schema_mismatch';
+  if (assessment.reasons.includes('foreign_key_violation')) return 'backup_database_foreign_keys_broken';
+  return 'backup_database_integrity_failed';
+}
+
+function databaseHealth(databasePath, options = {}) {
   if (!fs.existsSync(databasePath)) throw new Error('backup_database_not_found');
+  const mode = HEALTH_MODES[options.mode] ? options.mode : 'archive';
   const operationalDbHealth = require('../database/operational-db-health');
   let db;
   try {
     db = new Database(databasePath, { readonly: true, fileMustExist: true, timeout: 5000 });
-    const assessment = operationalDbHealth.assessHealth(db);
-    if (!assessment.ok) throw new Error('backup_database_integrity_failed');
+    const assessment = operationalDbHealth.assessHealth(db, {
+      ...HEALTH_MODES[mode],
+      expectedSchemaVersion: options.expectedSchemaVersion,
+    });
+    if (!assessment.ok) {
+      const error = new Error(databaseHealthError(assessment, mode));
+      error.code = error.message;
+      error.healthMode = mode;
+      error.reasons = assessment.reasons;
+      throw error;
+    }
     const { readSchemaVersion } = require('../database/hybrid-schema');
     return {
       ok: true,
       quickCheck: 'ok',
+      healthMode: mode,
       schemaVersion: readSchemaVersion(db),
       operationalHealth: assessment,
+      warnings: assessment.warnings || [],
       size: fs.statSync(databasePath).size,
     };
   } finally {
@@ -361,8 +397,9 @@ function databaseHealth(databasePath) {
   }
 }
 
-async function createConsistentDatabaseSnapshot(sourcePath, targetPath) {
-  databaseHealth(sourcePath);
+async function createConsistentDatabaseSnapshot(sourcePath, targetPath, options = {}) {
+  const mode = options.mode || 'source';
+  databaseHealth(sourcePath, { mode });
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   let source;
   try {
@@ -371,7 +408,7 @@ async function createConsistentDatabaseSnapshot(sourcePath, targetPath) {
   } finally {
     try { source?.close(); } catch { /* best effort */ }
   }
-  return databaseHealth(targetPath);
+  return databaseHealth(targetPath, { mode });
 }
 
 function buildManifest(options, entries, databaseInfo) {
@@ -493,7 +530,7 @@ function verifyStagedDatabase(databaseBuffer) {
   const target = path.join(root, 'tadawi.db');
   try {
     fs.writeFileSync(target, databaseBuffer, { mode: 0o600 });
-    return databaseHealth(target);
+    return databaseHealth(target, { mode: 'archive' });
   } finally {
     safeRemove(root, os.tmpdir());
   }
@@ -562,12 +599,12 @@ async function createBackupBuffer(options) {
   const stageRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tdw-backup-v2-'));
   try {
     emitProgress(options, 'checking_database');
-    const sourceHealth = databaseHealth(sourceDatabase);
+    const sourceHealth = databaseHealth(sourceDatabase, { mode: 'source' });
     failpoint(options, 'after_source_integrity');
 
     emitProgress(options, 'creating_snapshot');
     const stagedDatabase = path.join(stageRoot, 'tadawi.db');
-    const databaseInfo = await createConsistentDatabaseSnapshot(sourceDatabase, stagedDatabase);
+    const databaseInfo = await createConsistentDatabaseSnapshot(sourceDatabase, stagedDatabase, { mode: 'source' });
     failpoint(options, 'after_snapshot');
 
     const entries = { [DATABASE_PATH]: new Uint8Array(fs.readFileSync(stagedDatabase)) };
@@ -794,15 +831,17 @@ function migrateStagedDatabase(databasePath, now = new Date()) {
     const before = readSchemaVersion(db);
     const migrations = runSchemaMigrations(db, now);
     const quickCheck = db.pragma('quick_check', { simple: true });
-    const foreignKeyViolations = db.pragma('foreign_key_check');
-    if (quickCheck !== 'ok' || foreignKeyViolations.length) throw new Error('restored_sqlite_integrity_failed');
+    if (quickCheck !== 'ok') throw new Error('restored_sqlite_integrity_failed');
     const operationalDbHealth = require('../database/operational-db-health');
-    const operationalHealth = operationalDbHealth.assessHealth(db);
+    // Orphan rows inherited from an older build must not void an otherwise sound restore;
+    // they are reported so post-restore maintenance can clean them.
+    const operationalHealth = operationalDbHealth.assessHealth(db, { allowForeignKeyViolations: true });
     if (!operationalHealth.ok) throw new Error('restored_sqlite_integrity_failed');
     return {
       before,
       after: Math.max(0, ...migrations.map((item) => Number(item.version) || 0)),
       quickCheck,
+      foreignKeyViolations: operationalHealth.foreignKeyCheck?.violations || 0,
       operationalHealth,
     };
   } finally {
@@ -889,11 +928,12 @@ async function restoreBackupFile(options) {
   let securityChanged = false;
   let emergency = null;
   let safetyCopy = null;
+  let dataWarnings = [];
   try {
     emitProgress(options, 'staging_restore');
     extractEntriesToStage(inspected, stageRoot);
     const stagedDbPath = path.join(stageRoot, DATABASE_PATH.replace(/\//g, path.sep));
-    databaseHealth(stagedDbPath);
+    databaseHealth(stagedDbPath, { mode: 'archive' });
     restoreValidation.validateStagedAttachments(stageRoot, inspected.manifest, options);
     const scopeSummary = (() => {
       try {
@@ -902,12 +942,13 @@ async function restoreBackupFile(options) {
         return { includedBranchIds: [] };
       }
     })();
-    restoreValidation.validateStagedSemanticInvariants(stagedDbPath, {
+    const semantics = restoreValidation.validateStagedSemanticInvariants(stagedDbPath, {
       allowedBranchIds: scopeSummary.includedBranchIds?.length
         ? scopeSummary.includedBranchIds
         : (options.expectedIdentity?.authorizedBranchIds || []),
       allowLegacyBranchless: options.allowLegacyBranchless !== false,
     });
+    dataWarnings = semantics?.warnings || [];
     const migration = migrateStagedDatabase(stagedDbPath, options.now || new Date());
     failpoint(options, 'after_staging');
 
@@ -962,7 +1003,7 @@ async function restoreBackupFile(options) {
     }
     failpoint(options, 'after_swap');
     const finalDbPath = path.join(userDataDir, DATABASE_PATH.replace(/\//g, path.sep));
-    const finalHealth = databaseHealth(finalDbPath);
+    const finalHealth = databaseHealth(finalDbPath, { mode: 'strict' });
     const rowCounts = countDatabaseRows(finalDbPath);
     if (!finalHealth?.ok || rowCounts.ok === false) {
       throw restoreValidation.restoreError(
@@ -980,6 +1021,7 @@ async function restoreBackupFile(options) {
       source: inspected.manifest?.source || null,
       reconciliationRequired: true,
       postOpenRequired: true,
+      dataWarnings,
       safetySnapshotPath: safetyCopy?.safetyRoot || emergency?.path || null,
       completedAt: new Date().toISOString(),
     });
@@ -999,6 +1041,7 @@ async function restoreBackupFile(options) {
       safetySnapshotPath: safetyCopy?.safetyRoot || null,
       rollbackPath: rollbackRoot,
       reconciliationRequired: true,
+      dataWarnings,
       unrestorable: Array.isArray(options.unrestorableReport) ? options.unrestorableReport : [],
     };
   } catch (error) {
@@ -1061,6 +1104,9 @@ function friendlyBackupError(error) {
   const messages = {
     backup_database_not_found: 'قاعدة البيانات غير موجودة ولا يمكن إنشاء النسخة.',
     backup_database_integrity_failed: 'فشل فحص سلامة قاعدة البيانات الحالية.',
+    backup_database_corrupted: 'ملف قاعدة البيانات تالف (integrity_check) — لا يمكن نسخه أو استعادته.',
+    backup_database_schema_mismatch: 'مخطط قاعدة بيانات النسخة غير متوافق ولا يمكن ترقيته.',
+    backup_database_foreign_keys_broken: 'قاعدة البيانات تحتوي مراجع مكسورة تمنع إكمال العملية.',
     backup_authentication_failed: 'كلمة مرور النسخة غير صحيحة أو الملف تالف.',
     backup_manifest_missing: 'ملف بيان النسخة الاحتياطية غير موجود.',
     backup_manifest_invalid: 'بيان النسخة الاحتياطية غير صالح.',

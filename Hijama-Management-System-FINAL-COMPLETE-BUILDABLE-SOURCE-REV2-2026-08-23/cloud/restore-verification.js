@@ -69,6 +69,8 @@
 
   async function rehydrateOperationalCaches() {
     try {
+      // The boot promise is memoized, so a stale one would keep pre-restore rows in memory.
+      global.SqliteBridge?.invalidateOperationalCaches?.();
       if (global.SqliteBridge?.bootFromSQLiteSoTOnce) {
         await global.SqliteBridge.bootFromSQLiteSoTOnce();
       }

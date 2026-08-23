@@ -60,8 +60,10 @@
     try { global.SqliteBridge?.invalidateOperationalCaches?.(); } catch { /* empty */ }
 
     emit('sqlite_boot', 0.2);
-    if (global.SqliteBridge?.bootFromSQLiteSoTOnce) {
-      const boot = await global.SqliteBridge.bootFromSQLiteSoTOnce();
+    const bootFromRestoredDb = global.SqliteBridge?.bootFromSQLiteSoT
+      || global.SqliteBridge?.bootFromSQLiteSoTOnce;
+    if (bootFromRestoredDb) {
+      const boot = await bootFromRestoredDb.call(global.SqliteBridge);
       if (boot && boot.ok === false) {
         return { ok: false, error: boot.error || 'restore_rehydrate_boot_failed', stages };
       }

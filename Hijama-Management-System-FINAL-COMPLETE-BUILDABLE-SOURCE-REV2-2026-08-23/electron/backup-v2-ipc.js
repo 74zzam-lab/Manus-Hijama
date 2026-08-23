@@ -447,11 +447,16 @@ function registerBackupV2Ipc({
 
   handle('backup:v2:health', async () => {
     const databasePath = path.join(getUserDataPath(), 'database', 'tadawi.db');
-    return {
-      ...backupV2.databaseHealth(databasePath),
-      gate: backupV2.readRestoreGate(getUserDataPath()),
-      rowCounts: backupV2.countDatabaseRows(databasePath),
-    };
+    const gate = backupV2.readRestoreGate(getUserDataPath());
+    // Reporting channel: a failing database must be described, never thrown at the UI.
+    let health;
+    try {
+      health = backupV2.databaseHealth(databasePath, { mode: 'strict' });
+    } catch (error) {
+      const friendly = backupV2.friendlyBackupError(error);
+      health = { ok: false, error: friendly.code, message: friendly.message, reasons: error.reasons || [] };
+    }
+    return { ...health, gate, rowCounts: backupV2.countDatabaseRows(databasePath) };
   });
 
   handle('backup:v2:readiness', async (_e, options) => {

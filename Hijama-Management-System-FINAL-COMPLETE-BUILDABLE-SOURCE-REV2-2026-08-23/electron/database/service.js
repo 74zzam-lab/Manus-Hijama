@@ -41,7 +41,7 @@ function ensureDb() {
 
 function getOperationalHealth() {
   ensureDb();
-  return operationalDbHealth.assessHealth(db);
+  return operationalDbHealth.assessHealth(db, operationalDbHealth.RUNTIME_HEALTH_OPTIONS);
 }
 
 function readMeta(db) {
@@ -57,7 +57,7 @@ function getUpgradeAssessment() {
 
 function assertOperationalWriteAllowed() {
   ensureDb();
-  const health = operationalDbHealth.assessHealth(db);
+  const health = operationalDbHealth.assessHealth(db, operationalDbHealth.RUNTIME_HEALTH_OPTIONS);
   const healthGate = operationalDbHealth.assertWriteAllowed(health);
   if (!healthGate.ok) {
     return operationalErrorTruth.enrichResult({ ...healthGate, stage: 'database_write' });
@@ -84,7 +84,7 @@ function assertOperationalWriteAllowed() {
 function getStatus() {
   ensureDb();
   const meta = readMeta(db);
-  const operationalHealth = operationalDbHealth.assessHealth(db);
+  const operationalHealth = operationalDbHealth.assessHealth(db, operationalDbHealth.RUNTIME_HEALTH_OPTIONS);
   const upgradeState = getUpgradeAssessment();
   const operationalReadinessReport = operationalReadiness.assessOperationalReadiness({
     health: operationalHealth,

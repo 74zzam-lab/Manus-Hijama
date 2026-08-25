@@ -57,12 +57,12 @@ check(!/isRunning\(\).*PREPARING/.test(lifecycle.replace(/\s+/g, ' ')), 'lifecyc
 
 // P0-4 — Initial sync button awaits cycle
 check(/waitForSyncLifecycleReady/.test(boot), 'bootflow waits for lifecycle READY');
-check(/finalizeBootSyncAfterRestore/.test(boot), 'bootflow finalizes after-restore sync without double-wait');
-check(/afterRestoreChoice/.test(boot) && /!afterRestoreChoice/.test(boot), 'bootstrap hydrate skipped after backup restore');
-check(/shouldMarkBootSyncDone/.test(boot), 'bootflow marks syncDone from lifecycle not baseline alone');
-check(/lockToBranch/.test(boot), 'bootflow locks branch via lockToBranch alias');
+check(/skippedCloudCycle/.test(boot), 'after restore skips cloud cycle');
+check(/markBootSyncDoneInWizard\(true\)/.test(boot), 'after restore always records syncDone');
+check(/waitForSyncMutexIdle/.test(boot), 'mutex wait is bounded');
+check(/trySetBranchLock/.test(boot), 'bootflow locks branch via trySetBranchLock');
 check(/SyncCoordinator\?\.isCycleInFlight/.test(boot), 'wait helper respects cycle mutex');
-check(/afterRestore/.test(boot) && /runOnce/.test(boot), 'initial sync runOnce with afterRestore');
+check(/afterRestore/.test(boot) && /skippedCloudCycle/.test(boot), 'initial sync after restore is local-only');
 
 // P1 — Discovery backup breakdown
 check(/classifyBackupFile/.test(electronDiscovery), 'classifyBackupFile for breakdown');

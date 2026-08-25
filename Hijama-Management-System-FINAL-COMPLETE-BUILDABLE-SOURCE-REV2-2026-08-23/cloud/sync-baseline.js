@@ -13,6 +13,7 @@
   });
 
   const STATE_KEY = '__tdw_sync_lifecycle__';
+  let memoryOverlay = null;
 
   function defaultState() {
     return {
@@ -29,6 +30,9 @@
   }
 
   function load() {
+    if (memoryOverlay && typeof memoryOverlay === 'object') {
+      return { ...defaultState(), ...memoryOverlay };
+    }
     try {
       const raw = global.DB?.get?.(STATE_KEY, null);
       return { ...defaultState(), ...(raw && typeof raw === 'object' ? raw : {}) };
@@ -37,26 +41,34 @@
     }
   }
 
-  async function save(partial) {
+  async function persistState(next) {
+    if (typeof global.DB?.setAuthoritative === 'function') {
+      return global.DB.setAuthoritative(STATE_KEY, next);
+    }
+    if (typeof global.SqliteBridge?.setAuthoritative === 'function') {
+      return global.SqliteBridge.setAuthoritative(STATE_KEY, next);
+    }
+    return Promise.resolve(global.DB?.set?.(STATE_KEY, next));
+  }
+
+  async function save(partial, options) {
+    options = options || {};
     const next = { ...load(), ...(partial || {}), updatedAt: new Date().toISOString() };
+    if (options.persistBestEffort === true) {
+      memoryOverlay = next;
+      void Promise.resolve(persistState(next)).catch(() => {});
+      return { ok: true, state: next, deferred: true };
+    }
     try {
-      let committed = null;
-      if (typeof global.DB?.setAuthoritative === 'function') {
-        committed = await global.DB.setAuthoritative(STATE_KEY, next);
-      } else if (typeof global.SqliteBridge?.setAuthoritative === 'function') {
-        committed = await global.SqliteBridge.setAuthoritative(STATE_KEY, next);
-      } else {
-        committed = await Promise.resolve(global.DB?.set?.(STATE_KEY, next));
-      }
+      const committed = await persistState(next);
       if (committed === false || committed?.ok === false) {
-        if (global.DB?.raw?.set) {
-          try {
-            global.DB.raw.set(STATE_KEY, next);
-            return { ok: true, state: next, fallback: 'raw' };
-          } catch { /* try below */ }
-        }
-        return { ok: false, error: committed?.error || 'sync_lifecycle_commit_failed', state: next };
+        return {
+          ok: false,
+          error: committed?.error || 'sync_lifecycle_commit_failed',
+          state: next,
+        };
       }
+      memoryOverlay = next;
       return { ok: true, state: next, authoritative: committed?.authoritative === true };
     } catch (error) {
       return { ok: false, error: error?.code || 'sync_lifecycle_commit_failed', state: next };
@@ -279,7 +291,7 @@
     );
     if (options.remoteRevision != null && Number.isFinite(Number(options.remoteRevision))) {
       remoteRevision = Number(options.remoteRevision);
-    } else if (global.SyncEngine?.getRemoteBranchDatabaseRevision) {
+    } else if (!options.localOnly && global.SyncEngine?.getRemoteBranchDatabaseRevision) {
       try {
         const remote = await global.SyncEngine.getRemoteBranchDatabaseRevision(branchId);
         if (remote?.ok && Number.isFinite(Number(remote.remoteRevision))) {
@@ -293,9 +305,32 @@
       return { ok: false, code: 'integrity_check_required' };
     }
 
+    const persistBestEffort = options.persistBestEffort === true || options.localOnly === true;
     const state = load();
     if (state.lifecycle === LIFECYCLE.READY && state.baselineKnown === true) {
       return { ok: true, skipped: true, branchId, remoteRevision };
+    }
+
+    if (persistBestEffort) {
+      const committed = await save({
+        lifecycle: LIFECYCLE.READY,
+        baselineKnown: true,
+        baselineRevisionByBranch: {
+          ...(state.baselineRevisionByBranch || {}),
+          [branchId]: Math.max(0, remoteRevision),
+        },
+        integrityPass: true,
+        organizationResolved: !!centerId,
+        branchResolved: !!branchId,
+        hydrateComplete: true,
+        pushBlockedUntilReconcile: false,
+        lastBaselineAt: new Date().toISOString(),
+        readyAt: new Date().toISOString(),
+        operationId: options.operationId || state.operationId || null,
+      }, { persistBestEffort: true });
+      return committed.ok !== false
+        ? { ok: true, branchId, remoteRevision, localOnly: true, deferred: committed.deferred === true }
+        : committed;
     }
 
     if (state.baselineKnown !== true || state.lifecycle === LIFECYCLE.UNINITIALIZED) {

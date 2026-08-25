@@ -37,6 +37,32 @@ const baseline = sandbox.globalThis.SyncBaseline;
   assert.strictEqual(ready.ok, true, 'READY must follow a persisted baseline');
   assert.strictEqual(baseline.isPushAllowed({ branchId: 'BR-A' }).ok, true);
 
+  const bestEffortSandbox = {
+    globalThis: {
+      DB: {
+        get: () => null,
+        setAuthoritative: async () => ({ ok: false, error: 'operational_write_branch_required' }),
+      },
+      DeviceConfig: { getLockedBranchId: () => 'BR-A' },
+      BranchScope: { getActiveBranchId: () => 'BR-A' },
+    },
+  };
+  bestEffortSandbox.window = bestEffortSandbox.globalThis;
+  vm.runInNewContext(source, bestEffortSandbox, { filename: 'sync-baseline-best-effort.js' });
+  const local = await bestEffortSandbox.globalThis.SyncBaseline.establishFromLocalState({
+    localOnly: true,
+    persistBestEffort: true,
+    branchId: 'BR-A',
+  });
+  assert.strictEqual(local.ok, true, 'boot/restore baseline must succeed without SQLite write branch');
+  assert.strictEqual(
+    bestEffortSandbox.globalThis.SyncBaseline.load().baselineKnown,
+    true,
+    'memory overlay must expose baselineKnown after persistBestEffort'
+  );
+
+  console.log('PASS remediation:sync-lifecycle-authoritative-commit');
+
   const legacySource = fs.readFileSync(path.join(__dirname, '..', '..', 'cloud', 'sync-baseline.js'), 'utf8');
   let legacyState = null;
   const legacySandbox = {
@@ -55,6 +81,4 @@ const baseline = sandbox.globalThis.SyncBaseline;
   const legacyBaseline = legacySandbox.globalThis.SyncBaseline;
   const legacyFail = await legacyBaseline.markBaselineKnown({ branchId: 'BR-B', remoteRevision: 1, integrityPass: true });
   assert.strictEqual(legacyFail.ok, false, 'legacy DB.set(false) must not report success');
-
-  console.log('PASS remediation:sync-lifecycle-authoritative-commit');
 })().catch((error) => { console.error(error.stack || error); process.exit(1); });

@@ -66,8 +66,13 @@ require(modulePath);
   require(path.join(__dirname, '..', '..', 'cloud', 'sync-coordinator.js'));
 
   let coordinatorResult = null;
-  global.SyncEngine._pollInternal = async () => ({ ok: false, error: 'google_identity_transfer' });
+  let pollCalls = 0;
+  global.SyncEngine._pollInternal = async () => {
+    pollCalls += 1;
+    return { ok: false, error: 'google_identity_transfer' };
+  };
   coordinatorResult = await global.SyncCoordinator.runCycle({ afterRestore: true });
+  assert.strictEqual(pollCalls, 0, 'afterRestore must not start a cloud poll');
   assert.strictEqual(coordinatorResult.ok, true, 'coordinator must recover google_identity_transfer after restore');
   assert.strictEqual(coordinatorResult.pull?.recovered, true);
 

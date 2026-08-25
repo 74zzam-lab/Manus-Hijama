@@ -175,7 +175,11 @@
       await global.DeviceCache?.syncLicenseToMainCache?.();
     } catch { /* non-fatal */ }
     try {
-      return await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow' });
+      return await global.SyncBaseline?.establishFromLocalState?.({
+        source: 'boot_flow',
+        localOnly: true,
+        persistBestEffort: true,
+      });
     } catch {
       return { ok: false };
     }
@@ -216,24 +220,49 @@
     try { await establishBootSyncBaseline(); } catch { /* non-fatal */ }
   }
 
+  async function waitForSyncMutexIdle(maxMs) {
+    const budget = Number(maxMs) || 4000;
+    const started = Date.now();
+    while (global.SyncCoordinator?.isCycleInFlight?.() && (Date.now() - started) < budget) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+    }
+    return !global.SyncCoordinator?.isCycleInFlight?.();
+  }
+
   async function runBootInitialSync(options = {}) {
     const afterRestore = options.afterRestore === true;
     try { global.SyncEngine?.stop?.(); } catch { /* empty */ }
-    while (global.SyncCoordinator?.isCycleInFlight?.()) {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
+    await waitForSyncMutexIdle(afterRestore ? 2500 : 8000);
     await prepareBootSyncPrerequisites({ startSync: false });
+    if (afterRestore) {
+      const baseline = await global.SyncBaseline?.establishFromLocalState?.({
+        source: 'boot_flow_sync_button',
+        localOnly: true,
+        persistBestEffort: true,
+      });
+      return {
+        ok: true,
+        recovered: true,
+        localOnly: true,
+        baseline,
+        skippedCloudCycle: true,
+      };
+    }
+    if (!global.SyncEngine?.runOnce) {
+      return { ok: false, error: 'sync_engine_unavailable' };
+    }
     const r = await global.SyncEngine.runOnce({
       force: true,
-      afterRestore,
-      direction: afterRestore ? 'pull' : undefined,
+      afterRestore: false,
     });
     if (r?.ok !== false) return r;
-    if (afterRestore) {
-      const baseline = await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow_sync_button' });
-      if (baseline?.ok !== false) {
-        return { ...r, ok: true, recovered: true, baseline, priorError: r.error || r.pull?.error || null };
-      }
+    const baseline = await global.SyncBaseline?.establishFromLocalState?.({
+      source: 'boot_flow_sync_button',
+      localOnly: true,
+      persistBestEffort: true,
+    });
+    if (baseline?.ok !== false) {
+      return { ...r, ok: true, recovered: true, baseline, priorError: r.error || r.pull?.error || null };
     }
     return r;
   }
@@ -252,10 +281,12 @@
     if (branchId) {
       try {
         if (!global.DeviceConfig?.isBranchLocked?.()) {
-          if (typeof global.DeviceConfig?.lockToBranch === 'function') {
-            void global.DeviceConfig.lockToBranch(branchId, { activation: true, skipAudit: true });
+          if (typeof global.DeviceConfig?.trySetBranchLock === 'function') {
+            global.DeviceConfig.trySetBranchLock(branchId, true, '', { activation: true, skipAudit: true });
           } else if (typeof global.DeviceConfig?.setBranchLock === 'function') {
-            global.DeviceConfig.setBranchLock(branchId, true);
+            global.DeviceConfig.setBranchLock(branchId, true, '', { activation: true });
+          } else if (typeof global.DeviceConfig?.lockToBranch === 'function') {
+            void global.DeviceConfig.lockToBranch(branchId, { activation: true, skipAudit: true });
           }
         }
       } catch { /* empty */ }
@@ -327,7 +358,11 @@
     ensureBootSyncBranchContext();
     let baseline = null;
     try {
-      baseline = await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow_sync_button' });
+      baseline = await global.SyncBaseline?.establishFromLocalState?.({
+        source: 'boot_flow_sync_button',
+        localOnly: true,
+        persistBestEffort: true,
+      });
     } catch { /* non-fatal */ }
     if (baseline?.ok === false) {
       try {
@@ -1724,7 +1759,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
             } catch (e) {
               setStatusFromErr(e, 'restore_interrupted');
             }
-            try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
+            try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: false }); } catch { /* empty */ }
           });
 
           // --- Local backups / file ---
@@ -1866,6 +1901,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
         break;
       }
       case 'sync': {
+        try { global.SyncEngine?.stop?.(); } catch { /* empty */ }
         void prepareBootSyncPrerequisites({ startSync: false }).then(() => {
           try { renderStepUI(loadWizard()); } catch { /* empty */ }
         });
@@ -1897,43 +1933,37 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
             const restoreChoice = loadWizard().restoreChoice;
             const afterRestore = restoreChoice === 'backup_v2' || restoreChoice === 'file';
             await prepareBootSyncPrerequisites({ startSync: false });
+            if (afterRestore) {
+              const r = await runBootInitialSync({ afterRestore: true });
+              await finalizeBootSyncAfterRestore(r);
+              markBootSyncDoneInWizard(true);
+              setStatus('✅ اكتملت المزامنة الأولية — البيانات المستعادة هي المرجع');
+              ok = true;
+            } else {
             const ready = global.SyncEngine?.getReadiness?.({ force: true });
             const blockers = hasBlockingSyncPrerequisites(ready);
             if (blockers.length) {
               setStatus(`⚠️ ${ready?.messageAr || ('غير جاهز: ' + blockers.join(', '))}`, true);
               ok = false;
             } else if (global.SyncEngine?.runOnce) {
-              const r = await runBootInitialSync({ afterRestore });
+              const r = await runBootInitialSync({ afterRestore: false });
               ok = r?.ok !== false;
-              if (!ok && afterRestore && (r?.pull?.recovered || r?.recovered || r?.baseline)) {
+              if (!ok && (r?.pull?.recovered || r?.recovered || r?.baseline)) {
                 ok = true;
               }
               if (!ok) {
                 setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
-              } else if (afterRestore) {
-                setStatus('⏳ إتمام مواءمة ما بعد الاستعادة…');
-                const lifecycleAfter = await finalizeBootSyncAfterRestore(r);
-                const syncDone = shouldMarkBootSyncDone(lifecycleAfter, r, { afterRestore: true });
-                markBootSyncDoneInWizard(syncDone);
-                if (syncDone) {
-                  setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
-                  startBackgroundSyncEngineDeferred();
-                } else {
-                  setStatus(
-                    `⚠️ المزامنة لم تُسجَّل بعد (${lifecycleAfter?.labelAr || lifecycleAfter?.lifecycle || '—'})`,
-                    true
-                  );
-                }
               } else {
                 setStatus('⏳ انتظار اكتمال دورة المزامنة…');
                 const lifecycleAfter = await waitForSyncLifecycleReady({
                   relaxedBaseline: true,
-                  maxMs: 45000,
+                  maxMs: 15000,
                   acceptBaselineKnown: true,
                 });
                 const syncReady = shouldMarkBootSyncDone(lifecycleAfter, r, { afterRestore: false });
-                ok = syncReady;
-                if (syncReady) {
+                ok = syncReady || r?.ok !== false;
+                markBootSyncDoneInWizard(ok);
+                if (ok) {
                   setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
                   startBackgroundSyncEngineDeferred();
                 } else {
@@ -1942,15 +1972,13 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                     true
                   );
                 }
-                markBootSyncDoneInWizard(syncReady);
               }
             } else if (global.CloudBootstrap?.hydrateFromDrive && loadWizard().restoreChoice === 'cloud') {
               const r = await global.CloudBootstrap.hydrateFromDrive(null, { allowMissingLicense: true });
               ok = !!r?.ok || r?.skipped;
             }
             const w2 = loadWizard();
-            const afterRestoreChoice = w2.restoreChoice === 'backup_v2' || w2.restoreChoice === 'file';
-            if (ok && !afterRestoreChoice) {
+            if (ok && !w2.syncDone && restoreChoice === 'cloud') {
               if (loadWizard().path === PATHS.EXISTING) {
                 try { global.OwnerLifecycleAuthority?.markReplacementHydrate?.(); } catch { /* empty */ }
               }
@@ -1962,10 +1990,10 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                   allowMissingLicense: true
                 });
               }
-              if (!w2.syncDone) {
+              if (!loadWizard().syncDone) {
                 const lifecycleAfter = await waitForSyncLifecycleReady({
                   relaxedBaseline: true,
-                  maxMs: 45000,
+                  maxMs: 15000,
                   acceptBaselineKnown: true,
                 });
                 const syncReady = shouldMarkBootSyncDone(lifecycleAfter, null, { afterRestore: false });
@@ -1980,6 +2008,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
                   );
                 }
               }
+            }
             }
           } catch (e) {
             setStatusFromErr(e, 'sync_interrupted');

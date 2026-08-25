@@ -40,9 +40,24 @@
   async function save(partial) {
     const next = { ...load(), ...(partial || {}), updatedAt: new Date().toISOString() };
     try {
-      const committed = await Promise.resolve(global.DB?.set?.(STATE_KEY, next));
-      if (committed?.ok === false) return { ok: false, error: committed.error || 'sync_lifecycle_commit_failed', state: next };
-      return { ok: true, state: next };
+      let committed = null;
+      if (typeof global.DB?.setAuthoritative === 'function') {
+        committed = await global.DB.setAuthoritative(STATE_KEY, next);
+      } else if (typeof global.SqliteBridge?.setAuthoritative === 'function') {
+        committed = await global.SqliteBridge.setAuthoritative(STATE_KEY, next);
+      } else {
+        committed = await Promise.resolve(global.DB?.set?.(STATE_KEY, next));
+      }
+      if (committed === false || committed?.ok === false) {
+        if (global.DB?.raw?.set) {
+          try {
+            global.DB.raw.set(STATE_KEY, next);
+            return { ok: true, state: next, fallback: 'raw' };
+          } catch { /* try below */ }
+        }
+        return { ok: false, error: committed?.error || 'sync_lifecycle_commit_failed', state: next };
+      }
+      return { ok: true, state: next, authoritative: committed?.authoritative === true };
     } catch (error) {
       return { ok: false, error: error?.code || 'sync_lifecycle_commit_failed', state: next };
     }
@@ -283,11 +298,13 @@
       return { ok: true, skipped: true, branchId, remoteRevision };
     }
 
-    const hydrating = await markHydrating({
-      organizationResolved: !!centerId,
-      branchResolved: !!branchId,
-    });
-    if (hydrating?.ok === false) return hydrating;
+    if (state.baselineKnown !== true || state.lifecycle === LIFECYCLE.UNINITIALIZED) {
+      const hydrating = await markHydrating({
+        organizationResolved: !!centerId,
+        branchResolved: !!branchId,
+      });
+      if (hydrating?.ok === false) return hydrating;
+    }
 
     const baseline = await markBaselineKnown({
       branchId,

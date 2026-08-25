@@ -36,5 +36,25 @@ const baseline = sandbox.globalThis.SyncBaseline;
   const ready = await baseline.markReady({ operationId: 'OP-1' });
   assert.strictEqual(ready.ok, true, 'READY must follow a persisted baseline');
   assert.strictEqual(baseline.isPushAllowed({ branchId: 'BR-A' }).ok, true);
+
+  const legacySource = fs.readFileSync(path.join(__dirname, '..', '..', 'cloud', 'sync-baseline.js'), 'utf8');
+  let legacyState = null;
+  const legacySandbox = {
+    globalThis: {
+      DB: {
+        get: (_key, fallback) => legacyState || fallback,
+        set: async (_key, next) => {
+          legacyState = next;
+          return false;
+        },
+      },
+    },
+  };
+  legacySandbox.window = legacySandbox.globalThis;
+  vm.runInNewContext(legacySource, legacySandbox, { filename: 'sync-baseline-legacy.js' });
+  const legacyBaseline = legacySandbox.globalThis.SyncBaseline;
+  const legacyFail = await legacyBaseline.markBaselineKnown({ branchId: 'BR-B', remoteRevision: 1, integrityPass: true });
+  assert.strictEqual(legacyFail.ok, false, 'legacy DB.set(false) must not report success');
+
   console.log('PASS remediation:sync-lifecycle-authoritative-commit');
 })().catch((error) => { console.error(error.stack || error); process.exit(1); });

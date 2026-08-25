@@ -59,7 +59,8 @@ check(!/isRunning\(\).*PREPARING/.test(lifecycle.replace(/\s+/g, ' ')), 'lifecyc
 check(/waitForSyncLifecycleReady/.test(boot), 'bootflow waits for lifecycle READY');
 check(/finalizeBootSyncAfterRestore/.test(boot), 'bootflow finalizes after-restore sync without double-wait');
 check(/afterRestoreChoice/.test(boot) && /!afterRestoreChoice/.test(boot), 'bootstrap hydrate skipped after backup restore');
-check(/startBackgroundSyncEngineDeferred/.test(boot), 'background engine starts after boot sync completes');
+check(/shouldMarkBootSyncDone/.test(boot), 'bootflow marks syncDone from lifecycle not baseline alone');
+check(/lockToBranch/.test(boot), 'bootflow locks branch via lockToBranch alias');
 check(/SyncCoordinator\?\.isCycleInFlight/.test(boot), 'wait helper respects cycle mutex');
 check(/afterRestore/.test(boot) && /runOnce/.test(boot), 'initial sync runOnce with afterRestore');
 

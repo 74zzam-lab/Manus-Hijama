@@ -58,6 +58,19 @@ require(modulePath);
     'databaseVersion pull must be skipped after restore'
   );
 
+  delete require.cache[require.resolve(path.join(__dirname, '..', '..', 'cloud', 'sync-coordinator.js'))];
+  global.SyncBaseline = {
+    establishFromLocalState: async () => ({ ok: false, code: 'sync_lifecycle_commit_failed' }),
+    completeReconciliation: async () => ({ ok: true }),
+  };
+  require(path.join(__dirname, '..', '..', 'cloud', 'sync-coordinator.js'));
+
+  let coordinatorResult = null;
+  global.SyncEngine._pollInternal = async () => ({ ok: false, error: 'google_identity_transfer' });
+  coordinatorResult = await global.SyncCoordinator.runCycle({ afterRestore: true });
+  assert.strictEqual(coordinatorResult.ok, true, 'coordinator must recover google_identity_transfer after restore');
+  assert.strictEqual(coordinatorResult.pull?.recovered, true);
+
   console.log('PASS remediation:sync-after-restore-soft-pull');
 })().catch((error) => {
   console.error(error.stack || error);

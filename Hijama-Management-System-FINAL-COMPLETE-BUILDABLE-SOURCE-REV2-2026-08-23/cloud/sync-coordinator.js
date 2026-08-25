@@ -110,6 +110,36 @@
         }
       }
 
+      async function recoverAfterRestoreBaseline(pullErr, note) {
+        const established = await global.SyncBaseline?.establishFromLocalState?.({
+          operationId,
+          source: note || 'after_restore_pull_soft_fail',
+        });
+        if (established?.ok === false) {
+          const reconciled = await global.SyncBaseline?.completeReconciliation?.({
+            branchId: global.SyncEngine?.getBranchId?.(options.branchId) || undefined,
+            remoteRevision: 0,
+            operationId,
+          });
+          if (reconciled?.ok !== false) {
+            return {
+              ok: true,
+              recovered: true,
+              softFail: pullErr || null,
+              baseline: reconciled,
+              reconciliationFallback: true,
+            };
+          }
+          return null;
+        }
+        return {
+          ok: true,
+          recovered: true,
+          softFail: pullErr || null,
+          baseline: established,
+        };
+      }
+
       if (options.afterRestore === true && pull?.ok === false) {
         const recoverable = new Set([
           'remote_pull_failed',
@@ -118,22 +148,20 @@
           'not_found',
           'offline',
           'branch_context_required',
+          'google_not_connected',
+          'google_identity_transfer',
+          'google_email_mismatch',
+          'sync_lifecycle_commit_failed',
+          'baseline_commit_failed',
+          'sync_lifecycle_push_blocked',
+          'reconciliation_required',
+          'baseline_unknown',
+          'cycle_failed',
         ]);
-        const pullErr = String(pull?.error || pull?.failed?.result?.error || '').trim();
-        if (recoverable.has(pullErr) || pull?.offline === true) {
-          const established = await global.SyncBaseline?.establishFromLocalState?.({
-            operationId,
-            source: 'after_restore_pull_soft_fail',
-          });
-          if (established?.ok !== false) {
-            pull = {
-              ...pull,
-              ok: true,
-              recovered: true,
-              softFail: pullErr || pull.error || null,
-              baseline: established,
-            };
-          }
+        const pullErr = String(pull?.error || pull?.failed?.result?.error || pull?.reason || '').trim();
+        if (recoverable.has(pullErr) || pull?.offline === true || pull?.blocked === true) {
+          const recovered = await recoverAfterRestoreBaseline(pullErr, 'after_restore_pull_soft_fail');
+          if (recovered) pull = { ...pull, ...recovered };
         }
       }
 
@@ -159,14 +187,38 @@
             operationId,
           });
           if (completed?.ok === false) {
-            pull = { ...pull, ok: false, error: completed.error || 'sync_lifecycle_commit_failed' };
+            const recovered = await recoverAfterRestoreBaseline(
+              completed.error || 'sync_lifecycle_commit_failed',
+              'after_restore_reconcile_fallback'
+            );
+            if (recovered) {
+              pull = { ...pull, ...recovered, reconcileFallback: true };
+            } else {
+              pull = { ...pull, ok: false, error: completed.error || 'sync_lifecycle_commit_failed' };
+            }
           }
         } else if (global.SyncBaseline?.establishFromLocalState) {
           const established = await global.SyncBaseline.establishFromLocalState({ operationId });
           if (established?.ok === false) {
-            pull = { ...pull, ok: false, error: established.error || established.code || 'baseline_commit_failed' };
+            const recovered = await recoverAfterRestoreBaseline(
+              established.error || established.code || 'baseline_commit_failed',
+              'after_restore_baseline_fallback'
+            );
+            if (recovered) {
+              pull = { ...pull, ...recovered, baselineFallback: true };
+            } else {
+              pull = { ...pull, ok: false, error: established.error || established.code || 'baseline_commit_failed' };
+            }
           }
         }
+      }
+
+      if (options.afterRestore === true && pull?.ok === false) {
+        const recovered = await recoverAfterRestoreBaseline(
+          pull?.error || 'cycle_failed',
+          'after_restore_final_fallback'
+        );
+        if (recovered) pull = { ...pull, ...recovered, finalFallback: true };
       }
 
       const ok = pull?.ok !== false && push?.ok !== false;

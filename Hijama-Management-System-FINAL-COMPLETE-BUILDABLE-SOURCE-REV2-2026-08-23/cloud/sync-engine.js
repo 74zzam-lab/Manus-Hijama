@@ -783,12 +783,20 @@
       }
 
       if (global.LicenseIdentity?.verifyGoogleBinding) {
-        const idCheck = await global.LicenseIdentity.verifyGoogleBinding();
-    if (!idCheck.ok) {
-      const handled = global.DriveErrors?.handleFailure?.(idCheck) || {};
-      global.SyncState?.setError?.(idCheck.error || 'google_identity_transfer');
-      return { ok: false, error: idCheck.error, identity: idCheck, ...handled };
-    }
+        const idCheck = await global.LicenseIdentity.verifyGoogleBinding({
+          allowOffline: options.afterRestore === true,
+        });
+        if (!idCheck.ok) {
+          if (options.afterRestore === true && (idCheck.needsBind || idCheck.skipped)) {
+            // Post-restore boot sync: Google already worked for backup — binding can happen later.
+          } else if (options.afterRestore === true && ['google_not_connected', 'google_email_mismatch'].includes(String(idCheck.error || ''))) {
+            // Settings/OAuth already proved connectivity during restore.
+          } else {
+            const handled = global.DriveErrors?.handleFailure?.(idCheck) || {};
+            global.SyncState?.setError?.(idCheck.error || 'google_identity_transfer');
+            return { ok: false, error: idCheck.error, identity: idCheck, ...handled };
+          }
+        }
       }
 
       global.SyncState?.setOnline?.(true);

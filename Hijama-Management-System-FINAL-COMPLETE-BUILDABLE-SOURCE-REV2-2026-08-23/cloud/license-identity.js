@@ -12,11 +12,15 @@
   }
 
   function getConnectedGoogleEmail() {
-    // Identity decisions must use the same main-authoritative snapshot as the
-    // BootFlow gate; renderer cache alone cannot bind a commercial license.
+    // Prefer main-authoritative snapshot; fall back to settings when snapshot is warming/stale
+    // (BootFlow already validated Google for license/backup — do not fail closed on TTL alone).
     const snapshot = global.DriveAdapter?.authoritySnapshot?.();
     if (snapshot?.verified && snapshot?.connected && !snapshot?.needsReauth && !snapshot?.stale) {
       return normalizeEmail(snapshot.email || '');
+    }
+    if (global.DriveAdapter?.isConnectedFromSettings?.()) {
+      const prov = global.settings?.backup?.providers?.google || {};
+      return normalizeEmail(prov.email || prov.accountEmail || prov.userEmail || '');
     }
     return '';
   }

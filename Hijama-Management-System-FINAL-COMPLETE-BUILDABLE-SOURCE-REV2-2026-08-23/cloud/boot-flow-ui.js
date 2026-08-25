@@ -184,9 +184,17 @@
   function formatSyncCycleError(result) {
     if (!result) return 'sync_failed';
     const code = result.error || result.pull?.error || result.push?.error
+      || result.pull?.softFail
       || global.SyncCoordinator?.getLastCycleResult?.()?.error;
     const truth = code && global.OperationalErrorTruth?.present?.(code);
-    if (truth?.userMessageAr) return truth.userMessageAr;
+    if (truth?.userMessageAr && code !== 'generic' && truth.code !== 'generic') {
+      return truth.userMessageAr;
+    }
+    if (result.pull?.recovered || result.recovered) {
+      return 'اكتملت مواءمة ما بعد الاستعادة — البيانات المحلية هي المرجع';
+    }
+    const ux = code && global.ErrorRecoveryUx?.fromClassify?.(code);
+    if (ux?.bodyAr && code) return `${ux.bodyAr} (${code})`;
     const parts = [
       result.message,
       result.messageAr,
@@ -195,6 +203,39 @@
       code,
     ].filter(Boolean);
     return parts[0] || 'sync_cycle_failed';
+  }
+
+  async function prepareBootSyncPrerequisites(options = {}) {
+    const startSync = options.startSync === true;
+    try { await refreshGoogleConnectionState(); } catch { /* non-fatal */ }
+    try { await global.DriveAdapter?.ensureConnected?.(); } catch { /* non-fatal */ }
+    try { ensureBootSyncBranchContext(); } catch { /* non-fatal */ }
+    if (startSync) {
+      try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
+    }
+    try { await establishBootSyncBaseline(); } catch { /* non-fatal */ }
+  }
+
+  async function runBootInitialSync(options = {}) {
+    const afterRestore = options.afterRestore === true;
+    try { global.SyncEngine?.stop?.(); } catch { /* empty */ }
+    while (global.SyncCoordinator?.isCycleInFlight?.()) {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    await prepareBootSyncPrerequisites({ startSync: false });
+    const r = await global.SyncEngine.runOnce({
+      force: true,
+      afterRestore,
+      direction: afterRestore ? 'pull' : undefined,
+    });
+    if (r?.ok !== false) return r;
+    if (afterRestore) {
+      const baseline = await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow_sync_button' });
+      if (baseline?.ok !== false) {
+        return { ...r, ok: true, recovered: true, baseline, priorError: r.error || r.pull?.error || null };
+      }
+    }
+    return r;
   }
 
   function ensureBootSyncBranchContext() {
@@ -218,15 +259,6 @@
     }
     return branchId;
   }
-
-  async function prepareBootSyncPrerequisites() {
-    try { await refreshGoogleConnectionState(); } catch { /* non-fatal */ }
-    try { await global.DriveAdapter?.ensureConnected?.(); } catch { /* non-fatal */ }
-    try { ensureBootSyncBranchContext(); } catch { /* non-fatal */ }
-    try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
-    try { await establishBootSyncBaseline(); } catch { /* non-fatal */ }
-  }
-
   function hasBlockingSyncPrerequisites(readiness) {
     if (!readiness || readiness.ready) return [];
     const googleConnected = hasGoogle() || readiness.googleConnected === true;
@@ -1751,7 +1783,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
         break;
       }
       case 'sync': {
-        void prepareBootSyncPrerequisites().then(() => {
+        void prepareBootSyncPrerequisites({ startSync: false }).then(() => {
           try { renderStepUI(loadWizard()); } catch { /* empty */ }
         });
         const lifecycle = global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true }) || null;
@@ -1779,31 +1811,30 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
           setStatus('⏳ جارٍ المزامنة...');
           try {
             let ok = true;
-            await prepareBootSyncPrerequisites();
+            const restoreChoice = loadWizard().restoreChoice;
+            const afterRestore = restoreChoice === 'backup_v2' || restoreChoice === 'file';
+            await prepareBootSyncPrerequisites({ startSync: false });
             const ready = global.SyncEngine?.getReadiness?.({ force: true });
             const blockers = hasBlockingSyncPrerequisites(ready);
             if (blockers.length) {
               setStatus(`⚠️ ${ready?.messageAr || ('غير جاهز: ' + blockers.join(', '))}`, true);
               ok = false;
             } else if (global.SyncEngine?.runOnce) {
-              if (!global.SyncEngine.isRunning?.()) {
-                global.SyncEngine.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
-              }
-              const restoreChoice = loadWizard().restoreChoice;
-              const afterRestore = restoreChoice === 'backup_v2' || restoreChoice === 'file';
-              const r = await global.SyncEngine.runOnce({
-                force: true,
-                afterRestore,
-                direction: afterRestore ? 'pull' : undefined,
-              });
+              const r = await runBootInitialSync({ afterRestore });
               ok = r?.ok !== false;
-              if (!ok && afterRestore && (r?.pull?.recovered || r?.pull?.softFail)) {
+              if (!ok && afterRestore && (r?.pull?.recovered || r?.recovered || r?.baseline)) {
                 ok = true;
               }
               if (!ok) setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
               else {
                 setStatus('⏳ انتظار اكتمال دورة المزامنة…');
                 await waitForSyncLifecycleReady({ relaxedBaseline: true });
+                try {
+                  global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true });
+                  if (!global.SyncEngine.isRunning?.()) {
+                    global.SyncEngine.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
+                  }
+                } catch { /* empty */ }
               }
             } else if (global.CloudBootstrap?.hydrateFromDrive && loadWizard().restoreChoice === 'cloud') {
               const r = await global.CloudBootstrap.hydrateFromDrive(null, { allowMissingLicense: true });
@@ -1826,10 +1857,15 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
             const lifecycleAfter = await waitForSyncLifecycleReady({ relaxedBaseline: true })
               || global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true })
               || null;
+            const baseline = global.SyncBaseline?.load?.() || null;
+            const afterRestoreChoice = w2.restoreChoice === 'backup_v2' || w2.restoreChoice === 'file';
             const syncReady = lifecycleAfter?.lifecycle === 'READY'
               && lifecycleAfter?.readiness?.ready !== false
               && lifecycleAfter?.conflictCount === 0;
-            w2.syncDone = ok !== false && syncReady;
+            w2.syncDone = ok !== false && (
+              syncReady
+              || (afterRestoreChoice && baseline?.baselineKnown === true && (lifecycleAfter?.conflictCount || 0) === 0)
+            );
             saveWizard(w2);
             if (w2.syncDone) {
               setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');

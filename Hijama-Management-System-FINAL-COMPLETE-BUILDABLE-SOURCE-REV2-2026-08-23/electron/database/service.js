@@ -20,9 +20,30 @@ const upgradeOrchestrator = require('../../database/upgrade-migration-orchestrat
 let db = null;
 let repos = null;
 let syncPlatform = null;
+let upgradeAutoRan = false;
 
 function getDbPath() {
   return defaultDbPath(app.getPath('userData'));
+}
+
+function autoCompleteUpgradeOnOpen(options = {}) {
+  if (upgradeAutoRan || !db || !repos) return null;
+  upgradeAutoRan = true;
+  try {
+    const result = upgradeOrchestrator.autoCompletePendingUpgrade(db, repos, {
+      dbPath: getDbPath(),
+      syncPlatform: syncPlatform || createSyncPlatform(db),
+      skipBackup: true,
+      ...options,
+    });
+    if (result && result.ok === false) {
+      console.error('[sqlite] auto upgrade incomplete:', result.error || result.assessment?.error || 'upgrade_failed');
+    }
+    return result;
+  } catch (err) {
+    console.error('[sqlite] auto upgrade failed:', err.code || err.message);
+    return { ok: false, error: err.code || 'upgrade_failed', message: err.message };
+  }
 }
 
 function ensureDb() {
@@ -31,6 +52,7 @@ function ensureDb() {
     db = openDatabase(getDbPath());
     repos = createRepositories(db);
     syncPlatform = createSyncPlatform(db);
+    autoCompleteUpgradeOnOpen();
     return db;
   } catch (err) {
     // DATA-007: never silently open empty replacement after corrupt/missing-required.
@@ -542,6 +564,7 @@ function close() {
   db = null;
   repos = null;
   syncPlatform = null;
+  upgradeAutoRan = false;
 }
 
 module.exports = {
@@ -575,5 +598,10 @@ module.exports = {
       dbPath: getDbPath(),
       syncPlatform: ensureSync(),
     });
+  },
+  autoCompletePendingUpgrade: (options = {}) => {
+    ensureDb();
+    upgradeAutoRan = false;
+    return autoCompleteUpgradeOnOpen(options);
   },
 };

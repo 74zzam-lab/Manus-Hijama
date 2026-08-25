@@ -337,7 +337,14 @@
     }
     const guard = checkSyncGuard(options);
     if (!guard.ok && !guard.skipped) return { ok: false, blocked: true, reason: guard.reason };
-    if (!isEnabled()) return { ok: false, skipped: true };
+    if (!isEnabled()) {
+      const cloudV2 = !!global.CloudMeta?.isCloudV2Enabled?.();
+      return {
+        ok: false,
+        skipped: true,
+        error: cloudV2 ? 'google_not_connected' : 'cloud_v2_disabled',
+      };
+    }
 
     const baselineGate = global.SyncBaseline?.assertPushAllowed?.({
       branchId: getBranchId(branchId),
@@ -766,7 +773,12 @@
 
   async function _pollInternal(options) {
     options = options || {};
-    if (!global.CloudMeta?.isCloudV2Enabled?.()) return { ok: false, skipped: true };
+    if (!global.CloudMeta?.isCloudV2Enabled?.()) {
+      try { global.CloudV2?.maybeAutoEnableCloudV2?.(); } catch { /* empty */ }
+    }
+    if (!global.CloudMeta?.isCloudV2Enabled?.()) {
+      return { ok: false, error: 'cloud_v2_disabled', skipped: true };
+    }
     const guard = checkSyncGuard(options);
     if (!guard.ok && !guard.skipped) return { ok: false, blocked: true, reason: guard.reason };
     try {
@@ -834,7 +846,22 @@
 
   async function _flushPendingInternal(options) {
     options = options || {};
-    if (!isEnabled()) return { ok: false, skipped: true };
+    if (!isEnabled()) {
+      if (options.force) {
+        try { await global.DriveAdapter?.ensureConnected?.(); } catch { /* empty */ }
+        try { global.CloudV2?.maybeAutoEnableCloudV2?.(); } catch { /* empty */ }
+      }
+      if (!isEnabled()) {
+        const cloudV2 = !!global.CloudMeta?.isCloudV2Enabled?.();
+        const googleOk = !!global.DriveAdapter?.isConnected?.()
+          || !!global.DriveAdapter?.isConnectedFromSettings?.();
+        return {
+          ok: false,
+          skipped: true,
+          error: !cloudV2 ? 'cloud_v2_disabled' : (!googleOk ? 'google_not_connected' : 'sync_not_enabled'),
+        };
+      }
+    }
     const guard = checkSyncGuard();
     const blocked = !!(guard && guard.ok === false && !guard.skipped);
     const state = global.SyncState?.load?.() || {};
@@ -946,7 +973,13 @@
   function start(options) {
     options = options || {};
     stop();
-    if (!global.CloudMeta?.isCloudV2Enabled?.()) return { ok: false, skipped: true };
+    try { global.CloudV2?.maybeAutoEnableCloudV2?.(); } catch { /* empty */ }
+    if (!global.CloudMeta?.isCloudV2Enabled?.() && (options.force || global.settings?.cloudV2Enabled)) {
+      try { global.CloudMeta?.setCloudV2Enabled?.(true); } catch { /* empty */ }
+    }
+    if (!global.CloudMeta?.isCloudV2Enabled?.()) {
+      return { ok: false, skipped: true, error: 'cloud_v2_disabled' };
+    }
 
     const interval = Number(options.pollIntervalMs)
       || global.SyncState?.load?.()?.pollIntervalMs
@@ -1143,6 +1176,30 @@
     } catch { /* non-fatal */ }
   }
 
+  function flattenCycleResult(result) {
+    if (!result) return { ok: false, error: 'sync_cycle_failed' };
+    if (result.ok !== false) return result;
+    const error = result.error
+      || result.pull?.error
+      || result.push?.error
+      || result.pull?.reason
+      || result.push?.reason
+      || result.code
+      || 'sync_cycle_failed';
+    const truth = global.OperationalErrorTruth?.present?.(error);
+    const messageAr = result.messageAr
+      || result.pull?.messageAr
+      || result.push?.messageAr
+      || truth?.userMessageAr
+      || String(error);
+    return {
+      ...result,
+      error,
+      message: result.message || messageAr,
+      messageAr,
+    };
+  }
+
   /**
    * One-shot pull + flush (manual "مزامنة الآن" and BootFlow initial sync).
    */
@@ -1179,7 +1236,7 @@
     }
 
     if (global.SyncCoordinator?.runCycle) {
-      const coordinated = await global.SyncCoordinator.runCycle(options);
+      const coordinated = flattenCycleResult(await global.SyncCoordinator.runCycle(options));
       publishUiStatus(coordinated, 'sync-coordinator');
       return coordinated;
     }
@@ -1200,13 +1257,13 @@
     }
 
     const ok = pull?.ok !== false && push?.ok !== false;
-    const result = {
+    const result = flattenCycleResult({
       ok,
       pull,
       push,
       readiness: getReadiness({ force: true }),
       at: new Date().toISOString(),
-    };
+    });
     publishUiStatus(result, 'sync-engine');
     return result;
   }

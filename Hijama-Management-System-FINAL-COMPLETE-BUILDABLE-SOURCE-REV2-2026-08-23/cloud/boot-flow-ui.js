@@ -396,10 +396,13 @@
 
   function startBackgroundSyncEngineDeferred() {
     setTimeout(() => {
-      try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
+      try { global.ActivationSyncDefaults?.ensureLiveSyncEngine?.({ startBackup: true }); } catch { /* empty */ }
       try {
         if (global.SyncEngine?.start && !global.SyncEngine.isRunning?.()) {
-          global.SyncEngine.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
+          global.SyncEngine.start?.({
+            force: true,
+            pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs || 15000,
+          });
         }
       } catch { /* empty */ }
     }, 0);
@@ -2341,6 +2344,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
     hasDeviceBranch,
     hasRestoreDecision,
     hasSyncDone,
+    formatSyncCycleError,
     normalizeWizardState,
     reconcileGoogleAuthorityForOpenWizard,
     autoDiscoverActivationAfterGoogle,

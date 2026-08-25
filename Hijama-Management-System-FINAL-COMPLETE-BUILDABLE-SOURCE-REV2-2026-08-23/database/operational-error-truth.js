@@ -5,12 +5,17 @@
  */
 const REDACTED = '[REDACTED]';
 
-const CODE_ALIASES = Object.freeze({
+  const CODE_ALIASES = Object.freeze({
   owner_count_invariant_violation: 'owner_corrupted',
   DUPLICATE_PRIMARY_OWNER: 'owner_corrupted',
   branch_id_required: 'branch_context_missing',
   branch_scope_denied: 'branch_access_denied',
   backup_legacy_encrypted_direct_restore_blocked: 'restore_encrypted_import_only',
+  unknown: 'sync_cycle_failed',
+  Unknown: 'sync_cycle_failed',
+  UNKNOWN: 'sync_cycle_failed',
+  cycle_failed: 'sync_cycle_failed',
+  sync_not_enabled: 'cloud_v2_disabled',
 });
 
 const CATALOG = Object.freeze({
@@ -325,6 +330,32 @@ const CATALOG = Object.freeze({
     severity: 'warning',
     userMessageAr: 'ربط حساب Google مطلوب.',
     userMessageEn: 'Connect Google account.',
+  },
+  sync_cycle_failed: {
+    category: 'sync',
+    severity: 'error',
+    userMessageAr: 'فشلت المزامنة — تحقق من ربط Google والاتصال ثم أعد المحاولة.',
+    userMessageEn: 'Sync failed — check Google link and connectivity, then retry.',
+  },
+  restore_rehydrate_timeout: {
+    category: 'restore',
+    severity: 'warning',
+    retryable: true,
+    userMessageAr: 'اكتملت استعادة قاعدة البيانات — جارٍ تحديث الذاكرة المحلية (قد يستغرق وقتاً).',
+    userMessageEn: 'Database restore completed — refreshing local memory (may take a moment).',
+  },
+  restore_rehydrate_failed: {
+    category: 'restore',
+    severity: 'warning',
+    retryable: true,
+    userMessageAr: 'اكتملت استعادة SQLite — فشل تحديث الذاكرة؛ أعد تحميل التطبيق أو تابع المزامنة.',
+    userMessageEn: 'SQLite restore completed — memory refresh failed; reload the app or continue sync.',
+  },
+  restore_committed_post_processing_failed: {
+    category: 'restore',
+    severity: 'warning',
+    userMessageAr: 'تمت استعادة قاعدة البيانات — فشلت خطوة ما بعد الاستعادة؛ البيانات في SQLite محفوظة.',
+    userMessageEn: 'Database restored — post-restore step failed; SQLite data is preserved.',
   },
   device_sync_blocked: {
     category: 'device',

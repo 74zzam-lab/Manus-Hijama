@@ -693,6 +693,7 @@
       }
       mergeBranchSliceIntoCommitted(tableKey, list, branchId);
       state.lastError = null;
+      try { global.SyncEngine?.schedulePush?.(tableKey, branchId); } catch { /* empty */ }
       return { ok: true, tableKey, count: list.length, authoritative: true };
     } catch (e) {
       state.lastError = String(e?.message || e);
@@ -751,6 +752,7 @@
       }
       applyCommittedToView(key, persistValue);
       state.lastError = null;
+      try { global.SyncEngine?.schedulePush?.(key, getOperationalWriteBranchId()); } catch { /* empty */ }
       return { ok: true, key, authoritative: true };
     } catch (e) {
       state.lastError = String(e?.message || e);

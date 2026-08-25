@@ -10159,8 +10159,20 @@ async function completeAuthenticatedLogin() {
   // Pull latest cloud ops + ensure sync engine running after login (skip in license read-only).
   try {
     const licReadOnly = typeof LicenseReadOnlyMode !== 'undefined' && LicenseReadOnlyMode.isActive?.();
-    if (!licReadOnly && typeof ActivationSyncDefaults !== 'undefined' && ActivationSyncDefaults.isActivationBound?.()) {
-      ActivationSyncDefaults.applyDefaults?.({ startSync: true });
+    if (!licReadOnly) {
+      try { await DriveAdapter?.ensureConnected?.(); } catch { /* empty */ }
+      try { await OperationalReadiness?.ensureFresh?.({ force: true }); } catch { /* empty */ }
+      if (typeof ActivationSyncDefaults !== 'undefined' && ActivationSyncDefaults.ensureLiveSyncEngine) {
+        ActivationSyncDefaults.ensureLiveSyncEngine({ startBackup: true, force: true });
+      } else if (typeof ActivationSyncDefaults !== 'undefined' && ActivationSyncDefaults.isActivationBound?.()) {
+        ActivationSyncDefaults.applyDefaults?.({ startSync: true });
+      }
+      if (typeof SyncEngine !== 'undefined' && SyncEngine.start && !SyncEngine.isRunning?.()) {
+        SyncEngine.start({
+          force: true,
+          pollIntervalMs: SyncState?.load?.()?.pollIntervalMs || 15000,
+        });
+      }
     }
   } catch { /* empty */ }
   if (typeof BranchSwitcher !== 'undefined' && BranchSwitcher.applyVisibility) BranchSwitcher.applyVisibility();
@@ -19284,13 +19296,26 @@ async function runCloudV2SyncNow() {
       }
     }
     if (!SyncEngine.isRunning?.()) {
-      SyncEngine.start?.({ pollIntervalMs: SyncState?.load?.()?.pollIntervalMs || 15000 });
+      try { ActivationSyncDefaults?.ensureLiveSyncEngine?.({ startBackup: false, force: true }); } catch { /* empty */ }
+      SyncEngine.start?.({
+        force: true,
+        pollIntervalMs: SyncState?.load?.()?.pollIntervalMs || 15000,
+      });
     }
     notify('⏳ جاري تحديث البيانات بين الأجهزة...', 'warning');
     const res = await SyncEngine.runOnce({ force: true });
-    if (res?.ok === false) {
+    if (!res?.ok) {
       emitBackupUiStatus('sync-failed', { error: res?.message || res?.error || 'sync_failed' });
-      notify('❌ فشلت المزامنة: ' + (res?.message || res?.error || (res?.readiness?.missing || []).join(', ') || 'unknown'), 'danger');
+      const code = res?.error || res?.pull?.error || res?.push?.error || 'sync_cycle_failed';
+      const truth = typeof OperationalErrorTruth?.present === 'function'
+        ? OperationalErrorTruth.present(code)
+        : null;
+      const detail = res?.messageAr || res?.message || truth?.userMessageAr
+        || (typeof BootFlow !== 'undefined' && BootFlow.formatSyncCycleError
+          ? BootFlow.formatSyncCycleError(res)
+          : null)
+        || String(code);
+      notify('❌ فشلت المزامنة: ' + detail, 'danger');
       return res;
     }
     emitBackupUiStatus('sync-completed', { ok: true });

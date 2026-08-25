@@ -128,12 +128,44 @@
     return { ok: true, state: getState() };
   }
 
+  /**
+   * After login / post-restore: enable Cloud V2 and start the poll engine
+   * even if a single activation check is still warming up.
+   */
+  function ensureLiveSyncEngine(options) {
+    options = options || {};
+    if (global.settings?.cloudV2UserDisabled) {
+      return { ok: false, skipped: true, reason: 'user_disabled', state: getState() };
+    }
+    try { global.DriveAdapter?.ensureConnected?.(); } catch { /* empty */ }
+    try { global.CloudV2?.maybeAutoEnableCloudV2?.(); } catch { /* empty */ }
+    const googleOk = hasGoogle() || !!global.DriveAdapter?.isConnectedFromSettings?.();
+    const licenseOk = hasLicense();
+    const bootDone = !!global.BootFlow?.isBootComplete?.()
+      || !!global.DB?.get?.('__tdw_boot_wizard__')?.syncDone;
+    if ((googleOk && licenseOk) || options.force === true || bootDone) {
+      applyDefaults({
+        startSync: true,
+        force: true,
+        startBackup: options.startBackup !== false,
+      });
+    }
+    if (global.SyncEngine?.start && !global.SyncEngine.isRunning?.()) {
+      global.SyncEngine.start({
+        force: true,
+        pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs || 15000,
+      });
+    }
+    return { ok: true, state: getState() };
+  }
+
   global.ActivationSyncDefaults = {
     hasGoogle,
     hasLicense,
     hasBranchBinding,
     isActivationBound,
     getState,
-    applyDefaults
+    applyDefaults,
+    ensureLiveSyncEngine,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

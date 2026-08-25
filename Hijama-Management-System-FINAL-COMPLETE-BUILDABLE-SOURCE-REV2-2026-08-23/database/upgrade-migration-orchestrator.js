@@ -221,8 +221,11 @@ function assessUpgradeState(db, repos, options = {}) {
   };
 }
 
-function verifyInvariants(db, repos) {
-  const health = operationalDbHealth.assessHealth(db);
+function verifyInvariants(db, repos, options = {}) {
+  const health = operationalDbHealth.assessHealth(
+    db,
+    options.healthOptions || operationalDbHealth.RUNTIME_HEALTH_OPTIONS
+  );
   if (!health.ok) {
     return { ok: false, error: health.reasons[0] || 'database_unhealthy', health };
   }
@@ -457,7 +460,7 @@ function runUpgradePipeline(db, repos, options = {}) {
     }
 
     if (report.ok) {
-      const verify = verifyInvariants(db, repos);
+      const verify = verifyInvariants(db, repos, options);
       report.verify = verify;
       if (!verify.ok) {
         report.ok = false;
@@ -495,7 +498,7 @@ function resumeInProgressRun(db, repos, options = {}) {
   if (!inProgress) return { ok: true, resumed: false };
   const pending = detectPendingSteps(db, repos, options);
   if (!pending.length) {
-    const verify = verifyInvariants(db, repos);
+    const verify = verifyInvariants(db, repos, options);
     if (!verify.ok) {
       db.prepare(
         `UPDATE upgrade_migration_runs SET status='failed', finished_at=?, error_code=? WHERE id=?`
@@ -511,6 +514,54 @@ function resumeInProgressRun(db, repos, options = {}) {
   return runUpgradePipeline(db, repos, { ...options, resumeRunId: inProgress.id });
 }
 
+/**
+ * Complete leftover PR13 steps on DB open / after Backup V2 restore.
+ * Restored clinics typically have backupRegistry (and maybe attachment
+ * manifest) without upgradeMigrationVersion=1, which otherwise blocks
+ * every write and sync with migration_pending.
+ */
+function autoCompletePendingUpgrade(db, repos, options = {}) {
+  options = options || {};
+  const stuck = getInProgressRun(db);
+  if (stuck && !stuck.backup_path) {
+    try {
+      db.prepare(
+        `UPDATE upgrade_migration_runs SET status='failed', finished_at=?, error_code=? WHERE id=?`
+      ).run(new Date().toISOString(), 'upgrade_resume_backup_missing', stuck.id);
+    } catch { /* table may be missing on partial schemas */ }
+  }
+
+  const resume = resumeInProgressRun(db, repos, options);
+  if (resume && resume.ok === false && resume.resumed) return resume;
+
+  const assessment = assessUpgradeState(db, repos, options);
+  if (assessment.ok) {
+    if (Number(assessment.upgradeVersion || 0) < UPGRADE_VERSION) {
+      setMeta(db, UPGRADE_MARKER, String(UPGRADE_VERSION));
+    }
+    return { ok: true, already: true, assessment, resume };
+  }
+  if (assessment.owner_corrupted) {
+    return { ok: false, skipped: true, error: 'owner_corrupted', assessment };
+  }
+  if (assessment.unresolved_null_branch) {
+    return { ok: false, skipped: true, error: 'legacy_branch_migration_required', assessment };
+  }
+
+  const pipe = runUpgradePipeline(db, repos, {
+    ...options,
+    skipBackup: options.skipBackup !== false,
+    resumeRunId: assessment.runId || options.resumeRunId,
+  });
+  const after = assessUpgradeState(db, repos, options);
+  return {
+    ...pipe,
+    auto: true,
+    assessmentBefore: assessment,
+    assessment: after,
+  };
+}
+
 module.exports = {
   UPGRADE_VERSION,
   UPGRADE_MARKER,
@@ -523,6 +574,7 @@ module.exports = {
   verifyInvariants,
   runUpgradePipeline,
   resumeInProgressRun,
+  autoCompletePendingUpgrade,
   migrateOwnerLegacy,
   migrateLsConflictQueue,
   migrateNullBranchRows,

@@ -268,6 +268,18 @@
     });
   }
 
+  function isBootSyncLifecycleComplete(snapshot, options = {}) {
+    if (!snapshot) return false;
+    if (snapshot.lifecycle === 'READY') return true;
+    if (options.acceptBaselineKnown !== false
+      && snapshot.baselineKnown === true
+      && (snapshot.conflictCount || 0) === 0
+      && snapshot.readiness?.ready !== false) {
+      return true;
+    }
+    return false;
+  }
+
   async function waitForSyncLifecycleReady(options = {}) {
     const maxMs = Number(options.maxMs) || 120000;
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -280,11 +292,58 @@
         force: true,
         relaxedBaseline: options.relaxedBaseline !== false,
       }) || null;
-      if (lc?.lifecycle === 'READY') return lc;
-      if (lc && ['FAILED', 'CONFLICT_REQUIRES_ACTION', 'PAUSED_OFFLINE'].includes(lc.lifecycle)) return lc;
+      if (isBootSyncLifecycleComplete(lc, options)) return lc;
+      if (lc && ['FAILED', 'CONFLICT_REQUIRES_ACTION'].includes(lc.lifecycle)) return lc;
+      if (lc?.lifecycle === 'PAUSED_OFFLINE' && !hasGoogle()) return lc;
       await sleep(350);
     }
     return global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true }) || null;
+  }
+
+  async function finalizeBootSyncAfterRestore(syncResult) {
+    let baseline = null;
+    try {
+      baseline = await global.SyncBaseline?.establishFromLocalState?.({ source: 'boot_flow_sync_button' });
+    } catch { /* non-fatal */ }
+    if (baseline?.ok === false) {
+      try {
+        baseline = await establishBootSyncBaseline();
+      } catch { /* non-fatal */ }
+    }
+    const loaded = global.SyncBaseline?.load?.() || {};
+    if (loaded.baselineKnown !== true && (syncResult?.recovered || syncResult?.pull?.recovered)) {
+      const branchId = ensureBootSyncBranchContext();
+      const localVersions = global.VersionsIndex?.loadLocal?.(
+        global.LicenseCloud?.loadLocal?.()?.centerId || ''
+      ) || {};
+      const remoteRevision = Number(
+        localVersions?.branches?.[branchId]?.databaseVersion
+        || localVersions?.databaseVersion
+        || 0
+      );
+      if (branchId) {
+        try {
+          await global.SyncBaseline?.completeReconciliation?.({ branchId, remoteRevision });
+        } catch { /* non-fatal */ }
+      }
+    }
+    const state = global.SyncBaseline?.load?.() || {};
+    if (state.baselineKnown === true && state.lifecycle !== 'READY') {
+      try { await global.SyncBaseline?.markReady?.(); } catch { /* non-fatal */ }
+    }
+    try { global.SyncState?.clearError?.(); } catch { /* empty */ }
+    return global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true }) || null;
+  }
+
+  function startBackgroundSyncEngineDeferred() {
+    setTimeout(() => {
+      try { global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true }); } catch { /* empty */ }
+      try {
+        if (global.SyncEngine?.start && !global.SyncEngine.isRunning?.()) {
+          global.SyncEngine.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
+        }
+      } catch { /* empty */ }
+    }, 0);
   }
 
   function hasValidLicense() {
@@ -1825,22 +1884,57 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
               if (!ok && afterRestore && (r?.pull?.recovered || r?.recovered || r?.baseline)) {
                 ok = true;
               }
-              if (!ok) setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
-              else {
+              if (!ok) {
+                setStatus(`⚠️ فشلت المزامنة: ${formatSyncCycleError(r)}`, true);
+              } else if (afterRestore) {
+                setStatus('⏳ إتمام مواءمة ما بعد الاستعادة…');
+                const lifecycleAfter = await finalizeBootSyncAfterRestore(r);
+                const baseline = global.SyncBaseline?.load?.() || null;
+                const wEarly = loadWizard();
+                wEarly.syncDone = baseline?.baselineKnown === true && (lifecycleAfter?.conflictCount || 0) === 0;
+                saveWizard(wEarly);
+                if (wEarly.syncDone) {
+                  setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
+                  startBackgroundSyncEngineDeferred();
+                } else {
+                  setStatus(
+                    `⚠️ المزامنة لم تُسجَّل بعد (${lifecycleAfter?.labelAr || lifecycleAfter?.lifecycle || '—'})`,
+                    true
+                  );
+                }
+              } else {
                 setStatus('⏳ انتظار اكتمال دورة المزامنة…');
-                await waitForSyncLifecycleReady({ relaxedBaseline: true });
-                try {
-                  global.ActivationSyncDefaults?.applyDefaults?.({ startSync: true });
-                  if (!global.SyncEngine.isRunning?.()) {
-                    global.SyncEngine.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
-                  }
-                } catch { /* empty */ }
+                const lifecycleAfter = await waitForSyncLifecycleReady({
+                  relaxedBaseline: true,
+                  maxMs: 45000,
+                  acceptBaselineKnown: true,
+                });
+                const baseline = global.SyncBaseline?.load?.() || null;
+                const syncReady = isBootSyncLifecycleComplete(lifecycleAfter, { acceptBaselineKnown: true });
+                ok = syncReady;
+                if (syncReady) {
+                  setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
+                  startBackgroundSyncEngineDeferred();
+                } else {
+                  setStatus(
+                    `⚠️ المزامنة لم تصل READY بعد (${lifecycleAfter?.labelAr || lifecycleAfter?.lifecycle || '—'})`,
+                    true
+                  );
+                }
+                const wEarly = loadWizard();
+                wEarly.syncDone = ok !== false && (
+                  syncReady
+                  || (baseline?.baselineKnown === true && (lifecycleAfter?.conflictCount || 0) === 0)
+                );
+                saveWizard(wEarly);
               }
             } else if (global.CloudBootstrap?.hydrateFromDrive && loadWizard().restoreChoice === 'cloud') {
               const r = await global.CloudBootstrap.hydrateFromDrive(null, { allowMissingLicense: true });
               ok = !!r?.ok || r?.skipped;
             }
-            if (ok) {
+            const w2 = loadWizard();
+            const afterRestoreChoice = w2.restoreChoice === 'backup_v2' || w2.restoreChoice === 'file';
+            if (ok && !afterRestoreChoice) {
               if (loadWizard().path === PATHS.EXISTING) {
                 try { global.OwnerLifecycleAuthority?.markReplacementHydrate?.(); } catch { /* empty */ }
               }
@@ -1848,32 +1942,33 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
               if (bootstrap?.runNewDeviceBootstrap) {
                 await bootstrap.runNewDeviceBootstrap({
                   branchId: global.DeviceConfig?.load?.()?.lockedBranchId,
-                  startSync: true,
+                  startSync: false,
                   allowMissingLicense: true
                 });
               }
-            }
-            const w2 = loadWizard();
-            const lifecycleAfter = await waitForSyncLifecycleReady({ relaxedBaseline: true })
-              || global.SyncLifecycle?.resolveLifecycle?.({ force: true, relaxedBaseline: true })
-              || null;
-            const baseline = global.SyncBaseline?.load?.() || null;
-            const afterRestoreChoice = w2.restoreChoice === 'backup_v2' || w2.restoreChoice === 'file';
-            const syncReady = lifecycleAfter?.lifecycle === 'READY'
-              && lifecycleAfter?.readiness?.ready !== false
-              && lifecycleAfter?.conflictCount === 0;
-            w2.syncDone = ok !== false && (
-              syncReady
-              || (afterRestoreChoice && baseline?.baselineKnown === true && (lifecycleAfter?.conflictCount || 0) === 0)
-            );
-            saveWizard(w2);
-            if (w2.syncDone) {
-              setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
-            } else if (ok !== false) {
-              setStatus(
-                `⚠️ المزامنة لم تصل READY بعد (${lifecycleAfter?.labelAr || lifecycleAfter?.lifecycle || '—'})`,
-                true
-              );
+              if (!w2.syncDone) {
+                const lifecycleAfter = await waitForSyncLifecycleReady({
+                  relaxedBaseline: true,
+                  maxMs: 45000,
+                  acceptBaselineKnown: true,
+                });
+                const baseline = global.SyncBaseline?.load?.() || null;
+                const syncReady = isBootSyncLifecycleComplete(lifecycleAfter, { acceptBaselineKnown: true });
+                w2.syncDone = ok !== false && (
+                  syncReady
+                  || (baseline?.baselineKnown === true && (lifecycleAfter?.conflictCount || 0) === 0)
+                );
+                saveWizard(w2);
+                if (w2.syncDone) {
+                  setStatus('✅ اكتملت المزامنة الأولية — الحالة: جاهزة');
+                  startBackgroundSyncEngineDeferred();
+                } else if (ok !== false) {
+                  setStatus(
+                    `⚠️ المزامنة لم تصل READY بعد (${lifecycleAfter?.labelAr || lifecycleAfter?.lifecycle || '—'})`,
+                    true
+                  );
+                }
+              }
             }
           } catch (e) {
             setStatusFromErr(e, 'sync_interrupted');
@@ -1896,12 +1991,7 @@ body.bf-active #ops-ux-restore-wizard{z-index:100050!important}
           });
         }
         if (hasSyncDone()) {
-          const lc = global.SyncLifecycle?.resolveLifecycle?.() || null;
-          if (lc?.lifecycle === 'READY') {
-            setStatus('✅ المزامنة مسجّلة كمكتملة');
-          } else {
-            setStatus(`⚠️ المزامنة غير جاهزة بعد — ${lc?.labelAr || lc?.lifecycle || '—'}`, true);
-          }
+          setStatus('✅ المزامنة مسجّلة كمكتملة');
         }
         break;
       }

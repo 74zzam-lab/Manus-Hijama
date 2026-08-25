@@ -98,12 +98,29 @@
       return persistAuthorityStatus({ connected: false, needsReauth: false, email: '' }, 'user_disconnect');
     }
     if (!bridge?.isElectron?.() || !bridge.getCloudStatus) {
+      if (isConnectedFromSettings()) {
+        return persistAuthorityStatus({
+          connected: true,
+          needsReauth: false,
+          email: prior.email || prior.accountEmail || prior.userEmail || '',
+          hasRefreshToken: !!prior.hasRefreshToken,
+        }, 'settings_fallback_unavailable');
+      }
       return persistAuthorityStatus({ connected: false, needsReauth: true, error: 'main_status_unavailable' }, 'unavailable');
     }
     try {
       const live = await bridge.getCloudStatus('google');
       return persistAuthorityStatus(live, 'main_status');
     } catch (error) {
+      if (isConnectedFromSettings()) {
+        return persistAuthorityStatus({
+          connected: true,
+          needsReauth: false,
+          email: prior.email || prior.accountEmail || prior.userEmail || '',
+          hasRefreshToken: !!prior.hasRefreshToken,
+          error: String(error?.message || error || 'status_failed'),
+        }, 'settings_fallback_status_failed');
+      }
       return persistAuthorityStatus({ connected: false, needsReauth: true, error: String(error?.message || error || 'status_failed') }, 'main_status_failed');
     }
   }

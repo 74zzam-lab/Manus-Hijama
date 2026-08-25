@@ -57,8 +57,6 @@
 
   function isGoogleConnectedForLifecycle() {
     if (global.DriveAdapter?.isConnected?.()) return true;
-    const snap = global.DriveAdapter?.authoritySnapshot?.();
-    if (snap?.verified && snap?.connected && !snap?.needsReauth && !snap?.stale) return true;
     const prov = global.settings?.backup?.providers?.google;
     return !!(prov?.connected && !prov?.userDisconnected && prov?.oauth !== false);
   }
@@ -112,7 +110,7 @@
       progressHint = syncStatus.lastActivity || readiness.messageAr;
     } else if (readiness?.ready && !cycleInFlight) {
       const cycleSucceeded = lastCycleResult === 'success';
-      if (reconciliationRequired && !cycleSucceeded) {
+      if (reconciliationRequired && !cycleSucceeded && !(options.relaxedBaseline && baselineKnown)) {
         lifecycle = LIFECYCLE.VERIFYING;
         notReadyReason = 'مواءمة ما بعد الاستعادة — انتظر اكتمال دورة المزامنة';
       } else if (outboxCount > 0) {
@@ -121,6 +119,8 @@
       } else if (!baselineKnown && !options.relaxedBaseline && !cycleSucceeded) {
         lifecycle = LIFECYCLE.PREPARING;
         notReadyReason = 'baseline غير معروف بعد — نفّذ المزامنة الأولية';
+      } else if (options.relaxedBaseline && baselineKnown && outboxCount === 0) {
+        lifecycle = LIFECYCLE.READY;
       } else {
         lifecycle = LIFECYCLE.READY;
       }

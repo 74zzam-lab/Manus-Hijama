@@ -57,6 +57,9 @@ check(!/isRunning\(\).*PREPARING/.test(lifecycle.replace(/\s+/g, ' ')), 'lifecyc
 
 // P0-4 — Initial sync button awaits cycle
 check(/waitForSyncLifecycleReady/.test(boot), 'bootflow waits for lifecycle READY');
+check(/finalizeBootSyncAfterRestore/.test(boot), 'bootflow finalizes after-restore sync without double-wait');
+check(/afterRestoreChoice/.test(boot) && /!afterRestoreChoice/.test(boot), 'bootstrap hydrate skipped after backup restore');
+check(/startBackgroundSyncEngineDeferred/.test(boot), 'background engine starts after boot sync completes');
 check(/SyncCoordinator\?\.isCycleInFlight/.test(boot), 'wait helper respects cycle mutex');
 check(/afterRestore/.test(boot) && /runOnce/.test(boot), 'initial sync runOnce with afterRestore');
 

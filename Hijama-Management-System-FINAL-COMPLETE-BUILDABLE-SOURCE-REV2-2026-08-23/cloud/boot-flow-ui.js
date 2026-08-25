@@ -185,28 +185,42 @@
     }
   }
 
-  function formatSyncCycleError(result) {
-    if (!result) return 'sync_failed';
-    const code = result.error || result.pull?.error || result.push?.error
-      || result.pull?.softFail
-      || global.SyncCoordinator?.getLastCycleResult?.()?.error;
-    const truth = code && global.OperationalErrorTruth?.present?.(code);
-    if (truth?.userMessageAr && code !== 'generic' && truth.code !== 'generic') {
-      return truth.userMessageAr;
+  function asSyncErrorCode(value) {
+    if (value == null || value === true || value === false) return '';
+    if (typeof value === 'string') return value.trim();
+    if (typeof value === 'object') {
+      return String(value.error || value.code || value.reason || '').trim();
     }
+    return String(value).trim();
+  }
+
+  function formatSyncCycleError(result) {
+    if (!result) return 'تعذّر إكمال العملية. البيانات المحلية محفوظة. (رمز: sync_failed)';
+    const code = asSyncErrorCode(result.error)
+      || asSyncErrorCode(result.pull?.error)
+      || asSyncErrorCode(result.push?.error)
+      || asSyncErrorCode(result.pull?.reason)
+      || asSyncErrorCode(result.push?.reason)
+      || asSyncErrorCode(result.pull?.softFail)
+      || asSyncErrorCode(result.code)
+      || asSyncErrorCode(global.SyncCoordinator?.getLastCycleResult?.()?.error)
+      || 'sync_cycle_failed';
+    const catalog = global.OperationalErrorTruth?.CATALOG;
+    const known = !!(catalog && catalog[code]);
+    const truth = code && global.OperationalErrorTruth?.present?.(code);
     if (result.pull?.recovered || result.recovered) {
       return 'اكتملت مواءمة ما بعد الاستعادة — البيانات المحلية هي المرجع';
     }
-    const ux = code && global.ErrorRecoveryUx?.fromClassify?.(code);
-    if (ux?.bodyAr && code) return `${ux.bodyAr} (${code})`;
-    const parts = [
-      result.message,
-      result.messageAr,
-      result.pull?.message,
-      result.push?.message,
-      code,
-    ].filter(Boolean);
-    return parts[0] || 'sync_cycle_failed';
+    let msg = (known && truth?.userMessageAr)
+      || result.messageAr
+      || result.pull?.messageAr
+      || result.push?.messageAr
+      || (truth && truth.code !== 'generic' ? truth.userMessageAr : '')
+      || 'تعذّر إكمال العملية. البيانات المحلية محفوظة.';
+    if (!known && code && code !== 'generic') {
+      msg += ` (رمز: ${code})`;
+    }
+    return msg;
   }
 
   async function prepareBootSyncPrerequisites(options = {}) {

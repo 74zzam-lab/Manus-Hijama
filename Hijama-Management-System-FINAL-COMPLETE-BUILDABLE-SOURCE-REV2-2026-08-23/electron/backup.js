@@ -48,6 +48,10 @@ async function saveLocal(payload, filename, localPathHint) {
     const target = resolveInside(dir, safeName);
     const data = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
     fs.writeFileSync(target, data, 'utf8');
+    try {
+      const backupV2 = require('./backup-v2-core');
+      backupV2.pruneLocalBackups(dir, backupV2.DEFAULT_LOCAL_RETENTION, { keepPath: target });
+    } catch { /* retention is best-effort */ }
     return { ok: true, path: target };
   } catch (err) {
     return { ok: false, error: err.code || err.message, message: err.message };

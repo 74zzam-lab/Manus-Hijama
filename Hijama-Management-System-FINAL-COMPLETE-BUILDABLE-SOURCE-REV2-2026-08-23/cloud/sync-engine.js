@@ -1179,12 +1179,14 @@
   function flattenCycleResult(result) {
     if (!result) return { ok: false, error: 'sync_cycle_failed' };
     if (result.ok !== false) return result;
-    const error = result.error
-      || result.pull?.error
-      || result.push?.error
-      || result.pull?.reason
-      || result.push?.reason
-      || result.code
+    const error = asCodedError(result.error)
+      || asCodedError(result.pull?.error)
+      || asCodedError(result.push?.error)
+      || asCodedError(result.pull?.reason)
+      || asCodedError(result.push?.reason)
+      || asCodedError(result.code)
+      || asCodedError(result.reason)
+      || (result.skipped ? (asCodedError(result.skipped) || 'sync_cycle_failed') : '')
       || 'sync_cycle_failed';
     const truth = global.OperationalErrorTruth?.present?.(error);
     const messageAr = result.messageAr
@@ -1198,6 +1200,19 @@
       message: result.message || messageAr,
       messageAr,
     };
+  }
+
+  function asCodedError(value) {
+    if (value == null || value === true || value === false) return '';
+    if (typeof value === 'string') {
+      const s = value.trim();
+      if (!s || s === 'true' || s === 'false' || s.toLowerCase() === 'unknown') return '';
+      return s;
+    }
+    if (typeof value === 'object') {
+      return asCodedError(value.error) || asCodedError(value.code) || asCodedError(value.reason);
+    }
+    return String(value).trim();
   }
 
   /**

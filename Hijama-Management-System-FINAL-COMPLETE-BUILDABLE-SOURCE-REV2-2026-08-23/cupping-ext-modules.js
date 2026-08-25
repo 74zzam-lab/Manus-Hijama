@@ -271,6 +271,15 @@ function getRoleDisplayName(user) {
 }
 
 let logCounter = DB.get('logCounter', 0);
+let _auditPersistInFlight = false;
+
+const DEDUPE_LOG_TYPES = {
+  SYSTEM_ERROR: 1,
+  UI_TOAST: 1,
+  SYNC_FAILED: 1,
+  WRITE_DENIED: 1,
+  OPERATION_REJECTED: 1,
+};
 
 const LOG_OP_META = {
   PATIENT_ADDED: { label: 'إضافة مريض', cat: 'المرضى', icon: '🟢' },
@@ -302,6 +311,11 @@ const LOG_OP_META = {
   THEME_CHANGED: { label: 'تغيير الثيم', cat: 'النظام', icon: '🟠' },
   BACKUP_CREATED: { label: 'نسخة احتياطية', cat: 'النظام', icon: '🔵' },
   BACKUP_RESTORED: { label: 'استعادة نسخة', cat: 'النظام', icon: '🟠' },
+  UI_TOAST: { label: 'إشعار واجهة', cat: 'النظام', icon: '🔔' },
+  SYNC_FAILED: { label: 'فشل مزامنة', cat: 'النظام', icon: '❌' },
+  WRITE_DENIED: { label: 'رفض كتابة', cat: 'النظام', icon: '⛔' },
+  OPERATION_REJECTED: { label: 'رفض عملية', cat: 'النظام', icon: '⛔' },
+  SYSTEM_ERROR: { label: 'خطأ نظام', cat: 'النظام', icon: '⚠️' },
   INVENTORY_IN: { label: 'إضافة مخزون', cat: 'المخزون', icon: '🟢' },
   INVENTORY_OUT: { label: 'صرف مخزون', cat: 'المخزون', icon: '🟠' },
   INVENTORY_ITEM: { label: 'صنف مخزون', cat: 'المخزون', icon: '🔵' },
@@ -344,11 +358,11 @@ function formatLogDateTime(iso) {
 }
 
 function logAudit(opType, description, extra) {
-  const desc = String(description || '').slice(0, 200);
-  if (opType === 'SYSTEM_ERROR' && systemLogs.length) {
+  const desc = String(description || '').slice(0, 240);
+  if (DEDUPE_LOG_TYPES[opType] && systemLogs.length) {
     const last = systemLogs[0];
     const age = Date.now() - new Date(last.at).getTime();
-    if (last.opType === 'SYSTEM_ERROR' && last.description === desc && age < 60000) return;
+    if (last.opType === opType && last.description === desc && age < 60000) return;
   }
   const meta = LOG_OP_META[opType] || { label: opType, cat: 'النظام', icon: '⚪' };
   const entry = {
@@ -371,12 +385,26 @@ function logAudit(opType, description, extra) {
   systemLogs.unshift(entry);
   if (systemLogs.length > 3000) systemLogs.length = 3000;
   if (extra?.deferPersist) return;
-  DB.set('systemLogs', systemLogs);
+  persistSystemLogsBestEffort();
   if (typeof AuditLogger !== 'undefined' && typeof CloudMeta !== 'undefined' && CloudMeta.isCloudV2Enabled?.()) {
     try { AuditLogger.logFromSystem(opType, desc, extra); } catch { /* empty */ }
   }
   const logsPage = document.getElementById('page-logs');
   if (logsPage && logsPage.classList.contains('active')) refreshSystemLogsPage();
+}
+
+function persistSystemLogsBestEffort() {
+  if (_auditPersistInFlight) return;
+  _auditPersistInFlight = true;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('__tdw_systemLogs_pending__', JSON.stringify(systemLogs.slice(0, 400)));
+    }
+  } catch { /* quota */ }
+  try {
+    DB.set('systemLogs', systemLogs);
+  } catch { /* sqlite gate — memory + localStorage keep the trail */ }
+  _auditPersistInFlight = false;
 }
 
 function logSystem(category, action, detail, meta) {

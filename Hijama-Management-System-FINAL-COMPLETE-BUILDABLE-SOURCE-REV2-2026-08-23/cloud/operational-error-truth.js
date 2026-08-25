@@ -47,7 +47,7 @@ function redactString(s) {
     let recoveryEn;
     if (global.ErrorRecoveryUx?.fromClassify && !CATALOG[code]) {
       const ux = global.ErrorRecoveryUx.fromClassify(code);
-      if (ux?.bodyAr) {
+      if (ux?.bodyAr && ux.code && ux.code !== 'generic') {
         userMessageAr = options.userMessageAr || ux.bodyAr;
         userMessageEn = ux.bodyEn || userMessageEn;
         recoveryAr = ux.recoveryAr;

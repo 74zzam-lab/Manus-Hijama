@@ -17563,7 +17563,7 @@ async function refreshBackupV2ReadinessUi() {
 function getBackupV2CloudOptions() {
   return {
     cloudRetentionCount: 3,
-    retentionCount: 20,
+    retentionCount: 5,
   };
 }
 
@@ -18312,7 +18312,7 @@ async function saveBackupV2ScheduleFromUI() {
       intervalMinutes: mins > 0 ? mins : 60,
       cloudEnabled: mins > 0 && cloudEnabled,
       cloudRetentionCount: 3,
-      retentionCount: 20,
+      retentionCount: 5,
       ...getBackupV2IdentityMeta(),
     });
     await refreshBackupV2Status();
@@ -18363,7 +18363,12 @@ async function runBackupNow(trigger) {
     encrypted = true;
   }
 
-  const filename = `${getBackupBrandName()}-Backup-${stamp}${ext}`;
+  const AUTOMATIC_BACKUP_TRIGGERS = { auto: 1, ops: 1, close: 1, health: 1 };
+  const SAFETY_BACKUP_TRIGGERS = { 'pre-restore': 1, 'pre-legacy-migration': 1 };
+  let backupKind = 'manual';
+  if (SAFETY_BACKUP_TRIGGERS[trigger]) backupKind = 'safety';
+  else if (AUTOMATIC_BACKUP_TRIGGERS[trigger]) backupKind = 'auto';
+  const filename = `${getBackupBrandName()}-Backup-${backupKind}-${stamp}${ext}`;
   const localPath = cfg.localPath === 'custom' ? cfg.localPathCustom : cfg.localPath;
   let localOk = false;
   let cloudOk = false;
@@ -18374,7 +18379,7 @@ async function runBackupNow(trigger) {
       await BackupBridge.saveLocal(payload, filename, localPath);
       localOk = true;
     }
-    if (cfg.cloudEnabled) {
+    if (cfg.cloudEnabled && backupKind !== 'auto') {
       const prov = cfg.cloudProvider || 'google';
       const p = cfg.providers[prov];
       if (p?.connected) {
@@ -18418,6 +18423,9 @@ async function runBackupNow(trigger) {
     }
     renderBackupUI();
     emitBackupUiStatus('legacy-local-backup', { localOk, cloudOk, cloudQueued, trigger: trigger || 'manual' });
+    if (backupKind === 'auto' || backupKind === 'safety') {
+      pruneLegacyAutomaticBackups().catch(() => {});
+    }
     if (trigger === 'export') notify('✅ تم تصدير النسخة الاحتياطية الكاملة');
     else notify('✅ ' + msg);
   } catch (err) {
@@ -18449,9 +18457,53 @@ function trackBackupOperation() {
 
 function startAutoBackupTimer() {
   clearInterval(_backupAutoTimer);
-  const mins = parseInt(settings.backup.autoIntervalMin, 10) || 0;
-  if (mins <= 0) return;
-  _backupAutoTimer = setInterval(() => runBackupNow('auto'), mins * 60 * 1000);
+  _backupAutoTimer = null;
+  const startLegacy = () => {
+    const mins = parseInt(settings.backup.autoIntervalMin, 10) || 0;
+    if (mins <= 0) return;
+    _backupAutoTimer = setInterval(() => runBackupNow('auto'), mins * 60 * 1000);
+  };
+  const api = typeof getBackupV2Api === 'function' ? getBackupV2Api() : null;
+  if (api?.v2ScheduleStatus) {
+    Promise.resolve(api.v2ScheduleStatus()).then((st) => {
+      if (st?.enabled) {
+        pruneLegacyAutomaticBackups().catch(() => {});
+        return;
+      }
+      startLegacy();
+    }).catch(() => startLegacy());
+    return;
+  }
+  startLegacy();
+}
+
+function isPrunableLegacyBackupName(name) {
+  const n = String(name || '').toLowerCase();
+  if (/tadawi-backup-v2/.test(n)) return false;
+  if (/(?:^|[._-])(manual|safety|pinned|emergency|pre-restore|import)(?:[._-]|$)/.test(n)) return false;
+  if (/backup-auto-/.test(n) || /(?:^|[._-])(scheduled|auto|periodic)(?:[._-]|$)/.test(n)) return true;
+  if (/backup-\d{4}-\d{2}-\d{2}t/.test(n)) return true;
+  return false;
+}
+
+async function pruneLegacyAutomaticBackups() {
+  const keepLocal = 5;
+  const keepCloud = 3;
+  try {
+    if (BackupBridge.pruneAutomatic) {
+      await BackupBridge.pruneAutomatic({ keepLocal, keepCloud });
+    }
+  } catch { /* best effort */ }
+  try {
+    const listed = await BackupBridge.listCloudBackups?.('google');
+    const items = (listed?.items || [])
+      .filter((it) => isPrunableLegacyBackupName(it.name || it.path || ''))
+      .sort((a, b) => (Date.parse(b.modifiedAt || b.createdAt || 0) || 0) - (Date.parse(a.modifiedAt || a.createdAt || 0) || 0));
+    for (const extra of items.slice(keepCloud)) {
+      const remotePath = extra.path || extra.remotePath;
+      if (remotePath) await BackupBridge.deleteCloudBackup(remotePath, extra.provider || 'google');
+    }
+  } catch { /* best effort */ }
 }
 
 async function processBackupUploadQueue() {
@@ -19306,15 +19358,9 @@ async function runCloudV2SyncNow() {
     const res = await SyncEngine.runOnce({ force: true });
     if (!res?.ok) {
       emitBackupUiStatus('sync-failed', { error: res?.message || res?.error || 'sync_failed' });
-      const code = res?.error || res?.pull?.error || res?.push?.error || 'sync_cycle_failed';
-      const truth = typeof OperationalErrorTruth?.present === 'function'
-        ? OperationalErrorTruth.present(code)
-        : null;
-      const detail = res?.messageAr || res?.message || truth?.userMessageAr
-        || (typeof BootFlow !== 'undefined' && BootFlow.formatSyncCycleError
-          ? BootFlow.formatSyncCycleError(res)
-          : null)
-        || String(code);
+      const detail = (typeof BootFlow !== 'undefined' && BootFlow.formatSyncCycleError)
+        ? BootFlow.formatSyncCycleError(res)
+        : (res?.messageAr || res?.message || String(res?.error || 'sync_cycle_failed'));
       notify('❌ فشلت المزامنة: ' + detail, 'danger');
       return res;
     }
@@ -25582,6 +25628,16 @@ function notify(msg, type) {
   el.className = 'notif show' + (type ? ' ' + type : ' success');
   clearTimeout(notifTimer);
   notifTimer = setTimeout(() => el.classList.remove('show'), 3500);
+  if (type === 'danger' || type === 'warning') {
+    try {
+      if (typeof logAudit === 'function') {
+        const text = String(msg || '');
+        const op = /مزامن/.test(text) ? 'SYNC_FAILED'
+          : (/ترحيل|رفض|صلاحية|غير جاهز/.test(text) ? 'WRITE_DENIED' : 'UI_TOAST');
+        logAudit(op, text.replace(/^[^\w\u0600-\u06FF]+/, '').slice(0, 240), { toastType: type, source: 'notify' });
+      }
+    } catch { /* logging must never break UI */ }
+  }
 }
 
 function populateBookingDoctor() {

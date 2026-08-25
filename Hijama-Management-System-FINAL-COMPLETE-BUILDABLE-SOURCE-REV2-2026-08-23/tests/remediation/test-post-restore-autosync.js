@@ -72,6 +72,9 @@ assert.ok(!/unknown/i.test(truth.present('Unknown').userMessageAr));
 const serviceSrc = fs.readFileSync(path.join(root, 'electron/database/service.js'), 'utf8');
 assert.match(serviceSrc, /autoCompleteUpgradeOnOpen\(\)/, 'ensureDb auto-runs leftover upgrade');
 assert.match(serviceSrc, /upgradeAutoRan = false/, 'restore reopen retries auto-upgrade');
+assert.match(serviceSrc, /UPGRADE_RETRY_MS/, 'failed auto-upgrade retries instead of running once');
+assert.match(serviceSrc, /leftoverPendingIsSoft/, 'leftover restore metadata does not block clinic writes');
+assert.match(serviceSrc, /systemLogs/, 'system log KV writes bypass the migration write gate');
 
 const engineSrc = fs.readFileSync(path.join(root, 'cloud/sync-engine.js'), 'utf8');
 assert.match(engineSrc, /function flattenCycleResult/, 'runOnce flattens coordinator errors');
@@ -88,13 +91,27 @@ assert.doesNotMatch(
   'manual sync no longer falls back to unknown'
 );
 assert.match(indexSrc, /ensureLiveSyncEngine/, 'login starts live sync engine');
-assert.match(indexSrc, /OperationalErrorTruth\.present/, 'manual sync uses error catalog');
+assert.match(indexSrc, /BootFlow\.formatSyncCycleError/, 'manual sync uses coded Arabic formatter');
+assert.match(indexSrc, /st\?\.enabled/, 'legacy 15-min auto backup yields to Backup V2 scheduler');
+assert.match(indexSrc, /function pruneLegacyAutomaticBackups/, 'legacy local\/cloud automatic backups are pruned');
+assert.match(indexSrc, /Backup-\$\{backupKind\}-\$\{stamp\}/, 'automatic backups are named -auto- so they can be pruned');
+assert.match(indexSrc, /logAudit\(op,/, 'toasts are written to the system log');
 
 const actSrc = fs.readFileSync(path.join(root, 'cloud/activation-sync-defaults.js'), 'utf8');
 assert.match(actSrc, /function ensureLiveSyncEngine/, 'activation helper starts poll engine');
+assert.match(actSrc, /retentionCount: 5/, 'activation keeps 5 local automatic backups');
+assert.match(actSrc, /cloudRetentionCount: 3/, 'activation keeps 3 cloud automatic backups');
 
 const bootSrc = fs.readFileSync(path.join(root, 'cloud/boot-flow-ui.js'), 'utf8');
 assert.match(bootSrc, /ensureLiveSyncEngine/, 'boot ready defers to live sync engine');
+assert.match(bootSrc, /function formatSyncCycleError/, 'boot formatter exists');
+assert.match(bootSrc, /رمز:/, 'unknown sync errors include a technical code');
+
+const extSrc = fs.readFileSync(path.join(root, 'cupping-ext-modules.js'), 'utf8');
+assert.match(extSrc, /SYNC_FAILED:/, 'system log catalogs sync failures');
+assert.match(extSrc, /WRITE_DENIED:/, 'system log catalogs write denials');
+assert.match(extSrc, /UI_TOAST:/, 'system log catalogs warning\/danger toasts');
+assert.match(extSrc, /function persistSystemLogsBestEffort/, 'system log persist is best-effort');
 
 const bridgeSrc = fs.readFileSync(path.join(root, 'cupping-sqlite-bridge.js'), 'utf8');
 assert.match(bridgeSrc, /SyncEngine\?\.schedulePush\?\.\(tableKey/, 'local table writes enqueue push');
@@ -113,8 +130,16 @@ sandbox.SyncEngine = {
   _flushPendingInternal: async () => ({ ok: false, skipped: true }),
 };
 vm.createContext(sandbox);
-vm.runInContext(fs.readFileSync(path.join(root, 'cloud/sync-coordinator.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'cloud/error-recovery-ux.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(root, 'cloud/operational-error-truth.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'cloud/sync-coordinator.js'), 'utf8'), sandbox);
+
+const unexpected = sandbox.OperationalErrorTruth.present('weird_unmapped_code');
+assert.ok(
+  !/حدث خطأ غير متوقع/.test(unexpected.userMessageAr),
+  'unknown sync codes must not use the opaque ErrorRecoveryUx generic toast'
+);
+assert.ok(/تعذّر إكمال العملية/.test(unexpected.userMessageAr), 'unknown codes stay on the catalog generic');
 
 sandbox.SyncEngine._pollInternal = async () => ({ ok: false, skipped: true });
 sandbox.SyncEngine._flushPendingInternal = async () => ({ ok: false, skipped: true });
@@ -141,6 +166,10 @@ sandbox.SyncEngine._flushPendingInternal = async () => ({ ok: false, skipped: tr
   assert.strictEqual(once.ok, false);
   assert.ok(once.error && String(once.error).toLowerCase() !== 'unknown', 'runOnce error is coded: ' + once.error);
   assert.ok(once.messageAr, 'runOnce has Arabic message');
+  assert.ok(
+    !/حدث خطأ غير متوقع/.test(String(once.messageAr)),
+    'runOnce must not surface the opaque unexpected-error toast'
+  );
   console.log('PASS remediation:post-restore-autosync');
 })().catch((err) => {
   console.error('FAIL remediation:post-restore-autosync', err);

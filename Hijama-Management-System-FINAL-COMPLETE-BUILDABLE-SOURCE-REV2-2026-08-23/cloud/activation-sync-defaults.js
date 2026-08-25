@@ -113,6 +113,8 @@
             enabled: true,
             intervalMinutes: 60,
             cloudEnabled: true,
+            retentionCount: 5,
+            cloudRetentionCount: 3,
           }).catch?.(() => {});
         }
       } catch { /* empty */ }

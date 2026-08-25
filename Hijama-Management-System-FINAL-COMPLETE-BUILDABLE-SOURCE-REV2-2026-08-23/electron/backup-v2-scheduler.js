@@ -9,7 +9,8 @@ const PASSWORD_CREDENTIAL = 'backup-v2-schedule-password';
 const DEFAULT_INTERVAL_MINUTES = 60;
 const MIN_INTERVAL_MINUTES = 15;
 const MAX_INTERVAL_MINUTES = 7 * 24 * 60;
-const DEFAULT_RETENTION_COUNT = 20;
+const DEFAULT_RETENTION_COUNT = 5;
+const DEFAULT_CLOUD_RETENTION_COUNT = 3;
 
 function boundedInteger(value, fallback, min, max) {
   const parsed = Number.parseInt(value, 10);
@@ -53,6 +54,7 @@ class BackupV2Scheduler {
       enabled: config.enabled === true,
       intervalMinutes: boundedInteger(config.intervalMinutes, DEFAULT_INTERVAL_MINUTES, this.minimumInterval, MAX_INTERVAL_MINUTES),
       retentionCount: boundedInteger(config.retentionCount, DEFAULT_RETENTION_COUNT, 1, 100),
+      cloudRetentionCount: boundedInteger(config.cloudRetentionCount, DEFAULT_CLOUD_RETENTION_COUNT, 1, 20),
       localPath: typeof config.localPath === 'string' ? config.localPath.slice(0, 500) : '',
       cloudEnabled: config.cloudEnabled === true,
       provider: typeof config.provider === 'string' ? config.provider.slice(0, 50) : 'google',
@@ -137,4 +139,5 @@ module.exports = {
   MIN_INTERVAL_MINUTES,
   MAX_INTERVAL_MINUTES,
   DEFAULT_RETENTION_COUNT,
+  DEFAULT_CLOUD_RETENTION_COUNT,
 };

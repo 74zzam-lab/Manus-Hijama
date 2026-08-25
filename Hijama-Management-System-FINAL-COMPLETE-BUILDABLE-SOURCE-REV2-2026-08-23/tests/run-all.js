@@ -178,6 +178,7 @@ const remediation = [
   ['tests/remediation/test-restore-postcommit-truth.js', 'remediation:restore-postcommit-truth'],
   ['tests/remediation/test-backup-local-path-containment.js', 'remediation:backup-local-path-containment'],
   ['tests/remediation/test-backup-retention-classification.js', 'remediation:backup-retention-classification'],
+  ['tests/remediation/test-post-restore-autosync.js', 'remediation:post-restore-autosync'],
   ['tests/remediation/test-json-migration-quarantine.js', 'remediation:json-migration-quarantine'],
   ['tests/remediation/test-upgrade-resume-truth.js', 'remediation:upgrade-resume-truth'],
   ['tests/remediation/test-sync-outbox-lease.js', 'remediation:sync-outbox-lease'],

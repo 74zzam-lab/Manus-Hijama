@@ -13,6 +13,8 @@ function classifyBackupFile(name, manifest) {
   if (/scheduled|auto|periodic/.test(n)) return 'automatic';
   if (/manual|custom|user/.test(n)) return 'manual';
   if (/pinned|keep/.test(n)) return 'pinned';
+  // Unlabeled legacy Brand-Backup-{iso} (not V2) — produced by the 15-min timer.
+  if (/backup-\d{4}-\d{2}-\d{2}t/.test(n) && !/tadawi-backup-v2/.test(n)) return 'automatic';
   // Timestamp-only Tadawi-Backup-V2-{iso} without "scheduled" → user-triggered manual full backup.
   if (/tadawi-backup-v2-\d{4}-\d{2}-\d{2}/i.test(n) && !/scheduled/.test(n)) return 'manual';
   return 'manual';

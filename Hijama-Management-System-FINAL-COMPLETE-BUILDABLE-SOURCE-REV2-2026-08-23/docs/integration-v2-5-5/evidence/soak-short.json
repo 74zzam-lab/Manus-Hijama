@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "ms": 60,
+  "configuredMs": 60,
+  "hoursMode": null,
+  "ticks": 5,
+  "heapDeltaMb": 0.033,
+  "heapStartMb": 5,
+  "heapEndMb": 5,
+  "cpuBusyMs": 0,
+  "idleRatio": 1,
+  "leakSuspect": false
+}

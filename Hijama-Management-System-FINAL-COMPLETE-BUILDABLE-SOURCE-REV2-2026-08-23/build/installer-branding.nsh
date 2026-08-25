@@ -1,0 +1,10 @@
+; AUTO-GENERATED from branding.config.json — do not edit manually
+!define BRAND_COMPANY "NajjarTech"
+!define BRAND_TAGLINE "Software Solutions"
+!define BRAND_WEBSITE "www.najjartech.com"
+!define BRAND_PRODUCT "Hijama Management System"
+!define BRAND_WELCOME_TITLE "Welcome to Hijama Management System"
+!define BRAND_WELCOME_TEXT "Thank you for choosing NajjarTech solutions.$\r$\n$\r$\nThis system was designed to deliver a professional, secure experience for managing medical centers and clinics - with a focus on performance, reliability, and ease of use.$\r$\nWe wish you a successful experience and are always happy to develop technology solutions that help improve your business.$\r$\n$\r$\nمرحباً بك في برنامج Hijama Management System$\r$\nشكراً لاختياركم حلول NajjarTech.$\r$\nتم تصميم هذا النظام لتقديم تجربة احترافية وآمنة لإدارة المراكز الطبية والعيادات، مع التركيز على الأداء، والموثوقية، وسهولة الاستخدام.$\r$\nنتمنى لكم تجربة ناجحة، ونسعد دائماً بتطوير حلول تقنية تساعد على تحسين أعمالكم.$\r$\n$\r$\nDeveloped by NajjarTech - Software Solutions$\r$\nwww.najjartech.com"
+!define BRAND_FINISH_TITLE "Installation Complete"
+!define BRAND_FINISH_TEXT "Hijama Management System has been installed successfully.$\r$\n$\r$\nDeveloped by NajjarTech - Software Solutions$\r$\nwww.najjartech.com$\r$\n$\r$\nتم تثبيت نظام إدارة الحجامة بنجاح."
+!define BRAND_FINISH_RUN "Launch Hijama Management System"

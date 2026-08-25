@@ -1,0 +1,19 @@
+{
+  "profile": "FULL",
+  "targets": {
+    "clients": 100000,
+    "visits": 500000,
+    "invoices": 50000,
+    "appointments": 50000,
+    "attachments": 10000
+  },
+  "counts": {
+    "clients": 100000,
+    "visits": 500000,
+    "invoices": 50000,
+    "appointments": 50000,
+    "attachments": 10000
+  },
+  "ok": true,
+  "ms": 3534
+}

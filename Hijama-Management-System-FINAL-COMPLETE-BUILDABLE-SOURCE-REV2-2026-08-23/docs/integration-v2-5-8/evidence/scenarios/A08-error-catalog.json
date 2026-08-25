@@ -1,0 +1,10 @@
+{
+  "id": "A08-error-catalog",
+  "title": "User-facing errors without raw stack/secrets",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "codes": 36,
+    "diagnosticCode": "TDW-ACT-oauth_timeout-MT5VG8LJ"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 6,
+  "licenseId": "TDW-2026-000001",
+  "customerId": "CUSTOMER-001",
+  "customerName": "Center Name",
+  "packageId": "PRO",
+  "issuedAt": "2026-01-01T00:00:00.000Z",
+  "expiresAt": "2027-01-01T00:00:00.000Z",
+  "deviceBinding": {
+    "mode": "any"
+  },
+  "features": [
+    "clients",
+    "appointments",
+    "payroll",
+    "reports"
+  ],
+  "limits": {
+    "branches": 1,
+    "users": 5
+  },
+  "nonce": "c19ad122ffd504462c3f02d40521b149",
+  "keyId": "dev-ed25519-2026",
+  "signature": "4SU2gnS99yVIR9mwdMCLeXQLgxIcbd1HGNjvCFLuN7hZw9ChEO4dRfXCEngF-ORtQie6T6-6-pcBt3scDLoIBw"
+}

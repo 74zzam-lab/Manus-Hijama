@@ -1,0 +1,35 @@
+{
+  "at": "2026-07-30T01:06:05Z",
+  "commit": "d57828bd6ea217db36eb4a0d9baede83cf290fe7",
+  "branch": "integration/hybrid-cloud-owner-v2",
+  "runs": {
+    "v2-4-cloud-test": {
+      "url": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30503997707",
+      "conclusion": "success"
+    },
+    "v2-3-5-release-gate": {
+      "url": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30503997654",
+      "conclusion": "success"
+    },
+    "windows-uat-v2-3-5": {
+      "url": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30503997718",
+      "conclusion": "success"
+    },
+    "v2-4-release-gate": {
+      "url": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30503997693",
+      "conclusion": "failure",
+      "note": "Expected until SYNC-001 and all requirements PASS with real Drive A/B evidence"
+    }
+  },
+  "tests": "70/70",
+  "cloudSync": "NOT_PASS",
+  "local": {
+    "at": "2026-07-30T08:02:35.761Z",
+    "commit": "94d0866",
+    "tests": "70/70",
+    "cloudTest": "PASS",
+    "v24ReleaseGate": "PASS",
+    "scenarios": "25/25",
+    "cloudSync": "PASS"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "phase": "V2-5.3",
+  "startedAt": "2026-08-23T13:57:27.728Z",
+  "finishedAt": "2026-08-23T13:57:27.776Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "O01-token-ttl-and-once",
+      "title": "Setup token TTL + once-only redeem",
+      "result": "PASS",
+      "ms": 5,
+      "evidence": {
+        "expired": "token_expired",
+        "reused": "bootstrap_already_consumed",
+        "consumed": true
+      }
+    },
+    {
+      "id": "O02-two-device-race",
+      "title": "Two-device bootstrap race — one winner",
+      "result": "PASS",
+      "ms": 6,
+      "evidence": {
+        "wins": 1,
+        "errors": [
+          "bootstrap_already_consumed"
+        ]
+      }
+    },
+    {
+      "id": "O03-emergency-recovery-audit",
+      "title": "Emergency recovery authorized + audited",
+      "result": "PASS",
+      "ms": 2,
+      "evidence": {
+        "recovered": true,
+        "audited": true
+      }
+    },
+    {
+      "id": "O04-transfer-and-session-invalidate",
+      "title": "Ownership transfer + session invalidation",
+      "result": "PASS",
+      "ms": 2,
+      "evidence": {
+        "previousOwner": "old",
+        "epoch": 2
+      }
+    },
+    {
+      "id": "I01-ids-stable-and-center-confirm",
+      "title": "Org/Center/Device IDs + center confirm",
+      "result": "PASS",
+      "ms": 2,
+      "evidence": {
+        "center": "NJR-CLINIC-DEADBEEF",
+        "deviceUuid": "dev-1787493447746-hbcqsz4n",
+        "org": "NJR-CLINIC-DEADBEEF"
+      }
+    },
+    {
+      "id": "I02-device-transfer-sync-block",
+      "title": "Device transfer revokes sync, DB intact",
+      "result": "PASS",
+      "ms": 2,
+      "evidence": {
+        "fromBlocked": true,
+        "dbIntact": true
+      }
+    },
+    {
+      "id": "L01-limits-grace-upgrade-downgrade",
+      "title": "maxUsers + grace + upgrade/downgrade",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "userLimit": "user_limit_reached",
+        "grace": "offline_grace_exceeded",
+        "upgraded": true
+      }
+    },
+    {
+      "id": "L02-license-persist-markers",
+      "title": "License survive markers (uninstall-prep + lifecycle)",
+      "result": "PASS",
+      "ms": 26,
+      "evidence": {
+        "uninstallPrepExit": 0,
+        "refreshed": true
+      }
+    }
+  ]
+}

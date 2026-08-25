@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-07-01T15:03:28.170Z",
+  "version": "1.2.0",
+  "gate": "rc1-manual-runtime",
+  "approved": true,
+  "summary": {
+    "passed": 333,
+    "failed": 0,
+    "warned": 1
+  },
+  "pipeline": {
+    "license:harden": {
+      "exit": 0,
+      "ms": 633214,
+      "stderr": "",
+      "stdout": "\n> hijama-management-system@2.0.0 license:harden\n> node scripts/commercial-licensing-production-hardening.mjs\n\nCommercial Licensing — Final Production Hardening Gate\n\n\n=== PRODUCTION HARDENING: APPROVED ===\nPassed: 112 | Failed: 0 | Warnings: 3\n"
+    }
+  },
+  "performance": {
+    "stress": 3000,
+    "totalMs": 176859,
+    "avgMs": 58.95,
+    "first50": 59.54,
+    "last50": 59.77,
+    "heapMb": 10.5
+  },
+  "checklist": {
+    "initial-setup": "PASS",
+    "license-activation": "PASS",
+    "license-renewal": "PASS",
+    "upgrade": "PASS",
+    "downgrade": "PASS",
+    "packages": "PASS",
+    "features": "PASS",
+    "diagnostics": "PASS",
+    "opt-in": "PASS",
+    "browser-behavior": "PASS",
+    "electron-integration": "PASS",
+    "persistence": "PASS",
+    "restart": "PASS",
+    "offline": "PASS",
+    "performance": "PASS",
+    "memory": "PASS",
+    "console-clean": "PASS",
+    "runtime-errors": "PASS",
+    "production-blockers": "NONE"
+  }
+}

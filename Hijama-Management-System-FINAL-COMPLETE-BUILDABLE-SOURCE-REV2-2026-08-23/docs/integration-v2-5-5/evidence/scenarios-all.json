@@ -1,0 +1,67 @@
+{
+  "phase": "V2-5.5",
+  "startedAt": "2026-08-23T13:57:28.778Z",
+  "finishedAt": "2026-08-23T13:57:28.945Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "total": 5,
+  "passed": 2,
+  "failed": 3,
+  "results": [
+    {
+      "id": "P01-host-and-median",
+      "title": "Host documentation + median-of-3 harness",
+      "result": "FAIL",
+      "ms": 40,
+      "evidence": {},
+      "error": "unit_failed"
+    },
+    {
+      "id": "P02-full-scale-dataset",
+      "title": "FULL 100k/500k/50k/50k/10k scale dataset",
+      "result": "FAIL",
+      "ms": 26,
+      "evidence": {},
+      "error": "scale-dataset profile=FULL targets={\"clients\":100000,\"visits\":500000,\"invoices\":50000,\"appointments\":50000,\"attachments\":10000}\n"
+    },
+    {
+      "id": "P03-perf-bench-median",
+      "title": "Perf benches median-of-3 + incremental policy",
+      "result": "FAIL",
+      "ms": 37,
+      "evidence": {},
+      "error": "perf-bench profile=TINY\n"
+    },
+    {
+      "id": "P04-db-maintenance",
+      "title": "ANALYZE/indexes/VACUUM/WAL/FK/integrity",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "indexes": 13,
+        "busyTimeout": 5000,
+        "wal": "PASSIVE"
+      }
+    },
+    {
+      "id": "P05-reliability",
+      "title": "Crash markers, backoff, queue bound, soak, disk/mem, logs",
+      "result": "PASS",
+      "ms": 61,
+      "evidence": {
+        "backoff": [
+          8000,
+          16000,
+          32000,
+          64000,
+          128000
+        ],
+        "queuePending": 2000,
+        "soakMs": 60
+      }
+    }
+  ]
+}

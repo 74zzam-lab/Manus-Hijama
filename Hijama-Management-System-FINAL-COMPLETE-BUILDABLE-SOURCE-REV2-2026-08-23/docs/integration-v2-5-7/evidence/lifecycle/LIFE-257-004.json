@@ -1,0 +1,12 @@
+{
+  "id": "LIFE-257-004",
+  "title": "Repair same version",
+  "ok": true,
+  "result": "PASS",
+  "at": "2026-08-23T13:57:32.934Z",
+  "evidence": {
+    "policy": "NSIS re-run installer over same version; customRemoveFiles preserves userData when isUpdated",
+    "updatePreservesUserData": true,
+    "removeInstDirOnly": true
+  }
+}

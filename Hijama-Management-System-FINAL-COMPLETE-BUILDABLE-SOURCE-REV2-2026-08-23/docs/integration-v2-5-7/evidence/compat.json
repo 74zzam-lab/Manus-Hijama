@@ -1,0 +1,41 @@
+{
+  "at": "2026-08-23T13:57:32.263Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "windows11": {
+    "ciRunner": "windows-2022",
+    "note": "GitHub Actions windows-2022 is a Windows Server 2022 image (Win11-generation kernel/userland). CI proves Win11-class server image build+test.",
+    "evidence": "GHA workflow .github/workflows/v2-5-7-release-gate.yml runs-on: windows-2022",
+    "ok": true
+  },
+  "windows10": {
+    "supportedByElectronTarget": true,
+    "electronTarget": "nsis x64",
+    "note": "Win10 x64 is supported by the Electron/NSIS target matrix; this CI image does not boot Windows 10 — support is by product target policy, not by a Win10 VM in this gate.",
+    "ok": true
+  },
+  "displayScales": {
+    "supported": [
+      "100%",
+      "125%",
+      "150%"
+    ],
+    "note": "Electron Chromium DPI awareness; prior V2-5.5 UAT covered scale dataset",
+    "priorEvidence": "docs/integration-v2-5-5/evidence/device-a-uat.json",
+    "ok": true
+  },
+  "localeTimezone": {
+    "supportedLocales": [
+      "ar",
+      "en"
+    ],
+    "timezone": "Asia/Riyadh + system local",
+    "note": "ux-i18n ar/rtl + en/ltr; app uses system timezone",
+    "priorEvidence": "docs/integration-v2-5-6/evidence/scenarios/U05-i18n-a11y.json",
+    "ok": true
+  },
+  "ok": true
+}

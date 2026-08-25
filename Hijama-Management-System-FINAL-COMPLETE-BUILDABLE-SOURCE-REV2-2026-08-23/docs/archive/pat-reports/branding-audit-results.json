@@ -1,0 +1,155 @@
+{
+  "summary": {
+    "pass": 24,
+    "fail": 0,
+    "warn": 0,
+    "total": 24,
+    "pct": 100
+  },
+  "results": [
+    {
+      "id": "BR-01",
+      "name": "branding.config.json exists",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-02",
+      "name": "Required branding keys",
+      "status": "PASS",
+      "detail": "4 keys"
+    },
+    {
+      "id": "BR-03",
+      "name": "Logo source file",
+      "status": "PASS",
+      "detail": "1254×1254 RGBA"
+    },
+    {
+      "id": "BR-04",
+      "name": "Logo has alpha (transparency)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-05",
+      "name": "Build brand assets",
+      "status": "PASS",
+      "detail": "BMP + NSIS + ICO"
+    },
+    {
+      "id": "BR-06",
+      "name": "No logo upscale",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-07",
+      "name": "Installer logo within source bounds",
+      "status": "PASS",
+      "detail": "130×130"
+    },
+    {
+      "id": "BR-08",
+      "name": "Program icon valid Windows ICO",
+      "status": "PASS",
+      "detail": "Program-Icon.ico"
+    },
+    {
+      "id": "BR-09",
+      "name": "installer-branding.nsh generated",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-10",
+      "name": "Program icon path",
+      "status": "PASS",
+      "detail": "build/Program-Icon.ico"
+    },
+    {
+      "id": "BR-11",
+      "name": "signAndEditExecutable unchanged",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-12",
+      "name": "branding.config.json in build files",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-13",
+      "name": "prebuild runs generate:brand",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-14",
+      "name": "cupping-branding.js loaded",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-15",
+      "name": "About uses BrandingEngine ids",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-16",
+      "name": "No hardcoded logo path in About img",
+      "status": "PASS",
+      "detail": "dynamic via engine"
+    },
+    {
+      "id": "BR-17",
+      "name": "installer.nsh includes branding engine output",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-18",
+      "name": "Electron reads branding.config.json",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-19",
+      "name": "Runtime IPC app:getRuntimeInfo",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-20",
+      "name": "About @100% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0"
+    },
+    {
+      "id": "BR-20",
+      "name": "About @125% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0"
+    },
+    {
+      "id": "BR-20",
+      "name": "About @150% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0"
+    },
+    {
+      "id": "BR-20",
+      "name": "About @200% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0"
+    },
+    {
+      "id": "BR-21",
+      "name": "About scaling aggregate",
+      "status": "PASS",
+      "detail": "0 overflow hints"
+    }
+  ]
+}

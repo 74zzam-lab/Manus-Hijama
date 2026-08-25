@@ -1,0 +1,20 @@
+{
+  "at": "2026-08-23T13:57:28.945Z",
+  "mode": "SOAK_HOURS=8",
+  "note": "Full 8-hour soak enabled via SOAK_HOURS=8; CI proves harness with short SOAK_MS",
+  "shortEvidence": {
+    "ok": true,
+    "ms": 60,
+    "configuredMs": 60,
+    "hoursMode": null,
+    "ticks": 5,
+    "heapDeltaMb": 0.033,
+    "heapStartMb": 5,
+    "heapEndMb": 5,
+    "cpuBusyMs": 0,
+    "idleRatio": 1,
+    "leakSuspect": false
+  },
+  "command": "SOAK_HOURS=8 node -e \"require(\"./cloud/reliability-ops\").runSoak({}).then(console.log)\"",
+  "result": "PASS"
+}

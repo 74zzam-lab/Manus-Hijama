@@ -1,0 +1,10 @@
+{
+  "id": "S10-rbac-soft-ipc",
+  "title": "IPC RBAC denials return soft {ok:false} not throw",
+  "result": "PASS",
+  "ms": 2,
+  "evidence": {
+    "softRbac": true,
+    "error": "RBAC_DENIED"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "phase": "V2-5.7",
+  "at": "2026-08-23T13:57:32.935Z",
+  "uninstallPrep": true,
+  "nsisPolicy": true,
+  "uninstallUnit": true,
+  "policy": {
+    "updatePreservesUserData": true,
+    "appOnlyDefault": true,
+    "appOnlyKeepsLicense": true,
+    "fullWipeExplicit": true,
+    "silentDefaultsAppOnly": true,
+    "deleteAppDataOnUninstallFalse": true,
+    "customRemoveRemovesInstDir": true,
+    "upgradeSkipsAppDataWipe": true
+  },
+  "rows": [
+    {
+      "id": "LIFE-257-001",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-002",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-003",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-004",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-005",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-006",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-007",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-008",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-009",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-010",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-011",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-012",
+      "result": "PASS"
+    },
+    {
+      "id": "LIFE-257-013",
+      "result": "PASS"
+    }
+  ],
+  "passed": 13,
+  "total": 13,
+  "ok": true
+}

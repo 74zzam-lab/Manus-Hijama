@@ -1,0 +1,10 @@
+{
+  "id": "U04-redact-export",
+  "title": "Ops log redact email/bearer/password",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "redacted": true,
+    "exportCount": 1
+  }
+}

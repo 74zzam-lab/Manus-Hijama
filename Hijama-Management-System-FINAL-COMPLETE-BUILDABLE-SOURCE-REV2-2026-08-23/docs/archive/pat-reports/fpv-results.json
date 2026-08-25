@@ -1,0 +1,1422 @@
+{
+  "summary": {
+    "pass": 146,
+    "fail": 6,
+    "warn": 16,
+    "total": 168,
+    "pct": 95,
+    "suites": {
+      "pat": {
+        "pass": 42,
+        "fail": 2,
+        "warn": 7,
+        "skip": 0,
+        "total": 51,
+        "pct": 94
+      },
+      "fpa": {
+        "pass": 17,
+        "fail": 3,
+        "warn": 3,
+        "total": 23,
+        "pct": 86
+      },
+      "brand": {
+        "pass": 24,
+        "fail": 0,
+        "warn": 0,
+        "total": 24,
+        "pct": 100
+      }
+    }
+  },
+  "results": [
+    {
+      "section": "1 — Pages",
+      "id": "PG-01",
+      "name": "Application pages defined",
+      "status": "PASS",
+      "detail": "22 pages",
+      "ts": "2026-07-21T13:58:25.135Z"
+    },
+    {
+      "section": "1 — Pages",
+      "id": "PG-02",
+      "name": "showPage router",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.135Z"
+    },
+    {
+      "section": "1 — Pages",
+      "id": "PG-03",
+      "name": "Hidden legacy pages flagged",
+      "status": "WARN",
+      "detail": "page-search",
+      "ts": "2026-07-21T13:58:25.135Z"
+    },
+    {
+      "section": "1 — Pages",
+      "id": "PG-04",
+      "name": "No dummy/placeholder text",
+      "status": "PASS",
+      "detail": "0 hits",
+      "ts": "2026-07-21T13:58:25.137Z"
+    },
+    {
+      "section": "1 — Pages",
+      "id": "PG-05",
+      "name": "Empty hash links",
+      "status": "PASS",
+      "detail": "2 href=\"#\"",
+      "ts": "2026-07-21T13:58:25.138Z"
+    },
+    {
+      "section": "2 — UI",
+      "id": "UI-01",
+      "name": "CSS design tokens",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.144Z"
+    },
+    {
+      "section": "2 — UI",
+      "id": "UI-02",
+      "name": "Unified btn classes",
+      "status": "PASS",
+      "detail": "294 btn usages",
+      "ts": "2026-07-21T13:58:25.145Z"
+    },
+    {
+      "section": "2 — UI",
+      "id": "UI-03",
+      "name": "Card components",
+      "status": "PASS",
+      "detail": "65 cards",
+      "ts": "2026-07-21T13:58:25.145Z"
+    },
+    {
+      "section": "2 — UI",
+      "id": "UI-04",
+      "name": "Theme grid present",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.146Z"
+    },
+    {
+      "section": "2 — UI",
+      "id": "UI-05",
+      "name": "Sidebar collapse support",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.146Z"
+    },
+    {
+      "section": "3 — Typography",
+      "id": "TY-01",
+      "name": "Typography guardrails in CSS",
+      "status": "PASS",
+      "detail": "3/3 patterns",
+      "ts": "2026-07-21T13:58:25.152Z"
+    },
+    {
+      "section": "3 — Typography",
+      "id": "TY-02",
+      "name": "about-brand uses tokens",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.152Z"
+    },
+    {
+      "section": "4 — Print",
+      "id": "PR-01",
+      "name": "Receipt builder",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.157Z"
+    },
+    {
+      "section": "4 — Print",
+      "id": "PR-02",
+      "name": "Thermal paper spec",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.157Z"
+    },
+    {
+      "section": "4 — Print",
+      "id": "PR-03",
+      "name": "Thermal print doc",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.158Z"
+    },
+    {
+      "section": "4 — Print",
+      "id": "PR-04",
+      "name": "PDF export (Electron)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.158Z"
+    },
+    {
+      "section": "4 — Print",
+      "id": "PR-05",
+      "name": "Thermal nowrap values",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.158Z"
+    },
+    {
+      "section": "5 — Performance",
+      "id": "PF-01",
+      "name": "Product tour not bundled",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.163Z"
+    },
+    {
+      "section": "5 — Performance",
+      "id": "PF-02",
+      "name": "Lazy cupping modules",
+      "status": "PASS",
+      "detail": "27 files",
+      "ts": "2026-07-21T13:58:25.164Z"
+    },
+    {
+      "section": "5 — Performance",
+      "id": "PF-03",
+      "name": "Module script tags",
+      "status": "PASS",
+      "detail": "26 tags",
+      "ts": "2026-07-21T13:58:25.164Z"
+    },
+    {
+      "section": "5 — Performance",
+      "id": "PF-04",
+      "name": "Tour isolated module file",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.164Z"
+    },
+    {
+      "section": "6 — Licenses",
+      "id": "LC-01",
+      "name": "FEATURE_REGISTRY",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.169Z"
+    },
+    {
+      "section": "6 — Licenses",
+      "id": "LC-02",
+      "name": "OPT_IN_FEATURE_IDS tour",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.170Z"
+    },
+    {
+      "section": "6 — Licenses",
+      "id": "LC-03",
+      "name": "data-feature gates",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.170Z"
+    },
+    {
+      "section": "6 — Licenses",
+      "id": "LC-04",
+      "name": "licToggleRuntimeFeature",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.171Z"
+    },
+    {
+      "section": "6 — Licenses",
+      "id": "LC-05",
+      "name": "logAudit present",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.171Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-01",
+      "name": "branding.config.json",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.171Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-02",
+      "name": "cupping-branding.js",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.171Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-03",
+      "name": "branding-engine.mjs",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.171Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-04",
+      "name": "About loads branding module",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.177Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-05",
+      "name": "No hardcoded About logo src",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.177Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-06",
+      "name": "Program icon path",
+      "status": "PASS",
+      "detail": "build/Program-Icon.ico",
+      "ts": "2026-07-21T13:58:25.178Z"
+    },
+    {
+      "section": "7 — Branding",
+      "id": "BR-07",
+      "name": "Installer uses branding.nsh",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.178Z"
+    },
+    {
+      "section": "8 — Database",
+      "id": "DB-01",
+      "name": "Core DB collections referenced",
+      "status": "PASS",
+      "detail": "all core keys",
+      "ts": "2026-07-21T13:58:25.185Z"
+    },
+    {
+      "section": "8 — Database",
+      "id": "DB-02",
+      "name": "Schema version defined",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.185Z"
+    },
+    {
+      "section": "8 — Database",
+      "id": "DB-03",
+      "name": "Backup function",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.185Z"
+    },
+    {
+      "section": "8 — Database",
+      "id": "DB-04",
+      "name": "Restore function",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.185Z"
+    },
+    {
+      "section": "8 — Database",
+      "id": "DB-05",
+      "name": "DB wrapper exposed",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.185Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-01",
+      "name": "Payroll sync → ledger",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-02",
+      "name": "Doctor month sync",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-03",
+      "name": "Month close",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-04",
+      "name": "Month reopen",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-05",
+      "name": "Carryover unpaid",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-06",
+      "name": "Close guard",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-07",
+      "name": "Edit lock",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-08",
+      "name": "Accrual upsert (no dup)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-09",
+      "name": "Audit logging",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "9 — Ledger",
+      "id": "LG-10",
+      "name": "Duplicate accrual guards",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "10 — Wizard/Tour",
+      "id": "WT-01",
+      "name": "Setup wizard module",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "10 — Wizard/Tour",
+      "id": "WT-02",
+      "name": "Tour lazy loader",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "10 — Wizard/Tour",
+      "id": "WT-03",
+      "name": "Tour license gate",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "10 — Wizard/Tour",
+      "id": "WT-04",
+      "name": "Tour audit log",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.186Z"
+    },
+    {
+      "section": "10 — Wizard/Tour",
+      "id": "WT-05",
+      "name": "Tour opt-in default false",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.191Z"
+    },
+    {
+      "section": "11 — Hygiene",
+      "id": "HY-01",
+      "name": "No TODO in app source files",
+      "status": "PASS",
+      "detail": "0 files",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "11 — Hygiene",
+      "id": "HY-02",
+      "name": "No FIXME in app source",
+      "status": "PASS",
+      "detail": "0 files",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "11 — Hygiene",
+      "id": "HY-03",
+      "name": "No console.log in app source",
+      "status": "WARN",
+      "detail": "1 files",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "11 — Hygiene",
+      "id": "HY-04",
+      "name": "dist/ not tracked",
+      "status": "WARN",
+      "detail": "local build artifact",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "11 — Hygiene",
+      "id": "HY-05",
+      "name": "manus-reference legacy",
+      "status": "PASS",
+      "detail": "not loaded by app",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-01",
+      "name": "electron-builder config",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-02",
+      "name": "prebuild branding",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-03",
+      "name": "branding.config in files",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.205Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-04",
+      "name": "generate:brand succeeds",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.515Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-05",
+      "name": "electron/main.js syntax",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.532Z"
+    },
+    {
+      "section": "12 — Build",
+      "id": "BD-06",
+      "name": "signAndEditExecutable off",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:25.532Z"
+    },
+    {
+      "section": "13 — Electron",
+      "id": "EL-01",
+      "name": "Electron manual checklist",
+      "status": "WARN",
+      "detail": "10 items — required on Windows",
+      "ts": "2026-07-21T13:58:25.532Z"
+    },
+    {
+      "section": "0 — Orchestration",
+      "id": "RUN-PAT",
+      "name": "Run PAT",
+      "status": "WARN",
+      "detail": "exit:1",
+      "ts": "2026-07-21T13:58:29.430Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-01",
+      "name": "License seed (full edition)",
+      "status": "PASS",
+      "detail": "2027-08-25",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-00",
+      "name": "window.DB exposed for modules",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-02",
+      "name": "Admin login",
+      "status": "PASS",
+      "detail": "مدير النظام",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-03",
+      "name": "Setup Wizard DOM & API",
+      "status": "WARN",
+      "detail": "verify spotlight positioning in Electron",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-04",
+      "name": "Product Tour DOM & API",
+      "status": "WARN",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-05",
+      "name": "Readiness card API",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-06",
+      "name": "Health Check live render",
+      "status": "PASS",
+      "detail": "DOM present; spotlight needs manual Electron verify",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-07",
+      "name": "Center / tax / device settings",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P1-08",
+      "name": "Backup object buildable",
+      "status": "PASS",
+      "detail": "tested in Phase 7",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-01",
+      "name": "Add staff / services / packages",
+      "status": "PASS",
+      "detail": "svc:6 pkg:1",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-02",
+      "name": "Add client registry",
+      "status": "PASS",
+      "detail": "pat-client-1",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-03",
+      "name": "Create booking",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-04",
+      "name": "Register case + invoice",
+      "status": "PASS",
+      "detail": "INV-PAT-00001",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-05",
+      "name": "Thermal receipt HTML 58/80mm",
+      "status": "PASS",
+      "detail": "structural OK",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-06",
+      "name": "A4 receipt/report build",
+      "status": "PASS",
+      "detail": "captureReportHtml pipeline",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P2-07",
+      "name": "PDF export path",
+      "status": "WARN",
+      "detail": "MonthlyArchive.exportPdf requires Electron — not in headless",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-01",
+      "name": "Attendance + OT + leave records",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-02",
+      "name": "Payroll generation",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-03",
+      "name": "Ledger sync (accruals)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-04",
+      "name": "Partial payment + voucher",
+      "status": "PASS",
+      "detail": "accruals:5 paid:500",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-05",
+      "name": "Month close + lock flag",
+      "status": "FAIL",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-06",
+      "name": "Reopen + resync + re-close",
+      "status": "FAIL",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P3-07",
+      "name": "Statement preview",
+      "status": "PASS",
+      "detail": "3033 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P4-01",
+      "name": "Carry-over on close",
+      "status": "PASS",
+      "detail": "verified in closeMonth → carryOverToMonth",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P4-02",
+      "name": "Locked month edit prevention",
+      "status": "PASS",
+      "detail": "isMonthClosed true; non-admin blocked via canEditPeriod",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-today",
+      "name": "Report build: today",
+      "status": "PASS",
+      "detail": "1878 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-monthly",
+      "name": "Report build: monthly",
+      "status": "PASS",
+      "detail": "2599 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-vat",
+      "name": "Report build: vat",
+      "status": "PASS",
+      "detail": "1669 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-doctors",
+      "name": "Report build: doctors",
+      "status": "PASS",
+      "detail": "1886 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-payroll",
+      "name": "Report build: payroll",
+      "status": "PASS",
+      "detail": "2316 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-expenses",
+      "name": "Report build: expenses",
+      "status": "PASS",
+      "detail": "1362 chars",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-A4",
+      "name": "A4 document consistency",
+      "status": "WARN",
+      "detail": "today: hdr class stripped; monthly: hdr class stripped; payroll: hdr class stripped",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-PREVIEW",
+      "name": "Preview-before-print API",
+      "status": "PASS",
+      "detail": "previewMainReport + openReportPreview",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-THERMAL",
+      "name": "Thermal period summary",
+      "status": "WARN",
+      "detail": "requires cases data + Electron print",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P5-ARCHIVE",
+      "name": "Monthly archive A4",
+      "status": "WARN",
+      "detail": "MonthlyArchive modal — manual Electron",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P6-01",
+      "name": "Admin full access",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P6-02",
+      "name": "Reception POS only",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P6-03",
+      "name": "Accountant finance access",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P6-04",
+      "name": "Employee restricted",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P7-01",
+      "name": "Full backup object",
+      "status": "PASS",
+      "detail": "{\"cases\":1,\"clients\":1,\"doctors\":1,\"settings\":\"مركز تجريبي PAT\"}",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P7-02",
+      "name": "Integrity check (before)",
+      "status": "PASS",
+      "detail": "0 issues",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P7-03",
+      "name": "Integrity check (after mutate)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P7-04",
+      "name": "Restore data shape",
+      "status": "PASS",
+      "detail": "مركز بعد الاستعادة PAT",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P8-01",
+      "name": "Feature registry",
+      "status": "PASS",
+      "detail": "74 keys",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P8-02",
+      "name": "Feature groups",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P8-03",
+      "name": "Diagnostics + integrity APIs",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "P8-04",
+      "name": "Gateway + dev tools",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "T-01",
+      "name": "Button / label scan",
+      "status": "PASS",
+      "detail": "648 elements",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "T-02",
+      "name": "Mixed terminology check",
+      "status": "PASS",
+      "detail": "عميل/مريض co-exist by design",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "T-03",
+      "name": "English in Arabic UI",
+      "status": "WARN",
+      "detail": "15 intentional EN labels",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "PAT",
+      "id": "U-01",
+      "name": "Button/tab overflow scan",
+      "status": "PASS",
+      "detail": "0 overflows",
+      "ts": "2026-07-21T13:58:29.431Z"
+    },
+    {
+      "section": "0 — Orchestration",
+      "id": "RUN-FPA",
+      "name": "Run FPA",
+      "status": "WARN",
+      "detail": "exit:1",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "T-58-struct",
+      "name": "Thermal 58mm stress receipt",
+      "status": "FAIL",
+      "detail": "rows:124 vals:32 QR:true",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "T-80-struct",
+      "name": "Thermal 80mm stress receipt",
+      "status": "FAIL",
+      "detail": "rows:124 vals:32 QR:true",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "T-58-layout",
+      "name": "Thermal 58mm DOM metrics",
+      "status": "PASS",
+      "detail": "util:100% wrap:0 rows:61",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "T-80-layout",
+      "name": "Thermal 80mm DOM metrics",
+      "status": "PASS",
+      "detail": "util:100% wrap:0 rows:61",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TY-01",
+      "name": "Multi-page overflow scan",
+      "status": "PASS",
+      "detail": "0 overflows",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TY-02",
+      "name": "Multi-page wrap scan",
+      "status": "PASS",
+      "detail": "0 wrap hints",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TOUR-OFF",
+      "name": "Disabled: no JS/DOM/listeners",
+      "status": "PASS",
+      "detail": "{\"hasTourScript\":false,\"tourDom\":false,\"tourStyles\":false,\"productTourGlobal\":false,\"tourBtnVisible\":false,\"loadedTourScript\":false,\"tourDomAfter\":false,\"scriptsDelta\":0}",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TOUR-OFF-UI",
+      "name": "Disabled: UI hidden",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "WIZ-01",
+      "name": "Wizard independent of tour",
+      "status": "FAIL",
+      "detail": "{\"tourLoaded\":false,\"wizardDom\":false,\"tourDom\":false,\"wizardBody\":0,\"tourStillNotLoaded\":true,\"setupWizardFeat\":false,\"tourFeat\":false}",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TOUR-ON",
+      "name": "Enabled: single script load",
+      "status": "PASS",
+      "detail": "scripts:1",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TOUR-ON-DUP",
+      "name": "No duplicate overlay",
+      "status": "PASS",
+      "detail": "overlays:1",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "TOUR-ON-AUDIT",
+      "name": "Audit log on start",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "LIC-01",
+      "name": "Feature registry",
+      "status": "PASS",
+      "detail": "74 keys",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "LIC-02",
+      "name": "Product tour opt-in default",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "LIC-03",
+      "name": "DOM feature gates",
+      "status": "PASS",
+      "detail": "45 data-feature",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "LIC-04",
+      "name": "Ungated addons (module-level)",
+      "status": "WARN",
+      "detail": "book_schedule, book_confirm, book_no_show, ops_map_editor, rep_sales, tech_print_pdf, att_daily, att_leave, hr_leave_requests, pay_salary, pay_commission, hw_thermal, bk_local, bk_cloud, bk_drive",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "PERF-01",
+      "name": "Product tour not in index.html bundle",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "PERF-02",
+      "name": "Lazy scripts count",
+      "status": "PASS",
+      "detail": "119 modules",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "E-01",
+      "name": "Electron runtime validation",
+      "status": "WARN",
+      "detail": "Manual — see checklist in report",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "E-02",
+      "name": "electron/ package present",
+      "status": "PASS",
+      "detail": "electron/main.js present; cupping-product-tour.js lazy (not in index.html script tags); PASS: product-tour not statically bundled",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "PA-01",
+      "name": "Product tour not in index.html",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "PA-LEG",
+      "name": "Legacy path",
+      "status": "WARN",
+      "detail": "dist/ (build artifact — not source of truth)",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "FPA",
+      "id": "PA-BR",
+      "name": "Branch diff",
+      "status": "PASS",
+      "detail": "diff vs main: 23 files changed, 1965 insertions(+), 345 deletions(-)",
+      "ts": "2026-07-21T13:58:39.939Z"
+    },
+    {
+      "section": "0 — Orchestration",
+      "id": "RUN-BRAND",
+      "name": "Run BRAND",
+      "status": "PASS",
+      "detail": "exit:0",
+      "ts": "2026-07-21T13:58:47.484Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-01",
+      "name": "branding.config.json exists",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.484Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-02",
+      "name": "Required branding keys",
+      "status": "PASS",
+      "detail": "4 keys",
+      "ts": "2026-07-21T13:58:47.484Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-03",
+      "name": "Logo source file",
+      "status": "PASS",
+      "detail": "1254×1254 RGBA",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-04",
+      "name": "Logo has alpha (transparency)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-05",
+      "name": "Build brand assets",
+      "status": "PASS",
+      "detail": "BMP + NSIS + ICO",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-06",
+      "name": "No logo upscale",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-07",
+      "name": "Installer logo within source bounds",
+      "status": "PASS",
+      "detail": "130×130",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-08",
+      "name": "Program icon valid Windows ICO",
+      "status": "PASS",
+      "detail": "Program-Icon.ico",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-09",
+      "name": "installer-branding.nsh generated",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-10",
+      "name": "Program icon path",
+      "status": "PASS",
+      "detail": "build/Program-Icon.ico",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-11",
+      "name": "signAndEditExecutable unchanged",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-12",
+      "name": "branding.config.json in build files",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-13",
+      "name": "prebuild runs generate:brand",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-14",
+      "name": "cupping-branding.js loaded",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-15",
+      "name": "About uses BrandingEngine ids",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-16",
+      "name": "No hardcoded logo path in About img",
+      "status": "PASS",
+      "detail": "dynamic via engine",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-17",
+      "name": "installer.nsh includes branding engine output",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-18",
+      "name": "Electron reads branding.config.json",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-19",
+      "name": "Runtime IPC app:getRuntimeInfo",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-20",
+      "name": "About @100% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-20",
+      "name": "About @125% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-20",
+      "name": "About @150% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-20",
+      "name": "About @200% scale",
+      "status": "PASS",
+      "detail": "overflows:0 logoW:0",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "Branding",
+      "id": "BR-21",
+      "name": "About scaling aggregate",
+      "status": "PASS",
+      "detail": "0 overflow hints",
+      "ts": "2026-07-21T13:58:47.485Z"
+    },
+    {
+      "section": "14 — Final",
+      "id": "FN-01",
+      "name": "Branch diff vs main",
+      "status": "PASS",
+      "detail": "23 files changed, 1965 insertions(+), 345 deletions(-)",
+      "ts": "2026-07-21T13:58:47.512Z"
+    },
+    {
+      "section": "14 — Final",
+      "id": "FN-02",
+      "name": "Zero FAIL across FPV",
+      "status": "FAIL",
+      "detail": "5 total",
+      "ts": "2026-07-21T13:58:47.512Z"
+    }
+  ],
+  "manual": [
+    {
+      "section": "13 — Electron",
+      "text": "First startup — zero console errors"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "All navigation paths"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "Thermal 58mm + 80mm physical print"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "A4 Portrait + Landscape + PDF export"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "Monthly Archive PDF"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "Backup / Restore"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "About + runtime versions"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "License Management toggles"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "Branding in installer UI"
+    },
+    {
+      "section": "13 — Electron",
+      "text": "Employee Ledger full cycle"
+    }
+  ],
+  "generatedAt": "2026-07-21T13:58:47.512Z"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "MIG-257-010",
+  "ok": true,
+  "integrity": {
+    "ok": true,
+    "detail": {
+      "integrity_check": "ok"
+    }
+  },
+  "snapshot": {
+    "schemaVersion": 5,
+    "clients": 1,
+    "visits": 1,
+    "attachments": 1,
+    "outbox": 1,
+    "meta": {
+      "ownerUserId": "OWNER-001",
+      "branchId": "BR-MAIN",
+      "licenseId": "LIC-V24-TEST",
+      "deviceId": "DEV-A-001",
+      "schemaVersion": "5"
+    },
+    "users": [
+      {
+        "id": "OWNER-001",
+        "role": "owner",
+        "name": "Owner"
+      }
+    ],
+    "attachmentRows": [
+      {
+        "id": "ATT-LEGACY-1",
+        "path": "attachments/C-LEGACY-1/note.bin",
+        "entity_id": "C-LEGACY-1"
+      }
+    ],
+    "outboxRows": [
+      {
+        "event_id": "EVT-LEGACY-1",
+        "status": "pending",
+        "record_id": "C-LEGACY-1"
+      }
+    ]
+  }
+}

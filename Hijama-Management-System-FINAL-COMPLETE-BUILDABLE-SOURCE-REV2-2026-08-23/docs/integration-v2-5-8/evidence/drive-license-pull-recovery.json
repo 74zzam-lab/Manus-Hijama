@@ -1,0 +1,10 @@
+{
+  "at": "2026-08-23T13:57:33.629Z",
+  "ok": true,
+  "errors": [],
+  "rootCause": "9df1abe CSS hide of #lic-drive-bootstrap-panel (DED-258 BootFlow dedupe)",
+  "lastWorking": "pre-9df1abe (lic-drive-bootstrap-panel visible)",
+  "firstBroken": "9df1abe",
+  "windowsSetupExeTested": false,
+  "note": "Live Windows Setup EXE validation still required — unit PASS ≠ release PASS"
+}

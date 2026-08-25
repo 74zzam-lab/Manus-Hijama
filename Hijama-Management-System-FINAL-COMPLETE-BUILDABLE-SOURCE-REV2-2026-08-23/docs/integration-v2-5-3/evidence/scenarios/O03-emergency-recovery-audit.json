@@ -1,0 +1,10 @@
+{
+  "id": "O03-emergency-recovery-audit",
+  "title": "Emergency recovery authorized + audited",
+  "result": "PASS",
+  "ms": 2,
+  "evidence": {
+    "recovered": true,
+    "audited": true
+  }
+}

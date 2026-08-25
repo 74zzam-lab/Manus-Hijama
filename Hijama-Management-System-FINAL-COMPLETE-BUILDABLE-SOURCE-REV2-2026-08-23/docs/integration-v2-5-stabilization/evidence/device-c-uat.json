@@ -1,0 +1,18 @@
+{
+  "device": "C",
+  "role": "stabilization-tertiary-restore-uat",
+  "startedAt": "2026-08-23T13:57:33.265Z",
+  "finishedAt": "2026-08-23T13:57:33.553Z",
+  "ok": true,
+  "restorePath": [
+    "Install",
+    "Google",
+    "License",
+    "Org",
+    "Branch",
+    "Restore",
+    "Dashboard",
+    "Sync"
+  ],
+  "result": "PASS"
+}

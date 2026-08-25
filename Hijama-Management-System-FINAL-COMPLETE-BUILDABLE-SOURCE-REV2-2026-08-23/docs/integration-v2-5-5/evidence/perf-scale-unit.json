@@ -1,0 +1,64 @@
+{
+  "at": "2026-08-18T19:27:48.808Z",
+  "ok": true,
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+",
+    "node": "v22.14.0",
+    "cpus": 4,
+    "cpuModel": "Intel(R) Xeon(R) Processor",
+    "totalMemMb": 16014,
+    "freeMemMb": 15134,
+    "hostname": "cursor"
+  },
+  "errors": [],
+  "busyTimeout": 5000,
+  "tinyCounts": {
+    "clients": 200,
+    "visits": 500,
+    "invoices": 100,
+    "appointments": 100,
+    "attachments": 50
+  },
+  "backoff": {
+    "ok": true,
+    "samples": [
+      8000,
+      16000,
+      32000,
+      64000,
+      128000
+    ],
+    "tightLoop": false,
+    "policy": "exponential_backoff_4s_to_300s"
+  },
+  "queue": {
+    "lastPollAt": null,
+    "lastPushAt": null,
+    "pending": 2000,
+    "pendingDropped": 50,
+    "maxPending": 2000,
+    "online": true,
+    "lastError": "pending_pushes_bounded",
+    "pollIntervalMs": 15000,
+    "retryBackoffMs": 0
+  },
+  "incrementalPolicy": {
+    "supported": false,
+    "reason": "dr_unit_is_full_tdw_snapshot; deltas_via_cloud_sync"
+  },
+  "soak": {
+    "ok": true,
+    "ms": 80,
+    "configuredMs": 80,
+    "hoursMode": null,
+    "ticks": 6,
+    "heapDeltaMb": -1.608,
+    "heapStartMb": 7,
+    "heapEndMb": 6,
+    "cpuBusyMs": 0,
+    "idleRatio": 1,
+    "leakSuspect": false
+  }
+}

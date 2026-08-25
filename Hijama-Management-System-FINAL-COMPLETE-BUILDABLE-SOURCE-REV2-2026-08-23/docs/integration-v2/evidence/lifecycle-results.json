@@ -1,0 +1,127 @@
+{
+  "CleanInstallRuns": [
+    14.281,
+    11.822,
+    11.593
+  ],
+  "CleanInstallMedian": 11.822,
+  "MarkerHashBeforeUpdate": "273DC10C88B26561D10666F420BD5205FC3EA28037670EE8404A1770D5DB799C",
+  "UserDataPath": "C:\\Users\\runneradmin\\AppData\\Roaming\\Cupping Center",
+  "UserDataExistsAfterInstall": true,
+  "UpdateRuns": [
+    12.565,
+    12.597,
+    12.847
+  ],
+  "UpdateMedian": 12.597,
+  "MarkerExistsAfterUpdate": true,
+  "MarkerHashAfterUpdate": "273DC10C88B26561D10666F420BD5205FC3EA28037670EE8404A1770D5DB799C",
+  "LicenseMarkerAfterUpdate": true,
+  "UpdateDataPreserved": true,
+  "UpdateLicensePreserved": true,
+  "RepairSeconds": 12.883,
+  "RepairDataPreserved": true,
+  "RepairLicensePreserved": true,
+  "UserDataExistsAfterAppOnlyUninstall": true,
+  "MarkerAfterAppOnlyUninstall": true,
+  "LicenseAfterAppOnlyUninstall": true,
+  "UninstallRuns": [
+    2.138,
+    1.612,
+    1.581
+  ],
+  "UninstallMedian": 1.612,
+  "MarkerAfterReinstall": true,
+  "LicenseAfterReinstall": true,
+  "InterruptedMarkerIntact": true,
+  "InterruptedLicenseIntact": true,
+  "InterruptedRecoverInstallExit": 0,
+  "InterruptedRecovered": true,
+  "InterruptedUpdatePass": true,
+  "IconEvidence": {
+    "desktopShortcut": "C:\\Users\\runneradmin\\Desktop\\Hijama Management System.lnk",
+    "desktopShortcutExists": true,
+    "startMenuShortcut": "C:\\Users\\runneradmin\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\NajjarTech\\Hijama Management System.lnk",
+    "startMenuShortcutExists": true,
+    "installedExe": "C:\\Users\\runneradmin\\AppData\\Local\\Programs\\Hijama Management System\\Hijama Management System.exe",
+    "installedExeIconPng": "D:\\a\\Cupping-System-Management\\Cupping-System-Management\\docs\\integration-v2\\evidence\\screenshots\\installed-exe-icon.png",
+    "installedExeIconBytes": 1645,
+    "desktopScreenshot": true,
+    "startMenuScreenshot": true,
+    "arpDisplayIcon": "C:\\Users\\runneradmin\\AppData\\Local\\Programs\\Hijama Management System\\uninstallerIcon.ico",
+    "arpDisplayName": "Hijama Management System"
+  },
+  "InstallerStartupRuns": [
+    0.721,
+    0.464,
+    0.438
+  ],
+  "InstallerStartupMedian": 0.464,
+  "UserDataExistsAfterFullWipe": false,
+  "FullWipeRemovedUserData": true,
+  "Timings": [
+    {
+      "step": "clean_install_run_1",
+      "seconds": 14.281
+    },
+    {
+      "step": "clean_install_run_2",
+      "seconds": 11.822
+    },
+    {
+      "step": "clean_install_run_3",
+      "seconds": 11.593
+    },
+    {
+      "step": "update_run_1",
+      "seconds": 12.565
+    },
+    {
+      "step": "update_run_2",
+      "seconds": 12.597
+    },
+    {
+      "step": "update_run_3",
+      "seconds": 12.847
+    },
+    {
+      "step": "repair_run_1",
+      "seconds": 12.883
+    },
+    {
+      "step": "uninstall_app_only_run_1",
+      "seconds": 2.138
+    },
+    {
+      "step": "uninstall_app_only_run_2",
+      "seconds": 1.612
+    },
+    {
+      "step": "uninstall_app_only_run_3",
+      "seconds": 1.581
+    },
+    {
+      "step": "interrupted_update_kill",
+      "seconds": 5.013
+    },
+    {
+      "step": "installer_startup_run_1",
+      "seconds": 0.721
+    },
+    {
+      "step": "installer_startup_run_2",
+      "seconds": 0.464
+    },
+    {
+      "step": "installer_startup_run_3",
+      "seconds": 0.438
+    },
+    {
+      "step": "full_wipe_silent",
+      "seconds": 91.089
+    }
+  ],
+  "CompletedAt": "2026-07-29T23:47:27.0270436+00:00",
+  "Runner": "runnervmlazl1",
+  "Ok": true
+}

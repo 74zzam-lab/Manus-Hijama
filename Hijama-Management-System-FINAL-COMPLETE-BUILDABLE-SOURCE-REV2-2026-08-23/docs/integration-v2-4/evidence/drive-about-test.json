@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "status": 200,
+  "hasUser": true,
+  "emailEndsWith": "gmail.com",
+  "displayNameLen": 23,
+  "error": null
+}

@@ -1,0 +1,9 @@
+{
+  "id": "S11-prior-gates-still-present",
+  "title": "Prior V2-5 gate scripts and master verifier exist",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "priorGates": 4
+  }
+}

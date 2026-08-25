@@ -26,8 +26,10 @@
 
   function hasGoogle() {
     if (global.BootFlow?.hasGoogle) return !!global.BootFlow.hasGoogle();
-    const snap = global.DriveAdapter?.authoritySnapshot?.();
-    return !!(snap?.verified && snap?.connected && !snap?.needsReauth && !snap?.stale);
+    if (global.DriveAdapter?.isConnected?.()) return true;
+    if (global.DriveAdapter?.isConnectedFromSettings?.()) return true;
+    const snap = global.DriveAdapter?.authoritySnapshot?.({ maxAgeMs: 24 * 60 * 60 * 1000 });
+    return !!(snap?.connected && !snap?.needsReauth);
   }
 
   function hasLicense() {

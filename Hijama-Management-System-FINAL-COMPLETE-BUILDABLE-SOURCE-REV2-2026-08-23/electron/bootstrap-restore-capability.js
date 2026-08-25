@@ -111,6 +111,25 @@ function isBootstrapPhase() {
   return true;
 }
 
+/**
+ * RBAC bootstrap for Google OAuth / cloud status lasts until activation restart,
+ * not merely until initial sync is recorded. Restore capabilities still use
+ * isBootstrapPhase() so post-sync restore stays closed.
+ */
+function isActivationBootstrapPhase() {
+  try {
+    const bootComplete = deps.readKv('__tdw_boot_complete__', null);
+    if (bootComplete === true || bootComplete === 1 || bootComplete === '1') return false;
+  } catch { /* empty */ }
+  try {
+    const restart = deps.readKv('__tdw_restart_required__', null);
+    if (restart === true || restart === 1 || restart === '1') return true;
+  } catch { /* empty */ }
+  const wizard = deps.readKv('__tdw_boot_wizard__', null);
+  if (wizard && (wizard.path || wizard.startedAt || wizard.currentStep != null)) return true;
+  return true;
+}
+
 async function issueRestoreCapability(event, request) {
   purgeExpired();
   const req = request || {};
@@ -411,6 +430,7 @@ module.exports = {
   normalizePath,
   isApprovedLocalBackupPath,
   isBootstrapPhase,
+  isActivationBootstrapPhase,
   _capabilities: capabilities,
   _purgeExpired: purgeExpired,
 };

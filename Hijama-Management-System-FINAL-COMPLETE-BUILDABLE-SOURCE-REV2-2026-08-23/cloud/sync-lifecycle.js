@@ -56,14 +56,19 @@
   }
 
   function isGoogleConnectedForLifecycle() {
+    if (global.BootFlow?.hasGoogle?.()) return true;
     if (global.DriveAdapter?.isConnected?.()) return true;
     const prov = global.settings?.backup?.providers?.google;
-    return !!(prov?.connected && !prov?.userDisconnected && prov?.oauth !== false);
+    if (prov?.connected && !prov?.userDisconnected && prov?.oauth !== false) return true;
+    if (global.DriveAdapter?.isConnectedFromSettings?.()) return true;
+    return false;
   }
 
   function isOffline() {
     try {
-      if (typeof navigator !== 'undefined' && navigator.onLine === false) return true;
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        return !isGoogleConnectedForLifecycle();
+      }
     } catch { /* empty */ }
     return !isGoogleConnectedForLifecycle();
   }

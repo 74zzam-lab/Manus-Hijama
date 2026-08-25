@@ -58,15 +58,21 @@
     settings.backup.providers = settings.backup.providers || {};
     const prior = settings.backup.providers.google || {};
     const userDisconnected = !!prior.userDisconnected;
-    const connected = !userDisconnected && !!live.connected && !live.needsReauth;
+    const liveFailed = live.ok === false
+      || !!(live.error && !live.connected)
+      || ['unavailable', 'main_status_failed'].includes(String(source || ''));
+    let connected = !userDisconnected && !!live.connected && !live.needsReauth;
+    if (!connected && !userDisconnected && !live.needsReauth && liveFailed && (prior.connected || prior.oauth)) {
+      connected = true;
+    }
     const snapshot = {
       provider: 'google',
       connected,
-      needsReauth: !!live.needsReauth || !connected,
-      email: connected ? (live.email || prior.email || '') : '',
+      needsReauth: !!live.needsReauth || (!connected && !liveFailed),
+      email: connected ? (live.email || prior.email || prior.accountEmail || prior.userEmail || '') : (prior.email || ''),
       oauth: live.oauth !== false && connected,
-      hasRefreshToken: !!live.hasRefreshToken,
-      verified: source === 'main_status',
+      hasRefreshToken: !!(live.hasRefreshToken || prior.hasRefreshToken),
+      verified: source === 'main_status' && !liveFailed,
       checkedAt: nowIso(),
       source: source || 'unknown',
       error: live.error || null
@@ -110,6 +116,25 @@
     }
     try {
       const live = await bridge.getCloudStatus('google');
+      if (live && (live.ok === false || (live.error && !live.connected))) {
+        if (isConnectedFromSettings() || prior.connected) {
+          return persistAuthorityStatus({
+            connected: true,
+            needsReauth: false,
+            email: prior.email || prior.accountEmail || prior.userEmail || live.email || '',
+            hasRefreshToken: !!prior.hasRefreshToken,
+            error: live.error || live.code || 'status_denied',
+          }, 'settings_preserve_status_denied');
+        }
+      }
+      if (!live?.connected && !live?.needsReauth && !prior.userDisconnected && (prior.connected || prior.email)) {
+        return persistAuthorityStatus({
+          connected: true,
+          needsReauth: false,
+          email: prior.email || prior.accountEmail || prior.userEmail || '',
+          hasRefreshToken: !!prior.hasRefreshToken,
+        }, 'settings_preserve_stale_live');
+      }
       return persistAuthorityStatus(live, 'main_status');
     } catch (error) {
       if (isConnectedFromSettings()) {

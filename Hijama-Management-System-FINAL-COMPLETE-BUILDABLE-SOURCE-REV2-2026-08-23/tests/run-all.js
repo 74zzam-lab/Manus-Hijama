@@ -201,6 +201,7 @@ const remediation = [
   ['tests/remediation/test-restore-bootstrap-missing-center.js', 'remediation:restore-bootstrap-missing-center'],
   ['tests/remediation/test-sync-after-restore-soft-pull.js', 'remediation:sync-after-restore-soft-pull'],
   ['tests/remediation/test-boot-after-restore-local-sync.js', 'remediation:boot-after-restore-local-sync'],
+  ['tests/remediation/test-boot-google-after-syncdone.js', 'remediation:boot-google-after-syncdone'],
 ];
 
 const existing = [

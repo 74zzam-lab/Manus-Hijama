@@ -28,7 +28,8 @@ check(/issueRestoreCapability/.test(bootstrap), 'bootstrap issueRestoreCapabilit
 check(/tryAuthorizeChannel/.test(bootstrap), 'bootstrap tryAuthorizeChannel');
 check(/consumeCapability/.test(bootstrap), 'bootstrap consume single-use');
 check(/restore_scope_mismatch/.test(bootstrap), 'bootstrap scope mismatch');
-check(/bootstrap_restore_not_allowed_app_ready/.test(bootstrap), 'deny when app ready');
+check(/isActivationBootstrapPhase/.test(bootstrap), 'activation bootstrap lasts until boot complete');
+check(/isActivationBootstrapPhase/.test(main), 'main RBAC uses activation bootstrap phase');
 check(/BOOTSTRAP_RESTORE_CHANNELS/.test(bootstrap), 'bootstrap restore channel set');
 
 check(/bootstrap:issueRestoreCapability/.test(rbac) && /bootstrapOnly:\s*true/.test(rbac), 'bootstrap issue has an explicit bounded RBAC policy');

@@ -416,11 +416,20 @@
   }
 
   function hasGoogle() {
+    const w = loadWizard();
+    const prov = global.settings?.backup?.providers?.google
+      || global.DB?.get?.('settings', {})?.backup?.providers?.google
+      || {};
+    if (prov.userDisconnected) return false;
     if (global.DriveAdapter?.isConnected?.()) return true;
-    const snap = global.DriveAdapter?.authoritySnapshot?.();
-    if (snap?.verified && snap?.connected && !snap?.needsReauth && !snap?.stale) return true;
-    const prov = global.settings?.backup?.providers?.google;
-    return !!(prov?.connected && !prov?.userDisconnected && prov?.oauth !== false);
+    if (global.DriveAdapter?.isConnectedFromSettings?.()) return true;
+    const snap = global.DriveAdapter?.authoritySnapshot?.({ maxAgeMs: 24 * 60 * 60 * 1000 });
+    if (snap?.connected && !snap?.needsReauth) return true;
+    if (prov.connected && prov.oauth !== false) return true;
+    if (prov.email || prov.accountEmail || prov.hasRefreshToken) return true;
+    const steps = stepsFor(w.path);
+    const googleIdx = steps.indexOf('google');
+    return googleIdx >= 0 && Number(w.currentStep) > googleIdx;
   }
 
   function hasCenterData() {

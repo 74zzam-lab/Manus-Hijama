@@ -141,7 +141,9 @@ function handle(channel, handler) {
       __trustedIpcContext: {
         uninstallMode: IS_UNINSTALL_PREP || IS_UNINSTALL_FULL || IS_UNINSTALL_WIPE_ONLY,
         bootstrapPhase: (() => {
-          try { return bootstrapRestoreCap.isBootstrapPhase() === true; } catch { return false; }
+          try {
+            return bootstrapRestoreCap.isActivationBootstrapPhase() === true;
+          } catch { return false; }
         })(),
       },
     };

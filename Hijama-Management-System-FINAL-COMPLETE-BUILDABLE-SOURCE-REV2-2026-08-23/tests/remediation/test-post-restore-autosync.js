@@ -96,11 +96,14 @@ assert.match(indexSrc, /st\?\.enabled/, 'legacy 15-min auto backup yields to Bac
 assert.match(indexSrc, /function pruneLegacyAutomaticBackups/, 'legacy local\/cloud automatic backups are pruned');
 assert.match(indexSrc, /Backup-\$\{backupKind\}-\$\{stamp\}/, 'automatic backups are named -auto- so they can be pruned');
 assert.match(indexSrc, /logAudit\(op,/, 'toasts are written to the system log');
+assert.match(indexSrc, /function enrichBackupStatusSummary/, 'backup summary reads scheduler and Drive dates');
+assert.match(indexSrc, /st\?\.needsReauth && !st\?\.hasRefreshToken/, 'Google status stays sticky unless reauth is required');
 
 const actSrc = fs.readFileSync(path.join(root, 'cloud/activation-sync-defaults.js'), 'utf8');
 assert.match(actSrc, /function ensureLiveSyncEngine/, 'activation helper starts poll engine');
-assert.match(actSrc, /retentionCount: 5/, 'activation keeps 5 local automatic backups');
-assert.match(actSrc, /cloudRetentionCount: 3/, 'activation keeps 3 cloud automatic backups');
+assert.match(actSrc, /retentionCount: 1/, 'activation replaces the previous automatic local backup');
+assert.match(actSrc, /cloudRetentionCount: 1/, 'activation replaces the previous automatic cloud backup');
+assert.match(actSrc, /intervalMinutes: 15/, 'activation schedules a full backup every 15 minutes');
 
 const bootSrc = fs.readFileSync(path.join(root, 'cloud/boot-flow-ui.js'), 'utf8');
 assert.match(bootSrc, /ensureLiveSyncEngine/, 'boot ready defers to live sync engine');

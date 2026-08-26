@@ -25,7 +25,7 @@ const legacyAuto2 = write('Hijama-Backup-auto-2026-08-02T10-00-00.json', 600);
 const legacyManual = write('Hijama-Backup-manual-2026-08-03T10-00-00.json', 700);
 
 try {
-  assert.strictEqual(backupV2.DEFAULT_LOCAL_RETENTION, 5, 'keep last 5 automatic local backups');
+  assert.strictEqual(backupV2.DEFAULT_LOCAL_RETENTION, 1, 'replace previous automatic local backup');
   const result = backupV2.pruneLocalBackups(dir, 1);
   assert.strictEqual(result.ok, true);
   assert.strictEqual(fs.existsSync(recentScheduled), true, 'newest scheduled backup must remain');

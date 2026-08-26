@@ -67,9 +67,9 @@
     // Local auto backup must have a positive interval or startAutoBackupTimer no-ops.
     if (b.localAuto !== false) b.localAuto = true;
     if (b.localEnabled !== false) b.localEnabled = true;
-    if (!(parseInt(b.autoIntervalMin, 10) > 0)) b.autoIntervalMin = 60;
+    if (!(parseInt(b.autoIntervalMin, 10) > 0)) b.autoIntervalMin = 15;
     if (!(parseInt(b.cloudDb.autoIntervalMin, 10) > 0) && b.cloudDb.autoBackup) {
-      b.cloudDb.autoIntervalMin = 60;
+      b.cloudDb.autoIntervalMin = 15;
     }
     global.settings.cloudV2Enabled = true;
     global.DB?.set?.('settings', global.settings);
@@ -111,10 +111,10 @@
         if (api?.v2ScheduleConfigure) {
           api.v2ScheduleConfigure({
             enabled: true,
-            intervalMinutes: 60,
+            intervalMinutes: 15,
             cloudEnabled: true,
-            retentionCount: 5,
-            cloudRetentionCount: 3,
+            retentionCount: 1,
+            cloudRetentionCount: 1,
           }).catch?.(() => {});
         }
       } catch { /* empty */ }

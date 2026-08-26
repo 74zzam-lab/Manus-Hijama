@@ -6,11 +6,11 @@ const { writeFileAtomicSync } = require('./atomic-file');
 
 /** @deprecated Plaintext V2 backups no longer use a schedule password — kept for vault cleanup only. */
 const PASSWORD_CREDENTIAL = 'backup-v2-schedule-password';
-const DEFAULT_INTERVAL_MINUTES = 60;
+const DEFAULT_INTERVAL_MINUTES = 15;
 const MIN_INTERVAL_MINUTES = 15;
 const MAX_INTERVAL_MINUTES = 7 * 24 * 60;
-const DEFAULT_RETENTION_COUNT = 5;
-const DEFAULT_CLOUD_RETENTION_COUNT = 3;
+const DEFAULT_RETENTION_COUNT = 1;
+const DEFAULT_CLOUD_RETENTION_COUNT = 1;
 
 function boundedInteger(value, fallback, min, max) {
   const parsed = Number.parseInt(value, 10);

@@ -917,8 +917,7 @@ function registerBackupV2Ipc({
         const outDir = resolveManagedBackupDirectory(
           meta.localPath && String(meta.localPath).trim() ? String(meta.localPath).trim() : defaultBackupDir()
         );
-        const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const filePath = path.join(outDir, `Tadawi-Backup-V2-scheduled-${stamp}.tdw`);
+        const filePath = path.join(outDir, 'Tadawi-Backup-V2-scheduled-latest.tdw');
         const retentionCount = Number(meta.retentionCount) || backupV2.DEFAULT_LOCAL_RETENTION;
         const cloudRetention = cloudRetentionCount(meta);
         const createOpts = {
@@ -946,7 +945,7 @@ function registerBackupV2Ipc({
               const remotePath = `${backupV2Cloud.CLOUD_V2_PREFIX}/${filename}`;
               const uploaded = await backupMain.uploadCloud(buffer, filename, 'google', {
                 remotePath,
-                overwrite: false,
+                overwrite: true,
                 sha256: hash,
                 manifest,
               });

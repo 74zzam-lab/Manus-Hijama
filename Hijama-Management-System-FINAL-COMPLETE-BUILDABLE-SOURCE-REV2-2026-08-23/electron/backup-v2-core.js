@@ -26,7 +26,7 @@ const SECURITY_PATH = 'security/field-key.json';
 const RESTORE_ROOTS = Object.freeze(['database', 'attachments', 'settings', 'center-assets']);
 const MAX_ARCHIVE_ENTRIES = 25000;
 const MAX_UNCOMPRESSED_BYTES = 8 * 1024 * 1024 * 1024;
-const DEFAULT_LOCAL_RETENTION = 5;
+const DEFAULT_LOCAL_RETENTION = 1;
 const CURRENT_SCHEMA_VERSION = Math.max(0, ...MIGRATIONS.map((migration) => Number(migration.version) || 0));
 
 const EXCLUDED_SEGMENT = /^(?:cache|caches|temp|tmp|logs?|license-admin|admin-data)$/i;

@@ -6373,7 +6373,7 @@ body.license-readonly-mode .page-readonly textarea {
           <div class="backup-status-item"><label>آخر مزامنة</label><strong id="bk-sum-sync">—</strong></div>
           <div class="backup-status-item"><label>فرع العمل</label><strong id="bk-sum-branch">—</strong></div>
         </div>
-        <p style="margin:10px 0 0;font-size:11px;color:var(--text-muted);line-height:1.65">تُحدَّث بيانات العمل بين الأجهزة تلقائياً، ويُنشأ نسخ سحابي كامل كل 15 دقيقة افتراضياً بعد ربط حساب Google.</p>
+        <p style="margin:10px 0 0;font-size:11px;color:var(--text-muted);line-height:1.65">تُحدَّث بيانات العمل بين الأجهزة تلقائياً، ويُنشأ نسخ سحابي كامل كل 15 دقيقة افتراضياً بعد ربط حساب Google. النسخة التلقائية الجديدة تستبدل السابقة محلياً وعلى Drive.</p>
       </div>
 
       <div class="card backup-quick-actions-card" style="margin-bottom:16px;padding:16px;border:1.5px solid var(--primary-light)">
@@ -6492,7 +6492,7 @@ body.license-readonly-mode .page-readonly textarea {
         <div id="ops-ux-backup-host">
           <div id="ops-ux-status-host"></div>
         </div>
-        <p class="backup-card-desc">مسار الإنتاج لاستعادة <strong>قاعدة SQLite + المرفقات + الإعدادات</strong>. فحص وإنشاء النسخ المحلية والسحابية منفصلان — أو معاً (آخر <strong>3</strong> على Drive).</p>
+        <p class="backup-card-desc">مسار الإنتاج لاستعادة <strong>قاعدة SQLite + المرفقات + إعدادات المركز والأسعار</strong>. النسخة التلقائية الجديدة تستبدل السابقة محلياً وعلى Drive (النسخ اليدوية تُحفظ).</p>
         <input type="checkbox" id="bk-v2-upload-drive" checked hidden aria-hidden="true" tabindex="-1">
         <input class="form-control" type="password" id="bk-v2-pass" placeholder="تلقائي" autocomplete="new-password" tabindex="-1" hidden aria-hidden="true">
         <div class="form-grid form-grid-2" style="gap:10px;margin-top:10px">
@@ -6507,7 +6507,7 @@ body.license-readonly-mode .page-readonly textarea {
               <option value="1440">يومياً</option>
             </select>
             <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;font-size:12px;margin-top:8px">
-              <input type="checkbox" id="bk-v2-schedule-cloud" checked onchange="saveBackupV2ScheduleFromUI()"> جدولة ترفع إلى Drive (آخر 3 نسخ)
+              <input type="checkbox" id="bk-v2-schedule-cloud" checked onchange="saveBackupV2ScheduleFromUI()"> جدولة ترفع إلى Drive (تُستبدل النسخة التلقائية السابقة)
             </label>
           </div>
           <div class="form-group" style="margin:0">
@@ -17562,8 +17562,8 @@ async function refreshBackupV2ReadinessUi() {
 
 function getBackupV2CloudOptions() {
   return {
-    cloudRetentionCount: 3,
-    retentionCount: 5,
+    cloudRetentionCount: 1,
+    retentionCount: 1,
   };
 }
 
@@ -17648,6 +17648,15 @@ async function refreshBackupV2Status() {
     if (st) st.textContent = health?.ok ? `سليم (schema ${health.schemaVersion || '—'})` : (health?.error || 'غير جاهز');
     if (gt) gt.textContent = gate?.pending ? 'بانتظار التحقق' : (gate?.verified ? 'تم التحقق' : (gate?.failed ? 'فشل سابق' : '—'));
     if (sc) sc.textContent = sched?.lastSuccessAt || sched?.lastStatus || '—';
+    if (sched?.lastSuccessAt) {
+      stampBackupSyncSummary({
+        localAt: sched.lastSuccessAt,
+        cloudAt: (sched.cloudEnabled && sched.lastStatus !== 'local_only' && sched.lastStatus !== 'failed')
+          ? sched.lastSuccessAt
+          : null,
+      });
+      if (typeof applyBackupStatusSummaryDom === 'function') applyBackupStatusSummaryDom();
+    }
     const interval = document.getElementById('bk-v2-schedule-interval');
     if (interval && sched && typeof sched.intervalMinutes === 'number') {
       interval.value = sched.enabled ? String(sched.intervalMinutes) : '0';
@@ -18311,8 +18320,8 @@ async function saveBackupV2ScheduleFromUI() {
       enabled: mins > 0,
       intervalMinutes: mins > 0 ? mins : 60,
       cloudEnabled: mins > 0 && cloudEnabled,
-      cloudRetentionCount: 3,
-      retentionCount: 5,
+      cloudRetentionCount: 1,
+      retentionCount: 1,
       ...getBackupV2IdentityMeta(),
     });
     await refreshBackupV2Status();
@@ -18625,7 +18634,8 @@ function denyBackupV1CustomerAction(action) {
 function renderCloudDbBackupUI() {
   ensureBackupSettings();
   const prov = settings.backup.providers?.google || {};
-  const connected = !!prov.connected;
+  const connected = !prov.userDisconnected && !!(prov.connected || prov.email
+    || (typeof DriveAdapter !== 'undefined' && DriveAdapter.isConnectedFromSettings?.()));
   const statusEl = document.getElementById('cdb-status-text');
   const emailEl = document.getElementById('cdb-email');
   if (statusEl) statusEl.textContent = connected ? '✅ متصل بـ Google Drive' : '🔴 غير متصل';
@@ -19499,15 +19509,14 @@ async function syncCloudStatusFromElectron() {
         connected: true,
         email: st.email || settings.backup.providers[prov]?.email || '',
         oauth: st.oauth !== false,
-        hasRefreshToken: !!st.hasRefreshToken,
+        hasRefreshToken: !!st.hasRefreshToken || !!settings.backup.providers[prov]?.hasRefreshToken,
         lastSync: settings.backup.providers[prov]?.lastSync || null,
         userDisconnected: false
       };
       settings.backup.cloudEnabled = true;
       DB.set('settings', settings);
-    } else if (p.connected) {
+    } else if (st?.needsReauth && !st?.hasRefreshToken && !p.hasRefreshToken) {
       settings.backup.providers[prov] = { ...p, connected: false, email: p.email || '' };
-      settings.backup.cloudEnabled = false;
       DB.set('settings', settings);
     }
   } catch { /* ignore */ }
@@ -19527,7 +19536,7 @@ function renderBackupCloudStatus() {
   const syncEl = document.getElementById('bk-last-sync');
   const statusEl = document.getElementById('bk-cloud-status');
   const discBtn = document.getElementById('btn-cloud-disconnect');
-  const connected = !!p.connected;
+  const connected = !p.userDisconnected && !!(p.connected || p.email);
   if (emailEl) emailEl.textContent = connected ? (p.email || '—') : '— غير مرتبط —';
   if (syncEl) syncEl.textContent = p.lastSync ? formatBackupDateTime(p.lastSync) : '—';
   if (statusEl) statusEl.textContent = connected ? ('✅ متصل بـ ' + (labels[prov] || prov)) : '🔴 غير متصل';
@@ -19636,21 +19645,62 @@ function initBackupUI() {
   }
 }
 
-function renderBackupStatusSummary() {
+function pickLatestBackupIso() {
+  let best = null;
+  let bestMs = 0;
+  for (let i = 0; i < arguments.length; i++) {
+    const v = arguments[i];
+    if (v == null || v === '') continue;
+    const ms = typeof v === 'number' ? v : Date.parse(v);
+    if (Number.isFinite(ms) && ms > bestMs) {
+      bestMs = ms;
+      best = typeof v === 'number' ? new Date(ms).toISOString() : String(v);
+    }
+  }
+  return best;
+}
+
+function googleBackupSummaryLabel() {
+  const g = settings?.backup?.providers?.google || {};
+  if (g.userDisconnected) return '🔴 غير متصل — اربط من أدناه';
+  const live = (typeof DriveAdapter !== 'undefined' && (DriveAdapter.isConnectedFromSettings?.() || DriveAdapter.isConnected?.()));
+  if (live || g.connected || g.email) return g.email || '✅ متصل';
+  return '🔴 غير متصل — اربط من أدناه';
+}
+
+function applyBackupStatusSummaryDom() {
   const wrap = document.getElementById('bk-status-summary');
   if (!wrap) return;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   const g = settings?.backup?.providers?.google;
-  set('bk-sum-google', g?.connected ? (g.email || '✅ متصل') : '🔴 غير متصل — اربط من أدناه');
-  const lastLocal = (backupRegistry || []).find((r) => r && r.local);
-  set('bk-sum-local', lastLocal?.at ? formatBackupDateTime(lastLocal.at) : 'لم تُنشأ بعد');
-  const cloudV2Date = settings?.cloudV2?.lastAutoBackupDate;
-  const lastCloud = (backupRegistry || []).find((r) => r && r.cloud);
-  const cloudAt = lastCloud?.at || g?.lastSync || cloudV2Date;
+  const cache = window._tdwBackupSyncSummary || {};
+  set('bk-sum-google', googleBackupSummaryLabel());
+  const lastLocal = (typeof backupRegistry !== 'undefined' && backupRegistry || []).find((r) => r && r.local);
+  const localAt = pickLatestBackupIso(
+    lastLocal?.at,
+    settings?.cloudV2?.lastLocalBackupAt,
+    cache.localAt
+  );
+  set('bk-sum-local', localAt ? formatBackupDateTime(localAt) : 'لم تُنشأ بعد');
+  const lastCloud = (typeof backupRegistry !== 'undefined' && backupRegistry || []).find((r) => r && r.cloud);
+  const cloudAt = pickLatestBackupIso(
+    lastCloud?.at,
+    g?.lastSync,
+    settings?.cloudV2?.lastAutoBackupAt,
+    settings?.cloudV2?.lastAutoBackupDate,
+    cache.cloudAt
+  );
   set('bk-sum-cloud', cloudAt ? formatBackupDateTime(cloudAt) : 'لم تُنشأ بعد');
-  const sync = typeof SyncEngine !== 'undefined' ? SyncEngine.getStatus?.() : null;
-  const lastSync = sync?.lastPushAt || sync?.lastPollAt;
-  set('bk-sum-sync', lastSync ? formatBackupDateTime(lastSync) : (tdwIsCloudV2Enabled?.() ? 'لم تتم بعد' : '—'));
+  const sync = (typeof SyncEngine !== 'undefined' && SyncEngine.getStatus?.())
+    || (typeof SyncState !== 'undefined' && SyncState.getStatus?.())
+    || null;
+  const lastSync = pickLatestBackupIso(
+    sync?.lastPushAt,
+    sync?.lastPollAt,
+    sync?.lastCycleCompletedAt,
+    cache.syncAt
+  );
+  set('bk-sum-sync', lastSync ? formatBackupDateTime(lastSync) : (typeof tdwIsCloudV2Enabled === 'function' && tdwIsCloudV2Enabled() ? 'لم تتم بعد' : '—'));
   const bid = (typeof BranchContexts !== 'undefined' && BranchContexts.getOperationalWriteBranch?.())
     || (typeof BranchScope !== 'undefined' && BranchScope.getActiveBranchId?.())
     || '—';
@@ -19659,6 +19709,73 @@ function renderBackupStatusSummary() {
     ? BranchDisplay.resolveBranchName(bid)
     : (lic?.branches?.find((b) => b && b.id === bid)?.name || bid);
   set('bk-sum-branch', bname);
+}
+
+function stampBackupSyncSummary(partial) {
+  const next = { ...(window._tdwBackupSyncSummary || {}), ...(partial || {}) };
+  window._tdwBackupSyncSummary = next;
+  if (!settings.cloudV2) settings.cloudV2 = {};
+  if (next.localAt && !settings.cloudV2.lastLocalBackupAt) settings.cloudV2.lastLocalBackupAt = next.localAt;
+  if (next.cloudAt && !settings.cloudV2.lastAutoBackupAt) {
+    settings.cloudV2.lastAutoBackupAt = next.cloudAt;
+    if (!settings.cloudV2.lastAutoBackupDate) settings.cloudV2.lastAutoBackupDate = String(next.cloudAt).slice(0, 10);
+  }
+  if (next.localAt) settings.cloudV2.lastLocalBackupAt = pickLatestBackupIso(settings.cloudV2.lastLocalBackupAt, next.localAt);
+  if (next.cloudAt) settings.cloudV2.lastAutoBackupAt = pickLatestBackupIso(settings.cloudV2.lastAutoBackupAt, next.cloudAt);
+}
+
+async function enrichBackupStatusSummary() {
+  const api = typeof getBackupV2Api === 'function' ? getBackupV2Api() : null;
+  let localAt = null;
+  let cloudAt = null;
+  try {
+    const sched = await api?.v2ScheduleStatus?.();
+    if (sched?.ok !== false && sched?.lastSuccessAt) {
+      localAt = sched.lastSuccessAt;
+      if (sched.cloudEnabled && sched.lastStatus !== 'local_only' && sched.lastStatus !== 'failed') {
+        cloudAt = sched.lastSuccessAt;
+      }
+    }
+  } catch { /* schedule status may be unavailable pre-session */ }
+  try {
+    const listed = await api?.v2ListLocal?.({});
+    const items = listed?.items || listed?.files || [];
+    const newest = items
+      .map((it) => Number(it.mtimeMs) || Date.parse(it.modifiedAt || it.createdAt || it.at || ''))
+      .filter((ms) => Number.isFinite(ms))
+      .sort((a, b) => b - a)[0];
+    if (newest) localAt = pickLatestBackupIso(localAt, newest);
+  } catch { /* empty */ }
+  try {
+    const cloud = await api?.v2ListCloud?.({});
+    const items = cloud?.items || [];
+    const newest = items
+      .map((it) => Number(it.mtimeMs) || Date.parse(it.modifiedAt || it.createdAt || it.at || ''))
+      .filter((ms) => Number.isFinite(ms))
+      .sort((a, b) => b - a)[0];
+    if (newest) cloudAt = pickLatestBackupIso(cloudAt, newest);
+  } catch { /* empty */ }
+  const sync = (typeof SyncEngine !== 'undefined' && SyncEngine.getStatus?.())
+    || (typeof SyncState !== 'undefined' && SyncState.getStatus?.())
+    || null;
+  stampBackupSyncSummary({
+    localAt,
+    cloudAt,
+    syncAt: pickLatestBackupIso(sync?.lastPushAt, sync?.lastPollAt, sync?.lastCycleCompletedAt)
+  });
+  applyBackupStatusSummaryDom();
+  try { emitBackupUiStatus('summary-enriched', window._tdwBackupSyncSummary || {}); } catch { /* empty */ }
+}
+
+function renderBackupStatusSummary() {
+  applyBackupStatusSummaryDom();
+  if (!renderBackupStatusSummary._enrichQueued) {
+    renderBackupStatusSummary._enrichQueued = true;
+    Promise.resolve()
+      .then(() => enrichBackupStatusSummary())
+      .catch(() => {})
+      .then(() => { renderBackupStatusSummary._enrichQueued = false; });
+  }
 }
 
 function renderCloudV2BackupStatus() {
@@ -19714,14 +19831,21 @@ function renderCloudV2BackupStatus() {
   }
   try { SetupStateDom?.applyDomVisibility?.(); } catch { /* empty */ }
   const sync = typeof window.SyncEngine !== 'undefined' ? window.SyncEngine.getStatus?.() : null;
-  const lastSync = sync?.lastPushAt || sync?.lastPollAt;
+  const lastSync = pickLatestBackupIso(
+    sync?.lastPushAt,
+    sync?.lastPollAt,
+    sync?.lastCycleCompletedAt,
+    window._tdwBackupSyncSummary && window._tdwBackupSyncSummary.syncAt
+  );
   set('bk-cv2-sync', lastSync ? formatBackupDateTime(lastSync) : (enabled ? 'لم تتم بعد' : '—'));
   if (sync?.lastError && enabled && !/no_remote_versions|no_versions_path|not_found|offline|no_center_id|drive_not_connected/i.test(String(sync.lastError))) {
     const errLabel = sync.lastErrorMessageAr || sync.lastError;
     set('bk-cv2-sync', (lastSync ? formatBackupDateTime(lastSync) + ' · ' : '') + '⚠️ ' + errLabel);
   }
-  const autoDate = settings?.cloudV2?.lastAutoBackupDate;
-  set('bk-cv2-autobackup', autoDate || (enabled ? 'لم تُنشأ بعد' : '—'));
+  const autoDate = settings?.cloudV2?.lastAutoBackupAt
+    || settings?.cloudV2?.lastAutoBackupDate
+    || (window._tdwBackupSyncSummary && (window._tdwBackupSyncSummary.cloudAt || window._tdwBackupSyncSummary.localAt));
+  set('bk-cv2-autobackup', autoDate ? (formatBackupDateTime(autoDate) === '—' ? autoDate : formatBackupDateTime(autoDate)) : (enabled ? 'لم تُنشأ بعد' : '—'));
   const dc = typeof DeviceConfig !== 'undefined' ? DeviceConfig.load?.() : {};
   const branchId = dc?.lockedBranchId || settings?.defaultBranchId || '';
   const branchLabel = branchId

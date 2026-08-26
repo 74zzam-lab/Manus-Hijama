@@ -5,7 +5,7 @@ const assert = require('assert');
 const cloud = require('../../electron/backup-v2-cloud');
 const { classifyBackupFile } = require('../../electron/backup-v2-classify');
 
-assert.strictEqual(cloud.DEFAULT_CLOUD_RETENTION, 3);
+assert.strictEqual(cloud.DEFAULT_CLOUD_RETENTION, 1);
 assert.ok(cloud.isV2FullBackupName('Tadawi-Backup-V2-2026-01-01.tdw'));
 assert.ok(cloud.isV2FullBackupName('Tadawi-Backup-V2-scheduled-2026.tdw'));
 assert.ok(!cloud.isV2FullBackupName('2026-08-20.tdw'));

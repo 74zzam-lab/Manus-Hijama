@@ -33,6 +33,7 @@ const PUBLIC_CHANNELS = new Set([
   'backup:v2:health',
   'backup:v2:formatPolicy',
   'backup:v2:gate',
+  'backup:v2:scheduleStatus',
   'cache:getStatus',
   'cache:readLicense',
   'cache:readVersions',

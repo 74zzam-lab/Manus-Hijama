@@ -76,7 +76,11 @@
       }
 
       if (!global.SyncGuard?.isPaused?.()) {
-        global.SyncEngine?.start?.({ pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs });
+        try { global.ActivationSyncDefaults?.ensureLiveSyncEngine?.({ startBackup: false }); } catch { /* empty */ }
+        global.SyncEngine?.start?.({
+          force: true,
+          pollIntervalMs: global.SyncState?.load?.()?.pollIntervalMs,
+        });
       }
       global.BackupLayer?.start?.();
       global.AuditLogger?.flushToDrive?.().catch(() => {});

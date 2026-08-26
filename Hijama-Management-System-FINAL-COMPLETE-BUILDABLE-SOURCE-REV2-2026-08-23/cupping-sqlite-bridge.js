@@ -531,8 +531,16 @@
   async function hydrateIntoMemory() {
     const db = api();
     if (!db) return { ok: false, error: 'database_api_unavailable' };
-    const res = await db.hydrate();
+    let res = await db.hydrate();
     if (!res?.ok) return res;
+    if (res.status?.upgradeState?.migration_pending && typeof db.autoCompleteUpgrade === 'function') {
+      try {
+        await db.autoCompleteUpgrade({ skipBackup: true });
+        const again = await db.hydrate();
+        if (again?.ok) res = again;
+      } catch { /* write gate retries on persist */ }
+    }
+    try { await global.OperationalReadiness?.refresh?.({ force: true }); } catch { /* empty */ }
     const data = res.data || {};
     state.status = res.status;
     state.sqlitePrimary = !!(res.status && res.status.sqlitePrimary);
@@ -693,6 +701,7 @@
       }
       mergeBranchSliceIntoCommitted(tableKey, list, branchId);
       state.lastError = null;
+      try { global.SyncEngine?.schedulePush?.(tableKey, branchId); } catch { /* empty */ }
       return { ok: true, tableKey, count: list.length, authoritative: true };
     } catch (e) {
       state.lastError = String(e?.message || e);
@@ -751,6 +760,7 @@
       }
       applyCommittedToView(key, persistValue);
       state.lastError = null;
+      try { global.SyncEngine?.schedulePush?.(key, getOperationalWriteBranchId()); } catch { /* empty */ }
       return { ok: true, key, authoritative: true };
     } catch (e) {
       state.lastError = String(e?.message || e);

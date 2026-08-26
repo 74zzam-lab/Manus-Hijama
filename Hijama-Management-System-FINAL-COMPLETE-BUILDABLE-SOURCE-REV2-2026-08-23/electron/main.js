@@ -949,6 +949,8 @@ ipcMain.on('dialog:promptSync', (event, message, defaultValue) => {
 
 handle('database:status', () => dbService.getStatus());
 handle('database:hydrate', () => dbService.hydrate());
+handle('database:autoCompleteUpgrade', (_e, options) =>
+  dbService.autoCompletePendingUpgrade(V.asObject(options || {}, { name: 'options' })));
 handle('database:persistTable', (e, tableKey, records, branchId) => {
   const key = V.asString(tableKey, { name: 'tableKey', max: 64, required: true, allowEmpty: false });
   if (!Array.isArray(records)) V.fail('IPC_TYPE', 'records_must_be_array');

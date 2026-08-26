@@ -16,6 +16,7 @@ const ALLOWED_INVOKE = new Set([
   'bootstrap:syncWizardState',
   'database:status',
   'database:hydrate',
+  'database:autoCompleteUpgrade',
   'database:persistTable',
   'database:persistKv',
   'database:enableSqlitePrimary',
@@ -309,6 +310,7 @@ const cuppingApi = {
   database: {
     status: () => invoke('database:status'),
     hydrate: () => invoke('database:hydrate'),
+    autoCompleteUpgrade: (options) => invoke('database:autoCompleteUpgrade', options || {}),
     persistTable: (tableKey, records, branchId) => invoke('database:persistTable', tableKey, records, branchId),
     persistKv: (key, value) => invoke('database:persistKv', key, value),
     enableSqlitePrimary: () => invoke('database:enableSqlitePrimary'),

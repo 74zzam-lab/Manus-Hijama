@@ -132,6 +132,13 @@
       if (typeof global.syncAppGlobals === 'function') global.syncAppGlobals();
     } catch { /* empty */ }
 
+    emit('seed_branch_settings', 0.96);
+    try {
+      const bid = global.DeviceConfig?.getLockedBranchId?.()
+        || global.BranchScope?.getActiveBranchId?.();
+      if (bid) global.BranchDataIsolation?.persistBranchSettings?.(bid);
+    } catch { /* empty */ }
+
     emit('verify_memory', 1);
     const verify = verifyMemoryAgainstSQLite(options.rowCounts);
     if (!verify.ok) {

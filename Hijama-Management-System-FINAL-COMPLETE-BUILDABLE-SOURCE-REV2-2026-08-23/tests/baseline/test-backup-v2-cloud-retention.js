@@ -5,7 +5,7 @@ const assert = require('assert');
 const cloud = require('../../electron/backup-v2-cloud');
 const { classifyBackupFile } = require('../../electron/backup-v2-classify');
 
-assert.strictEqual(cloud.DEFAULT_CLOUD_RETENTION, 3);
+assert.strictEqual(cloud.DEFAULT_CLOUD_RETENTION, 1);
 assert.ok(cloud.isV2FullBackupName('Tadawi-Backup-V2-2026-01-01.tdw'));
 assert.ok(cloud.isV2FullBackupName('Tadawi-Backup-V2-scheduled-2026.tdw'));
 assert.ok(!cloud.isV2FullBackupName('2026-08-20.tdw'));
@@ -13,6 +13,9 @@ assert.ok(!cloud.isV2FullBackupName('Hijama-Clinic-Backup.tdw'));
 
 assert.strictEqual(classifyBackupFile('Tadawi-Backup-V2-2026-08-22.tdw'), 'manual');
 assert.strictEqual(classifyBackupFile('Tadawi-Backup-V2-scheduled-2026.tdw'), 'automatic');
+assert.strictEqual(classifyBackupFile('Hijama-Backup-auto-2026-08-25T12-00-00.json'), 'automatic');
+assert.strictEqual(classifyBackupFile('Hijama-Backup-2026-08-25T12-00-00.json'), 'automatic');
+assert.strictEqual(classifyBackupFile('Hijama-Backup-manual-2026-08-25T12-00-00.json'), 'manual');
 
 const filtered = cloud.filterV2FullBackups([
   { name: '2026-08-20.tdw', path: 'NajjarTech/x/Backup/2026-08-20.tdw', size: 12000, modifiedAt: '2026-08-20T02:00:00Z' },

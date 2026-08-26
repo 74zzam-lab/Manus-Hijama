@@ -44,7 +44,7 @@
     const stale = !Number.isFinite(ageMs) || ageMs > maxAgeMs;
     return {
       ...snap,
-      connected: !!snap.connected && !snap.needsReauth && !stale,
+      connected: !!snap.connected && !snap.needsReauth,
       verified: !!snap.verified && !stale,
       stale,
       ageMs
@@ -58,21 +58,25 @@
     settings.backup.providers = settings.backup.providers || {};
     const prior = settings.backup.providers.google || {};
     const userDisconnected = !!prior.userDisconnected;
+    const hasRefreshToken = !!(live.hasRefreshToken || prior.hasRefreshToken);
     const liveFailed = live.ok === false
       || !!(live.error && !live.connected)
-      || ['unavailable', 'main_status_failed'].includes(String(source || ''));
-    let connected = !userDisconnected && !!live.connected && !live.needsReauth;
-    if (!connected && !userDisconnected && !live.needsReauth && liveFailed && (prior.connected || prior.oauth)) {
-      connected = true;
-    }
+      || ['unavailable', 'main_status_failed', 'settings_fallback_status_failed'].includes(String(source || ''));
+    const explicitReauth = !!live.needsReauth && !hasRefreshToken;
+    let connected = false;
+    if (userDisconnected) connected = false;
+    else if (explicitReauth) connected = false;
+    else if (live.connected && !live.needsReauth) connected = true;
+    else if (prior.connected || prior.oauth || hasRefreshToken || prior.email) connected = true;
+    else connected = !!live.connected && !live.needsReauth;
     const snapshot = {
       provider: 'google',
       connected,
-      needsReauth: !!live.needsReauth || (!connected && !liveFailed),
+      needsReauth: userDisconnected ? false : explicitReauth,
       email: connected ? (live.email || prior.email || prior.accountEmail || prior.userEmail || '') : (prior.email || ''),
       oauth: live.oauth !== false && connected,
-      hasRefreshToken: !!(live.hasRefreshToken || prior.hasRefreshToken),
-      verified: source === 'main_status' && !liveFailed,
+      hasRefreshToken,
+      verified: source === 'main_status' && connected && !liveFailed && !explicitReauth,
       checkedAt: nowIso(),
       source: source || 'unknown',
       error: live.error || null

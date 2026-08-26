@@ -34,6 +34,14 @@ const STEPS = Object.freeze([
   'restore_settings_v2',
 ]);
 
+/** Leftover restore/metadata steps must not lock the clinic out of writes/sync. */
+const SOFT_UPGRADE_STEPS = Object.freeze([
+  'attachment_metadata_canonical',
+  'encryption_settings_strip',
+  'restore_settings_v2',
+  'ls_conflict_queue_sqlite',
+]);
+
 function getMeta(db, key) {
   try {
     const row = db.prepare('SELECT value FROM meta WHERE key = ?').get(key);
@@ -221,8 +229,11 @@ function assessUpgradeState(db, repos, options = {}) {
   };
 }
 
-function verifyInvariants(db, repos) {
-  const health = operationalDbHealth.assessHealth(db);
+function verifyInvariants(db, repos, options = {}) {
+  const health = operationalDbHealth.assessHealth(
+    db,
+    options.healthOptions || operationalDbHealth.RUNTIME_HEALTH_OPTIONS
+  );
   if (!health.ok) {
     return { ok: false, error: health.reasons[0] || 'database_unhealthy', health };
   }
@@ -457,7 +468,7 @@ function runUpgradePipeline(db, repos, options = {}) {
     }
 
     if (report.ok) {
-      const verify = verifyInvariants(db, repos);
+      const verify = verifyInvariants(db, repos, options);
       report.verify = verify;
       if (!verify.ok) {
         report.ok = false;
@@ -495,7 +506,7 @@ function resumeInProgressRun(db, repos, options = {}) {
   if (!inProgress) return { ok: true, resumed: false };
   const pending = detectPendingSteps(db, repos, options);
   if (!pending.length) {
-    const verify = verifyInvariants(db, repos);
+    const verify = verifyInvariants(db, repos, options);
     if (!verify.ok) {
       db.prepare(
         `UPDATE upgrade_migration_runs SET status='failed', finished_at=?, error_code=? WHERE id=?`
@@ -511,10 +522,109 @@ function resumeInProgressRun(db, repos, options = {}) {
   return runUpgradePipeline(db, repos, { ...options, resumeRunId: inProgress.id });
 }
 
+function forceCompleteSoftUpgradeSteps(db, repos, syncPlatform) {
+  const results = [];
+  const run = (stepId, fn) => {
+    try {
+      const result = fn();
+      results.push({ stepId, ...result });
+    } catch (err) {
+      results.push({ stepId, ok: false, error: err.code || 'upgrade_step_failed', message: err.message });
+    }
+  };
+  run('attachment_metadata_canonical', () => migrateAttachmentMetadata(db, repos));
+  run('encryption_settings_strip', () => stripEncryptionSettings(db, repos));
+  run('restore_settings_v2', () => migrateRestoreSettingsV2(db, repos));
+  run('ls_conflict_queue_sqlite', () => migrateLsConflictQueue(db, repos, syncPlatform));
+  return results;
+}
+
+function canStampUpgradeMarker(assessment, health) {
+  if (assessment?.owner_corrupted || assessment?.unresolved_null_branch) return false;
+  if (health && health.ok === false) {
+    const reasons = health.reasons || [health.error].filter(Boolean);
+    if (reasons.includes('integrity_check_failed')) return false;
+    if (health.schemaAheadOfApplication) return false;
+  }
+  return true;
+}
+
+/**
+ * Complete leftover PR13 steps on DB open / after Backup V2 restore.
+ * Restored clinics typically have backupRegistry (and maybe attachment
+ * manifest) without upgradeMigrationVersion=1, which otherwise blocks
+ * every write and sync with migration_pending.
+ */
+function autoCompletePendingUpgrade(db, repos, options = {}) {
+  options = options || {};
+  const healthOptions = {
+    ...operationalDbHealth.RUNTIME_HEALTH_OPTIONS,
+    allowSchemaMismatch: true,
+    ...(options.healthOptions || {}),
+  };
+  const pipeOptions = { ...options, healthOptions, skipBackup: options.skipBackup !== false };
+
+  const stuck = getInProgressRun(db);
+  if (stuck && !stuck.backup_path) {
+    try {
+      db.prepare(
+        `UPDATE upgrade_migration_runs SET status='failed', finished_at=?, error_code=? WHERE id=?`
+      ).run(new Date().toISOString(), 'upgrade_resume_backup_missing', stuck.id);
+    } catch { /* table may be missing on partial schemas */ }
+  }
+
+  const resume = resumeInProgressRun(db, repos, pipeOptions);
+  if (resume && resume.ok === false && resume.resumed && resume.error === 'owner_corrupted') {
+    return resume;
+  }
+
+  const assessment = assessUpgradeState(db, repos, pipeOptions);
+  if (assessment.owner_corrupted) {
+    return { ok: false, skipped: true, error: 'owner_corrupted', assessment, resume };
+  }
+  if (assessment.unresolved_null_branch) {
+    return { ok: false, skipped: true, error: 'legacy_branch_migration_required', assessment, resume };
+  }
+
+  const pending = detectPendingSteps(db, repos, pipeOptions);
+  let pipe = { ok: true, skipped: true };
+  if (pending.length) {
+    pipe = runUpgradePipeline(db, repos, {
+      ...pipeOptions,
+      resumeRunId: assessment.runId || options.resumeRunId,
+    });
+  }
+
+  const forced = forceCompleteSoftUpgradeSteps(db, repos, options.syncPlatform);
+  const health = verifyInvariants(db, repos, { ...pipeOptions, healthOptions: operationalDbHealth.RUNTIME_HEALTH_OPTIONS });
+  const stamped = canStampUpgradeMarker(assessment, health.health || health)
+    && Number(getMeta(db, UPGRADE_MARKER) || 0) < UPGRADE_VERSION;
+  if (stamped) {
+    setMeta(db, UPGRADE_MARKER, String(UPGRADE_VERSION));
+  }
+
+  const after = assessUpgradeState(db, repos, pipeOptions);
+  const leftoverSoft = Array.isArray(after.pending)
+    && after.pending.length > 0
+    && after.pending.every((step) => SOFT_UPGRADE_STEPS.includes(step));
+  return {
+    ...pipe,
+    ok: after.ok || leftoverSoft,
+    already: !pending.length && !!assessment.ok,
+    auto: true,
+    stamped: !!stamped,
+    forced,
+    resume,
+    assessmentBefore: assessment,
+    assessment: after,
+  };
+}
+
 module.exports = {
   UPGRADE_VERSION,
   UPGRADE_MARKER,
   STEPS,
+  SOFT_UPGRADE_STEPS,
   BRANCH_TABLES,
   assessUpgradeState,
   detectPendingSteps,
@@ -523,6 +633,8 @@ module.exports = {
   verifyInvariants,
   runUpgradePipeline,
   resumeInProgressRun,
+  autoCompletePendingUpgrade,
+  forceCompleteSoftUpgradeSteps,
   migrateOwnerLegacy,
   migrateLsConflictQueue,
   migrateNullBranchRows,

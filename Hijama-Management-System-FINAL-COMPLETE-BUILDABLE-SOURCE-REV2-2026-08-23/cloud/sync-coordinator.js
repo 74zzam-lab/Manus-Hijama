@@ -155,8 +155,17 @@
       const ok = pull?.ok !== false && push?.ok !== false;
       lastCycleResult = ok ? 'success' : 'failed';
       lastCycleCompletedAt = new Date().toISOString();
-      lastCycleError = ok ? null : (pull?.error || push?.error || 'cycle_failed');
-      return { ok, pull, push, operationId, at: lastCycleCompletedAt, cycleCompleted: true };
+      lastCycleError = ok ? null : (pull?.error || push?.error || pull?.reason || push?.reason || 'sync_cycle_failed');
+      return {
+        ok,
+        pull,
+        push,
+        operationId,
+        at: lastCycleCompletedAt,
+        cycleCompleted: true,
+        error: lastCycleError,
+        message: lastCycleError,
+      };
     }, { operationId: options.operationId, prefix: 'cycle' });
   }
 

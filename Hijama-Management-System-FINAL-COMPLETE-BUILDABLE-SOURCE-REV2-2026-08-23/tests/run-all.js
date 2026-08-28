@@ -204,6 +204,7 @@ const remediation = [
   ['tests/remediation/test-boot-google-after-syncdone.js', 'remediation:boot-google-after-syncdone'],
   ['tests/remediation/test-document-sequences-restore.js', 'remediation:document-sequences-restore'],
   ['tests/remediation/test-overdue-clients-full-registry.js', 'remediation:overdue-clients-full-registry'],
+  ['tests/remediation/test-sync-extended-operational.js', 'remediation:sync-extended-operational'],
 ];
 
 const existing = [

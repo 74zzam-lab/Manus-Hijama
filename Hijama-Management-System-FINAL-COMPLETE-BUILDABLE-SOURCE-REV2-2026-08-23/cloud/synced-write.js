@@ -5,12 +5,9 @@
   'use strict';
 
   const LOCAL_ONLY_KEYS = new Set([
-    'otRecords', 'clientFileCounter', 'hardwareLog', 'messageLog', 'nextSessions',
-    'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
-    'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
-    'invoiceCounter', 'backupLog', 'backupRegistry', 'budget', 'systemLogs',
-    'logCounter', 'logsPageSize', 'cashDrawerSession', 'preImportBackup',
-    'importStudioLog', 'activityLog'
+    'hardwareLog', 'backupLog', 'backupRegistry',
+    'logsPageSize', 'preImportBackup',
+    'importStudioLog', 'communicationQueue'
   ]);
 
   function ensureBridge() {
@@ -40,6 +37,18 @@
     else if (table === 'inventoryItems') global.inventoryItems = value;
     else if (table === 'inventorySuppliers') global.inventorySuppliers = value;
     else if (table === 'inventoryMovements') global.inventoryMovements = value;
+    else if (table === 'messageLog') global.messageLog = value;
+    else if (table === 'activityLog') global.activityLog = value;
+    else if (table === 'nextSessions') global.nextSessions = value;
+    else if (table === 'otRecords') global.otRecords = value;
+    else if (table === 'employeeLeaveRequests') global.employeeLeaveRequests = value;
+    else if (table === 'employeeLedgerAccruals') global.employeeLedgerAccruals = value;
+    else if (table === 'employeeLedgerPayments') global.employeeLedgerPayments = value;
+    else if (table === 'employeeLedgerEntries') global.employeeLedgerEntries = value;
+    else if (table === 'importHistory') global.importHistory = value;
+    else if (table === 'communicationWebhookLog') global.communicationWebhookLog = value;
+    else if (table === 'systemLogs') global.systemLogs = value;
+    else if (table === 'cashDrawerSession') global.cashDrawerSession = value;
   }
 
   async function setTable(table, value, options) {
@@ -88,14 +97,19 @@
     return r;
   }
 
+  const BACKUP_SCALAR_KEYS = ['invoiceCounter', 'clientFileCounter', 'budget', 'logCounter'];
+  const BACKUP_OBJECT_KEYS = ['cashDrawerSession'];
+
   function applyLocalOnlyPayload(data) {
     if (!data || typeof data !== 'object') return [];
     const applied = [];
     Object.keys(data).forEach(key => {
-      if (LOCAL_ONLY_KEYS.has(key) && data[key] != null) {
+      if ((LOCAL_ONLY_KEYS.has(key) || BACKUP_SCALAR_KEYS.includes(key) || BACKUP_OBJECT_KEYS.includes(key)) && data[key] != null) {
         global.DB?.set?.(key, data[key]);
         if (key === 'invoiceCounter') global.invoiceCounter = data[key];
         if (key === 'clientFileCounter') global.clientFileCounter = data[key];
+        if (key === 'logCounter') global.logCounter = data[key];
+        if (key === 'cashDrawerSession') global.cashDrawerSession = data[key];
         applied.push(key);
       }
     });

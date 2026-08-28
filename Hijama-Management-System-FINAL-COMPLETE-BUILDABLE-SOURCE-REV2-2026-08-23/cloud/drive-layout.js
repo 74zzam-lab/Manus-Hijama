@@ -157,13 +157,23 @@
     return primary === legacy ? [primary] : [primary, legacy];
   }
 
+  function operationalFileBases(table) {
+    const raw = String(table || '').replace(/\.json$/i, '');
+    const mapped = global.OperationalLayer?.TABLE_FILES?.[raw]
+      || global.OperationalLayer?.TABLE_FILES?.[table];
+    const mappedBase = mapped ? String(mapped).replace(/\.json$/i, '') : '';
+    return [...new Set([mappedBase, raw].filter(Boolean))];
+  }
+
   function operationalBranchFileCandidates(centerId, branchId, table) {
     const branchName = resolveBranchFolderName(branchId);
-    const base = String(table || '').replace(/\.json$/i, '');
-    const idPath = `${idBranchRoot(centerId, branchId)}/Operational/${base}.json`;
-    const primary = operationalBranchFile(centerId, branchId, table, branchName);
-    const legacy = legacyOperationalBranchFile(centerId, branchId, table);
-    return [...new Set([idPath, primary, legacy])];
+    const paths = [];
+    operationalFileBases(table).forEach((base) => {
+      paths.push(`${idBranchRoot(centerId, branchId)}/Operational/${base}.json`);
+      paths.push(operationalBranchFile(centerId, branchId, base, branchName));
+      paths.push(legacyOperationalBranchFile(centerId, branchId, base));
+    });
+    return [...new Set(paths)];
   }
 
   function syncVersionsJson(centerId, branchId, branchName) {
@@ -243,6 +253,7 @@
     configBranchFile,
     operationalBranchDir,
     operationalBranchFile,
+    operationalFileBases,
     backupBranchDir,
     backupBranchFile,
     sharedDir,

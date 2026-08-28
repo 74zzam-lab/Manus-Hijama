@@ -237,7 +237,16 @@ opTables.forEach(t => {
   assert(versionTables.includes(t), `version map has ${t}`);
   assert(restoreTables.includes(t), `restore staging has op table ${t}`);
 });
-assert(!syncedTables.includes('activityLog'), 'activityLog is local-only not cloud-synced');
+assert(syncedTables.includes('activityLog'), 'activityLog is cloud-synced');
+assert(syncedTables.includes('messageLog'), 'messageLog is cloud-synced');
+assert(syncedTables.includes('expenses'), 'expenses are cloud-synced');
+assert(syncedTables.includes('systemLogs'), 'systemLogs is cloud-synced');
+assert(opTables.includes('opsKv'), 'opsKv operational pack is synced');
+assert(opTables.includes('cashDrawerSession'), 'cash float / عهدة is cloud-synced');
+assert(!syncedTables.includes('cashDrawerSession'), 'cash float uses operational pack, not a repo array');
+assert(!context.SyncedWrite.LOCAL_ONLY_KEYS.has('cashDrawerSession'), 'cash float is not local-only');
+assert(!context.SyncedWrite.LOCAL_ONLY_KEYS.has('messageLog'), 'messageLog is not local-only');
+assert(context.SyncedWrite.LOCAL_ONLY_KEYS.has('hardwareLog'), 'hardwareLog stays local');
 
 (async () => {
   context.settings.backup.providers.google = { connected: true, email: 'owner@clinic.test', oauth: true };

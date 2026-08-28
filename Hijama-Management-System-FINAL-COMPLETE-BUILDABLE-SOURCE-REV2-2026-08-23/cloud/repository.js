@@ -11,6 +11,10 @@
     'settings', 'expenses', 'packages', 'services',
     'attendance', 'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
     'attachments_meta',
+    'messageLog', 'activityLog', 'nextSessions', 'otRecords',
+    'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
+    'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+    'systemLogs',
   ];
 
   const SYNCED_SET = new Set(SYNCED_TABLES);
@@ -84,6 +88,19 @@
     if (table === 'inventoryItems') global.inventoryItems = data;
     if (table === 'inventorySuppliers') global.inventorySuppliers = data;
     if (table === 'inventoryMovements') global.inventoryMovements = data;
+    if (table === 'messageLog') global.messageLog = data;
+    if (table === 'activityLog') global.activityLog = data;
+    if (table === 'nextSessions') global.nextSessions = data;
+    if (table === 'otRecords') global.otRecords = data;
+    if (table === 'employeeLeaveRequests') global.employeeLeaveRequests = data;
+    if (table === 'employeeLedgerAccruals') global.employeeLedgerAccruals = data;
+    if (table === 'employeeLedgerPayments') global.employeeLedgerPayments = data;
+    if (table === 'employeeLedgerEntries') global.employeeLedgerEntries = data;
+    if (table === 'importHistory') global.importHistory = data;
+    if (table === 'communicationWebhookLog') global.communicationWebhookLog = data;
+    if (table === 'systemLogs') global.systemLogs = data;
+    if (table === 'expenses') global.expenses = data;
+    if (table === 'attendance') global.attendance = data;
   }
 
   function createRepository(adapter) {
@@ -115,7 +132,18 @@
           attendance: 'attendance',
           inventoryItems: 'inventoryItems',
           inventorySuppliers: 'inventorySuppliers',
-          inventoryMovements: 'inventoryMovements'
+          inventoryMovements: 'inventoryMovements',
+          messageLog: 'messageLog',
+          nextSessions: 'nextSessions',
+          otRecords: 'otRecords',
+          employeeLeaveRequests: 'employeeLeaveRequests',
+          employeeLedgerAccruals: 'employeeLedgerAccruals',
+          employeeLedgerPayments: 'employeeLedgerPayments',
+          employeeLedgerEntries: 'employeeLedgerEntries',
+          importHistory: 'importHistory',
+          communicationWebhookLog: 'communicationWebhookLog',
+          systemLogs: 'systemLogs',
+          attachments_meta: 'attachments_meta',
         };
         return map[table] || table;
       },
@@ -402,7 +430,12 @@
 
       _defaultFor(table) {
         return ['cases', 'bookings', 'clientsRegistry', 'doctors', 'users', 'expenses',
-          'attendance', 'inventoryItems', 'inventorySuppliers', 'inventoryMovements'].includes(table) ? [] : {};
+          'attendance', 'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
+          'messageLog', 'activityLog', 'nextSessions', 'otRecords',
+          'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
+          'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+          'systemLogs',
+          'attachments_meta'].includes(table) ? [] : {};
       }
     };
 

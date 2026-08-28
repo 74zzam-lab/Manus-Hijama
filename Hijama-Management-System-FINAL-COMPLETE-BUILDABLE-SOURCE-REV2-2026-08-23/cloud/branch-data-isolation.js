@@ -14,7 +14,7 @@
     'packages', 'services', 'otRecords', 'nextSessions', 'employeeLeaveRequests',
     'employeeLedgerAccruals', 'employeeLedgerPayments', 'employeeLedgerEntries',
     'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
-    'activityLog', 'messageLog', 'importHistory', 'cashDrawerSession',
+    'activityLog', 'messageLog', 'importHistory', 'systemLogs',
     'communicationWebhookLog', 'communicationQueue', 'luxQueue'
   ]);
 
@@ -232,7 +232,12 @@
       return filterArrayForView(key, value);
     }
     if (key === 'users') return filterUsersForView(value);
-    if (key === 'activityLog' || key === 'messageLog') return filterLogsForView(value);
+    if (key === 'activityLog' || key === 'messageLog' || key === 'systemLogs') return filterLogsForView(value);
+    if (key === 'cashDrawerSession') {
+      if (!value || isAggregateView()) return value;
+      if (value.branchId && value.branchId !== getViewBranchId()) return null;
+      return value;
+    }
     if (key === 'settings') return value;
     return value;
   }

@@ -24,7 +24,11 @@
 
   const OPERATIONAL_TABLES = [
     'cases', 'clientsRegistry', 'bookings', 'expenses', 'attendance', 'doctors',
-    'inventoryItems', 'inventorySuppliers', 'inventoryMovements'
+    'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
+    'attachments_meta', 'messageLog', 'activityLog', 'nextSessions', 'otRecords',
+    'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
+    'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+    'cashDrawerSession', 'systemLogs', 'opsKv'
   ];
 
   const CONFIG_TABLES = ['settings', 'services', 'packages', 'users'];
@@ -51,8 +55,9 @@
     const centerId = global.ConfigLayer?.getCenterId?.() || global.CenterId?.getStoredCenterId?.() || '';
 
     if (OPERATIONAL_TABLES.includes(table)) {
-      const paths = global.DriveLayout?.operationalBranchFileCandidates?.(centerId, branchId, table)
-        || [global.OperationalLayer?.drivePathForTable?.(centerId, branchId, table)];
+      const canonical = global.OperationalLayer?.drivePathForTable?.(centerId, branchId, table);
+      const extra = global.DriveLayout?.operationalBranchFileCandidates?.(centerId, branchId, table) || [];
+      const paths = [...new Set([canonical, ...extra].filter(Boolean))];
       const dl = await global.DriveAdapter.downloadJsonFirst(paths);
       if (!dl?.ok || !dl.data) return dl || { ok: false, error: 'not_found' };
       return { ok: true, records: dl.data.records || dl.data || [] };

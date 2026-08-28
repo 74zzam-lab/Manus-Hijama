@@ -1244,6 +1244,17 @@ function saveMessagingApiSettings() {
 }
 
 // ── CASH FLOAT ──
+function persistCashDrawerSession() {
+  if (cashDrawerSession && typeof cashDrawerSession === 'object') {
+    cashDrawerSession.updatedAt = new Date().toISOString();
+    if (typeof BranchDataIsolation !== 'undefined' && BranchDataIsolation.stampBranchId) {
+      BranchDataIsolation.stampBranchId(cashDrawerSession);
+    }
+  }
+  DB.set('cashDrawerSession', cashDrawerSession);
+  try { SyncEngine?.schedulePush?.('cashDrawerSession'); } catch { /* empty */ }
+}
+
 function getTodayCashSession() {
   const today = new Date().toISOString().split('T')[0];
   if (!cashDrawerSession || cashDrawerSession.date !== today) {
@@ -1255,9 +1266,10 @@ function getTodayCashSession() {
       foreign: { USD: 0, EUR: 0 },
       movements: [],
       openedAt: new Date().toISOString(),
-      openedBy: currentUser ? currentUser.fullName : '—'
+      openedBy: currentUser ? currentUser.fullName : '—',
+      updatedAt: new Date().toISOString()
     };
-    DB.set('cashDrawerSession', cashDrawerSession);
+    persistCashDrawerSession();
   }
   return cashDrawerSession;
 }
@@ -1280,7 +1292,7 @@ function recordCashMovement(amount, reason, meta, skipPermCheck) {
     meta: meta || {},
     user: currentUser ? currentUser.fullName : '—'
   });
-  DB.set('cashDrawerSession', cashDrawerSession);
+  persistCashDrawerSession();
   logSystem('cash', reason, fmtMoney(Math.abs(amount)), meta);
   refreshCashFloatPage();
 }
@@ -1326,7 +1338,7 @@ function onCasePaymentRecorded(c) {
       user: currentUser ? currentUser.fullName : '—'
     });
   }
-  DB.set('cashDrawerSession', cashDrawerSession);
+  persistCashDrawerSession();
   logAudit('CASH_MOVEMENT', `فاتورة ${c.invoice}: ${c.foreignAmount ? c.foreignAmount + ' ' + c.payCurrency : ''} ${change ? 'باقي ' + fmtMoney(change) : ''}`.trim());
   refreshCashFloatPage();
 }
@@ -1376,7 +1388,7 @@ function setCashOpeningFloat() {
   if (isNaN(val) || val < 0) { notify('⚠️ أدخل قيمة صحيحة', 'danger'); return; }
   const s = getTodayCashSession();
   s.openingFloat = val;
-  DB.set('cashDrawerSession', cashDrawerSession);
+  persistCashDrawerSession();
   refreshCashFloatPage();
   notify('✅ تم تعيين عهدة الافتتاح');
 }

@@ -30,6 +30,19 @@
     inventorySuppliers: { layer: 'operational', file: 'inventory-suppliers.json', table: 'inventorySuppliers' },
     inventoryMovements: { layer: 'operational', file: 'inventory-movements.json', table: 'inventoryMovements' },
     attachments_meta: { layer: 'operational', file: 'attachments-meta.json', table: 'attachments_meta' },
+    messageLog: { layer: 'operational', file: 'message-log.json', table: 'messageLog' },
+    activityLog: { layer: 'operational', file: 'activity-log.json', table: 'activityLog' },
+    nextSessions: { layer: 'operational', file: 'next-sessions.json', table: 'nextSessions' },
+    otRecords: { layer: 'operational', file: 'ot-records.json', table: 'otRecords' },
+    employeeLeaveRequests: { layer: 'operational', file: 'employee-leave-requests.json', table: 'employeeLeaveRequests' },
+    employeeLedgerAccruals: { layer: 'operational', file: 'employee-ledger-accruals.json', table: 'employeeLedgerAccruals' },
+    employeeLedgerPayments: { layer: 'operational', file: 'employee-ledger-payments.json', table: 'employeeLedgerPayments' },
+    employeeLedgerEntries: { layer: 'operational', file: 'employee-ledger-entries.json', table: 'employeeLedgerEntries' },
+    importHistory: { layer: 'operational', file: 'import-history.json', table: 'importHistory' },
+    communicationWebhookLog: { layer: 'operational', file: 'communication-webhook-log.json', table: 'communicationWebhookLog' },
+    cashDrawerSession: { layer: 'operational', file: 'cash-drawer-session.json', table: 'cashDrawerSession' },
+    systemLogs: { layer: 'operational', file: 'system-logs.json', table: 'systemLogs' },
+    opsKv: { layer: 'operational', file: 'ops-kv.json', table: 'opsKv' },
   };
 
   let _pollTimer = null;
@@ -262,7 +275,13 @@
       if (centerId && global.SqliteOutboxBridge?.enqueue) {
         let payload = null;
         try {
-          payload = global.Repository?.get?.(table);
+          if (table === 'opsKv' && global.OperationalLayer?.exportOpsKvRecords) {
+            payload = global.OperationalLayer.exportOpsKvRecords();
+          } else if (table === 'cashDrawerSession' && global.OperationalLayer?.exportCashDrawerRecords) {
+            payload = global.OperationalLayer.exportCashDrawerRecords();
+          } else {
+            payload = global.Repository?.get?.(table);
+          }
         } catch { /* empty */ }
         const payloadJson = payload == null ? JSON.stringify([]) : JSON.stringify(payload);
         const entry = {
@@ -629,12 +648,19 @@
     branchId = getBranchId(branchId);
     if (!branchId) return { ok: false, blocked: true, reason: 'branch_context_required' };
     const centerId = getCenterId();
-    const paths = global.DriveLayout?.operationalBranchFileCandidates?.(centerId, branchId, table)
-      || [global.OperationalLayer?.drivePathForTable?.(centerId, branchId, table)];
+    const canonical = global.OperationalLayer?.drivePathForTable?.(centerId, branchId, table);
+    const extra = global.DriveLayout?.operationalBranchFileCandidates?.(centerId, branchId, table) || [];
+    const paths = [...new Set([canonical, ...extra].filter(Boolean))];
+    if (!paths.length) return { ok: true, emptyRemote: true, table, skipped: true };
     const dl = global.DriveAdapter?.downloadJsonFirst
       ? await global.DriveAdapter.downloadJsonFirst(paths)
       : await global.DriveAdapter.downloadJson(paths[0]);
-    if (!dl?.ok) return dl;
+    if (!dl?.ok) {
+      if (isBenignSyncError(dl?.error) || dl?.error === 'not_found' || dl?.message === 'missing') {
+        return { ok: true, emptyRemote: true, table, skipped: true };
+      }
+      return dl;
+    }
 
     const localRev = getLocalRevisionForTable(table, branchId);
     const remoteRev = Number(dl.data?.revision || 0);
@@ -673,6 +699,10 @@
       }
     }
     const failed = results.filter((row) => !row.ok);
+    if (failed.length === 0) {
+      try { global.reloadClientStoreFromDb?.(); } catch { /* empty */ }
+      try { global.DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
+    }
     return {
       ok: failed.length === 0,
       branchId,

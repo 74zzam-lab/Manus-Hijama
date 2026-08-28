@@ -132,6 +132,11 @@
       if (typeof global.syncAppGlobals === 'function') global.syncAppGlobals();
     } catch { /* empty */ }
 
+    emit('reconcile_sequences', 0.96);
+    try {
+      global.DocumentSequences?.reconcileDocumentSequences?.();
+    } catch { /* empty */ }
+
     emit('verify_memory', 1);
     const verify = verifyMemoryAgainstSQLite(options.rowCounts);
     if (!verify.ok) {

@@ -116,12 +116,17 @@
     branchId = String(branchId || '').trim();
     if (!branchId || branchId === '*' || branchId === '__ALL__') return;
     const store = loadStore(BRANCH_COUNTERS_STORE);
-    const slice = store[branchId] || { invoiceCounter: 1, clientFileCounter: 1, budget: 0 };
-    global.invoiceCounter = slice.invoiceCounter;
-    global.clientFileCounter = slice.clientFileCounter;
-    global.DB?.set?.('invoiceCounter', slice.invoiceCounter);
-    global.DB?.set?.('clientFileCounter', slice.clientFileCounter);
-    global.DB?.set?.('budget', slice.budget);
+    const slice = store[branchId];
+    // Missing slice must NOT reset counters to 1 — that collides with restored invoices/files.
+    if (slice) {
+      global.invoiceCounter = Math.max(1, Number(slice.invoiceCounter) || 1);
+      global.clientFileCounter = Math.max(1, Number(slice.clientFileCounter) || 1);
+      global.DB?.set?.('invoiceCounter', global.invoiceCounter);
+      global.DB?.set?.('clientFileCounter', global.clientFileCounter);
+      if (slice.budget != null) global.DB?.set?.('budget', slice.budget);
+    }
+    // Sequence lift from document max runs after hydrate/reload, not here:
+    // applying it here would inflate the destination branch using the previous branch's cases.
   }
 
   function filterArrayForView(key, records) {
@@ -361,7 +366,9 @@
     persistActiveBranchSettings,
     persistActiveBranchCounters,
     persistBranchSettings,
+    persistBranchCounters,
     applyBranchSettings,
+    applyBranchCounters,
     sliceKvArrayForBranch,
     mergeKvBranchSlice,
     invalidateViewCaches,

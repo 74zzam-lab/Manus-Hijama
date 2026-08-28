@@ -51,6 +51,8 @@ check(/rehydrating_runtime/.test(coordinatorSrc), 'coordinator defines rehydrati
 check(/rehydrateRuntime/.test(coordinatorSrc), 'coordinator calls rehydrateRuntime');
 check(/restoreRes\.ok === false/.test(coordinatorSrc), 'coordinator aborts on failed local restore');
 check(/restore-runtime-rehydrate/.test(indexSrc), 'index loads restore-runtime-rehydrate');
+check(/document-sequences\.js/.test(indexSrc), 'index loads document-sequences');
+check(/reconcileDocumentSequences/.test(rehydrateSrc), 'rehydrate reconciles document sequences');
 check(/invalidateOperationalCaches/.test(bridgeSrc), 'SqliteBridge exposes invalidateOperationalCaches');
 check(/onRestoreRehydrateRequest/.test(preloadSrc), 'preload restore rehydrate request bridge');
 check(/restoreRehydrateResult/.test(preloadSrc), 'preload restore rehydrate result bridge');

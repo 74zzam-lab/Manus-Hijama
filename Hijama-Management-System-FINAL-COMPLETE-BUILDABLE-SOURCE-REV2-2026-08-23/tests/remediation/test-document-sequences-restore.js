@@ -114,7 +114,9 @@ check(isolationSb.clientFileCounter === 17, 'missing branch slice keeps restored
 check(isolationSb.invoiceCounter !== 1, 'applyIncoming without slice must not rewind invoices to 1');
 
 check(/document-sequences\.js/.test(indexSrc), 'index loads document-sequences.js');
-check(/DocumentSequences\?\.reconcileDocumentSequences/.test(indexSrc), 'reloadClientStoreFromDb reconciles sequences');
+check(/function reloadClientStoreFromDb[\s\S]*?DocumentSequences\?\.reconcileDocumentSequences/.test(indexSrc), 'reloadClientStoreFromDb reconciles sequences');
+check(/function generateInvoice\(options\) \{[\s\S]{0,200}reconcileDocumentSequences/.test(indexSrc),
+  'generateInvoice reconciles sequences before assigning a number');
 check(/completeAuthenticatedLogin[\s\S]{0,1200}DocumentSequences\?\.reconcileDocumentSequences/.test(indexSrc)
   || /rehydrateBranchView\(\);[\s\S]{0,200}DocumentSequences\?\.reconcileDocumentSequences/.test(indexSrc),
   'login rehydrate reconciles sequences before generating invoices');

@@ -20,7 +20,18 @@
     inventoryItems: 'databaseVersion',
     inventorySuppliers: 'databaseVersion',
     inventoryMovements: 'databaseVersion',
-    attachments_meta: 'databaseVersion'
+    attachments_meta: 'databaseVersion',
+    messageLog: 'databaseVersion',
+    activityLog: 'databaseVersion',
+    nextSessions: 'databaseVersion',
+    otRecords: 'databaseVersion',
+    employeeLeaveRequests: 'databaseVersion',
+    employeeLedgerAccruals: 'databaseVersion',
+    employeeLedgerPayments: 'databaseVersion',
+    employeeLedgerEntries: 'databaseVersion',
+    importHistory: 'databaseVersion',
+    communicationWebhookLog: 'databaseVersion',
+    opsKv: 'databaseVersion'
   };
 
   const BRANCH_CONFIG_FIELDS = ['settingsVersion', 'pricesVersion', 'servicesVersion', 'packagesVersion', 'usersVersion'];

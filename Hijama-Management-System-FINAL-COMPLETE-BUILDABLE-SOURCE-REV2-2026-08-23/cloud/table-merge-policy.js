@@ -33,7 +33,17 @@
     inventorySuppliers: { strategy: STRATEGIES.MERGE_FIELDS, label: 'موردو المخزون', caution: 'medium' },
     inventoryMovements: { strategy: STRATEGIES.MOVEMENT_AWARE, label: 'حركات المخزون', caution: 'critical' },
     attachments_meta: { strategy: STRATEGIES.STRICT_CONFLICT, label: 'مرفقات', caution: 'high', protectedFields: ['sha256'] },
-    activityLog: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل النشاط', caution: 'low' }
+    activityLog: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل النشاط', caution: 'low' },
+    messageLog: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل الرسائل', caution: 'low' },
+    nextSessions: { strategy: STRATEGIES.MERGE_FIELDS, label: 'الجلسات القادمة', caution: 'medium' },
+    otRecords: { strategy: STRATEGIES.MERGE_FIELDS, label: 'سجلات الوقت الإضافي', caution: 'medium' },
+    employeeLeaveRequests: { strategy: STRATEGIES.MERGE_FIELDS, label: 'طلبات الإجازة', caution: 'medium' },
+    employeeLedgerAccruals: { strategy: STRATEGIES.STRICT_CONFLICT, label: 'مستحقات الموظفين', caution: 'high' },
+    employeeLedgerPayments: { strategy: STRATEGIES.STRICT_CONFLICT, label: 'صرف مستحقات', caution: 'high' },
+    employeeLedgerEntries: { strategy: STRATEGIES.STRICT_CONFLICT, label: 'دفتر الموظفين', caution: 'high' },
+    importHistory: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل الاستيراد', caution: 'low' },
+    communicationWebhookLog: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل الإرسال', caution: 'low' },
+    opsKv: { strategy: STRATEGIES.MERGE_FIELDS, label: 'عدادات وميزانية', caution: 'high' }
   };
 
   const DEFAULT_POLICY = { strategy: STRATEGIES.MERGE_FIELDS, label: '', caution: 'medium' };

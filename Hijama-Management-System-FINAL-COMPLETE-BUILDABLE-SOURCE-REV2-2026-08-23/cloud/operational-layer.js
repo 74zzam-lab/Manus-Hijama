@@ -16,6 +16,17 @@
     inventorySuppliers: 'inventory-suppliers.json',
     inventoryMovements: 'inventory-movements.json',
     attachments_meta: 'attachments-meta.json',
+    messageLog: 'message-log.json',
+    activityLog: 'activity-log.json',
+    nextSessions: 'next-sessions.json',
+    otRecords: 'ot-records.json',
+    employeeLeaveRequests: 'employee-leave-requests.json',
+    employeeLedgerAccruals: 'employee-ledger-accruals.json',
+    employeeLedgerPayments: 'employee-ledger-payments.json',
+    employeeLedgerEntries: 'employee-ledger-entries.json',
+    importHistory: 'import-history.json',
+    communicationWebhookLog: 'communication-webhook-log.json',
+    opsKv: 'ops-kv.json',
   };
 
   const OPERATIONAL_TABLES = Object.keys(TABLE_FILES);
@@ -35,8 +46,72 @@
       || `${centerId}/Operational/branches/${branchId}/${file}`;
   }
 
+  function readScalar(key, fallback) {
+    try {
+      const fromWin = global[key];
+      if (fromWin != null && fromWin !== '') {
+        const n = Number(fromWin);
+        if (Number.isFinite(n)) return n;
+      }
+    } catch { /* empty */ }
+    try {
+      const fromDb = global.DB?.get?.(key, fallback);
+      const n = Number(fromDb);
+      if (Number.isFinite(n)) return n;
+    } catch { /* empty */ }
+    return fallback;
+  }
+
+  function exportOpsKvRecords() {
+    return [
+      { id: 'invoiceCounter', value: Math.max(1, readScalar('invoiceCounter', 1)) },
+      { id: 'clientFileCounter', value: Math.max(1, readScalar('clientFileCounter', 1)) },
+      { id: 'budget', value: readScalar('budget', 0) },
+    ];
+  }
+
+  function applyOpsKvRecords(records, branchId) {
+    const byId = {};
+    (Array.isArray(records) ? records : []).forEach((r) => {
+      if (r && r.id) byId[r.id] = r;
+    });
+    const invoiceCounter = Math.max(
+      1,
+      readScalar('invoiceCounter', 1),
+      Number(byId.invoiceCounter && byId.invoiceCounter.value) || 1
+    );
+    const clientFileCounter = Math.max(
+      1,
+      readScalar('clientFileCounter', 1),
+      Number(byId.clientFileCounter && byId.clientFileCounter.value) || 1
+    );
+    const budget = Math.max(
+      0,
+      readScalar('budget', 0),
+      Number(byId.budget && byId.budget.value) || 0
+    );
+    global.invoiceCounter = invoiceCounter;
+    global.clientFileCounter = clientFileCounter;
+    try { global.DB?.set?.('invoiceCounter', invoiceCounter); } catch { /* empty */ }
+    try { global.DB?.set?.('clientFileCounter', clientFileCounter); } catch { /* empty */ }
+    try { global.DB?.set?.('budget', budget); } catch { /* empty */ }
+    try { global.BranchDataIsolation?.persistActiveBranchCounters?.(branchId); } catch { /* empty */ }
+    try { global.DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
+    return { invoiceCounter: global.invoiceCounter, clientFileCounter: global.clientFileCounter, budget };
+  }
+
   function exportTable(table, branchId) {
     branchId = branchId || global.BranchScope?.getActiveBranchId?.() || 'BR-MAIN';
+    if (table === 'opsKv') {
+      return {
+        centerId: getCenterId(),
+        branchId,
+        table,
+        exportedAt: new Date().toISOString(),
+        revision: global.Repository?.getRevision?.(table) || 0,
+        records: exportOpsKvRecords(),
+      };
+    }
     const repo = global.Repository;
     let rows = repo?.get?.(table) || global.DB?.get?.(repo?.tableKey?.(table) || table, []);
     if (global.SettingsSplit?.filterRecordsForBranch) {
@@ -61,6 +136,10 @@
     options = options || {};
     branchId = branchId || payload?.branchId || global.BranchScope?.getActiveBranchId?.() || 'BR-MAIN';
     const records = Array.isArray(payload?.records) ? payload.records : (Array.isArray(payload) ? payload : []);
+    if (table === 'opsKv') {
+      const applied = applyOpsKvRecords(records, branchId);
+      return { ok: true, table, branchId, count: records.length, merged: true, opsKv: applied };
+    }
     const repo = global.Repository;
 
     const incoming = records.map(r => {
@@ -137,6 +216,8 @@
     drivePathForTable,
     exportTable,
     importTable,
-    exportAllOperational
+    exportAllOperational,
+    exportOpsKvRecords,
+    applyOpsKvRecords
   };
 })(typeof window !== 'undefined' ? window : globalThis);

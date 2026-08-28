@@ -11052,6 +11052,9 @@ function syncAppGlobals() {
   window.otRecords = otRecords;
   window.activityLog = activityLog;
   window.backupLog = backupLog;
+  window.messageLog = typeof messageLog !== 'undefined' ? messageLog : [];
+  window.invoiceCounter = typeof invoiceCounter !== 'undefined' ? invoiceCounter : 1;
+  window.clientFileCounter = typeof clientFileCounter !== 'undefined' ? clientFileCounter : 1;
 }
 window.getActiveUser = () => currentUser;
 window.isAppAuthed = () => _appAuthed;
@@ -12121,9 +12124,11 @@ function getClientLookupKey(phone, name) {
 }
 
 function generateClientFileNo() {
+  try { DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
   const n = clientFileCounter++;
   DB.set('clientFileCounter', clientFileCounter);
   try { BranchDataIsolation?.persistActiveBranchCounters?.(); } catch { /* empty */ }
+  try { SyncEngine?.schedulePush?.('opsKv'); } catch { /* empty */ }
   return 'CL-' + n.toString().padStart(5, '0');
 }
 
@@ -14964,11 +14969,13 @@ function sendReceiptWhatsApp(caseId) {
 // CASE MANAGEMENT
 // ═══════════════════════════════════════════════
 function generateInvoice(options) {
+  try { DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
   const n = invoiceCounter.toString().padStart(4, '0');
   invoiceCounter++;
   if (!options?.deferPersist) {
     DB.set('invoiceCounter', invoiceCounter);
     try { BranchDataIsolation?.persistActiveBranchCounters?.(); } catch { /* empty */ }
+    try { SyncEngine?.schedulePush?.('opsKv'); } catch { /* empty */ }
   }
   return `TM-${new Date().getFullYear()}-${n}`;
 }
@@ -25704,7 +25711,9 @@ function markExpensePaid(id, payAs) {
 
 function saveBudget() {
   const b = parseFloat(document.getElementById('exp-budget').value) || 0;
-  DB.set('budget', b); refreshExpenses(); notify('✅ تم تحديد الميزانية');
+  DB.set('budget', b);
+  try { SyncEngine?.schedulePush?.('opsKv'); } catch { /* empty */ }
+  refreshExpenses(); notify('✅ تم تحديد الميزانية');
 }
 
 function deleteExpense(id) {

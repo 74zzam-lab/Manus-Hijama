@@ -20,7 +20,18 @@
     inventoryItems: 'inventoryItems',
     inventorySuppliers: 'inventorySuppliers',
     inventoryMovements: 'inventoryMovements',
-    attachments_meta: 'attachments_meta'
+    attachments_meta: 'attachments_meta',
+    messageLog: 'messageLog',
+    activityLog: 'activityLog',
+    nextSessions: 'nextSessions',
+    otRecords: 'otRecords',
+    employeeLeaveRequests: 'employeeLeaveRequests',
+    employeeLedgerAccruals: 'employeeLedgerAccruals',
+    employeeLedgerPayments: 'employeeLedgerPayments',
+    employeeLedgerEntries: 'employeeLedgerEntries',
+    importHistory: 'importHistory',
+    communicationWebhookLog: 'communicationWebhookLog',
+    opsKv: 'opsKv'
   };
 
   const MIGRATION_ALLOW_TOP_KEYS = new Set([
@@ -49,6 +60,14 @@
     'attachments_meta',
     'invoiceCounter',
     'clientFileCounter',
+    'budget',
+    'messageLog',
+    'activityLog',
+    'nextSessions',
+    'otRecords',
+    'employeeLeaveRequests',
+    'importHistory',
+    'communicationWebhookLog',
   ]);
 
   const MIGRATION_DENY_TOP_KEYS = new Set([

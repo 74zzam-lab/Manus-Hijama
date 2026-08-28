@@ -77,11 +77,17 @@
   }
 
   function persistCounters(invoiceCounter, clientFileCounter) {
+    const prevInv = readStoredCounter('invoiceCounter', 1);
+    const prevFile = readStoredCounter('clientFileCounter', 1);
+    const changed = invoiceCounter !== prevInv || clientFileCounter !== prevFile;
     global.invoiceCounter = invoiceCounter;
     global.clientFileCounter = clientFileCounter;
     try { if (global.DB && typeof global.DB.set === 'function') global.DB.set('invoiceCounter', invoiceCounter); } catch { /* empty */ }
     try { if (global.DB && typeof global.DB.set === 'function') global.DB.set('clientFileCounter', clientFileCounter); } catch { /* empty */ }
     try { global.BranchDataIsolation && global.BranchDataIsolation.persistActiveBranchCounters && global.BranchDataIsolation.persistActiveBranchCounters(); } catch { /* empty */ }
+    if (changed) {
+      try { global.SyncEngine && global.SyncEngine.schedulePush && global.SyncEngine.schedulePush('opsKv'); } catch { /* empty */ }
+    }
   }
 
   function collectLiveData(override) {

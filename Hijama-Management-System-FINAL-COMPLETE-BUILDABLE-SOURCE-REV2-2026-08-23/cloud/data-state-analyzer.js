@@ -27,7 +27,8 @@
     'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
     'attachments_meta', 'messageLog', 'activityLog', 'nextSessions', 'otRecords',
     'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
-    'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog', 'opsKv'
+    'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+    'cashDrawerSession', 'systemLogs', 'opsKv'
   ];
 
   const CONFIG_TABLES = ['settings', 'services', 'packages', 'users'];

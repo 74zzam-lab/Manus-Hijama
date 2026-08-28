@@ -25,6 +25,7 @@ const mustSync = [
   'messageLog', 'activityLog', 'nextSessions', 'otRecords',
   'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
   'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+  'systemLogs', 'expenses',
 ];
 mustSync.forEach((t) => {
   check(new RegExp(`'${t}'`).test(repo), `Repository SYNCED_TABLES includes ${t}`);
@@ -33,6 +34,8 @@ mustSync.forEach((t) => {
 });
 
 check(/opsKv: 'ops-kv.json'/.test(ops), 'opsKv pack exported to Drive');
+check(/cashDrawerSession: 'cash-drawer-session.json'/.test(ops), 'cash float pack exported to Drive');
+check(/systemLogs: 'system-logs.json'/.test(ops), 'systemLogs pack exported to Drive');
 check(/schedulePush\('opsKv'\)/.test(seqSrc), 'counter persist schedules opsKv push');
 check(/DocumentSequences\?\.reconcileDocumentSequences/.test(indexSrc)
   && /function generateInvoice/.test(indexSrc), 'generateInvoice reconciles before issuing');
@@ -42,7 +45,9 @@ check(/function generateClientFileNo\(\) \{[\s\S]{0,180}DocumentSequences/.test(
 const localOnlyBlock = synced.match(/const LOCAL_ONLY_KEYS = new Set\(\[([\s\S]*?)\]\)/);
 check(localOnlyBlock && !localOnlyBlock[1].includes('messageLog'), 'messageLog removed from LOCAL_ONLY_KEYS');
 check(localOnlyBlock && localOnlyBlock[1].includes('hardwareLog'), 'hardwareLog remains local-only');
-check(localOnlyBlock && localOnlyBlock[1].includes('cashDrawerSession'), 'cash drawer stays local');
+check(localOnlyBlock && !localOnlyBlock[1].includes('cashDrawerSession'), 'cash float / عهدة is not local-only');
+check(localOnlyBlock && !localOnlyBlock[1].includes('systemLogs'), 'systemLogs is not local-only');
+check(localOnlyBlock && localOnlyBlock[1].includes('communicationQueue'), 'outbound message queue stays on this device');
 check(/emptyRemote: true/.test(engine), 'missing new operational files do not fail branch pull');
 check(/reloadClientStoreFromDb/.test(engine) && /reconcileDocumentSequences/.test(engine),
   'branch pull reloads store and reconciles sequences');
@@ -91,6 +96,25 @@ const applied = sandbox.OperationalLayer.applyOpsKvRecords([
 check(applied.invoiceCounter >= 51, 'opsKv pull takes max(local, remote, documents)');
 check(applied.clientFileCounter >= 51, 'opsKv file counter lifts from documents');
 check(kv.budget === 250, 'budget syncs through opsKv');
+
+check(String(sandbox.OperationalLayer.drivePathForTable('CTR', 'BR-MAIN', 'cashDrawerSession')).includes('cash-drawer-session.json'),
+  'cash float Drive file is cash-drawer-session.json');
+
+const today = new Date().toISOString().split('T')[0];
+sandbox.cashDrawerSession = {
+  date: today,
+  openingFloat: 500,
+  movements: [{ id: 'm-local', amount: 100, reason: 'A', at: '2026-08-28T10:00:00.000Z' }],
+  openedAt: '2026-08-28T09:00:00.000Z',
+};
+kv.cashDrawerSession = sandbox.cashDrawerSession;
+const cashApplied = sandbox.OperationalLayer.applyCashDrawerRecords([
+  { id: `session:${today}`, kind: 'session', date: today, openingFloat: 500, openedAt: '2026-08-28T09:00:00.000Z' },
+  { id: 'm-remote', kind: 'movement', date: today, amount: 80, reason: 'B', at: '2026-08-28T11:00:00.000Z' },
+], 'BR-MAIN');
+const cashIds = (cashApplied.movements || []).map((m) => m.id).sort();
+check(cashIds.includes('m-local') && cashIds.includes('m-remote'), 'cash float pull unions movements from both devices');
+check(Number(cashApplied.openingFloat) === 500, 'cash float opening survives merge');
 
 if (errors.length) {
   console.error('FAIL sync-extended-operational');

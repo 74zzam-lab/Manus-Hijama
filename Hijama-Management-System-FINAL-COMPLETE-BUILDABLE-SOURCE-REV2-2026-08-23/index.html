@@ -23770,6 +23770,14 @@ function reloadClientStoreFromDb() {
   if (typeof messageLog !== 'undefined') messageLog = DB.get('messageLog', messageLog);
   syncAppGlobals();
   try { DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
+  try {
+    const cashPage = document.getElementById('page-cashfloat');
+    if (cashPage && cashPage.classList.contains('active') && typeof refreshCashFloatPage === 'function') refreshCashFloatPage();
+  } catch { /* empty */ }
+  try {
+    const expPage = document.getElementById('page-expenses');
+    if (expPage && expPage.classList.contains('active') && typeof refreshExpenses === 'function') refreshExpenses();
+  } catch { /* empty */ }
 }
 
 function mergeRegistryClientsIntoMap(map, dateMode, registrySource) {

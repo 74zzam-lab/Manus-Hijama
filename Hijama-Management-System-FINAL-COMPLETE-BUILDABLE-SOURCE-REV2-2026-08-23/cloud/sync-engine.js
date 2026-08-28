@@ -40,6 +40,8 @@
     employeeLedgerEntries: { layer: 'operational', file: 'employee-ledger-entries.json', table: 'employeeLedgerEntries' },
     importHistory: { layer: 'operational', file: 'import-history.json', table: 'importHistory' },
     communicationWebhookLog: { layer: 'operational', file: 'communication-webhook-log.json', table: 'communicationWebhookLog' },
+    cashDrawerSession: { layer: 'operational', file: 'cash-drawer-session.json', table: 'cashDrawerSession' },
+    systemLogs: { layer: 'operational', file: 'system-logs.json', table: 'systemLogs' },
     opsKv: { layer: 'operational', file: 'ops-kv.json', table: 'opsKv' },
   };
 
@@ -283,6 +285,8 @@
         try {
           if (table === 'opsKv' && global.OperationalLayer?.exportOpsKvRecords) {
             payload = global.OperationalLayer.exportOpsKvRecords();
+          } else if (table === 'cashDrawerSession' && global.OperationalLayer?.exportCashDrawerRecords) {
+            payload = global.OperationalLayer.exportCashDrawerRecords();
           } else {
             payload = global.Repository?.get?.(table);
           }

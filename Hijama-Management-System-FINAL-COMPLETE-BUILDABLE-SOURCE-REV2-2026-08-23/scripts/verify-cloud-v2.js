@@ -239,8 +239,12 @@ opTables.forEach(t => {
 });
 assert(syncedTables.includes('activityLog'), 'activityLog is cloud-synced');
 assert(syncedTables.includes('messageLog'), 'messageLog is cloud-synced');
+assert(syncedTables.includes('expenses'), 'expenses are cloud-synced');
+assert(syncedTables.includes('systemLogs'), 'systemLogs is cloud-synced');
 assert(opTables.includes('opsKv'), 'opsKv operational pack is synced');
-assert(!syncedTables.includes('cashDrawerSession'), 'cash drawer session stays local to the device');
+assert(opTables.includes('cashDrawerSession'), 'cash float / عهدة is cloud-synced');
+assert(!syncedTables.includes('cashDrawerSession'), 'cash float uses operational pack, not a repo array');
+assert(!context.SyncedWrite.LOCAL_ONLY_KEYS.has('cashDrawerSession'), 'cash float is not local-only');
 assert(!context.SyncedWrite.LOCAL_ONLY_KEYS.has('messageLog'), 'messageLog is not local-only');
 assert(context.SyncedWrite.LOCAL_ONLY_KEYS.has('hardwareLog'), 'hardwareLog stays local');
 

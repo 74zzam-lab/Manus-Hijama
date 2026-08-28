@@ -14,6 +14,7 @@
     'messageLog', 'activityLog', 'nextSessions', 'otRecords',
     'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
     'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+    'systemLogs',
   ];
 
   const SYNCED_SET = new Set(SYNCED_TABLES);
@@ -97,6 +98,7 @@
     if (table === 'employeeLedgerEntries') global.employeeLedgerEntries = data;
     if (table === 'importHistory') global.importHistory = data;
     if (table === 'communicationWebhookLog') global.communicationWebhookLog = data;
+    if (table === 'systemLogs') global.systemLogs = data;
     if (table === 'expenses') global.expenses = data;
     if (table === 'attendance') global.attendance = data;
   }
@@ -140,6 +142,7 @@
           employeeLedgerEntries: 'employeeLedgerEntries',
           importHistory: 'importHistory',
           communicationWebhookLog: 'communicationWebhookLog',
+          systemLogs: 'systemLogs',
           attachments_meta: 'attachments_meta',
         };
         return map[table] || table;
@@ -431,6 +434,7 @@
           'messageLog', 'activityLog', 'nextSessions', 'otRecords',
           'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments',
           'employeeLedgerEntries', 'importHistory', 'communicationWebhookLog',
+          'systemLogs',
           'attachments_meta'].includes(table) ? [] : {};
       }
     };

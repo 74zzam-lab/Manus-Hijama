@@ -31,6 +31,8 @@
     employeeLedgerEntries: 'employeeLedgerEntries',
     importHistory: 'importHistory',
     communicationWebhookLog: 'communicationWebhookLog',
+    systemLogs: 'systemLogs',
+    cashDrawerSession: 'cashDrawerSession',
     opsKv: 'opsKv'
   };
 
@@ -68,6 +70,8 @@
     'employeeLeaveRequests',
     'importHistory',
     'communicationWebhookLog',
+    'systemLogs',
+    'cashDrawerSession',
   ]);
 
   const MIGRATION_DENY_TOP_KEYS = new Set([
@@ -196,7 +200,9 @@
     };
     Object.keys(SYNCED_MAP).forEach(key => {
       if (payload[key] != null) {
-        const rows = Array.isArray(payload[key]) ? payload[key] : (key === 'settings' ? [payload[key]] : []);
+        const rows = Array.isArray(payload[key])
+          ? payload[key]
+          : (key === 'settings' || key === 'cashDrawerSession' ? [payload[key]] : []);
         staged.tables[key] = rows;
       }
     });
@@ -274,6 +280,19 @@
       if (!t) return;
       if (t.hasConflict && !options.force) {
         results.push({ table, ok: false, skipped: true, reason: 'conflict' });
+        return;
+      }
+      if (table === 'cashDrawerSession') {
+        const rows = staged.tables[table] || t.mergePreview || [];
+        const raw = Array.isArray(rows) ? rows[0] : rows;
+        if (raw && typeof raw === 'object' && !raw.kind && (raw.date || Array.isArray(raw.movements))) {
+          global.cashDrawerSession = raw;
+          try { global.DB?.set?.('cashDrawerSession', raw); } catch { /* empty */ }
+          results.push({ table, ok: true, restoredObject: true });
+          return;
+        }
+        const applied = global.OperationalLayer?.applyCashDrawerRecords?.(rows, branchId);
+        results.push({ table, ok: applied != null });
         return;
       }
       const applied = global.RecordMerger?.applyMergeToRepository?.(table, { merged: t.mergePreview }, {

@@ -31,6 +31,8 @@
     employeeLedgerEntries: 'databaseVersion',
     importHistory: 'databaseVersion',
     communicationWebhookLog: 'databaseVersion',
+    cashDrawerSession: 'databaseVersion',
+    systemLogs: 'databaseVersion',
     opsKv: 'databaseVersion'
   };
 

@@ -43,6 +43,8 @@
     employeeLedgerEntries: { strategy: STRATEGIES.STRICT_CONFLICT, label: 'دفتر الموظفين', caution: 'high' },
     importHistory: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل الاستيراد', caution: 'low' },
     communicationWebhookLog: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل الإرسال', caution: 'low' },
+    systemLogs: { strategy: STRATEGIES.APPEND_UNION, label: 'سجل النظام', caution: 'low' },
+    cashDrawerSession: { strategy: STRATEGIES.MERGE_FIELDS, label: 'عهدة الكاش', caution: 'high' },
     opsKv: { strategy: STRATEGIES.MERGE_FIELDS, label: 'عدادات وميزانية', caution: 'high' }
   };
 

@@ -3068,6 +3068,38 @@ tr.client-row-selected { background: #ecfdf5 !important; outline: 2px solid var(
 }
 .client-overdue-controls label { font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
 .client-overdue-controls input { width: 80px; }
+.overdue-alert-card .card-header { align-items: center; }
+.overdue-collapse-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); cursor: pointer; font-size: 14px; line-height: 1;
+  color: var(--text-secondary); flex-shrink: 0;
+}
+.overdue-collapse-btn:hover { background: var(--surface-dark, #f3f3f3); }
+.overdue-alert-summary { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-inline-start: 8px; }
+.overdue-alert-legend { font-size: 12px; color: var(--text-muted); margin: 0 4px 10px; line-height: 1.6; }
+.overdue-group { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.overdue-group-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 12px; cursor: pointer; user-select: none; background: var(--surface, #fafafa);
+}
+.overdue-group-head:hover { background: var(--surface-dark, #f3f3f3); }
+.overdue-group-title { font-weight: 800; font-size: 13px; }
+.overdue-group-count { font-size: 12px; color: var(--text-muted); }
+.overdue-group--pending .overdue-group-head { background: #fff8e1; }
+.overdue-group--followed .overdue-group-head { background: #ecfdf5; }
+.overdue-group.is-collapsed .overdue-group-body { display: none; }
+.overdue-item {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 8px 12px; border-top: 1px solid var(--border);
+}
+.overdue-item-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.overdue-item-meta { font-size: 12px; color: var(--text-muted); }
+.overdue-item-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.overdue-item-details { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.overdue-item.is-collapsed .overdue-item-details { display: none; }
+.overdue-item--pending { background: #fffdf5; }
+.overdue-item--followed { background: #f6fffb; }
+.overdue-empty { color: var(--text-light); font-size: 13px; padding: 6px 2px; }
 .topbar-actions {
   display: flex;
   align-items: center;
@@ -7185,15 +7217,21 @@ body.license-readonly-mode .page-readonly textarea {
       <h2>سجل العملاء</h2>
       <p>متابعة العملاء، التنبيهات، وسجل الزيارات</p>
     </header>
-    <div class="card" style="background:linear-gradient(135deg,#fff8e1,#fff);border:1px solid #f0c040" data-feature="msg_retention">
+    <div class="card overdue-alert-card" id="overdueAlertCard" style="background:linear-gradient(135deg,#fff8e1,#fff);border:1px solid #f0c040" data-feature="msg_retention">
       <div class="card-header" style="flex-wrap:wrap;gap:10px">
-        <div class="card-title">🔔 تنبيه: عملاء لم يزوروا المركز منذ أكثر من <span id="client-overdue-days-label">75</span> يوماً</div>
+        <button type="button" class="overdue-collapse-btn" id="overdueAlertToggle" onclick="toggleOverdueAlertCard()" aria-expanded="true" title="طي / توسيع التنبيه">▾</button>
+        <div class="card-title">🔔 تنبيه: عملاء لم يزوروا المركز منذ أكثر من <span id="client-overdue-days-label">75</span> يوماً
+          <span id="overdueAlertSummary" class="overdue-alert-summary"></span>
+        </div>
         <div class="client-overdue-controls">
           <label for="client-overdue-days">الفترة (يوم):</label>
           <input type="number" class="form-control" id="client-overdue-days" min="1" max="999" value="75" oninput="onClientOverdueDaysChange()">
         </div>
       </div>
-      <div id="overduClientsList" style="font-size:14px;color:var(--text-muted)">لا يوجد تنبيهات حالياً</div>
+      <div id="overdueAlertBody">
+        <p class="overdue-alert-legend">يُحسب التنبيه من <strong>سجل العملاء كاملاً</strong> وليس من الصفحة المعروضة فقط. إرسال رسالة أو تسجيل المتابعة يميّز العميل: لم يزر ولم تتم المتابعة، أو لم يزر وتمت المتابعة وإرسال رسالة.</p>
+        <div id="overduClientsList" style="font-size:14px;color:var(--text-muted)">لا يوجد تنبيهات حالياً</div>
+      </div>
     </div>
     <div class="card">
       <div class="card-header">
@@ -10118,6 +10156,7 @@ async function completeAuthenticatedLogin() {
       await SqliteBridge.rehydrateBranchView();
     }
   } catch { /* empty */ }
+  try { DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
   try {
     if (typeof RestorePostOpen !== 'undefined') {
       await RestorePostOpen.runPostOpenVerification();
@@ -12084,6 +12123,7 @@ function getClientLookupKey(phone, name) {
 function generateClientFileNo() {
   const n = clientFileCounter++;
   DB.set('clientFileCounter', clientFileCounter);
+  try { BranchDataIsolation?.persistActiveBranchCounters?.(); } catch { /* empty */ }
   return 'CL-' + n.toString().padStart(5, '0');
 }
 
@@ -13132,6 +13172,211 @@ function onClientOverdueDaysChange() {
   refreshClientsView();
   refreshDashboardAlerts();
   if (typeof refreshBulkTable === 'function') refreshBulkTable();
+}
+
+let overdueAlertCollapsed = false;
+let overduePendingGroupCollapsed = false;
+let overdueFollowedGroupCollapsed = false;
+const overdueExpandedClientKeys = new Set();
+
+function persistOverdueFollowupMessage({ phone, clientName, clientKey, channel, preview }) {
+  if (typeof logMessage !== 'function') return;
+  logMessage({
+    clientName: clientName || '—',
+    phone: phone || '',
+    type: 'overdue',
+    channel: channel || 'whatsapp',
+    refId: clientKey ? ('overdue_' + clientKey) : ('overdue_' + (phone || Date.now())),
+    clientKey: clientKey || '',
+    preview: preview || 'متابعة عميل لم يزر المركز',
+    status: 'sent'
+  });
+}
+
+function getOverdueFollowupState(client) {
+  const api = typeof OverdueFollowup !== 'undefined' ? OverdueFollowup : null;
+  const log = (typeof messageLog !== 'undefined' && messageLog) || (typeof DB !== 'undefined' ? DB.get('messageLog', []) : []) || [];
+  if (api?.classifyOverdueFollowup) {
+    return api.classifyOverdueFollowup(log, { phone: client?.phone, clientKey: client?.key });
+  }
+  return { followedUp: false, status: 'not_followed', labelAr: 'لم يزر ولم تتم المتابعة', last: null };
+}
+
+function formatFollowupWhen(sentAt) {
+  if (!sentAt) return '';
+  try {
+    return new Date(sentAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' });
+  } catch {
+    return String(sentAt);
+  }
+}
+
+function collectOverdueClients(thresholdDays) {
+  const today = new Date();
+  const threshold = thresholdDays != null ? thresholdDays : getClientOverdueDays();
+  const scopedCases = typeof getUiScopedRecords === 'function' ? getUiScopedRecords(cases) : (cases || []);
+  const scopedRegistry = typeof getUiScopedRecords === 'function' ? getUiScopedRecords(clientsRegistry) : (clientsRegistry || []);
+  const map = {};
+  scopedCases.forEach(c => {
+    if (!c) return;
+    const key = getClientMapKey(c);
+    if (!map[key]) {
+      map[key] = {
+        key, name: c.name, phone: c.phone || '', fileNo: c.fileNo || '',
+        clientRegistryId: c.clientRegistryId || '', visits: [], lastDate: null,
+        nationality: c.nationality || '', patientId: c.patientId || '', registryOnly: false
+      };
+    }
+    map[key].visits.push({ date: c.date, invoice: c.invoice });
+    if (!map[key].lastDate || c.date > map[key].lastDate) map[key].lastDate = c.date;
+    if (c.patientId) map[key].patientId = c.patientId;
+    if (c.fileNo) map[key].fileNo = c.fileNo;
+    if (c.clientRegistryId) map[key].clientRegistryId = c.clientRegistryId;
+  });
+  if (typeof mergeRegistryClientsIntoMap === 'function') mergeRegistryClientsIntoMap(map, 'all', scopedRegistry);
+  const list = [];
+  Object.values(map).forEach(v => {
+    const lastActivity = v.lastDate || v.registryCreatedAt;
+    if (!lastActivity) return;
+    const days = Math.floor((today - new Date(lastActivity)) / 86400000);
+    if (!(days > threshold)) return;
+    const follow = getOverdueFollowupState(v);
+    list.push({
+      ...v,
+      days,
+      lastActivity,
+      followedUp: follow.followedUp,
+      followupStatus: follow.status,
+      followupLabel: follow.labelAr,
+      lastFollowup: follow.last
+    });
+  });
+  list.sort((a, b) => b.days - a.days);
+  return list;
+}
+
+function toggleOverdueAlertCard() {
+  overdueAlertCollapsed = !overdueAlertCollapsed;
+  const body = document.getElementById('overdueAlertBody');
+  const btn = document.getElementById('overdueAlertToggle');
+  if (body) body.style.display = overdueAlertCollapsed ? 'none' : '';
+  if (btn) {
+    btn.textContent = overdueAlertCollapsed ? '▸' : '▾';
+    btn.setAttribute('aria-expanded', overdueAlertCollapsed ? 'false' : 'true');
+  }
+}
+
+function toggleOverdueGroup(which) {
+  if (which === 'pending') overduePendingGroupCollapsed = !overduePendingGroupCollapsed;
+  else overdueFollowedGroupCollapsed = !overdueFollowedGroupCollapsed;
+  renderOverdueClientsPanel(collectOverdueClients());
+}
+
+function toggleOverdueClientRow(key) {
+  const k = String(key || '');
+  if (!k) return;
+  if (overdueExpandedClientKeys.has(k)) overdueExpandedClientKeys.delete(k);
+  else overdueExpandedClientKeys.add(k);
+  renderOverdueClientsPanel(collectOverdueClients());
+}
+
+function sendOverdueFollowupMessage(key, phone, name, lastDate) {
+  let opened = false;
+  if (typeof openQuickClientMessage === 'function') {
+    opened = openQuickClientMessage('overdue', phone, name, lastDate);
+    if (opened === false) opened = openQuickClientMessage('followup', phone, name, lastDate);
+  }
+  if (opened === false && typeof openWhatsApp === 'function') {
+    opened = openWhatsApp(phone, name) === true;
+  }
+  if (!opened) return;
+  persistOverdueFollowupMessage({
+    phone, clientName: name, clientKey: key, channel: 'whatsapp',
+    preview: 'متابعة عميل لم يزر المركز (واتساب)'
+  });
+  notify('💬 تم فتح واتساب وتسجيل أن الرسالة أُرسلت للمتابعة');
+  refreshClientsView(false);
+  if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
+}
+
+function markOverdueClientFollowed(key, phone, name) {
+  persistOverdueFollowupMessage({
+    phone, clientName: name, clientKey: key, channel: 'manual',
+    preview: 'تم تسجيل المتابعة يدوياً'
+  });
+  notify('✅ تم تسجيل المتابعة مع العميل');
+  refreshClientsView(false);
+  if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
+}
+
+function renderOverdueClientItem(v) {
+  const key = String(v.key || v.phone || v.name || '');
+  const expanded = overdueExpandedClientKeys.has(key);
+  const followed = !!v.followedUp;
+  const lastMsgWhen = formatFollowupWhen(v.lastFollowup?.sentAt);
+  const safeKey = encodeURIComponent(key);
+  const safePhone = encodeURIComponent(v.phone || '');
+  const safeName = encodeURIComponent(v.name || '');
+  const safeLast = encodeURIComponent(v.lastDate || v.lastActivity || '');
+  const statusTag = followed
+    ? `<span class="tag tag-green">تم المتابعة وإرسال رسالة</span>`
+    : `<span class="tag tag-red">لم تتم المتابعة</span>`;
+  return `<div class="overdue-item ${followed ? 'overdue-item--followed' : 'overdue-item--pending'}${expanded ? '' : ' is-collapsed'}">
+    <div class="overdue-item-main">
+      <div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="toggleOverdueClientRow(decodeURIComponent('${safeKey}'))" title="طي / توسيع">${expanded ? '▾' : '▸'} <strong>${escHtml(v.name)}</strong></button>
+        <div class="overdue-item-meta">${escHtml(v.phone || 'بدون هاتف')} — آخر زيارة منذ <strong>${v.days}</strong> يوماً — ${statusTag}</div>
+      </div>
+      <div class="overdue-item-actions">
+        ${v.phone ? `<button class="btn btn-accent btn-sm" onclick="sendOverdueFollowupMessage(decodeURIComponent('${safeKey}'),decodeURIComponent('${safePhone}'),decodeURIComponent('${safeName}'),decodeURIComponent('${safeLast}'))">💬 إرسال ومتابعة</button>` : ''}
+        ${followed ? '' : `<button class="btn btn-ghost btn-sm" onclick="markOverdueClientFollowed(decodeURIComponent('${safeKey}'),decodeURIComponent('${safePhone}'),decodeURIComponent('${safeName}'))">✓ تسجيل المتابعة</button>`}
+        ${v.phone ? `<button class="btn btn-ghost btn-sm" onclick="openWhatsAppPromo('${escHtml(v.phone).replace(/'/g, "\\'")}','${escHtml(v.name).replace(/'/g, "\\'")}')">🎉 عرض</button>` : ''}
+      </div>
+    </div>
+    <div class="overdue-item-details">
+      ملف: ${escHtml(v.fileNo || '—')} · آخر زيارة: ${escHtml(v.lastDate || 'لا توجد زيارة')} · الحالة: ${escHtml(v.followupLabel || (followed ? 'لم يزر المركز — تم المتابعة وإرسال رسالة' : 'لم يزر ولم تتم المتابعة'))}${lastMsgWhen ? ` · آخر متابعة: ${escHtml(lastMsgWhen)}` : ''}${v.lastFollowup?.channel === 'manual' ? ' (يدوياً)' : ''}
+    </div>
+  </div>`;
+}
+
+function renderOverdueGroup(kind, title, items, collapsed) {
+  const count = items.length;
+  return `<div class="overdue-group overdue-group--${kind}${collapsed ? ' is-collapsed' : ''}">
+    <div class="overdue-group-head" onclick="toggleOverdueGroup('${kind}')">
+      <span class="overdue-group-title">${collapsed ? '▸' : '▾'} ${title}</span>
+      <span class="overdue-group-count">${count} عميل</span>
+    </div>
+    <div class="overdue-group-body">${count ? items.map(renderOverdueClientItem).join('') : '<div class="overdue-empty">لا يوجد عملاء في هذه المجموعة</div>'}</div>
+  </div>`;
+}
+
+function renderOverdueClientsPanel(overdues) {
+  const overdueEl = document.getElementById('overduClientsList');
+  const summaryEl = document.getElementById('overdueAlertSummary');
+  const body = document.getElementById('overdueAlertBody');
+  const btn = document.getElementById('overdueAlertToggle');
+  if (body) body.style.display = overdueAlertCollapsed ? 'none' : '';
+  if (btn) {
+    btn.textContent = overdueAlertCollapsed ? '▸' : '▾';
+    btn.setAttribute('aria-expanded', overdueAlertCollapsed ? 'false' : 'true');
+  }
+  const list = Array.isArray(overdues) ? overdues : [];
+  const pending = list.filter(v => !v.followedUp);
+  const followed = list.filter(v => v.followedUp);
+  if (summaryEl) {
+    summaryEl.textContent = list.length
+      ? `(${list.length} عميل — ${pending.length} بدون متابعة، ${followed.length} تمت المتابعة)`
+      : '';
+  }
+  if (!overdueEl) return list.length;
+  if (!list.length) {
+    overdueEl.innerHTML = '<div class="overdue-empty">✅ لا يوجد عملاء متأخرون عن الزيارة</div>';
+    return 0;
+  }
+  overdueEl.innerHTML =
+    renderOverdueGroup('pending', 'لم يزر ولم تتم المتابعة', pending, overduePendingGroupCollapsed)
+    + renderOverdueGroup('followed', 'لم يزر المركز — تم المتابعة وإرسال رسالة', followed, overdueFollowedGroupCollapsed);
+  return list.length;
 }
 
 /** Topbar — same client matching engine as صفحة سجل العملاء */
@@ -14677,13 +14922,14 @@ function getWAMessage(clientName) {
 function openWhatsApp(phone, clientName) {
   if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_templates', 'msg_bulk', 'msg_auto'])) {
     notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
-    return;
+    return false;
   }
   const formatted = formatPhoneForWA(phone);
-  if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return; }
+  if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return false; }
   const msg = getWAMessage(clientName);
-  if (!msg) { notify('⚠️ لم يتم كتابة رسالة المتابعة — اذهب لصفحة الرسائل', 'danger'); return; }
+  if (!msg) { notify('⚠️ لم يتم كتابة رسالة المتابعة — اذهب لصفحة الرسائل', 'danger'); return false; }
   window.open(`https://wa.me/${formatted}?text=${msg}`, '_blank');
+  return true;
 }
 
 function sendSMS(phone, clientName) {
@@ -14720,7 +14966,10 @@ function sendReceiptWhatsApp(caseId) {
 function generateInvoice(options) {
   const n = invoiceCounter.toString().padStart(4, '0');
   invoiceCounter++;
-  if (!options?.deferPersist) DB.set('invoiceCounter', invoiceCounter);
+  if (!options?.deferPersist) {
+    DB.set('invoiceCounter', invoiceCounter);
+    try { BranchDataIsolation?.persistActiveBranchCounters?.(); } catch { /* empty */ }
+  }
   return `TM-${new Date().getFullYear()}-${n}`;
 }
 
@@ -16710,6 +16959,8 @@ window.BackupBridge = BackupBridge;
 <script src="cloud/owner-branch-mode.js"></script>
 <script src="cloud/settings-split.js"></script>
 <script src="cloud/branch-data-isolation.js"></script>
+<script src="cloud/document-sequences.js"></script>
+<script src="cloud/overdue-followup.js"></script>
 <script src="cloud/repository.js"></script>
 <script src="cloud/role-policy.js"></script>
 <script src="cloud/operational-rbac-guard.js"></script>
@@ -20065,19 +20316,29 @@ function verifyRestoredDataIntegrity(data) {
   });
   if (orphanCases) warnings.push(`${orphanCases} فاتورة مرتبطة بعميل غير موجود في السجل`);
 
-  const maxInv = caseList.reduce((m, c) => {
-    const n = parseInt(String(c.invoice || '').replace(/\D/g, ''), 10);
-    return Number.isFinite(n) ? Math.max(m, n) : m;
-  }, 0);
+  const seqApi = typeof DocumentSequences !== 'undefined' ? DocumentSequences : null;
+  const parseInvSeq = seqApi?.parseInvoiceSequence || ((inv) => {
+    const m = String(inv || '').trim().match(/(\d+)\s*$/);
+    return m ? (parseInt(m[1], 10) || 0) : 0;
+  });
+  const parseFileSeq = seqApi?.parseClientFileSequence || ((fileNo) => {
+    const m = String(fileNo || '').trim().match(/(\d+)\s*$/);
+    return m ? (parseInt(m[1], 10) || 0) : 0;
+  });
+  const scanned = seqApi?.scanMaxSequences
+    ? seqApi.scanMaxSequences({ cases: caseList, clientsRegistry: registry, otRecords: data.otRecords || [] })
+    : {
+      maxInvoiceSeq: caseList.reduce((m, c) => Math.max(m, parseInvSeq(c.invoice)), 0),
+      maxFileSeq: registry.reduce((m, r) => Math.max(m, parseFileSeq(r.fileNo)), 0),
+    };
   const counter = data.invoiceCounter != null ? data.invoiceCounter : invoiceCounter;
-  if (maxInv && counter < maxInv) warnings.push(`عداد الفواتير (${counter}) أقل من أعلى رقم (${maxInv})`);
-
-  const maxFile = registry.reduce((m, r) => {
-    const n = parseInt(String(r.fileNo || '').replace(/\D/g, ''), 10);
-    return Number.isFinite(n) ? Math.max(m, n) : m;
-  }, 0);
+  if (scanned.maxInvoiceSeq && counter <= scanned.maxInvoiceSeq) {
+    warnings.push(`عداد الفواتير سيُستكمل من آخر رقم مستخدم (${scanned.maxInvoiceSeq}) بدلاً من ${counter}`);
+  }
   const fileCounter = data.clientFileCounter != null ? data.clientFileCounter : clientFileCounter;
-  if (maxFile && fileCounter < maxFile) warnings.push(`عداد الملفات (${fileCounter}) أقل من أعلى رقم ملف (${maxFile})`);
+  if (scanned.maxFileSeq && fileCounter <= scanned.maxFileSeq) {
+    warnings.push(`عداد الملفات سيُستكمل من آخر رقم ملف (${scanned.maxFileSeq}) بدلاً من ${fileCounter}`);
+  }
 
   const expList = data.expenses || expenses || [];
   const budgetVal = data.budget != null ? data.budget : (DB.get('budget', 0) || 0);
@@ -22825,17 +23086,18 @@ function renderMsgStatusTag(status) {
 function openQuickClientMessage(type, phone, clientName, lastDate) {
   if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_templates', 'msg_bulk', 'msg_auto'])) {
     notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
-    return;
+    return false;
   }
   const formatted = formatPhoneForWA(phone);
-  if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return; }
+  if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return false; }
   const body = buildQuickMessageBody(type, clientName, lastDate);
   if (!body) {
     const labels = { followup: 'المتابعة', promo: 'العروض', appointment: 'تذكير الموعد', overdue: 'تنبيه الغياب' };
     notify(`⚠️ لم يتم كتابة رسالة ${labels[type] || type}`, 'danger');
-    return;
+    return false;
   }
   window.open(`https://wa.me/${formatted}?text=${encodeURIComponent(body)}`, '_blank');
+  return true;
 }
 
 function openMsgPreviewModal(type, phone, clientName, lastDate) {
@@ -22868,7 +23130,22 @@ function closeMsgPreviewModal() {
 function confirmMsgPreviewSend() {
   const modal = document.getElementById('msgPreviewModal');
   if (!modal) return;
-  openQuickClientMessage(modal.dataset.type, modal.dataset.phone, modal.dataset.name, modal.dataset.lastdate);
+  const type = modal.dataset.type;
+  const phone = modal.dataset.phone;
+  const name = modal.dataset.name;
+  const lastDate = modal.dataset.lastdate;
+  const opened = openQuickClientMessage(type, phone, name, lastDate);
+  if (opened && (type === 'overdue' || type === 'followup')) {
+    persistOverdueFollowupMessage({
+      phone,
+      clientName: name,
+      clientKey: '',
+      channel: 'whatsapp',
+      preview: type === 'overdue' ? 'متابعة عميل لم يزر المركز (واتساب)' : 'رسالة متابعة (واتساب)'
+    });
+    if (typeof refreshClientsView === 'function') refreshClientsView(false);
+    if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
+  }
   closeMsgPreviewModal();
 }
 
@@ -23483,7 +23760,9 @@ function reloadClientStoreFromDb() {
   if (typeof cashDrawerSession !== 'undefined') cashDrawerSession = DB.get('cashDrawerSession', cashDrawerSession);
   if (typeof employeeLeaveRequests !== 'undefined') employeeLeaveRequests = DB.get('employeeLeaveRequests', employeeLeaveRequests);
   if (typeof importHistory !== 'undefined') importHistory = DB.get('importHistory', importHistory);
+  if (typeof messageLog !== 'undefined') messageLog = DB.get('messageLog', messageLog);
   syncAppGlobals();
+  try { DocumentSequences?.reconcileDocumentSequences?.(); } catch { /* empty */ }
 }
 
 function mergeRegistryClientsIntoMap(map, dateMode, registrySource) {
@@ -23565,9 +23844,13 @@ function refreshClientsView(resetPage) {
   const q = (document.getElementById('client-search')?.value||'').toLowerCase().trim();
   const today = new Date();
   const tbody = document.getElementById('clientsTableBody');
-  const overdueEl = document.getElementById('overduClientsList');
   const threshold = getClientOverdueDays();
-  let overdues = [];
+  const overdues = collectOverdueClients(threshold);
+  const overdueByKey = {};
+  overdues.forEach(v => { overdueByKey[v.key] = v; });
+  renderOverdueClientsPanel(overdues);
+  const dashOverdue = document.getElementById('dash-overdue');
+  if (dashOverdue) dashOverdue.textContent = overdues.length;
 
   // Branch Mode / device lock: never show other branches' clients on this page.
   const scopedCases = getUiScopedRecords(cases);
@@ -23601,6 +23884,11 @@ function refreshClientsView(resetPage) {
   const searchField = document.getElementById('client-search-field')?.value || 'all';
   const entries = Object.entries(filteredMap).filter(([k, v]) => clientEntryMatchesSearch(k, v, q, searchField));
 
+  if (!tbody) {
+    if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
+    return;
+  }
+
   if (!entries.length) {
     tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-light)">لا توجد بيانات للفترة المحددة</td></tr>`;
     renderClientsPagination(0, 0);
@@ -23621,8 +23909,9 @@ function refreshClientsView(resetPage) {
     const hasVisit = !!v.lastDate;
     const lastD = hasVisit ? new Date(v.lastDate) : null;
     const daysSince = hasVisit ? Math.floor((today - lastD) / 86400000) : null;
-    const isOverdue = hasVisit && daysSince > threshold;
-    if (isOverdue) overdues.push({...v, days: daysSince});
+    const overdueInfo = overdueByKey[key];
+    const isOverdue = !!overdueInfo;
+    const followedUp = !!overdueInfo?.followedUp;
 
     const ns = nextSessions.filter(s => s.clientKey===key && new Date(s.date) >= today).sort((a,b)=>a.date.localeCompare(b.date));
     const nextDate  = ns.length ? ns[0].date : null;
@@ -23632,7 +23921,7 @@ function refreshClientsView(resetPage) {
     const statusTag = !hasVisit || v.registryOnly
       ? `<span class="tag tag-blue">ملف بدون زيارات</span>`
       : isOverdue
-      ? `<span class="tag tag-red">⚠️ ${daysSince} يوم</span>`
+      ? `<span class="tag ${followedUp ? 'tag-gold' : 'tag-red'}">⚠️ ${daysSince} يوم — ${followedUp ? 'تم المتابعة' : 'لم تتم المتابعة'}</span>`
       : daysSince > 30 ? `<span class="tag tag-gold">${daysSince} يوم</span>`
       : `<span class="tag tag-green">${daysSince} يوم</span>`;
 
@@ -23678,25 +23967,6 @@ function refreshClientsView(resetPage) {
       </td>
     </tr>`;
   }).join('');
-
-  // Overdue
-  if (overdueEl) {
-    if (overdues.length) {
-      overdueEl.innerHTML = overdues.map(v=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff3cd;border-radius:8px;margin-bottom:6px;border:1px solid #ffc107">
-          <div><strong>${v.name}</strong> — ${v.phone||'بدون هاتف'} — آخر زيارة منذ <strong>${v.days} يوم</strong></div>
-          <div style="display:flex;gap:6px">
-            ${v.phone?`<button class="btn btn-accent btn-sm" onclick="openWhatsApp('${v.phone}','${v.name}')">💬 متابعة</button>`:''}
-            ${v.phone?`<button class="btn btn-ghost btn-sm" onclick="openWhatsAppPromo('${v.phone}','${v.name}')">🎉 عرض</button>`:''}
-          </div>
-        </div>`).join('');
-    } else {
-      overdueEl.innerHTML = '<div style="color:var(--text-light);font-size:13px">✅ لا يوجد عملاء متأخرون عن الزيارة</div>';
-    }
-  }
-
-  const dashOverdue = document.getElementById('dash-overdue');
-  if (dashOverdue) dashOverdue.textContent = overdues.length;
 }
 
 // ═══════════════════════════════════════════════
@@ -24530,10 +24800,13 @@ function deleteNextSession(id) {
 }
 
 function refreshDashboardAlerts() {
-  const map = buildClientsMap();
   const today = new Date();
   const overdueDays = getClientOverdueDays();
-  const overdues = Object.values(map).filter(v => Math.floor((today - new Date(v.lastDate)) / 86400000) > overdueDays);
+  const overdues = typeof collectOverdueClients === 'function'
+    ? collectOverdueClients(overdueDays)
+    : Object.values(buildClientsMap()).filter(v => Math.floor((today - new Date(v.lastDate)) / 86400000) > overdueDays);
+  const pending = overdues.filter(v => !v.followedUp).length;
+  const followed = overdues.length - pending;
   const el = document.getElementById('dash-overdue-alert');
   if (el) {
     if (typeof isFeatureEnabled === 'function' && !isFeatureEnabled('msg_retention')) {
@@ -24541,9 +24814,11 @@ function refreshDashboardAlerts() {
       el.innerHTML = '';
     } else if (overdues.length) {
       el.style.display = '';
-      el.innerHTML = `⚠️ <strong>${overdues.length} عميل</strong> لم يزوروا المركز منذ أكثر من ${overdueDays} يوماً — <button class="btn btn-accent btn-sm" onclick="showPage('clients')">عرض التفاصيل</button>`;
+      el.innerHTML = `⚠️ <strong>${overdues.length} عميل</strong> لم يزوروا المركز منذ أكثر من ${overdueDays} يوماً (${pending} بدون متابعة، ${followed} تمت المتابعة) — <button class="btn btn-accent btn-sm" onclick="showPage('clients')">عرض التفاصيل</button>`;
     } else { el.style.display = 'none'; el.innerHTML = ''; }
   }
+  const dashOverdue = document.getElementById('dash-overdue');
+  if (dashOverdue) dashOverdue.textContent = overdues.length;
 
   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
   const tomStr = formatDateISO(tomorrow);

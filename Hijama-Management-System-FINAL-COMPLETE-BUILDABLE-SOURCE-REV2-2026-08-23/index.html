@@ -1514,6 +1514,18 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 .table-pagination .pg-btn:hover:not(:disabled) { border-color: var(--primary-light); background: var(--surface); }
 .table-pagination .pg-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 .table-pagination .pg-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.list-sort-wrap {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: var(--text-muted); white-space: nowrap;
+}
+.list-sort-wrap select { width: min(230px, 100%); }
+.msg-media-box { margin-top: 10px; padding: 10px; background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; }
+.msg-media-preview { display: none; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.msg-media-preview.has-media { display: flex; }
+.msg-media-preview img, .msg-media-preview video {
+  max-width: 220px; max-height: 140px; border-radius: 10px; border: 1px solid var(--border); object-fit: cover; background: #000;
+}
+.bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
 
 /* Printer picker drawer */
 .printer-picker-row { display: flex; gap: 8px; align-items: stretch; }
@@ -5527,7 +5539,10 @@ body.license-readonly-mode .page-readonly textarea {
     <div class="card">
       <div class="card-header">
         <div class="card-title">📋 سجل اليوم</div>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-daily" onchange="onListSortChange('daily', this.value)"></select>
+          </label>
           <span style="font-size:13px;color:var(--text-muted)" id="todayCount">0 حالة</span>
         <div class="daily-print-toolbar">
           <button class="btn btn-ghost btn-sm" onclick="exportToday()">📥 تصدير CSV</button>
@@ -5619,6 +5634,9 @@ body.license-readonly-mode .page-readonly textarea {
           <option value="session">جلسة</option>
           <option value="package">باقة</option>
         </select>
+        <label class="list-sort-wrap">ترتيب
+          <select class="form-control" id="sort-invoices" onchange="onListSortChange('invoices', this.value)"></select>
+        </label>
         <button class="btn btn-ghost btn-sm" type="button" onclick="clearInvoicesFilters()">✕ مسح</button>
         <span id="invoices-count" style="font-size:13px;color:var(--text-muted)">—</span>
       </div>
@@ -7051,6 +7069,9 @@ body.license-readonly-mode .page-readonly textarea {
             <option value="custom">تاريخ مخصص</option>
           </select>
           <input type="date" class="form-control" id="bk-custom-date" style="width:160px;display:none" oninput="refreshBookingsTable()">
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-bookings" onchange="onListSortChange('bookings', this.value)"></select>
+          </label>
           <button class="btn btn-accent btn-sm" onclick="printBookingsReport()">🖨️ طباعة تقرير الحجوزات</button>
         </div>
       </div>
@@ -7086,6 +7107,11 @@ body.license-readonly-mode .page-readonly textarea {
         <div class="form-group" style="margin-bottom:8px">
           <label class="form-label">تُضاف: «مرحباً [اسم العميل]،»</label>
           <textarea class="form-control" id="msg-promo" rows="3" placeholder="نص العروض"></textarea>
+        </div>
+        <div class="msg-media-box">
+          <label class="form-label">📎 صورة أو فيديو مع العرض</label>
+          <input class="form-control" type="file" id="msg-promo-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
+          <div class="msg-media-preview" id="msg-promo-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('promo')">💾 حفظ</button>
       </div>
@@ -7158,8 +7184,13 @@ body.license-readonly-mode .page-readonly textarea {
       <div class="card-header" style="flex-wrap:wrap;gap:8px">
         <div class="card-title">📤 إرسال للعملاء — إجراءات سريعة</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <button class="btn btn-ghost btn-sm" onclick="selectAllBulk()">تحديد الكل</button>
-          <button class="btn btn-ghost btn-sm" onclick="deselectAllBulk()">إلغاء الكل</button>
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-messages" onchange="onListSortChange('messages', this.value)"></select>
+          </label>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="selectPageBulk()">تحديد الصفحة</button>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="selectAllBulkClients()">تحديد كل العملاء</button>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="deselectAllBulk()">إلغاء الكل</button>
+          <span class="bulk-selected-count" id="bulk-selected-count">محدّد: 0</span>
           <select class="form-control" id="bulk-msg-type" style="width:180px">
             <option value="followup">رسالة المتابعة</option>
             <option value="promo">رسالة العروض</option>
@@ -7179,6 +7210,12 @@ body.license-readonly-mode .page-readonly textarea {
         </div>
         <div id="manual-bulk-list" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
+      <div class="msg-media-box" style="margin:0 0 14px">
+        <label class="form-label">📎 وسائط تُرسل مع الرسالة (صورة أو فيديو)</label>
+        <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
+        <div class="msg-media-preview" id="msg-bulk-media-preview"></div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">مع واتساب عبر الرابط: تُنسخ الصورة للحافظة للصقها (Ctrl+V). مزود واتساب API يرسل المرفق مع الرسالة.</div>
+      </div>
       <div class="table-wrap msg-bulk-table-wrap">
         <table class="table-compact table-reports msg-bulk-table">
           <thead><tr>
@@ -7196,6 +7233,9 @@ body.license-readonly-mode .page-readonly textarea {
     <div class="card" style="margin-bottom:20px">
       <div class="card-header" style="flex-wrap:wrap;gap:8px">
         <div class="card-title">📋 سجل الرسائل المرسلة</div>
+        <label class="list-sort-wrap">ترتيب
+          <select class="form-control" id="sort-messageLog" onchange="onListSortChange('messageLog', this.value)"></select>
+        </label>
         <button class="btn btn-ghost btn-sm" onclick="refreshMessageLog()">🔄 تحديث</button>
         <button class="btn btn-ghost btn-sm" onclick="clearMessageLog()">🗑️ مسح السجل</button>
       </div>
@@ -7256,6 +7296,9 @@ body.license-readonly-mode .page-readonly textarea {
           <input type="date" class="form-control" id="client-date-from" style="width:150px;display:none" oninput="refreshClientsView()">
           <input type="date" class="form-control" id="client-date-to" style="width:150px;display:none" oninput="refreshClientsView()">
           <input type="month" class="form-control" id="client-month" style="width:150px;display:none" oninput="refreshClientsView()">
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-clients" onchange="onListSortChange('clients', this.value)"></select>
+          </label>
           <button class="btn btn-ghost btn-sm admin-only" data-feature="ops_client_file" onclick="printBlankClientFileSheet()" title="نموذج فارغ للتعبئة اليدوية">📄 ملف فارغ</button>
           <button class="btn btn-danger btn-sm admin-only" onclick="promptDeleteClient()" title="مسح كامل بيانات عميل (مدير فقط)" style="white-space:nowrap">🗑️ مسح عميل</button>
         </div>
@@ -7286,6 +7329,9 @@ body.license-readonly-mode .page-readonly textarea {
             <option value="id">رقم الهوية</option>
           </select>
           <button class="btn btn-ghost btn-sm" onclick="clearInvoiceSearch()">✕ مسح</button>
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-invoiceSearch" onchange="onListSortChange('invoiceSearch', this.value)"></select>
+          </label>
           <span id="invoice-search-count" style="font-size:13px;color:var(--text-muted)">—</span>
         </div>
       </div>
@@ -7565,6 +7611,9 @@ body.license-readonly-mode .page-readonly textarea {
             </select>
             <select class="form-control" id="att-filter-month" style="width:140px" onchange="refreshAttLog()"></select>
             <select class="form-control" id="att-filter-year" style="width:100px" onchange="refreshAttLog()"></select>
+            <label class="list-sort-wrap">ترتيب
+              <select class="form-control" id="sort-attendance" onchange="onListSortChange('attendance', this.value)"></select>
+            </label>
           </div>
         </div>
         <div class="table-wrap">
@@ -7772,6 +7821,9 @@ body.license-readonly-mode .page-readonly textarea {
         <div style="display:flex;gap:8px">
           <select class="form-control" id="exp-filter-month" style="width:140px" onchange="refreshExpenses()"></select>
           <select class="form-control" id="exp-filter-year" style="width:100px" onchange="refreshExpenses()"></select>
+          <label class="list-sort-wrap">ترتيب
+            <select class="form-control" id="sort-expenses" onchange="onListSortChange('expenses', this.value)"></select>
+          </label>
           <button class="btn btn-accent btn-sm btn-print-a4" onclick="printExpReport()" title="معاينة كشف المصروفات قبل الطباعة">👁️ معاينة كشف المصروفات</button>
         </div>
       </div>
@@ -8339,6 +8391,7 @@ body.license-readonly-mode .page-readonly textarea {
       <div><strong>النوع:</strong> <span id="msg-preview-type">—</span></div>
     </div>
     <textarea class="form-control" id="msg-preview-body" rows="6" readonly style="font-size:13px;line-height:1.6"></textarea>
+    <div class="msg-media-preview" id="msg-preview-media" style="margin-top:10px"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeMsgPreviewModal()">إلغاء</button>
       <button class="btn btn-primary" id="btn-msg-preview-send" onclick="confirmMsgPreviewSend()">💬 إرسال عبر واتساب</button>
@@ -11202,11 +11255,13 @@ if (document.readyState === 'loading') {
     if (typeof syncThermalPreviewCss === 'function') syncThermalPreviewCss();
     initMessagingKeyboardShortcuts();
     initProductionErrorHandlers();
+    if (typeof ListSort !== 'undefined' && ListSort.fillAllSelects) ListSort.fillAllSelects();
   });
 } else {
   SidebarController.init();
   if (typeof initMessagingKeyboardShortcuts === 'function') initMessagingKeyboardShortcuts();
   if (typeof initProductionErrorHandlers === 'function') initProductionErrorHandlers();
+  if (typeof ListSort !== 'undefined' && ListSort.fillAllSelects) ListSort.fillAllSelects();
 }
 
 function initProductionErrorHandlers() {
@@ -15703,9 +15758,10 @@ function initCloudSyncUiRefresh() {
 }
 
 function refreshDailyTable() {
-  const tc  = todayCases();
+  const tcRaw = todayCases();
   const tbody = document.getElementById('dailyTableBody');
-  document.getElementById('todayCount').textContent = `${fmtDateWithDay(typeof getTodayISO === 'function' ? getTodayISO() : formatDateISO(new Date()))} — ${tc.length} حالة`;
+  document.getElementById('todayCount').textContent = `${fmtDateWithDay(typeof getTodayISO === 'function' ? getTodayISO() : formatDateISO(new Date()))} — ${tcRaw.length} حالة`;
+  const tc = typeof sortClinicList === 'function' ? sortClinicList('daily', tcRaw, caseListSortValue) : tcRaw;
 
   if (!tc.length) {
     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--text-light);padding:30px">
@@ -16967,6 +17023,9 @@ window.BackupBridge = BackupBridge;
 <script src="cloud/settings-split.js"></script>
 <script src="cloud/branch-data-isolation.js"></script>
 <script src="cloud/document-sequences.js"></script>
+<script src="cloud/list-sort.js"></script>
+<script src="cloud/bulk-select.js"></script>
+<script>if (typeof ListSort !== 'undefined' && ListSort.fillAllSelects) ListSort.fillAllSelects();</script>
 <script src="cloud/overdue-followup.js"></script>
 <script src="cloud/repository.js"></script>
 <script src="cloud/role-policy.js"></script>
@@ -17249,16 +17308,23 @@ const MessagingBridge = {
     const formatted = formatPhoneForWA(phone);
     if (!formatted) return { ok: false, reason: 'invalid_phone' };
     const cfg = getCommBridgeConfig();
+    const payloadMeta = { ...(meta || {}) };
+    if (payloadMeta.attachMedia && !payloadMeta.media && typeof getMessageMediaMeta === 'function') {
+      payloadMeta.media = getMessageMediaMeta();
+    }
     if (getCuppingElectron()?.communication?.send) {
-      try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...(meta || {}) }); }
+      try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
     if (getCuppingElectron()?.messaging?.sendWhatsApp) {
-      try { return await getCuppingElectron().messaging.sendWhatsApp(formatted, text, cfg, meta); }
+      try { return await getCuppingElectron().messaging.sendWhatsApp(formatted, text, cfg, payloadMeta); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
+    if (payloadMeta.media && typeof copyMessageMediaToClipboard === 'function') {
+      await copyMessageMediaToClipboard(payloadMeta.media);
+    }
     window.open(`https://wa.me/${formatted}?text=${encodeURIComponent(text)}`, '_blank');
-    return { ok: true, mode: 'browser' };
+    return { ok: true, mode: 'browser', mediaHint: payloadMeta.media ? 'افتح واتساب والصق الصورة (Ctrl+V) إن نُسخت' : '' };
   },
   async sendSMS(phone, text, meta) {
     if (!phone) return { ok: false, reason: 'invalid_phone' };
@@ -22469,13 +22535,21 @@ function refreshAttLog() {
   const paidLabels = { paid: 'مدفوعة', unpaid: 'بدون أجر' };
   const filtered = getUiScopedRecords(attendance).filter(a => {
     return (!filterDoc || a.doctorId===filterDoc) && recordMatchesMonth(a, filterMonth, filterYear);
-  }).sort((a,b)=>b.date.localeCompare(a.date));
-  if (!filtered.length) {
+  });
+  const sortedAtt = typeof sortClinicList === 'function'
+    ? sortClinicList('attendance', filtered, function (a, field) {
+        if (field === 'date') return String(a.date || '');
+        if (field === 'created') return typeof ListSort !== 'undefined' ? ListSort.timeValue(a.createdAt || a.date) : 0;
+        if (field === 'name') return a.doctorName || '';
+        return a.date || '';
+      })
+    : filtered.sort((a,b)=>b.date.localeCompare(a.date));
+  if (!sortedAtt.length) {
     tbody.innerHTML=`<tr><td colspan="14" style="text-align:center;padding:30px;color:var(--text-light)">لا توجد سجلات لهذا الشهر</td></tr>`;
     renderTablePagination('attLogPagination', 1, 0, 0, 'goAttLogPage');
     return;
   }
-  const pg = paginateList(filtered, attLogPage);
+  const pg = paginateList(sortedAtt, attLogPage);
   attLogPage = pg.page;
   renderTablePagination('attLogPagination', pg.page, pg.totalPages, pg.total, 'goAttLogPage');
   tbody.innerHTML = pg.items.map((a,i)=>{
@@ -22978,12 +23052,19 @@ function refreshMessageLog(resetPage) {
   const tbody = document.getElementById('messageLogBody');
   if (!tbody) return;
   messageLog = DB.get('messageLog', messageLog);
-  if (!messageLog.length) {
+  const sortedLog = typeof sortClinicList === 'function'
+    ? sortClinicList('messageLog', messageLog, function (m, field) {
+        if (field === 'sentAt') return typeof ListSort !== 'undefined' ? ListSort.timeValue(m.sentAt) : Date.parse(m.sentAt || 0) || 0;
+        if (field === 'name') return m.clientName || '';
+        return m.sentAt || '';
+      })
+    : messageLog;
+  if (!sortedLog.length) {
     tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل بعد</td></tr>';
     renderTablePagination('messageLogPagination', 1, 0, 0, 'goMessageLogPage');
     return;
   }
-  const pg = paginateList(messageLog, messageLogPage);
+  const pg = paginateList(sortedLog, messageLogPage);
   messageLogPage = pg.page;
   renderTablePagination('messageLogPagination', pg.page, pg.totalPages, pg.total, 'goMessageLogPage');
   const chLabels = { whatsapp: 'واتساب', sms: 'SMS' };
@@ -23080,7 +23161,13 @@ function getClientLastMessage(phone) {
   messageLog = DB.get('messageLog', messageLog || []);
   const norm = (p) => String(p || '').replace(/\D/g, '');
   const target = norm(phone);
-  return messageLog.find(m => norm(m.phone) === target) || null;
+  let best = null;
+  for (let i = 0; i < messageLog.length; i++) {
+    const m = messageLog[i];
+    if (norm(m.phone) !== target) continue;
+    if (!best || String(m.sentAt || '') > String(best.sentAt || '')) best = m;
+  }
+  return best;
 }
 
 function renderMsgStatusTag(status) {
@@ -23090,7 +23177,7 @@ function renderMsgStatusTag(status) {
   return '<span class="tag tag-gray">—</span>';
 }
 
-function openQuickClientMessage(type, phone, clientName, lastDate) {
+async function openQuickClientMessage(type, phone, clientName, lastDate) {
   if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_templates', 'msg_bulk', 'msg_auto'])) {
     notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
     return false;
@@ -23103,8 +23190,10 @@ function openQuickClientMessage(type, phone, clientName, lastDate) {
     notify(`⚠️ لم يتم كتابة رسالة ${labels[type] || type}`, 'danger');
     return false;
   }
-  window.open(`https://wa.me/${formatted}?text=${encodeURIComponent(body)}`, '_blank');
-  return true;
+  const media = typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null;
+  const result = await MessagingBridge.sendWhatsApp(phone, body, { type, attachMedia: true, media: media || undefined });
+  if (result?.mediaHint) notify(result.mediaHint, 'info');
+  return result?.ok !== false;
 }
 
 function openMsgPreviewModal(type, phone, clientName, lastDate) {
@@ -23127,6 +23216,10 @@ function openMsgPreviewModal(type, phone, clientName, lastDate) {
   modal.dataset.phone = phone || '';
   modal.dataset.name = clientName || '';
   modal.dataset.lastdate = lastDate || '';
+  const previewMedia = document.getElementById('msg-preview-media');
+  if (previewMedia && typeof renderMessageMediaPreview === 'function') {
+    renderMessageMediaPreview(previewMedia, typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null);
+  }
   modal.classList.add('open');
 }
 
@@ -23134,14 +23227,14 @@ function closeMsgPreviewModal() {
   document.getElementById('msgPreviewModal')?.classList.remove('open');
 }
 
-function confirmMsgPreviewSend() {
+async function confirmMsgPreviewSend() {
   const modal = document.getElementById('msgPreviewModal');
   if (!modal) return;
   const type = modal.dataset.type;
   const phone = modal.dataset.phone;
   const name = modal.dataset.name;
   const lastDate = modal.dataset.lastdate;
-  const opened = openQuickClientMessage(type, phone, name, lastDate);
+  const opened = await openQuickClientMessage(type, phone, name, lastDate);
   if (opened && (type === 'overdue' || type === 'followup')) {
     persistOverdueFollowupMessage({
       phone,
@@ -23182,16 +23275,44 @@ function renderMsgQuickActions(phone, name, lastDate) {
 // BULK SEND
 // ═══════════════════════════════════════════════
 let manualBulkNumbers = [];
+const bulkSelection = (typeof BulkSelect !== 'undefined' && BulkSelect.createSelection)
+  ? BulkSelect.createSelection()
+  : { add() {}, remove() {}, has() { return false; }, clear() {}, addAll() {}, toggle() {}, values() { return []; }, size() { return 0; }, pageState() { return { all: false, some: false }; } };
+
+function getBulkClientEntries() {
+  const map = buildClientsMap();
+  const entries = Object.entries(map).filter(([, v]) => v.phone);
+  return typeof sortClinicList === 'function'
+    ? sortClinicList('messages', entries, function (entry, field) { return clientEntrySortValue(entry[1], field); })
+    : entries;
+}
+
+function bulkRowFromEntry(entry) {
+  const v = Array.isArray(entry) ? entry[1] : entry;
+  const key = Array.isArray(entry) ? entry[0] : (v && v.key);
+  return { phone: v.phone, name: v.name, lastDate: v.lastDate || '', key };
+}
+
+function updateBulkSelectedCount() {
+  const el = document.getElementById('bulk-selected-count');
+  if (el) el.textContent = `محدّد: ${bulkSelection.size()}`;
+  const master = document.getElementById('bulk-check-all');
+  if (!master) return;
+  const visible = Array.from(document.querySelectorAll('.bulk-check')).map((c) => ({ phone: c.dataset.phone }));
+  const st = bulkSelection.pageState(visible);
+  master.checked = !!st.all;
+  master.indeterminate = !!st.some;
+}
 
 function refreshBulkTable(resetPage) {
   if (resetPage !== false) bulkTablePage = 1;
-  const map = buildClientsMap();
   const tbody = document.getElementById('bulkTableBody');
   if (!tbody) return;
-  const entries = Object.entries(map).filter(([k,v]) => v.phone);
+  const entries = getBulkClientEntries();
   if (!entries.length) {
     tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء بأرقام هاتف</td></tr>';
     renderTablePagination('bulkTablePagination', 1, 0, 0, 'goBulkTablePage');
+    updateBulkSelectedCount();
     return;
   }
   const pg = paginateList(entries, bulkTablePage);
@@ -23206,8 +23327,9 @@ function refreshBulkTable(resetPage) {
     const lastMsgDate = lastMsg?.sentAt ? new Date(lastMsg.sentAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' }) : '—';
     const lastMsgStatus = lastMsg ? renderMsgStatusTag(lastMsg.status) : '<span class="tag tag-gray">لم يُرسل</span>';
     const safeName = (v.name || '').replace(/'/g, "\\'");
+    const checked = bulkSelection.has(v.phone) ? ' checked' : '';
     return `<tr>
-      <td><input type="checkbox" class="bulk-check" data-phone="${v.phone}" data-name="${safeName}" data-lastdate="${v.lastDate||''}"></td>
+      <td><input type="checkbox" class="bulk-check" data-phone="${v.phone}" data-name="${safeName}" data-lastdate="${v.lastDate||''}" data-key="${String(key || '').replace(/"/g, '&quot;')}"${checked} onchange="onBulkRowCheck(this)"></td>
       <td>${v.name}</td><td dir="ltr">${v.phone}</td>
       <td>${v.lastDate||'—'}</td><td>${tag}</td>
       <td dir="ltr" style="font-size:12px">${lastMsgDate}</td>
@@ -23215,6 +23337,46 @@ function refreshBulkTable(resetPage) {
       <td class="msg-actions-col">${renderMsgQuickActions(v.phone, v.name, v.lastDate)}</td>
     </tr>`;
   }).join('');
+  updateBulkSelectedCount();
+}
+
+function onBulkRowCheck(cb) {
+  bulkSelection.toggle({
+    phone: cb.dataset.phone,
+    name: cb.dataset.name,
+    lastDate: cb.dataset.lastdate,
+    key: cb.dataset.key,
+  }, cb.checked);
+  updateBulkSelectedCount();
+}
+
+function selectPageBulk() {
+  document.querySelectorAll('.bulk-check').forEach((c) => {
+    c.checked = true;
+    bulkSelection.add({ phone: c.dataset.phone, name: c.dataset.name, lastDate: c.dataset.lastdate, key: c.dataset.key });
+  });
+  updateBulkSelectedCount();
+}
+
+function selectAllBulkClients() {
+  getBulkClientEntries().forEach((entry) => bulkSelection.add(bulkRowFromEntry(entry)));
+  refreshBulkTable(false);
+  notify(`✅ تم تحديد ${bulkSelection.size()} عميل`);
+}
+
+function selectAllBulk() { selectAllBulkClients(); }
+
+function deselectAllBulk() {
+  bulkSelection.clear();
+  refreshBulkTable(false);
+}
+
+function toggleAllBulk(master) {
+  document.querySelectorAll('.bulk-check').forEach((c) => {
+    c.checked = master.checked;
+    bulkSelection.toggle({ phone: c.dataset.phone, name: c.dataset.name, lastDate: c.dataset.lastdate, key: c.dataset.key }, master.checked);
+  });
+  updateBulkSelectedCount();
 }
 
 function initMessagingKeyboardShortcuts() {
@@ -23241,10 +23403,6 @@ function goBulkTablePage(page) {
   refreshBulkTable(false);
 }
 
-function selectAllBulk()   { document.querySelectorAll('.bulk-check').forEach(c=>c.checked=true); }
-function deselectAllBulk() { document.querySelectorAll('.bulk-check').forEach(c=>c.checked=false); }
-function toggleAllBulk(master) { document.querySelectorAll('.bulk-check').forEach(c=>c.checked=master.checked); }
-
 function addManualBulk() {
   const name  = document.getElementById('bulk-manual-name').value.trim() || 'عميل';
   const phone = document.getElementById('bulk-manual-phone').value.trim();
@@ -23270,12 +23428,9 @@ async function sendBulkWA() {
   const btn = document.getElementById('btn-bulk-send');
   runWithButtonLock(btn, async () => {
     const msgType = document.getElementById('bulk-msg-type').value;
-    const selected = [];
-    document.querySelectorAll('.bulk-check:checked').forEach(c => {
-      selected.push({ phone: c.dataset.phone, name: c.dataset.name, lastDate: c.dataset.lastdate });
-    });
+    const selected = bulkSelection.values().slice();
     manualBulkNumbers.forEach(x => selected.push(x));
-    if (!selected.length) { notify('⚠️ لم تحدد أي عميل', 'danger'); return; }
+    if (!selected.length) { notify('⚠️ لم تحدد أي عميل — استخدم تحديد الصفحة أو تحديد كل العملاء', 'danger'); return; }
     const emptyLabels = {
       followup: '⚠️ لم يتم كتابة رسالة المتابعة — اذهب لصفحة الرسائل',
       promo: '⚠️ لم يتم كتابة رسالة العروض — اذهب لصفحة الرسائل',
@@ -23307,7 +23462,8 @@ async function sendBulkWA() {
         days: String(days)
       });
       if (!body) continue;
-      const result = await MessagingBridge.sendWhatsApp(client.phone, body, { type: msgType, bulk: true });
+      const media = typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null;
+      const result = await MessagingBridge.sendWhatsApp(client.phone, body, { type: msgType, bulk: true, attachMedia: true, media: media || undefined });
       const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
       if (msgStatus === 'queued') queued++;
       else if (msgStatus === 'sent') sent++;
@@ -23317,10 +23473,11 @@ async function sendBulkWA() {
         type: msgType,
         channel: 'whatsapp',
         refId: 'bulk_' + Date.now() + '_' + i,
-        preview: body.slice(0, 80),
+        preview: (media ? '📎 ' : '') + body.slice(0, 80),
         messageId: result?.messageId || result?.message_id || result?.id || null,
         status: msgStatus,
-        detail: result
+        detail: result,
+        hasMedia: !!media
       });
       if (i < selected.length - 1) await new Promise(r => setTimeout(r, delayMs));
     }
@@ -23330,7 +23487,12 @@ async function sendBulkWA() {
     const total = sent + queued;
     if (!total) notify(emptyLabels[msgType] || '⚠️ فشل الإرسال', 'danger');
     else if (queued && !sent) notify(`✅ تمت جدولة ${queued} رسالة في الطابور`);
-    else notify(`✅ تم إرسال/جدولة ${total} رسالة${queued ? ` (${queued} في الطابور)` : ''}`);
+    else {
+      const mediaHint = (typeof getMessageMediaMeta === 'function' && getMessageMediaMeta())
+        ? ' — أرفق الصورة/الفيديو من الحافظة أو المجلد المفتوح'
+        : '';
+      notify(`✅ تم إرسال/جدولة ${total} رسالة${queued ? ` (${queued} في الطابور)` : ''}${mediaHint}`);
+    }
     refreshBulkTable(false);
   });
 }
@@ -23635,11 +23797,12 @@ function buildClientsMap() {
   const map = {};
   getUiScopedRecords(cases).forEach(c => {
     const key = getClientMapKey(c);
-    if (!map[key]) map[key] = { key, name: c.name || '—', phone: c.phone||'', fileNo: c.fileNo||'', clientRegistryId: c.clientRegistryId||'', visits: [], lastDate: null };
+    if (!map[key]) map[key] = { key, name: c.name || '—', phone: c.phone||'', fileNo: c.fileNo||'', clientRegistryId: c.clientRegistryId||'', visits: [], lastDate: null, latestCreatedAt: c.createdAt || '' };
     map[key].visits.push(c.date);
     if (c.fileNo) map[key].fileNo = c.fileNo;
     if (c.clientRegistryId) map[key].clientRegistryId = c.clientRegistryId;
     if (!map[key].lastDate || c.date > map[key].lastDate) map[key].lastDate = c.date;
+    if (c.createdAt && (!map[key].latestCreatedAt || c.createdAt > map[key].latestCreatedAt)) map[key].latestCreatedAt = c.createdAt;
   });
   return map;
 }
@@ -23679,6 +23842,143 @@ function onTablePageSizeChange(size) {
   if (typeof refreshAttLog === 'function') refreshAttLog();
   if (typeof refreshBookingsTable === 'function') refreshBookingsTable();
   if (typeof refreshExpenses === 'function') refreshExpenses();
+}
+
+function sortClinicList(listId, items, getter) {
+  if (typeof ListSort === 'undefined' || typeof ListSort.sortItems !== 'function') return items.slice();
+  return ListSort.sortItems(items, ListSort.get(listId), getter, listId);
+}
+
+function caseListSortValue(c, field) {
+  if (!c) return '';
+  if (field === 'created') return typeof ListSort !== 'undefined' ? ListSort.timeValue(c.createdAt || c.date) : Date.parse(c.createdAt || c.date || 0) || 0;
+  if (field === 'date') return String(c.date || '') + '\t' + String(c.createdAt || '');
+  if (field === 'invoice') return typeof ListSort !== 'undefined' ? ListSort.fileNoValue(c.invoice) : 0;
+  if (field === 'fileNo') return typeof ListSort !== 'undefined' ? ListSort.fileNoValue(c.fileNo) : 0;
+  if (field === 'name') return c.name || '';
+  if (field === 'amount') return Number(c.amount || c.total) || 0;
+  return c.date || '';
+}
+
+function clientEntrySortValue(v, field) {
+  if (!v) return '';
+  if (field === 'lastVisit') return String(v.lastDate || v.registryCreatedAt || '');
+  if (field === 'created') return typeof ListSort !== 'undefined' ? ListSort.timeValue(v.latestCreatedAt || v.registryCreatedAt) : 0;
+  if (field === 'fileNo') return typeof ListSort !== 'undefined' ? ListSort.fileNoValue(v.fileNo) : 0;
+  if (field === 'visits') return (v.visits || []).length;
+  if (field === 'name') return v.name || '';
+  if (field === 'lastMsg') {
+    const m = typeof getClientLastMessage === 'function' ? getClientLastMessage(v.phone) : null;
+    return typeof ListSort !== 'undefined' ? ListSort.timeValue(m && m.sentAt) : 0;
+  }
+  return v.lastDate || '';
+}
+
+function onListSortChange(listId, value) {
+  if (typeof ListSort !== 'undefined') ListSort.set(listId, value);
+  const refreshers = {
+    clients: function () { refreshClientsView(false); },
+    daily: function () { refreshDailyTable(); },
+    invoices: function () { if (typeof refreshInvoicesPage === 'function') refreshInvoicesPage(false); },
+    invoiceSearch: function () { if (typeof performInvoiceSearch === 'function') performInvoiceSearch(false); },
+    messages: function () { if (typeof refreshBulkTable === 'function') refreshBulkTable(false); },
+    messageLog: function () { if (typeof refreshMessageLog === 'function') refreshMessageLog(false); },
+    bookings: function () { if (typeof refreshBookingsTable === 'function') refreshBookingsTable(); },
+    expenses: function () { if (typeof refreshExpenses === 'function') refreshExpenses(); },
+    attendance: function () { if (typeof refreshAttLog === 'function') refreshAttLog(); },
+  };
+  if (refreshers[listId]) refreshers[listId]();
+}
+
+const MESSAGE_MEDIA_MAX_BYTES = 6 * 1024 * 1024;
+let _messageMediaAttachment = null;
+
+function getMessageMediaMeta() {
+  return _messageMediaAttachment || null;
+}
+
+function renderMessageMediaPreview(el, media) {
+  if (!el) return;
+  if (!media || !media.dataUrl) {
+    el.classList.remove('has-media');
+    el.innerHTML = '';
+    return;
+  }
+  el.classList.add('has-media');
+  const isVideo = media.kind === 'video';
+  const tag = isVideo
+    ? `<video src="${media.dataUrl}" controls muted></video>`
+    : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
+  el.innerHTML = `${tag}<div style="font-size:12px;color:var(--text-muted);line-height:1.6">
+    <div><strong>${media.name || 'مرفق'}</strong></div>
+    <div>${isVideo ? 'فيديو' : 'صورة'} — يُرسل مع الرسالة</div>
+    <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia()">إزالة المرفق</button>
+  </div>`;
+}
+
+function refreshMessageMediaPreviews() {
+  const media = getMessageMediaMeta();
+  ['msg-promo-media-preview', 'msg-bulk-media-preview', 'msg-preview-media'].forEach((id) => {
+    renderMessageMediaPreview(document.getElementById(id), media);
+  });
+}
+
+function clearMessageMedia() {
+  _messageMediaAttachment = null;
+  const promo = document.getElementById('msg-promo-media');
+  const bulk = document.getElementById('msg-bulk-media');
+  if (promo) promo.value = '';
+  if (bulk) bulk.value = '';
+  refreshMessageMediaPreviews();
+}
+
+function onMessageMediaPicked(input) {
+  const file = input && input.files && input.files[0];
+  if (!file) { clearMessageMedia(); return; }
+  const mime = file.type || '';
+  const isImage = mime.startsWith('image/');
+  const isVideo = mime.startsWith('video/');
+  if (!isImage && !isVideo) {
+    notify('⚠️ اختر صورة أو فيديو فقط', 'danger');
+    input.value = '';
+    return;
+  }
+  if (file.size > MESSAGE_MEDIA_MAX_BYTES) {
+    notify('⚠️ حجم الملف أكبر من 6 ميغابايت', 'danger');
+    input.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function () {
+    _messageMediaAttachment = {
+      name: file.name,
+      mime: mime || (isVideo ? 'video/mp4' : 'image/jpeg'),
+      kind: isVideo ? 'video' : 'image',
+      dataUrl: String(reader.result || ''),
+      size: file.size,
+    };
+    refreshMessageMediaPreviews();
+    notify(isVideo ? '✅ تم إرفاق الفيديو' : '✅ تم إرفاق الصورة');
+  };
+  reader.onerror = function () {
+    notify('⚠️ تعذر قراءة الملف', 'danger');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function copyMessageMediaToClipboard(media) {
+  const item = media || getMessageMediaMeta();
+  if (!item || !item.dataUrl || item.kind === 'video') return false;
+  try {
+    if (navigator.clipboard && window.ClipboardItem) {
+      const blob = await (await fetch(item.dataUrl)).blob();
+      await navigator.clipboard.write([new ClipboardItem({ [blob.type || item.mime]: blob })]);
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
 }
 
 function paginateList(arr, page, pageSize) {
@@ -23796,6 +24096,7 @@ function mergeRegistryClientsIntoMap(map, dateMode, registrySource) {
       visits: [],
       lastDate: null,
       registryCreatedAt: reg.createdAt || reg.updatedAt || '',
+      latestCreatedAt: reg.createdAt || reg.updatedAt || '',
       nationality: reg.nationality || '',
       patientId: reg.patientId || '',
       registryOnly: true
@@ -23886,9 +24187,10 @@ function refreshClientsView(resetPage) {
   const filteredMap = {};
   filteredCases.forEach(c => {
     const key = getClientMapKey(c);
-    if (!filteredMap[key]) filteredMap[key] = { key, name: c.name, phone: c.phone||'', fileNo: c.fileNo||'', clientRegistryId: c.clientRegistryId||'', visits: [], lastDate: null, nationality: c.nationality||'', patientId: c.patientId||'', registryOnly: false };
+    if (!filteredMap[key]) filteredMap[key] = { key, name: c.name, phone: c.phone||'', fileNo: c.fileNo||'', clientRegistryId: c.clientRegistryId||'', visits: [], lastDate: null, nationality: c.nationality||'', patientId: c.patientId||'', registryOnly: false, latestCreatedAt: c.createdAt || '' };
     filteredMap[key].visits.push({ date: c.date, invoice: c.invoice });
     if (!filteredMap[key].lastDate || c.date > filteredMap[key].lastDate) filteredMap[key].lastDate = c.date;
+    if (c.createdAt && (!filteredMap[key].latestCreatedAt || c.createdAt > filteredMap[key].latestCreatedAt)) filteredMap[key].latestCreatedAt = c.createdAt;
     if (c.patientId) filteredMap[key].patientId = c.patientId;
     if (c.fileNo) filteredMap[key].fileNo = c.fileNo;
     if (c.clientRegistryId) filteredMap[key].clientRegistryId = c.clientRegistryId;
@@ -23910,11 +24212,13 @@ function refreshClientsView(resetPage) {
     return;
   }
 
-  const sorted = entries.sort((a, b) => {
-    const da = a[1].lastDate || a[1].registryCreatedAt || '';
-    const db = b[1].lastDate || b[1].registryCreatedAt || '';
-    return String(db).localeCompare(String(da));
-  });
+  const sorted = typeof sortClinicList === 'function'
+    ? sortClinicList('clients', entries, function (entry, field) { return clientEntrySortValue(entry[1], field); })
+    : entries.sort((a, b) => {
+        const da = a[1].lastDate || a[1].registryCreatedAt || '';
+        const db = b[1].lastDate || b[1].registryCreatedAt || '';
+        return String(db).localeCompare(String(da));
+      });
   const pg = paginateList(sorted, clientsListPage);
   clientsListPage = pg.page;
   renderClientsPagination(pg.total, pg.totalPages);
@@ -25489,7 +25793,7 @@ function refreshBookingsTable() {
   const custEl = document.getElementById('bk-custom-date');
   if (custEl) custEl.style.display = filter==='custom' ? '' : 'none';
 
-  const filtered = getUiScopedRecords(bookings).filter(b => {
+  const filteredRaw = getUiScopedRecords(bookings).filter(b => {
     switch(filter) {
       case 'today':    return b.date === today;
       case 'tomorrow': return b.date === tomStr;
@@ -25498,7 +25802,15 @@ function refreshBookingsTable() {
       case 'custom':   return customDate ? b.date === customDate : true;
       default:         return true; // 'all'
     }
-  }).sort((a,b) => a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+  });
+  const filtered = typeof sortClinicList === 'function'
+    ? sortClinicList('bookings', filteredRaw, function (b, field) {
+        if (field === 'date') return String(b.date || '') + 'T' + String(b.time || '00:00');
+        if (field === 'created') return typeof ListSort !== 'undefined' ? ListSort.timeValue(b.createdAt || b.date) : 0;
+        if (field === 'name') return b.name || b.clientName || '';
+        return String(b.date || '');
+      })
+    : filteredRaw.slice().sort((a,b) => String(b.date).localeCompare(a.date) || String(b.time||'').localeCompare(a.time||''));
 
   const tbody = document.getElementById('bookingsTableBody');
   const statusMap = {
@@ -25775,7 +26087,14 @@ function refreshExpenses() {
     renderTablePagination('expPagination', 1, 0, 0, 'goExpensesPage');
     return;
   }
-  const sortedExp = me.sort((a, b) => b.date.localeCompare(a.date));
+  const sortedExp = typeof sortClinicList === 'function'
+    ? sortClinicList('expenses', me, function (e, field) {
+        if (field === 'date') return String(e.date || '');
+        if (field === 'created') return typeof ListSort !== 'undefined' ? ListSort.timeValue(e.createdAt || e.date) : 0;
+        if (field === 'amount') return Number(e.amount) || 0;
+        return e.date || '';
+      })
+    : me.slice().sort((a, b) => b.date.localeCompare(a.date));
   const pg = paginateList(sortedExp, expensesPage);
   expensesPage = pg.page;
   renderTablePagination('expPagination', pg.page, pg.totalPages, pg.total, 'goExpensesPage');

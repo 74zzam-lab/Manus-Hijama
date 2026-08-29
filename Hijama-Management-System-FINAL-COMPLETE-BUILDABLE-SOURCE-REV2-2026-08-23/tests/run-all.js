@@ -205,6 +205,7 @@ const remediation = [
   ['tests/remediation/test-document-sequences-restore.js', 'remediation:document-sequences-restore'],
   ['tests/remediation/test-overdue-clients-full-registry.js', 'remediation:overdue-clients-full-registry'],
   ['tests/remediation/test-sync-extended-operational.js', 'remediation:sync-extended-operational'],
+  ['tests/remediation/test-list-sort-and-bulk-select.js', 'remediation:list-sort-and-bulk-select'],
 ];
 
 const existing = [

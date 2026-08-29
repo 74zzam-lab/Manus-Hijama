@@ -73,7 +73,7 @@
       return (c.name || '').toLowerCase().includes(f.q) || (c.phone || '').includes(f.q) ||
         (c.fileNo || '').toLowerCase().includes(f.q) || String(c.invoice ?? '').toLowerCase().includes(f.q) ||
         (c.patientId || '').includes(f.q);
-    }).sort((a, b) => b.date.localeCompare(a.date) || String(b.invoice).localeCompare(String(a.invoice)));
+    });
   }
 
   function paymentLabel(c) {
@@ -130,7 +130,16 @@
     if (!body) return;
 
     const all = typeof cases !== 'undefined' ? cases : [];
-    const filtered = filterInvoices(all);
+    const filteredRaw = filterInvoices(all);
+    const filtered = typeof sortClinicList === 'function'
+      ? sortClinicList('invoices', filteredRaw, typeof caseListSortValue === 'function' ? caseListSortValue : function (c, field) {
+          if (field === 'invoice') return String(c.invoice || '');
+          if (field === 'fileNo') return String(c.fileNo || '');
+          if (field === 'name') return c.name || '';
+          if (field === 'created') return Date.parse(c.createdAt || c.date || 0) || 0;
+          return c.date || '';
+        })
+      : filteredRaw.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.invoice).localeCompare(String(a.invoice)));
     const totalAmount = filtered.reduce((s, c) => s + (c.total || 0), 0);
 
     if (countEl) countEl.textContent = `${filtered.length} فاتورة`;

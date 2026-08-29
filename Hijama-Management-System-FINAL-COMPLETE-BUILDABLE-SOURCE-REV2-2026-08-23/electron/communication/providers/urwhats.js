@@ -34,6 +34,11 @@ module.exports = {
         from: cfg.senderId,
         template: payload.template,
         variables: payload.variables,
+        ...(payload.media && !payload.media.omitted ? {
+          media: payload.media.dataUrl,
+          media_type: payload.media.kind,
+          filename: payload.media.name,
+        } : {}),
       },
     });
     if (!res.ok) return { ok: false, reason: 'urwhats_error', status: res.status, detail: res.text?.slice(0, 200) };

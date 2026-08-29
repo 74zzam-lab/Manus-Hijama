@@ -38,6 +38,16 @@ module.exports = {
       template: payload.template,
       variables: payload.variables || {},
     };
+    if (payload.media && !payload.media.omitted) {
+      body.media = {
+        mime: payload.media.mime,
+        filename: payload.media.name,
+        kind: payload.media.kind,
+        data: payload.media.dataUrl,
+      };
+      body.media_type = payload.media.kind;
+      body.filename = payload.media.name;
+    }
     const res = await requestJson(url, {
       method: 'POST',
       headers: buildHeaders(cfg),

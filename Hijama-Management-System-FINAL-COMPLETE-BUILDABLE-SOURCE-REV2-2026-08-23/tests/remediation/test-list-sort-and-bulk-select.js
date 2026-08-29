@@ -76,7 +76,11 @@ check(/id="sort-invoices"/.test(indexSrc) && /id="sort-messages"/.test(indexSrc)
 check(/id="sort-messageLog"/.test(indexSrc), 'message log has sort control');
 check(/onMessageMediaPicked/.test(indexSrc) && /accept="image\/\*,video\/\*"/.test(indexSrc), 'message media file picker');
 check(/getMessageMediaMeta/.test(indexSrc) && /attachMedia/.test(indexSrc), 'send path attaches media meta');
-check(/msg-promo-media/.test(indexSrc) && /msg-bulk-media/.test(indexSrc), 'promo and bulk send have media inputs');
+check(/msg-shared-media/.test(indexSrc) && /msg-bulk-media/.test(indexSrc), 'shared media applies to all message types and bulk send');
+check(/كل أنواع الرسائل/.test(indexSrc), 'media UI states it applies to all message types');
+check(/sendWhatsApp\(phone, body, \{\s*type,\s*refId,\s*attachMedia: true/.test(indexSrc)
+  || /attachMedia: true/.test(indexSrc.slice(indexSrc.indexOf('async function sendClientMessage'), indexSrc.indexOf('async function sendClientMessage') + 900)),
+  'automated send attaches media for every message type');
 check(/sortClinicList\('invoices'/.test(invoicesSrc), 'invoices page uses shared list sort');
 
 check(/const PUSH_DEBOUNCE_MS = 2000/.test(engineSrc), 'live push debounce is 2 seconds');

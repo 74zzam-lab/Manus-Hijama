@@ -14,11 +14,35 @@
     return null;
   }
 
+  function ensureRestoreBackupCoverage(gate) {
+    if (!gate || gate.missing || !gate.verified || gate.failed) return null;
+    if (!global.BackupCoverage?.markRestored) return null;
+    const existing = global.BackupCoverage.loadCoverage?.();
+    if (existing && existing.source === 'restore' && existing.full) return existing;
+    try {
+      return global.BackupCoverage.markRestored({
+        at: new Date().toISOString(),
+        snapshotAt: gate.createdAt || gate.backupAt || gate.at || null,
+        backupId: gate.backupId || '',
+        branchId: global.BranchScope?.getActiveBranchId?.() || '',
+        centerId: global.CenterId?.getStoredCenterId?.() || '',
+        fromCloud: !!gate.fromCloud,
+      }, {
+        logBackupEntry: typeof global.logBackupEntry === 'function' ? global.logBackupEntry : null,
+        registerBackup: typeof global.registerBackup === 'function' ? global.registerBackup : null,
+      });
+    } catch {
+      return null;
+    }
+  }
+
   async function runPostOpenVerification(options) {
     options = options || {};
     if (typeof sessionStorage !== 'undefined') {
       try {
         if (sessionStorage.getItem(GATE_POLL_KEY) === '1' && !options.force) {
+          const gateEarly = options.gate || (await readRestoreGateFromMain());
+          ensureRestoreBackupCoverage(gateEarly);
           return { ok: true, skipped: true, reason: 'already_verified_session' };
         }
       } catch { /* empty */ }
@@ -28,6 +52,7 @@
     if (!gate || gate.missing || !gate.verified || gate.failed) {
       return { ok: true, skipped: true, reason: 'no_verified_restore_gate' };
     }
+    ensureRestoreBackupCoverage(gate);
     if (gate.postOpenComplete === true && !options.force) {
       return { ok: true, skipped: true, reason: 'post_open_already_complete' };
     }
@@ -113,6 +138,7 @@
       }
 
       try { sessionStorage.setItem(GATE_POLL_KEY, '1'); } catch { /* empty */ }
+      ensureRestoreBackupCoverage(gate);
 
       if (typeof global.refreshAllBranchScopedViews === 'function') {
         global.refreshAllBranchScopedViews({ fromRestore: true });

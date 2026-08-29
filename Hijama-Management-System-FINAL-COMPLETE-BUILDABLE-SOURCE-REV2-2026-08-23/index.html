@@ -7108,11 +7108,6 @@ body.license-readonly-mode .page-readonly textarea {
           <label class="form-label">تُضاف: «مرحباً [اسم العميل]،»</label>
           <textarea class="form-control" id="msg-promo" rows="3" placeholder="نص العروض"></textarea>
         </div>
-        <div class="msg-media-box">
-          <label class="form-label">📎 صورة أو فيديو مع العرض</label>
-          <input class="form-control" type="file" id="msg-promo-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
-          <div class="msg-media-preview" id="msg-promo-media-preview"></div>
-        </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('promo')">💾 حفظ</button>
       </div>
       <div class="card msg-template-card">
@@ -7130,6 +7125,16 @@ body.license-readonly-mode .page-readonly textarea {
           <textarea class="form-control" id="msg-overdue" rows="3" placeholder="نص تنبيه الغياب"></textarea>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('overdue')">💾 حفظ</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
+      <div class="card-header"><div class="card-title">📎 وسائط الرسائل — كل الأنواع</div></div>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px;line-height:1.7">تُرفق الصورة أو الفيديو مع <strong>كل أنواع الرسائل</strong>: متابعة، عروض، تذكير موعد، وتنبيه الغياب — من القوالب والإرسال الجماعي والإجراءات السريعة والإرسال التلقائي.</p>
+      <div class="msg-media-box" style="margin:0">
+        <label class="form-label">صورة أو فيديو</label>
+        <input class="form-control" type="file" id="msg-shared-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
+        <div class="msg-media-preview" id="msg-shared-media-preview"></div>
       </div>
     </div>
 
@@ -7211,7 +7216,7 @@ body.license-readonly-mode .page-readonly textarea {
         <div id="manual-bulk-list" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
       <div class="msg-media-box" style="margin:0 0 14px">
-        <label class="form-label">📎 وسائط تُرسل مع الرسالة (صورة أو فيديو)</label>
+        <label class="form-label">📎 وسائط تُرسل مع الرسالة المحددة (متابعة / عروض / موعد / غياب)</label>
         <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
         <div class="msg-media-preview" id="msg-bulk-media-preview"></div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:6px">مع واتساب عبر الرابط: تُنسخ الصورة للحافظة للصقها (Ctrl+V). مزود واتساب API يرسل المرفق مع الرسالة.</div>
@@ -17010,6 +17015,7 @@ window.BackupBridge = BackupBridge;
 <script src="cloud/branch-switch-forms.js"></script>
 <script src="cloud/restore-reconciliation.js"></script>
 <script src="cloud/restore-post-open.js"></script>
+<script src="cloud/backup-coverage.js"></script>
 <script src="cloud/legacy-branch-migration.js"></script>
 <script src="cloud/legacy-branch-migration-ui.js"></script>
 <script src="cloud/drive-path-resolver.js"></script>
@@ -20317,7 +20323,22 @@ function refreshAfterBackupRestore(data, res) {
   initBackupUI();
   const summary = imported.length ? imported.join(' | ') : (res?.localOnly?.join?.(' | ') || 'بيانات متزامنة');
   const migrationReport = data?.__migrationImportReport || res?.merged?.report || null;
-  logBackupEntry('success', `استيراد: ${summary}`, 'migration_import');
+  try {
+    if (typeof BackupCoverage !== 'undefined' && BackupCoverage.markRestored) {
+      BackupCoverage.markRestored({
+        at: new Date().toISOString(),
+        snapshotAt: data?._meta?.date || data?.date || null,
+        branchId: data?._meta?.branchId || '',
+        centerId: data?._meta?.centerId || '',
+      }, {
+        logBackupEntry: typeof logBackupEntry === 'function' ? logBackupEntry : null,
+        registerBackup: typeof registerBackup === 'function' ? registerBackup : null,
+      });
+    }
+  } catch { /* empty */ }
+  if (!backupLog.some((e) => e.trigger === 'restore' && e.status === 'success')) {
+    logBackupEntry('success', `استيراد: ${summary}`, 'migration_import');
+  }
   if (typeof logAudit === 'function') logAudit('BACKUP_IMPORTED', `استيراد: ${summary}`, { items: imported, via: 'restore_staging' });
   const integrity = verifyRestoredDataIntegrity(data);
   const credentialSkip = migrationReport?.skipped?.find((s) => s.key === 'users.credentials');
@@ -22880,7 +22901,12 @@ async function sendClientMessage({ phone, clientName, type, refId, text, cooldow
   const channel = resolveMessagingChannel();
   const result = channel === 'sms'
     ? await MessagingBridge.sendSMS(phone, body, { type, refId })
-    : await MessagingBridge.sendWhatsApp(phone, body, { type, refId });
+    : await MessagingBridge.sendWhatsApp(phone, body, {
+      type,
+      refId,
+      attachMedia: true,
+      media: (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null) || undefined
+    });
   const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
   logMessage({
     clientName: clientName || '—',
@@ -23918,17 +23944,17 @@ function renderMessageMediaPreview(el, media) {
 
 function refreshMessageMediaPreviews() {
   const media = getMessageMediaMeta();
-  ['msg-promo-media-preview', 'msg-bulk-media-preview', 'msg-preview-media'].forEach((id) => {
+  ['msg-shared-media-preview', 'msg-bulk-media-preview', 'msg-preview-media'].forEach((id) => {
     renderMessageMediaPreview(document.getElementById(id), media);
   });
 }
 
 function clearMessageMedia() {
   _messageMediaAttachment = null;
-  const promo = document.getElementById('msg-promo-media');
-  const bulk = document.getElementById('msg-bulk-media');
-  if (promo) promo.value = '';
-  if (bulk) bulk.value = '';
+  ['msg-shared-media', 'msg-bulk-media'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   refreshMessageMediaPreviews();
 }
 

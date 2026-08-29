@@ -40,6 +40,9 @@
   }
 
   function isDue() {
+    if (global.BackupCoverage?.shouldSkipSameDayAutoBackup?.({
+      coverage: global.BackupCoverage.loadCoverage?.(),
+    })) return false;
     const last = global.settings?.cloudV2?.lastAutoBackupDate;
     if (last === todayKey()) return false;
     const h = new Date().getHours();

@@ -77,6 +77,9 @@ check(/id="sort-messageLog"/.test(indexSrc), 'message log has sort control');
 check(/onMessageMediaPicked/.test(indexSrc) && /accept="image\/\*,video\/\*"/.test(indexSrc), 'message media file picker');
 check(/getMessageMediaMeta/.test(indexSrc) && /attachMedia/.test(indexSrc), 'send path attaches media meta');
 check(/msg-shared-media/.test(indexSrc) && /msg-bulk-media/.test(indexSrc), 'shared media applies to all message types and bulk send');
+check(/msg-followup-media/.test(indexSrc) && /msg-promo-media/.test(indexSrc) && /msg-appointment-media/.test(indexSrc) && /msg-overdue-media/.test(indexSrc), 'each message type has its own media picker');
+check(/getMessageMediaList/.test(indexSrc), 'send path collects shared + type-specific media');
+check(/id="page-followup"/.test(indexSrc) && /متابعة العملاء/.test(indexSrc), 'follow-up workspace page exists');
 check(/كل أنواع الرسائل/.test(indexSrc), 'media UI states it applies to all message types');
 check(/sendWhatsApp\(phone, body, \{\s*type,\s*refId,\s*attachMedia: true/.test(indexSrc)
   || /attachMedia: true/.test(indexSrc.slice(indexSrc.indexOf('async function sendClientMessage'), indexSrc.indexOf('async function sendClientMessage') + 900)),
@@ -91,6 +94,7 @@ check(/emptyRemote: true/.test(engineSrc), 'missing remote ops files do not fail
 check(/function normalizeMedia/.test(gatewaySrc), 'gateway normalizes message media');
 check(/stageMediaForDeeplink/.test(gatewaySrc), 'deeplink path stages image/video for WhatsApp paste');
 check(/if \(!message && !media\)/.test(gatewaySrc), 'media-only messages are allowed');
+check(/function collectMediaItems/.test(gatewaySrc) && /mediaList/.test(gatewaySrc), 'gateway sends shared then type-specific media');
 check(/payload\.media/.test(fs.readFileSync(path.join(root, 'electron/communication/providers/custom.js'), 'utf8')),
   'custom provider forwards media');
 

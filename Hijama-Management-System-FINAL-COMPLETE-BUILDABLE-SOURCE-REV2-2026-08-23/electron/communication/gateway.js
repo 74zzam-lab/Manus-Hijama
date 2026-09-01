@@ -48,6 +48,25 @@ function queueableMedia(media) {
   return media;
 }
 
+function collectMediaItems(payload) {
+  const items = [];
+  const seen = new Set();
+  function push(raw) {
+    const n = normalizeMedia(raw);
+    if (!n) return;
+    const key = String(n.dataUrl || n.path || n.name || '').slice(0, 160);
+    if (key && seen.has(key)) return;
+    if (key) seen.add(key);
+    items.push(n);
+  }
+  if (payload && Array.isArray(payload.mediaList) && payload.mediaList.length) {
+    payload.mediaList.forEach(push);
+  } else if (payload) {
+    push(payload.media);
+  }
+  return items;
+}
+
 async function stageMediaForDeeplink(media) {
   const out = { copied: false, stagedPath: '', hint: '' };
   if (!media) return out;
@@ -127,16 +146,15 @@ async function testProvider(storedProvider) {
   return adapter.testConnection(cfg);
 }
 
-async function sendMessage(config, payload) {
-  runtimeConfig = config;
+async function sendOneMessage(config, payload, media) {
   const channel = payload.channel || 'whatsapp';
-  const phone = normalizePhone(payload.phone);
+  const phone = payload.phone;
   const message = payload.message || '';
-  const media = normalizeMedia(payload.media);
-  if (!phone) return { ok: false, reason: 'invalid_phone' };
   if (!message && !media) return { ok: false, reason: 'empty_message' };
 
   const sendPayload = { ...payload, phone, message, channel, media: media || undefined };
+  delete sendPayload.mediaList;
+  delete sendPayload._mediaPart;
 
   const provider = findProviderForChannel(config, channel);
   if (provider && provider.slug !== 'manual' && (provider.baseUrl || provider.apiKey)) {
@@ -180,6 +198,74 @@ async function sendMessage(config, payload) {
     mediaPath: staged.stagedPath || '',
     mediaHint: staged.hint || '',
   };
+}
+
+async function sendMessage(config, payload) {
+  runtimeConfig = config;
+  const channel = payload.channel || 'whatsapp';
+  const phone = normalizePhone(payload.phone);
+  const message = payload.message || '';
+  if (!phone) return { ok: false, reason: 'invalid_phone' };
+
+  const mediaItems = collectMediaItems(payload);
+  const media = mediaItems[0] || null;
+  if (!message && !media) return { ok: false, reason: 'empty_message' };
+
+  const provider = findProviderForChannel(config, channel);
+  const isApi = !!(provider && provider.slug !== 'manual' && (provider.baseUrl || provider.apiKey));
+  const base = { ...payload, phone, message, channel };
+
+  if (mediaItems.length > 1 && payload._mediaPart == null && isApi) {
+    const results = [];
+    let last = { ok: true, mode: 'api' };
+    for (let i = 0; i < mediaItems.length; i++) {
+      const isLast = i === mediaItems.length - 1;
+      last = await sendOneMessage(config, {
+        ...base,
+        media: mediaItems[i],
+        message: isLast ? message : '',
+        _mediaPart: i,
+      }, mediaItems[i]);
+      results.push(last);
+      if (i < mediaItems.length - 1) await new Promise((r) => setTimeout(r, 400));
+    }
+    return {
+      ...last,
+      ok: results.every((r) => r && r.ok !== false),
+      mediaParts: mediaItems.length,
+      parts: results,
+    };
+  }
+
+  if (mediaItems.length > 1 && !isApi) {
+    const hints = [];
+    let copied = false;
+    let stagedPath = '';
+    for (const item of mediaItems) {
+      const staged = await stageMediaForDeeplink(item);
+      if (staged.copied) copied = true;
+      if (staged.stagedPath) stagedPath = staged.stagedPath;
+      if (staged.hint) hints.push(staged.hint);
+    }
+    if (channel === 'sms') {
+      await shell.openExternal(`sms:${phone}?body=${encodeURIComponent(message)}`);
+      return { ok: true, channel: 'sms', mode: 'deeplink', phone, mediaAttached: false };
+    }
+    await shell.openExternal(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+    return {
+      ok: true,
+      channel: 'whatsapp',
+      mode: 'deeplink',
+      phone,
+      mediaCopied: copied,
+      mediaPath: stagedPath,
+      mediaParts: mediaItems.length,
+      mediaHint: hints.filter(Boolean).join(' — ')
+        || 'مرفقان: الصورة المشتركة ثم مرفق النوع — الصق/أرفق من المجلد المفتوح',
+    };
+  }
+
+  return sendOneMessage(config, base, media);
 }
 
 async function processQueueNow(config) {
@@ -243,4 +329,5 @@ module.exports = {
   clearQueue: queue.clearQueue,
   enqueue: queue.enqueue,
   normalizeMedia,
+  collectMediaItems,
 };

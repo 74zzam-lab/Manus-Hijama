@@ -119,7 +119,7 @@ const PAGE_ACCESS_MODULES = [
   { id: 'bookings', label: 'الحجوزات', view: 'bookings.view', edit: 'bookings.edit', pages: ['bookings'] },
   { id: 'clients', label: 'سجل العملاء', view: 'clients.view', edit: 'clients.edit', pages: ['clients'] },
   { id: 'invoices', label: 'إدارة الفواتير', view: 'cases.view', edit: 'cases.edit', pages: ['invoices'] },
-  { id: 'messages', label: 'رسائل العملاء', view: 'messages.view', edit: 'messages.edit', pages: ['messages'] },
+  { id: 'messages', label: 'رسائل العملاء', view: 'messages.view', edit: 'messages.edit', pages: ['messages', 'followup'] },
   { id: 'reports', label: 'التقارير', view: 'reports.view', edit: 'reports.print', pages: ['reports'] },
   { id: 'expenses', label: 'النفقات والمصاريف', view: 'expenses.view', edit: 'expenses.edit', pages: ['expenses'] },
   { id: 'attendance', label: 'الحضور والانصراف', view: 'attendance.view', edit: 'attendance.edit', pages: ['attendance'] },
@@ -136,7 +136,7 @@ const PAGE_ACCESS_MODULES = [
 
 const PAGE_EDIT_PERMISSIONS = {
   dashboard: 'cases.edit', daily: 'cases.edit', bookings: 'bookings.edit', clients: 'clients.edit',
-  messages: 'messages.edit', reports: 'reports.print', expenses: 'expenses.edit',
+  messages: 'messages.edit', followup: 'messages.edit', reports: 'reports.print', expenses: 'expenses.edit',
   attendance: 'attendance.edit', payroll: 'payroll.edit', 'employee-ledger': 'ledger.pay', inventory: 'inventory.edit',
   cashfloat: 'cash.edit', doctors: 'core.edit', users: 'users.manage',
   packages: 'settings.edit', settings: 'settings.edit', logs: null, employee: null, invoices: 'cases.edit'
@@ -144,7 +144,7 @@ const PAGE_EDIT_PERMISSIONS = {
 
 const PAGE_PERMISSIONS = {
   dashboard: 'cases.view', daily: 'cases.view', bookings: 'bookings.view',
-  clients: 'clients.view', messages: 'messages.view', reports: 'reports.view',
+  clients: 'clients.view', messages: 'messages.view', followup: 'messages.view', reports: 'reports.view',
   expenses: 'expenses.view', attendance: 'attendance.view', payroll: 'payroll.view',
   'employee-ledger': 'ledger.view',
   doctors: 'core.edit', users: 'users.manage', packages: 'settings.edit',

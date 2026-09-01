@@ -1520,11 +1520,22 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 }
 .list-sort-wrap select { width: min(230px, 100%); }
 .msg-media-box { margin-top: 10px; padding: 10px; background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; }
+.msg-media-box--compact { margin-top: 8px; padding: 8px; }
+.msg-media-box--compact .form-label { font-size: 11px; margin-bottom: 4px; }
 .msg-media-preview { display: none; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
 .msg-media-preview.has-media { display: flex; }
 .msg-media-preview img, .msg-media-preview video {
   max-width: 220px; max-height: 140px; border-radius: 10px; border: 1px solid var(--border); object-fit: cover; background: #000;
 }
+.msg-media-box--compact .msg-media-preview img,
+.msg-media-box--compact .msg-media-preview video { max-width: 140px; max-height: 90px; }
+.msg-media-chip { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+.followup-arch { font-size: 13px; line-height: 1.75; color: var(--text-muted); margin: 0; }
+.followup-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.followup-kpi { padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.followup-kpi strong { display: block; font-size: 22px; color: var(--primary); }
+.followup-kpi span { font-size: 12px; color: var(--text-muted); }
+@media (max-width: 900px) { .followup-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
 
 /* Printer picker drawer */
@@ -4864,6 +4875,9 @@ body.license-readonly-mode .page-readonly textarea {
     <div class="nav-item no-employee" data-addon-page="messages" onclick="showPage('messages')" data-nav-title="رسائل العملاء">
       <span class="nav-icon">💬</span><span class="nav-label">رسائل العملاء</span>
     </div>
+    <div class="nav-item no-employee" data-page="followup" data-addon-page="followup" onclick="showPage('followup')" data-nav-title="متابعة العملاء">
+      <span class="nav-icon">📱</span><span class="nav-label">متابعة العملاء</span>
+    </div>
     <div class="nav-section-label no-employee">البيانات والتحليل</div>
 <div class="nav-item no-employee" data-page="reports" data-addon-page="reports" onclick="showPage('reports')" data-nav-title="التقارير">
       <span class="nav-icon">📈</span><span class="nav-label">التقارير</span>
@@ -7100,6 +7114,11 @@ body.license-readonly-mode .page-readonly textarea {
           <label class="form-label">تُضاف: «مرحباً [اسم العميل]،»</label>
           <textarea class="form-control" id="msg-followup" rows="3" placeholder="نص المتابعة"></textarea>
         </div>
+        <div class="msg-media-box msg-media-box--compact">
+          <label class="form-label">📎 صورة/فيديو خاص برسالة المتابعة</label>
+          <input class="form-control" type="file" id="msg-followup-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'followup')">
+          <div class="msg-media-preview" id="msg-followup-media-preview"></div>
+        </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('followup')">💾 حفظ</button>
       </div>
       <div class="card msg-template-card">
@@ -7107,6 +7126,11 @@ body.license-readonly-mode .page-readonly textarea {
         <div class="form-group" style="margin-bottom:8px">
           <label class="form-label">تُضاف: «مرحباً [اسم العميل]،»</label>
           <textarea class="form-control" id="msg-promo" rows="3" placeholder="نص العروض"></textarea>
+        </div>
+        <div class="msg-media-box msg-media-box--compact">
+          <label class="form-label">📎 صورة/فيديو خاص برسالة العروض</label>
+          <input class="form-control" type="file" id="msg-promo-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'promo')">
+          <div class="msg-media-preview" id="msg-promo-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('promo')">💾 حفظ</button>
       </div>
@@ -7116,6 +7140,11 @@ body.license-readonly-mode .page-readonly textarea {
           <label class="form-label">{center} {date} {time} {name}</label>
           <textarea class="form-control" id="msg-appointment" rows="3" placeholder="نص تذكير الموعد"></textarea>
         </div>
+        <div class="msg-media-box msg-media-box--compact">
+          <label class="form-label">📎 صورة/فيديو خاص بتذكير الموعد</label>
+          <input class="form-control" type="file" id="msg-appointment-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'appointment')">
+          <div class="msg-media-preview" id="msg-appointment-media-preview"></div>
+        </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('appointment')">💾 حفظ</button>
       </div>
       <div class="card msg-template-card">
@@ -7124,16 +7153,21 @@ body.license-readonly-mode .page-readonly textarea {
           <label class="form-label">{center} {days} {name}</label>
           <textarea class="form-control" id="msg-overdue" rows="3" placeholder="نص تنبيه الغياب"></textarea>
         </div>
+        <div class="msg-media-box msg-media-box--compact">
+          <label class="form-label">📎 صورة/فيديو خاص بتنبيه الغياب</label>
+          <input class="form-control" type="file" id="msg-overdue-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'overdue')">
+          <div class="msg-media-preview" id="msg-overdue-media-preview"></div>
+        </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('overdue')">💾 حفظ</button>
       </div>
     </div>
 
     <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
       <div class="card-header"><div class="card-title">📎 وسائط الرسائل — كل الأنواع</div></div>
-      <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px;line-height:1.7">تُرفق الصورة أو الفيديو مع <strong>كل أنواع الرسائل</strong>: متابعة، عروض، تذكير موعد، وتنبيه الغياب — من القوالب والإرسال الجماعي والإجراءات السريعة والإرسال التلقائي.</p>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px;line-height:1.7">صورة أو فيديو <strong>مثبّت يُرسل مع كل أنواع الرسائل</strong> (متابعة، عروض، تذكير موعد، تنبيه غياب). يمكنك إضافة مرفق مختلف في بطاقة كل نوع — يُرسل المرفق المشترك أولاً ثم مرفق النوع مع نص الرسالة.</p>
       <div class="msg-media-box" style="margin:0">
-        <label class="form-label">صورة أو فيديو</label>
-        <input class="form-control" type="file" id="msg-shared-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
+        <label class="form-label">صورة أو فيديو مشترك لكل الرسائل</label>
+        <input class="form-control" type="file" id="msg-shared-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'shared')">
         <div class="msg-media-preview" id="msg-shared-media-preview"></div>
       </div>
     </div>
@@ -7196,7 +7230,7 @@ body.license-readonly-mode .page-readonly textarea {
           <button class="btn btn-ghost btn-sm" type="button" onclick="selectAllBulkClients()">تحديد كل العملاء</button>
           <button class="btn btn-ghost btn-sm" type="button" onclick="deselectAllBulk()">إلغاء الكل</button>
           <span class="bulk-selected-count" id="bulk-selected-count">محدّد: 0</span>
-          <select class="form-control" id="bulk-msg-type" style="width:180px">
+          <select class="form-control" id="bulk-msg-type" style="width:180px" onchange="refreshMessageMediaPreviews()">
             <option value="followup">رسالة المتابعة</option>
             <option value="promo">رسالة العروض</option>
             <option value="appointment">تذكير موعد</option>
@@ -7216,10 +7250,10 @@ body.license-readonly-mode .page-readonly textarea {
         <div id="manual-bulk-list" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
       <div class="msg-media-box" style="margin:0 0 14px">
-        <label class="form-label">📎 وسائط تُرسل مع الرسالة المحددة (متابعة / عروض / موعد / غياب)</label>
-        <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this)">
+        <label class="form-label">📎 مرفق إضافي لنوع الرسالة المحددة أعلاه (يُرسل مع المرفق المشترك لكل الأنواع)</label>
+        <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, document.getElementById('bulk-msg-type').value)">
         <div class="msg-media-preview" id="msg-bulk-media-preview"></div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">مع واتساب عبر الرابط: تُنسخ الصورة للحافظة للصقها (Ctrl+V). مزود واتساب API يرسل المرفق مع الرسالة.</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">يظهر هنا المرفق المشترك + مرفق النوع المختار. مع واتساب عبر الرابط: تُنسخ الصورة للحافظة للصقها (Ctrl+V). مزود واتساب API يرسل المرفقين مع الرسالة.</div>
       </div>
       <div class="table-wrap msg-bulk-table-wrap">
         <table class="table-compact table-reports msg-bulk-table">
@@ -7253,6 +7287,90 @@ body.license-readonly-mode .page-readonly textarea {
         </table>
       </div>
       <div id="messageLogPagination" class="table-pagination" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CLIENT FOLLOW-UP ═══════════════ -->
+  <div class="page" id="page-followup">
+    <header class="dash-hero-glass page-hero compact-hero">
+      <h2>متابعة العملاء</h2>
+      <p>واتساب في الخلفية، الجداول، وربط الاسم برقم الملف</p>
+    </header>
+    <div class="card" style="margin-bottom:20px;border:1px solid var(--primary)" data-feature="msg_auto">
+      <div class="card-header" style="flex-wrap:wrap;gap:10px">
+        <div class="card-title">📱 واتساب التلقائي</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="fu-auto-enabled" onchange="syncFollowupMessagingToggles()">
+            <strong>تفعيل الإرسال الأوتوماتيكي</strong>
+          </label>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="openClinicWhatsAppWorkspace()">فتح واتساب ويب</button>
+          <button class="btn btn-primary btn-sm" type="button" onclick="runMessagingAutomation(true)">▶️ فحص وإرسال الآن</button>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="showPage('messages')">قوالب الرسائل</button>
+        </div>
+      </div>
+      <p class="followup-arch">الإرسال بدون تدخل موظف الاستقبال يعمل في الخلفية عبر <strong>مزود واتساب رسمي (Business API / urWhats)</strong> الموجود في بوابة التكامل. فتح واتساب ويب هنا للدردشة والمراجعة فقط — لا يمكن الاعتماد على تضمين واتساب داخل نافذة البرنامج للإرسال الصامت. جلسة جديدة تُسجَّل برقم الهاتف ورقم الملف، ثم تُرسل المتابعة والمواعيد والتنبيه حسب الجداول حتى لو كان الموظف يعمل في السجل اليومي.</p>
+      <div id="fu-bridge-status" style="margin-top:12px;font-size:12px;color:var(--text-muted)">—</div>
+      <div class="form-grid form-grid-3" style="gap:12px;margin-top:12px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <input type="checkbox" id="fu-followup-enabled" onchange="syncFollowupMessagingToggles()"> متابعة بعد الجلسة
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <input type="checkbox" id="fu-appt-enabled" onchange="syncFollowupMessagingToggles()"> تذكير بالمواعيد
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <input type="checkbox" id="fu-overdue-enabled" onchange="syncFollowupMessagingToggles()"> تنبيه غياب العملاء
+        </label>
+      </div>
+    </div>
+    <div class="followup-kpi-grid" data-feature="msg_auto">
+      <div class="followup-kpi"><strong id="fu-kpi-due">0</strong><span>رسائل مستحقة الآن</span></div>
+      <div class="followup-kpi"><strong id="fu-kpi-clients">0</strong><span>عملاء برقم هاتف</span></div>
+      <div class="followup-kpi"><strong id="fu-kpi-matched">0</strong><span>مطابقة مع قائمة واتساب</span></div>
+      <div class="followup-kpi"><strong id="fu-kpi-unmatched">0</strong><span>غير مطابقة — للمراجعة</span></div>
+    </div>
+    <div class="card" style="margin-bottom:20px" data-feature="msg_auto">
+      <div class="card-header"><div class="card-title">🗓️ الرسائل المستحقة حسب الجدول</div>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="refreshFollowupWorkspace()">🔄 تحديث</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table-compact table-reports">
+          <thead><tr>
+            <th>النوع</th><th>رقم الملف</th><th>العميل</th><th>الهاتف</th><th>الحالة</th>
+          </tr></thead>
+          <tbody id="fu-due-body"><tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
+      <div class="card-header"><div class="card-title">👥 تسلسل العملاء — الاسم ورقم الملف</div></div>
+      <div class="table-wrap">
+        <table class="table-compact table-reports">
+          <thead><tr>
+            <th>رقم الملف</th><th>الاسم</th><th>الهاتف</th><th>آخر زيارة</th><th>آخر رسالة</th>
+          </tr></thead>
+          <tbody id="fu-roster-body"><tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr></tbody>
+        </table>
+      </div>
+      <div id="fu-roster-pagination" class="table-pagination" style="display:none"></div>
+    </div>
+    <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
+      <div class="card-header"><div class="card-title">🔗 مطابقة قائمة واتساب مع عملاء البرنامج</div></div>
+      <p class="followup-arch" style="margin-bottom:10px">انسخ من واتساب الأسماء والأرقام (سطر لكل جهة: الاسم ثم الفاصلة ثم الرقم). البرنامج يقارن بآخر 9 أرقام ثم بالاسم، ويربط النتيجة برقم الملف. لا يتم سحب جهات واتساب تلقائياً.</p>
+      <textarea class="form-control" id="fu-import-contacts" rows="6" placeholder="أحمد علي، 0500000001&#10;فاطمة، 9665xxxxxxxx"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+        <button class="btn btn-primary btn-sm" type="button" onclick="runFollowupContactMatch()">مطابقة القائمة</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="clearFollowupContactImport()">مسح القائمة المستوردة</button>
+      </div>
+      <div id="fu-match-summary" style="font-size:13px;color:var(--text-muted);margin-bottom:10px">—</div>
+      <div class="table-wrap">
+        <table class="table-compact table-reports">
+          <thead><tr>
+            <th>من واتساب</th><th>رقم واتساب</th><th>المطابقة</th><th>في البرنامج</th><th>رقم الملف</th><th>إجراء</th>
+          </tr></thead>
+          <tbody id="fu-match-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">الصق القائمة ثم اضغط مطابقة</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -11335,6 +11453,7 @@ const pageTitles = {
   expenses:    'النفقات والمصاريف',
   users:       'إدارة المستخدمين والصلاحيات',
   messages:    'رسائل العملاء',
+  followup:    'متابعة العملاء',
   employee:    'لوحتي الشخصية',
   inventory:   'إدارة المخزون',
   cashfloat:   'عهدة درج الكاشير',
@@ -11549,6 +11668,7 @@ function showPageAfterRestoreGate(id) {
   if (id === 'search')      { showPage('clients'); return; } // merged into clients — unreachable after rewrite above
   if (id === 'employee')    { showEmployeeDashboard(); }
   if (id === 'messages')    { loadMsgTemplates(); loadMessagingConfigUI(); refreshBulkTable(); refreshMessageLog(); }
+  if (id === 'followup')    { loadFollowupWorkspace(); }
   if (id === 'clients')     { initClientOverdueDaysUI(); refreshClientsView(); populateOldCaseDoctors(); }
   if (id === 'attendance')  {
     populateAttDoctor();
@@ -17031,6 +17151,8 @@ window.BackupBridge = BackupBridge;
 <script src="cloud/document-sequences.js"></script>
 <script src="cloud/list-sort.js"></script>
 <script src="cloud/bulk-select.js"></script>
+<script src="cloud/message-media.js"></script>
+<script src="cloud/wa-followup.js"></script>
 <script>if (typeof ListSort !== 'undefined' && ListSort.fillAllSelects) ListSort.fillAllSelects();</script>
 <script src="cloud/overdue-followup.js"></script>
 <script src="cloud/repository.js"></script>
@@ -17315,8 +17437,14 @@ const MessagingBridge = {
     if (!formatted) return { ok: false, reason: 'invalid_phone' };
     const cfg = getCommBridgeConfig();
     const payloadMeta = { ...(meta || {}) };
-    if (payloadMeta.attachMedia && !payloadMeta.media && typeof getMessageMediaMeta === 'function') {
-      payloadMeta.media = getMessageMediaMeta();
+    if (payloadMeta.attachMedia && typeof getMessageMediaList === 'function') {
+      const list = getMessageMediaList(payloadMeta.type);
+      if (list.length) {
+        if (!payloadMeta.mediaList) payloadMeta.mediaList = list;
+        if (!payloadMeta.media) payloadMeta.media = list[list.length - 1];
+      }
+    } else if (payloadMeta.attachMedia && !payloadMeta.media && typeof getMessageMediaMeta === 'function') {
+      payloadMeta.media = getMessageMediaMeta(payloadMeta.type);
     }
     if (getCuppingElectron()?.communication?.send) {
       try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
@@ -17327,7 +17455,10 @@ const MessagingBridge = {
       catch (e) { return { ok: false, reason: e.message }; }
     }
     if (payloadMeta.media && typeof copyMessageMediaToClipboard === 'function') {
-      await copyMessageMediaToClipboard(payloadMeta.media);
+      const clip = (payloadMeta.mediaList && payloadMeta.mediaList.length)
+        ? payloadMeta.mediaList.slice().reverse().find((m) => m && m.kind !== 'video') || payloadMeta.mediaList[payloadMeta.mediaList.length - 1]
+        : payloadMeta.media;
+      await copyMessageMediaToClipboard(clip);
     }
     window.open(`https://wa.me/${formatted}?text=${encodeURIComponent(text)}`, '_blank');
     return { ok: true, mode: 'browser', mediaHint: payloadMeta.media ? 'افتح واتساب والصق الصورة (Ctrl+V) إن نُسخت' : '' };
@@ -22899,13 +23030,15 @@ async function sendClientMessage({ phone, clientName, type, refId, text, cooldow
   const body = text || buildAutomatedMessage(type, clientName);
   if (!body) return { ok: false, reason: 'no_template' };
   const channel = resolveMessagingChannel();
+  const mediaList = typeof getMessageMediaList === 'function' ? getMessageMediaList(type) : [];
   const result = channel === 'sms'
     ? await MessagingBridge.sendSMS(phone, body, { type, refId })
     : await MessagingBridge.sendWhatsApp(phone, body, {
       type,
       refId,
       attachMedia: true,
-      media: (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null) || undefined
+      mediaList: mediaList.length ? mediaList : undefined,
+      media: (mediaList.length ? mediaList[mediaList.length - 1] : (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(type) : null)) || undefined
     });
   const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
   logMessage({
@@ -22916,6 +23049,8 @@ async function sendClientMessage({ phone, clientName, type, refId, text, cooldow
     refId,
     preview: body.slice(0, 80) + (body.length > 80 ? '…' : ''),
     body: body,
+    fileNo: (typeof lookupClientFileNo === 'function' ? lookupClientFileNo(phone) : '') || undefined,
+    hasMedia: !!(mediaList && mediaList.length),
     messageId: result?.messageId || result?.message_id || result?.id || null,
     status: msgStatus,
     detail: result
@@ -23044,6 +23179,7 @@ function loadMessagingConfigUI() {
   val('msg-overdue-days', m.overdue?.days ?? getClientOverdueDays());
   val('msg-overdue-cooldown', m.overdue?.cooldownDays ?? 30);
   updateMessagingBridgeStatus();
+  if (typeof copyMessagingTogglesToFollowup === 'function') copyMessagingTogglesToFollowup();
 }
 
 function saveMessagingConfig() {
@@ -23060,6 +23196,11 @@ function saveMessagingConfig() {
   DB.set('settings', settings);
   updateMessagingBridgeStatus();
   if (typeof logAudit === 'function') logAudit('SETTINGS_CHANGED', 'حفظ إعدادات الرسائل التلقائية', { section: 'messaging' });
+  if (typeof copyMessagingTogglesToFollowup === 'function') copyMessagingTogglesToFollowup();
+  if (document.getElementById('page-followup')?.classList.contains('active') && typeof refreshFollowupDueTable === 'function') {
+    refreshFollowupDueTable();
+    refreshFollowupStatus();
+  }
 }
 
 async function updateMessagingBridgeStatus() {
@@ -23216,8 +23357,9 @@ async function openQuickClientMessage(type, phone, clientName, lastDate) {
     notify(`⚠️ لم يتم كتابة رسالة ${labels[type] || type}`, 'danger');
     return false;
   }
-  const media = typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null;
-  const result = await MessagingBridge.sendWhatsApp(phone, body, { type, attachMedia: true, media: media || undefined });
+  const mediaList = typeof getMessageMediaList === 'function' ? getMessageMediaList(type) : [];
+  const media = mediaList.length ? mediaList[mediaList.length - 1] : (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(type) : null);
+  const result = await MessagingBridge.sendWhatsApp(phone, body, { type, attachMedia: true, mediaList: mediaList.length ? mediaList : undefined, media: media || undefined });
   if (result?.mediaHint) notify(result.mediaHint, 'info');
   return result?.ok !== false;
 }
@@ -23243,8 +23385,10 @@ function openMsgPreviewModal(type, phone, clientName, lastDate) {
   modal.dataset.name = clientName || '';
   modal.dataset.lastdate = lastDate || '';
   const previewMedia = document.getElementById('msg-preview-media');
-  if (previewMedia && typeof renderMessageMediaPreview === 'function') {
-    renderMessageMediaPreview(previewMedia, typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null);
+  if (previewMedia && typeof renderMessageMediaList === 'function') {
+    renderMessageMediaList(previewMedia, typeof getMessageMediaList === 'function' ? getMessageMediaList(type) : []);
+  } else if (previewMedia && typeof renderMessageMediaPreview === 'function') {
+    renderMessageMediaPreview(previewMedia, typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(type) : null);
   }
   modal.classList.add('open');
 }
@@ -23488,8 +23632,9 @@ async function sendBulkWA() {
         days: String(days)
       });
       if (!body) continue;
-      const media = typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta() : null;
-      const result = await MessagingBridge.sendWhatsApp(client.phone, body, { type: msgType, bulk: true, attachMedia: true, media: media || undefined });
+      const mediaList = typeof getMessageMediaList === 'function' ? getMessageMediaList(msgType) : [];
+      const media = mediaList.length ? mediaList[mediaList.length - 1] : (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(msgType) : null);
+      const result = await MessagingBridge.sendWhatsApp(client.phone, body, { type: msgType, bulk: true, attachMedia: true, mediaList: mediaList.length ? mediaList : undefined, media: media || undefined });
       const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
       if (msgStatus === 'queued') queued++;
       else if (msgStatus === 'sent') sent++;
@@ -23499,11 +23644,12 @@ async function sendBulkWA() {
         type: msgType,
         channel: 'whatsapp',
         refId: 'bulk_' + Date.now() + '_' + i,
-        preview: (media ? '📎 ' : '') + body.slice(0, 80),
+        preview: ((mediaList && mediaList.length) ? '📎 ' : '') + body.slice(0, 80),
         messageId: result?.messageId || result?.message_id || result?.id || null,
         status: msgStatus,
         detail: result,
-        hasMedia: !!media
+        fileNo: client.fileNo || (typeof lookupClientFileNo === 'function' ? lookupClientFileNo(client.phone) : '') || undefined,
+        hasMedia: !!(mediaList && mediaList.length)
       });
       if (i < selected.length - 1) await new Promise(r => setTimeout(r, delayMs));
     }
@@ -23514,8 +23660,8 @@ async function sendBulkWA() {
     if (!total) notify(emptyLabels[msgType] || '⚠️ فشل الإرسال', 'danger');
     else if (queued && !sent) notify(`✅ تمت جدولة ${queued} رسالة في الطابور`);
     else {
-      const mediaHint = (typeof getMessageMediaMeta === 'function' && getMessageMediaMeta())
-        ? ' — أرفق الصورة/الفيديو من الحافظة أو المجلد المفتوح'
+      const mediaHint = (typeof getMessageMediaList === 'function' && getMessageMediaList(msgType).length)
+        ? ' — أرفق الصورة/الفيديو من الحافظة أو المجلد المفتوح (المشترك ثم مرفق النوع)'
         : '';
       notify(`✅ تم إرسال/جدولة ${total} رسالة${queued ? ` (${queued} في الطابور)` : ''}${mediaHint}`);
     }
@@ -23841,6 +23987,7 @@ let dailyTablePage = 1;
 let attLogPage = 1;
 let bookingsPage = 1;
 let expensesPage = 1;
+let fuRosterPage = 1;
 const TABLE_PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
 function getTablePageSize() {
@@ -23857,7 +24004,7 @@ function setTablePageSize(n) {
 
 function onTablePageSizeChange(size) {
   setTablePageSize(size);
-  messageLogPage = bulkTablePage = invoiceSearchPage = clientsListPage = dailyTablePage = attLogPage = bookingsPage = expensesPage = 1;
+  messageLogPage = bulkTablePage = invoiceSearchPage = clientsListPage = dailyTablePage = attLogPage = bookingsPage = expensesPage = fuRosterPage = 1;
   if (typeof globalThis._invoicesListPage !== 'undefined') globalThis._invoicesListPage = 1;
   if (typeof refreshMessageLog === 'function') refreshMessageLog();
   if (typeof refreshBulkTable === 'function') refreshBulkTable();
@@ -23868,6 +24015,7 @@ function onTablePageSizeChange(size) {
   if (typeof refreshAttLog === 'function') refreshAttLog();
   if (typeof refreshBookingsTable === 'function') refreshBookingsTable();
   if (typeof refreshExpenses === 'function') refreshExpenses();
+  if (typeof refreshFollowupRoster === 'function') refreshFollowupRoster(false);
 }
 
 function sortClinicList(listId, items, getter) {
@@ -23917,13 +24065,32 @@ function onListSortChange(listId, value) {
 }
 
 const MESSAGE_MEDIA_MAX_BYTES = 6 * 1024 * 1024;
-let _messageMediaAttachment = null;
+let _messageMediaByType = (typeof MessageMedia !== 'undefined' && MessageMedia.emptyStore)
+  ? MessageMedia.emptyStore()
+  : { shared: null, followup: null, promo: null, appointment: null, overdue: null };
 
-function getMessageMediaMeta() {
-  return _messageMediaAttachment || null;
+function getMessageMediaList(type) {
+  if (typeof MessageMedia !== 'undefined' && MessageMedia.collectMediaList) {
+    return MessageMedia.collectMediaList(_messageMediaByType, type);
+  }
+  const list = [];
+  if (_messageMediaByType.shared) list.push(_messageMediaByType.shared);
+  if (type && type !== 'shared' && _messageMediaByType[type]) list.push(_messageMediaByType[type]);
+  return list;
 }
 
-function renderMessageMediaPreview(el, media) {
+function getMessageMediaMeta(type) {
+  const list = getMessageMediaList(type);
+  return list.length ? list[list.length - 1] : null;
+}
+
+function messageMediaSlotLabel(slot) {
+  return (typeof MessageMedia !== 'undefined' && MessageMedia.SLOT_LABELS && MessageMedia.SLOT_LABELS[slot])
+    || slot
+    || 'مرفق';
+}
+
+function renderMessageMediaPreview(el, media, slot) {
   if (!el) return;
   if (!media || !media.dataUrl) {
     el.classList.remove('has-media');
@@ -23935,32 +24102,65 @@ function renderMessageMediaPreview(el, media) {
   const tag = isVideo
     ? `<video src="${media.dataUrl}" controls muted></video>`
     : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
-  el.innerHTML = `${tag}<div style="font-size:12px;color:var(--text-muted);line-height:1.6">
+  const clearSlot = slot || media.slot || 'shared';
+  el.innerHTML = `${tag}<div class="msg-media-chip">
     <div><strong>${media.name || 'مرفق'}</strong></div>
-    <div>${isVideo ? 'فيديو' : 'صورة'} — يُرسل مع الرسالة</div>
-    <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia()">إزالة المرفق</button>
+    <div>${messageMediaSlotLabel(clearSlot)} — ${isVideo ? 'فيديو' : 'صورة'}</div>
+    <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${clearSlot}')">إزالة المرفق</button>
   </div>`;
 }
 
-function refreshMessageMediaPreviews() {
-  const media = getMessageMediaMeta();
-  ['msg-shared-media-preview', 'msg-bulk-media-preview', 'msg-preview-media'].forEach((id) => {
-    renderMessageMediaPreview(document.getElementById(id), media);
-  });
+function renderMessageMediaList(el, list) {
+  if (!el) return;
+  const items = Array.isArray(list) ? list.filter((m) => m && m.dataUrl) : [];
+  if (!items.length) {
+    el.classList.remove('has-media');
+    el.innerHTML = '';
+    return;
+  }
+  el.classList.add('has-media');
+  el.innerHTML = items.map((media) => {
+    const isVideo = media.kind === 'video';
+    const tag = isVideo
+      ? `<video src="${media.dataUrl}" controls muted></video>`
+      : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
+    const slot = media.slot || 'shared';
+    return `<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">${tag}<div class="msg-media-chip">
+      <div><strong>${media.name || 'مرفق'}</strong></div>
+      <div>${messageMediaSlotLabel(slot)} — ${isVideo ? 'فيديو' : 'صورة'}</div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${slot}')">إزالة</button>
+    </div></div>`;
+  }).join('');
 }
 
-function clearMessageMedia() {
-  _messageMediaAttachment = null;
-  ['msg-shared-media', 'msg-bulk-media'].forEach((id) => {
+function refreshMessageMediaPreviews() {
+  renderMessageMediaPreview(document.getElementById('msg-shared-media-preview'), _messageMediaByType.shared, 'shared');
+  ['followup', 'promo', 'appointment', 'overdue'].forEach((slot) => {
+    renderMessageMediaPreview(document.getElementById(`msg-${slot}-media-preview`), _messageMediaByType[slot], slot);
+  });
+  const bulkType = document.getElementById('bulk-msg-type')?.value || 'followup';
+  renderMessageMediaList(document.getElementById('msg-bulk-media-preview'), getMessageMediaList(bulkType));
+  const previewType = document.getElementById('msgPreviewModal')?.dataset.type;
+  if (previewType) renderMessageMediaList(document.getElementById('msg-preview-media'), getMessageMediaList(previewType));
+}
+
+function clearMessageMedia(slot) {
+  const key = slot || 'shared';
+  if (Object.prototype.hasOwnProperty.call(_messageMediaByType, key)) _messageMediaByType[key] = null;
+  const ids = key === 'shared'
+    ? ['msg-shared-media']
+    : [`msg-${key}-media`, 'msg-bulk-media'];
+  ids.forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   refreshMessageMediaPreviews();
 }
 
-function onMessageMediaPicked(input) {
+function onMessageMediaPicked(input, slot) {
+  const key = slot || input?.dataset?.slot || 'shared';
   const file = input && input.files && input.files[0];
-  if (!file) { clearMessageMedia(); return; }
+  if (!file) { clearMessageMedia(key); return; }
   const mime = file.type || '';
   const isImage = mime.startsWith('image/');
   const isVideo = mime.startsWith('video/');
@@ -23976,12 +24176,13 @@ function onMessageMediaPicked(input) {
   }
   const reader = new FileReader();
   reader.onload = function () {
-    _messageMediaAttachment = {
+    _messageMediaByType[key] = {
       name: file.name,
       mime: mime || (isVideo ? 'video/mp4' : 'image/jpeg'),
       kind: isVideo ? 'video' : 'image',
       dataUrl: String(reader.result || ''),
       size: file.size,
+      slot: key,
     };
     refreshMessageMediaPreviews();
     notify(isVideo ? '✅ تم إرفاق الفيديو' : '✅ تم إرفاق الصورة');
@@ -24005,6 +24206,282 @@ async function copyMessageMediaToClipboard(media) {
     return false;
   }
   return false;
+}
+
+function lookupClientFileNo(phone) {
+  const p = typeof WaFollowup !== 'undefined' ? WaFollowup.last9(phone) : String(phone || '').replace(/\D/g, '').slice(-9);
+  if (!p) return '';
+  const map = typeof buildClientsMap === 'function' ? buildClientsMap() : {};
+  for (const v of Object.values(map)) {
+    const vp = typeof WaFollowup !== 'undefined' ? WaFollowup.last9(v.phone) : String(v.phone || '').replace(/\D/g, '').slice(-9);
+    if (vp === p && v.fileNo) return v.fileNo;
+  }
+  if (typeof clientsRegistry !== 'undefined' && Array.isArray(clientsRegistry)) {
+    const hit = clientsRegistry.find((c) => (typeof WaFollowup !== 'undefined' ? WaFollowup.last9(c.phone) : String(c.phone || '').replace(/\D/g, '').slice(-9)) === p);
+    if (hit?.fileNo) return hit.fileNo;
+  }
+  return '';
+}
+
+let _fuMatchState = { matched: [], unmatchedImported: [], unmatchedClinic: [] };
+
+function getFollowupRoster() {
+  const map = typeof buildClientsMap === 'function' ? buildClientsMap() : {};
+  const rows = Object.values(map).map((v) => ({
+    key: v.key,
+    name: v.name,
+    phone: v.phone,
+    fileNo: v.fileNo || '',
+    lastDate: v.lastDate || '',
+    visits: v.visits || [],
+  }));
+  const seen = new Set(rows.map((r) => r.fileNo || r.key));
+  (typeof clientsRegistry !== 'undefined' && Array.isArray(clientsRegistry) ? clientsRegistry : []).forEach((c) => {
+    if (!c || !c.phone) return;
+    const id = c.fileNo || c.id;
+    if (id && seen.has(id)) return;
+    seen.add(id);
+    rows.push({
+      key: id,
+      name: c.name || '—',
+      phone: c.phone,
+      fileNo: c.fileNo || '',
+      lastDate: '',
+      visits: [],
+    });
+  });
+  return typeof sortClinicList === 'function'
+    ? sortClinicList('messages', rows, function (v, field) { return clientEntrySortValue(v, field); })
+    : rows;
+}
+
+function syncFollowupMessagingToggles() {
+  const pairs = [
+    ['fu-auto-enabled', 'msg-auto-enabled'],
+    ['fu-followup-enabled', 'msg-followup-enabled'],
+    ['fu-appt-enabled', 'msg-appt-enabled'],
+    ['fu-overdue-enabled', 'msg-overdue-enabled'],
+  ];
+  pairs.forEach(([fromId, toId]) => {
+    const from = document.getElementById(fromId);
+    const to = document.getElementById(toId);
+    if (from && to) to.checked = !!from.checked;
+  });
+  if (typeof saveMessagingConfig === 'function') saveMessagingConfig();
+  refreshFollowupWorkspace();
+}
+
+function copyMessagingTogglesToFollowup() {
+  const pairs = [
+    ['msg-auto-enabled', 'fu-auto-enabled'],
+    ['msg-followup-enabled', 'fu-followup-enabled'],
+    ['msg-appt-enabled', 'fu-appt-enabled'],
+    ['msg-overdue-enabled', 'fu-overdue-enabled'],
+  ];
+  pairs.forEach(([fromId, toId]) => {
+    const from = document.getElementById(fromId);
+    const to = document.getElementById(toId);
+    if (from && to) to.checked = !!from.checked;
+  });
+}
+
+function openClinicWhatsAppWorkspace() {
+  const url = 'https://web.whatsapp.com';
+  try {
+    const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+    if (api?.app?.openExternal) api.app.openExternal(url);
+    else window.open(url, '_blank');
+  } catch {
+    window.open(url, '_blank');
+  }
+}
+
+async function refreshFollowupStatus() {
+  const el = document.getElementById('fu-bridge-status');
+  if (!el || typeof MessagingBridge === 'undefined') return;
+  const st = await MessagingBridge.getStatus();
+  const waMode = st?.whatsapp?.mode || 'browser';
+  const provider = st?.whatsapp?.provider || '';
+  const auto = settings.messaging?.enabled ? 'مفعّل' : 'يدوي';
+  const bg = waMode === 'api'
+    ? 'إرسال خلفي جاهز عبر المزود'
+    : 'وضع الرابط (wa.me) يحتاج نقرة — للإرسال الصامت اربط مزود واتساب API';
+  el.textContent = `واتساب: ${waMode}${provider ? ' — ' + provider : ''} | الوضع: ${auto} | ${bg}`;
+}
+
+function refreshFollowupDueTable() {
+  const tbody = document.getElementById('fu-due-body');
+  if (!tbody || typeof WaFollowup === 'undefined') return [];
+  ensureMessagingSettings();
+  const due = WaFollowup.listDueAutomatedMessages({
+    now: Date.now(),
+    cfg: settings.messaging,
+    cases: typeof cases !== 'undefined' ? cases : [],
+    bookings: typeof bookings !== 'undefined' ? bookings : [],
+    nextSessions: typeof nextSessions !== 'undefined' ? nextSessions : [],
+    clientsMap: typeof buildClientsMap === 'function' ? buildClientsMap() : {},
+    wasSent: typeof wasMessageSent === 'function' ? wasMessageSent : function () { return false; },
+    parseDateTimeMs: typeof parseDateTimeMs === 'function' ? parseDateTimeMs : undefined,
+  });
+  const kpi = document.getElementById('fu-kpi-due');
+  if (kpi) kpi.textContent = String(due.length);
+  if (!due.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr>';
+    return due;
+  }
+  tbody.innerHTML = due.map((d) => `<tr>
+    <td><span class="tag tag-blue">${d.label || d.type}</span></td>
+    <td dir="ltr">${d.fileNo || '—'}</td>
+    <td>${d.name || '—'}</td>
+    <td dir="ltr">${d.phone || '—'}</td>
+    <td>جاهزة للإرسال التلقائي</td>
+  </tr>`).join('');
+  return due;
+}
+
+function goFollowupRosterPage(page) {
+  fuRosterPage = Math.max(1, parseInt(page, 10) || 1);
+  refreshFollowupRoster(false);
+}
+
+function refreshFollowupRoster(resetPage) {
+  const tbody = document.getElementById('fu-roster-body');
+  if (!tbody) return [];
+  if (resetPage !== false) fuRosterPage = 1;
+  const rows = getFollowupRoster().filter((r) => r.phone);
+  const kpi = document.getElementById('fu-kpi-clients');
+  if (kpi) kpi.textContent = String(rows.length);
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr>';
+    renderTablePagination('fu-roster-pagination', 1, 0, 0, 'goFollowupRosterPage');
+    return rows;
+  }
+  const pg = paginateList(rows, fuRosterPage);
+  fuRosterPage = pg.page;
+  renderTablePagination('fu-roster-pagination', pg.page, pg.totalPages, pg.total, 'goFollowupRosterPage');
+  tbody.innerHTML = pg.items.map((r) => {
+    const lastMsg = typeof getClientLastMessage === 'function' ? getClientLastMessage(r.phone) : null;
+    const lastMsgDate = lastMsg?.sentAt ? new Date(lastMsg.sentAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' }) : '—';
+    return `<tr>
+      <td dir="ltr">${r.fileNo || '—'}</td>
+      <td>${r.name || '—'}</td>
+      <td dir="ltr">${r.phone || '—'}</td>
+      <td>${r.lastDate || '—'}</td>
+      <td dir="ltr" style="font-size:12px">${lastMsgDate}</td>
+    </tr>`;
+  }).join('');
+  return rows;
+}
+
+function followupImportStorageKey() {
+  return 'tdw.waImportedContacts';
+}
+
+function loadFollowupImportedText() {
+  try { return localStorage.getItem(followupImportStorageKey()) || ''; } catch { return ''; }
+}
+
+function saveFollowupImportedText(text) {
+  try { localStorage.setItem(followupImportStorageKey(), text || ''); } catch { /* local only */ }
+}
+
+function runFollowupContactMatch() {
+  const ta = document.getElementById('fu-import-contacts');
+  const text = ta ? ta.value : '';
+  saveFollowupImportedText(text);
+  if (typeof WaFollowup === 'undefined') return;
+  const imported = WaFollowup.parseContactLines(text);
+  const clinic = getFollowupRoster().filter((r) => r.phone || r.name);
+  _fuMatchState = WaFollowup.matchImportedContacts(imported, clinic);
+  renderFollowupMatchTable();
+}
+
+function clearFollowupContactImport() {
+  const ta = document.getElementById('fu-import-contacts');
+  if (ta) ta.value = '';
+  saveFollowupImportedText('');
+  _fuMatchState = { matched: [], unmatchedImported: [], unmatchedClinic: [] };
+  renderFollowupMatchTable();
+}
+
+function renderFollowupMatchTable() {
+  const tbody = document.getElementById('fu-match-body');
+  const summary = document.getElementById('fu-match-summary');
+  if (!tbody) return;
+  const st = _fuMatchState || { matched: [], unmatchedImported: [], unmatchedClinic: [] };
+  if (document.getElementById('fu-kpi-matched')) document.getElementById('fu-kpi-matched').textContent = String(st.matched.length);
+  if (document.getElementById('fu-kpi-unmatched')) {
+    document.getElementById('fu-kpi-unmatched').textContent = String(st.unmatchedImported.length + st.unmatchedClinic.length);
+  }
+  const rows = [];
+  st.matched.forEach((m, i) => {
+    const how = m.how === 'phone' ? '<span class="tag tag-green">رقم متطابق</span>' : '<span class="tag tag-gold">اسم متطابق — راجع الرقم</span>';
+    rows.push(`<tr>
+      <td>${m.imported.name || '—'}</td>
+      <td dir="ltr">${m.imported.displayPhone || m.imported.phone || '—'}</td>
+      <td>${how}</td>
+      <td>${m.clinic.name || '—'}</td>
+      <td dir="ltr">${m.clinic.fileNo || '—'}</td>
+      <td>—</td>
+    </tr>`);
+  });
+  st.unmatchedImported.forEach((imp, i) => {
+    rows.push(`<tr>
+      <td>${imp.name || '—'}</td>
+      <td dir="ltr">${imp.displayPhone || imp.phone || '—'}</td>
+      <td><span class="tag tag-red">غير موجود في البرنامج</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>${imp.phone ? `<button type="button" class="btn btn-ghost btn-sm" onclick="registerFollowupImportedClient(${i})">تسجيل كعميل سابق</button>` : '—'}</td>
+    </tr>`);
+  });
+  st.unmatchedClinic.slice(0, 80).forEach((c) => {
+    rows.push(`<tr>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="tag tag-gray">ليس في قائمة واتساب المستوردة</span></td>
+      <td>${c.name || '—'}</td>
+      <td dir="ltr">${c.fileNo || '—'}</td>
+      <td dir="ltr">${c.phone || '—'}</td>
+    </tr>`);
+  });
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">الصق القائمة ثم اضغط مطابقة</td></tr>';
+  } else {
+    tbody.innerHTML = rows.join('');
+  }
+  if (summary) {
+    summary.textContent = st.matched.length || st.unmatchedImported.length
+      ? `مطابق: ${st.matched.length} — غير مسجّل من واتساب: ${st.unmatchedImported.length} — في البرنامج دون قائمة واتساب: ${st.unmatchedClinic.length}`
+      : '—';
+  }
+}
+
+function registerFollowupImportedClient(index) {
+  const imp = (_fuMatchState.unmatchedImported || [])[index];
+  if (!imp || !imp.phone) { notify('⚠️ لا يوجد رقم لتسجيله', 'danger'); return; }
+  if (typeof ensureClientRegistry !== 'function') { notify('⚠️ تعذر تسجيل العميل', 'danger'); return; }
+  const client = ensureClientRegistry({ name: imp.name, phone: imp.displayPhone || imp.phone });
+  notify(client?.fileNo ? `✅ سُجّل ${client.name || imp.name} برقم ملف ${client.fileNo}` : '✅ تم تسجيل العميل');
+  runFollowupContactMatch();
+  refreshFollowupRoster();
+}
+
+function loadFollowupWorkspace() {
+  if (typeof loadMessagingConfigUI === 'function') loadMessagingConfigUI();
+  copyMessagingTogglesToFollowup();
+  const ta = document.getElementById('fu-import-contacts');
+  if (ta && !ta.value) ta.value = loadFollowupImportedText();
+  refreshFollowupWorkspace();
+}
+
+function refreshFollowupWorkspace() {
+  copyMessagingTogglesToFollowup();
+  refreshFollowupStatus();
+  refreshFollowupDueTable();
+  refreshFollowupRoster(false);
+  if (document.getElementById('fu-import-contacts')?.value) runFollowupContactMatch();
+  else renderFollowupMatchTable();
 }
 
 function paginateList(arr, page, pageSize) {
@@ -27243,7 +27720,7 @@ const FEATURE_REGISTRY = [
 
 ];
 const ADDON_PAGE_MODULES = {
-  bookings: 'bookings', messages: 'messages', reports: 'reports',
+  bookings: 'bookings', messages: 'messages', followup: 'messages', reports: 'reports',
   expenses: 'expenses', attendance: 'attendance', payroll: 'payroll',
   inventory: 'inventory', cashfloat: 'cashfloat', logs: 'logs', search: 'search',
   invoices: 'invoices'
@@ -27253,6 +27730,7 @@ const FEATURE_LEGACY_BUNDLES = {
   daily: ['core_pos', 'pos_shared_pkg', 'pos_multi_svc', 'pos_receipt', 'fin_currency', 'lux_vip', 'lux_rush'],
   bookings: ['book_schedule', 'book_confirm', 'book_no_show', 'dash_book_kpi'],
   clients: ['core_clients', 'crm_invoice_search', 'crm_search', 'ops_client_file'], invoices: ['crm_invoice_search', 'pos_receipt'], messages: ['msg_templates', 'msg_bulk', 'msg_auto', 'dash_msg_alert'],
+  followup: ['msg_templates', 'msg_bulk', 'msg_auto', 'dash_msg_alert'],
   reports: ['rep_monthly', 'rep_doctors', 'rep_vat', 'rep_zreport', 'rep_profitability', 'rep_sales', 'rep_thermal_period', 'rep_archive_a4', 'tech_print_pdf'],
   expenses: ['exp_track', 'exp_budget', 'dash_exp_kpi'],
   attendance: ['att_daily', 'att_leave', 'hr_leave_requests', 'att_overtime', 'att_report', 'att_policy', 'hr_leave_balance'],
@@ -27746,7 +28224,7 @@ function _pruneEmptyFeatureContainers() {
     const any = kids.length ? kids.some(c => !c.classList.contains('feature-hidden')) : [...row.children].some(c => !c.classList.contains('feature-hidden'));
     row.classList.toggle('feature-row-empty', !any);
   });
-  document.querySelectorAll('#page-messages > .card, #page-messages > div[data-feature]').forEach(block => {
+  document.querySelectorAll('#page-messages > .card, #page-messages > div[data-feature], #page-followup > .card, #page-followup > div[data-feature]').forEach(block => {
     if (block.classList.contains('feature-hidden')) block.style.display = 'none';
   });
 }

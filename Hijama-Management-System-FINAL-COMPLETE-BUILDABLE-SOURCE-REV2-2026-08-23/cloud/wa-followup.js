@@ -221,14 +221,200 @@
     return due;
   }
 
+  function contactDisplayName(row) {
+    const name = String((row && row.name) || '').trim() || 'عميل';
+    const fileNo = String((row && row.fileNo) || '').trim();
+    return fileNo ? (name + ' ' + fileNo) : name;
+  }
+
+  function internationalPhone(phone) {
+    const d = digits(phone);
+    if (!d) return '';
+    if (d.startsWith('966')) return '+' + d;
+    if (d.startsWith('00')) return '+' + d.slice(2);
+    if (d.startsWith('0') && d.length >= 9) return '+966' + d.slice(1);
+    if (d.length === 9) return '+966' + d;
+    return '+' + d;
+  }
+
+  function csvEscape(value) {
+    const t = String(value == null ? '' : value);
+    if (/[",\n\r]/.test(t)) return '"' + t.replace(/"/g, '""') + '"';
+    return t;
+  }
+
+  function buildGoogleContactsCsv(rows) {
+    const list = Array.isArray(rows) ? rows : [];
+    const lines = ['Name,Given Name,Family Name,Phone 1 - Type,Phone 1 - Value,Notes'];
+    list.forEach(function (row) {
+      const phone = internationalPhone(row && row.phone);
+      if (!phone) return;
+      lines.push([
+        csvEscape(contactDisplayName(row)),
+        csvEscape(row.name || ''),
+        csvEscape(row.fileNo || ''),
+        'Mobile',
+        csvEscape(phone),
+        csvEscape(row.fileNo ? ('file:' + row.fileNo) : ''),
+      ].join(','));
+    });
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  function buildWhatsAppCsv(rows) {
+    const list = Array.isArray(rows) ? rows : [];
+    const lines = ['Name,Phone Number'];
+    list.forEach(function (row) {
+      const phone = internationalPhone(row && row.phone);
+      if (!phone) return;
+      lines.push(csvEscape(contactDisplayName(row)) + ',' + csvEscape(phone));
+    });
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  function vcfEscape(value) {
+    return String(value == null ? '' : value)
+      .replace(/\\/g, '\\\\')
+      .replace(/\n/g, '\\n')
+      .replace(/,/g, '\\,')
+      .replace(/;/g, '\\;');
+  }
+
+  function buildVcard(rows) {
+    const list = Array.isArray(rows) ? rows : [];
+    const blocks = [];
+    list.forEach(function (row) {
+      const phone = internationalPhone(row && row.phone);
+      if (!phone) return;
+      const display = contactDisplayName(row);
+      blocks.push([
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'FN:' + vcfEscape(display),
+        'N:' + vcfEscape(row.fileNo || '') + ';' + vcfEscape(row.name || '') + ';;;',
+        'TEL;TYPE=CELL:' + phone,
+        'NOTE:' + vcfEscape(row.fileNo ? ('رقم الملف ' + row.fileNo) : ''),
+        'END:VCARD',
+      ].join('\r\n'));
+    });
+    return blocks.join('\r\n') + (blocks.length ? '\r\n' : '');
+  }
+
+  function parseVcard(text) {
+    const chunks = String(text || '').split(/END:VCARD/i);
+    const out = [];
+    chunks.forEach(function (chunk, idx) {
+      if (!/BEGIN:VCARD/i.test(chunk)) return;
+      const fn = (chunk.match(/FN:(.+)/i) || [])[1];
+      const tel = (chunk.match(/TEL[^:]*:([^\r\n]+)/i) || [])[1];
+      const name = String(fn || '').replace(/\\,/g, ',').trim();
+      const phone = digits(tel);
+      if (!phone && !name) return;
+      out.push({ name: name || '—', phone: phone, displayPhone: tel || phone, line: idx + 1 });
+    });
+    return out;
+  }
+
+  function parseCsvContacts(text) {
+    const lines = String(text || '').replace(/^\uFEFF/, '').split(/\r?\n/).filter(function (l) { return l.trim(); });
+    if (lines.length < 2) return [];
+    const header = lines[0].split(',').map(function (h) { return h.trim().replace(/^"|"$/g, '').toLowerCase(); });
+    const nameIdx = header.findIndex(function (h) { return h === 'name' || h === 'given name' || h.indexOf('name') !== -1; });
+    const phoneIdx = (() => {
+      const exact = header.findIndex(function (h) {
+        return h === 'phone number' || h === 'phone 1 - value' || h === 'phone';
+      });
+      if (exact >= 0) return exact;
+      return header.findIndex(function (h) {
+        return h.indexOf('phone') !== -1 && h.indexOf('type') === -1;
+      });
+    })();
+    if (nameIdx < 0 || phoneIdx < 0) return [];
+    const out = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(',').map(function (c) { return c.trim().replace(/^"|"$/g, ''); });
+      const name = cols[nameIdx] || '';
+      const phone = digits(cols[phoneIdx]);
+      if (!phone && !name) continue;
+      out.push({ name: name || '—', phone: phone, displayPhone: cols[phoneIdx] || phone, line: i + 1 });
+    }
+    return out;
+  }
+
+  function parseAnyContacts(text) {
+    const raw = String(text || '').trim();
+    if (!raw) return [];
+    if (/BEGIN:VCARD/i.test(raw)) return parseVcard(raw);
+    const csv = parseCsvContacts(raw);
+    if (csv.length) return csv;
+    return parseContactLines(raw);
+  }
+
+  function flattenMatchRows(state) {
+    const st = state || {};
+    const rows = [];
+    (st.matched || []).forEach(function (m) {
+      rows.push({
+        kind: 'matched',
+        how: m.how,
+        importedName: m.imported && m.imported.name,
+        importedPhone: (m.imported && (m.imported.displayPhone || m.imported.phone)) || '',
+        clinicName: m.clinic && m.clinic.name,
+        fileNo: m.clinic && m.clinic.fileNo,
+      });
+    });
+    (st.unmatchedImported || []).forEach(function (imp, index) {
+      rows.push({
+        kind: 'imported',
+        index: index,
+        importedName: imp.name,
+        importedPhone: imp.displayPhone || imp.phone,
+        clinicName: '',
+        fileNo: '',
+        phone: imp.phone,
+      });
+    });
+    (st.unmatchedClinic || []).forEach(function (c) {
+      rows.push({
+        kind: 'clinic',
+        importedName: '',
+        importedPhone: '',
+        clinicName: c.name,
+        fileNo: c.fileNo,
+        phone: c.phone,
+      });
+    });
+    return rows;
+  }
+
+  function buildWhatsAppSendUrl(phone, text, target) {
+    const p = String(phone || '').replace(/\D/g, '');
+    const q = encodeURIComponent(text || '');
+    const mode = String(target || 'auto');
+    if (!p) return '';
+    if (mode === 'desktop') return 'whatsapp://send?phone=' + p + '&text=' + q;
+    if (mode === 'web' || mode === 'embedded') return 'https://web.whatsapp.com/send?phone=' + p + '&text=' + q;
+    return 'https://wa.me/' + p + (q ? ('?text=' + q) : '');
+  }
+
   const api = {
     TYPE_LABELS: TYPE_LABELS,
     digits: digits,
     last9: last9,
     normalizeName: normalizeName,
     parseContactLines: parseContactLines,
+    parseAnyContacts: parseAnyContacts,
+    parseVcard: parseVcard,
+    parseCsvContacts: parseCsvContacts,
     matchImportedContacts: matchImportedContacts,
+    flattenMatchRows: flattenMatchRows,
     listDueAutomatedMessages: listDueAutomatedMessages,
+    contactDisplayName: contactDisplayName,
+    internationalPhone: internationalPhone,
+    buildGoogleContactsCsv: buildGoogleContactsCsv,
+    buildWhatsAppCsv: buildWhatsAppCsv,
+    buildVcard: buildVcard,
+    buildWhatsAppSendUrl: buildWhatsAppSendUrl,
   };
   global.WaFollowup = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

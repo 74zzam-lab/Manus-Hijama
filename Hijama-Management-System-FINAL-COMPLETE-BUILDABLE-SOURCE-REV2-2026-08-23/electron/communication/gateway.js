@@ -7,6 +7,16 @@ const queue = require('./queue');
 const webhook = require('./webhook-server');
 
 const MEDIA_QUEUE_MAX = 200000;
+let WaFollowupLib = null;
+try { WaFollowupLib = require('../../cloud/wa-followup'); } catch { WaFollowupLib = null; }
+
+function whatsappDeeplink(phone, message, target) {
+  if (WaFollowupLib && typeof WaFollowupLib.buildWhatsAppSendUrl === 'function') {
+    return WaFollowupLib.buildWhatsAppSendUrl(phone, message, target);
+  }
+  const text = encodeURIComponent(message || '');
+  return `https://wa.me/${phone}${text ? `?text=${text}` : ''}`;
+}
 
 function normalizeMedia(media) {
   if (!media || typeof media !== 'object') return null;
@@ -188,12 +198,14 @@ async function sendOneMessage(config, payload, media) {
     return { ok: true, channel: 'sms', mode: 'deeplink', phone, mediaAttached: false };
   }
   const staged = await stageMediaForDeeplink(media);
-  await shell.openExternal(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+  const launchUrl = whatsappDeeplink(phone, message, payload.waClient || config?.messaging?.waClient);
+  await shell.openExternal(launchUrl);
   return {
     ok: true,
     channel: 'whatsapp',
     mode: 'deeplink',
     phone,
+    launch: payload.waClient || config?.messaging?.waClient || 'auto',
     mediaCopied: !!staged.copied,
     mediaPath: staged.stagedPath || '',
     mediaHint: staged.hint || '',
@@ -251,12 +263,14 @@ async function sendMessage(config, payload) {
       await shell.openExternal(`sms:${phone}?body=${encodeURIComponent(message)}`);
       return { ok: true, channel: 'sms', mode: 'deeplink', phone, mediaAttached: false };
     }
-    await shell.openExternal(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+    const launchUrl = whatsappDeeplink(phone, message, payload.waClient || config?.messaging?.waClient);
+    await shell.openExternal(launchUrl);
     return {
       ok: true,
       channel: 'whatsapp',
       mode: 'deeplink',
       phone,
+      launch: payload.waClient || config?.messaging?.waClient || 'auto',
       mediaCopied: copied,
       mediaPath: stagedPath,
       mediaParts: mediaItems.length,
@@ -330,4 +344,5 @@ module.exports = {
   enqueue: queue.enqueue,
   normalizeMedia,
   collectMediaItems,
+  whatsappDeeplink,
 };

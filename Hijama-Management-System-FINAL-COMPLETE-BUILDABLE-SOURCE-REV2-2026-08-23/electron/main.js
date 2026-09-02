@@ -474,6 +474,39 @@ handle('communication:init', (_e, config) => {
   return { ok: false };
 });
 
+const whatsappWorkspace = require('./whatsapp-workspace');
+handle('whatsapp:embedShow', (e, bounds) => {
+  const win = BrowserWindow.fromWebContents(e.sender) || mainWindow;
+  const shown = whatsappWorkspace.attachView(win);
+  if (!shown.ok) return shown;
+  return whatsappWorkspace.setBounds(win, V.asObject(bounds));
+});
+handle('whatsapp:embedHide', (e) => {
+  const win = BrowserWindow.fromWebContents(e.sender) || mainWindow;
+  return whatsappWorkspace.detachView(win);
+});
+handle('whatsapp:embedBounds', (e, bounds) => {
+  const win = BrowserWindow.fromWebContents(e.sender) || mainWindow;
+  return whatsappWorkspace.setBounds(win, V.asObject(bounds));
+});
+handle('whatsapp:openChat', (_e, phone, text) =>
+  whatsappWorkspace.openChat(
+    V.asString(phone, { name: 'phone', max: 40, required: true }),
+    V.asString(text || '', { name: 'text', max: 10000 })
+  ));
+handle('whatsapp:writeContacts', (_e, payload) => {
+  const body = V.asObject(payload, { required: true });
+  return whatsappWorkspace.writeContacts({
+    csv: V.asString(body.csv || '', { name: 'csv', max: 2 * 1024 * 1024 }),
+    googleCsv: V.asString(body.googleCsv || '', { name: 'googleCsv', max: 2 * 1024 * 1024 }),
+    vcf: V.asString(body.vcf || '', { name: 'vcf', max: 2 * 1024 * 1024 }),
+  });
+});
+handle('whatsapp:openContactsFolder', () => whatsappWorkspace.openContactsFolder());
+handle('whatsapp:openVcard', () => whatsappWorkspace.openVcard());
+
+// ── Backup ───────────────────────────────────────────────
+
 // ── Backup ───────────────────────────────────────────────
 handle('backup:saveLocal', async (_e, payload, filename, localPath) => {
   const data = V.asPayload(payload);

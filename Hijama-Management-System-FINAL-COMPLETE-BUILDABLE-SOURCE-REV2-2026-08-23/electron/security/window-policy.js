@@ -6,7 +6,7 @@
 const path = require('path');
 const { shell } = require('electron');
 
-const ALLOWED_EXTERNAL_PROTOCOLS = new Set(['https:', 'http:', 'mailto:', 'sms:']);
+const ALLOWED_EXTERNAL_PROTOCOLS = new Set(['https:', 'http:', 'mailto:', 'sms:', 'whatsapp:']);
 const DENIED_PERMISSIONS = new Set([
   'media',
   'mediaKeySystem',

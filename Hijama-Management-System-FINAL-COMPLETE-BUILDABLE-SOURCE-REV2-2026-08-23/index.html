@@ -1536,6 +1536,22 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 .followup-kpi strong { display: block; font-size: 22px; color: var(--primary); }
 .followup-kpi span { font-size: 12px; color: var(--text-muted); }
 @media (max-width: 900px) { .followup-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fu-split { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
+@media (min-width: 1280px) {
+  .fu-split { grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr); }
+  .fu-wa-col { position: sticky; top: 8px; }
+}
+.fu-wa-embed-host {
+  min-height: 560px; height: calc(100vh - 180px); max-height: 860px;
+  background: #0b141a; border-radius: 12px; border: 1px solid var(--border);
+  overflow: hidden; position: relative;
+}
+.fu-wa-embed-fallback {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px; padding: 24px; text-align: center;
+  color: #d1e4dd; font-size: 13px; line-height: 1.7;
+}
+#page-followup .table-pagination { margin-top: 10px; flex-wrap: wrap; }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
 
 /* Printer picker drawer */
@@ -7186,6 +7202,12 @@ body.license-readonly-mode .page-readonly textarea {
             <option value="whatsapp">واتساب</option>
             <option value="sms">رسائل SMS</option>
           </select>
+          <select class="form-control" id="msg-wa-client" style="width:210px" onchange="saveMessagingConfig()" title="كيف يُفتح واتساب عند الإرسال اليدوي">
+            <option value="auto">واتساب: تلقائي (wa.me)</option>
+            <option value="web">واتساب ويب</option>
+            <option value="desktop">برنامج واتساب على الكمبيوتر</option>
+            <option value="embedded">واتساب داخل البرنامج</option>
+          </select>
           <button class="btn btn-ghost btn-sm" onclick="runMessagingAutomation(true)">▶️ فحص وإرسال الآن</button>
         </div>
       </div>
@@ -7294,8 +7316,10 @@ body.license-readonly-mode .page-readonly textarea {
   <div class="page" id="page-followup">
     <header class="dash-hero-glass page-hero compact-hero">
       <h2>متابعة العملاء</h2>
-      <p>واتساب في الخلفية، الجداول، وربط الاسم برقم الملف</p>
+      <p>واتساب داخل البرنامج، مزامنة الأرقام، والجداول التلقائية</p>
     </header>
+    <div class="fu-split">
+      <div class="fu-main">
     <div class="card" style="margin-bottom:20px;border:1px solid var(--primary)" data-feature="msg_auto">
       <div class="card-header" style="flex-wrap:wrap;gap:10px">
         <div class="card-title">📱 واتساب التلقائي</div>
@@ -7304,12 +7328,19 @@ body.license-readonly-mode .page-readonly textarea {
             <input type="checkbox" id="fu-auto-enabled" onchange="syncFollowupMessagingToggles()">
             <strong>تفعيل الإرسال الأوتوماتيكي</strong>
           </label>
-          <button class="btn btn-ghost btn-sm" type="button" onclick="openClinicWhatsAppWorkspace()">فتح واتساب ويب</button>
+          <select class="form-control" id="fu-wa-client" style="width:230px" onchange="syncFollowupMessagingToggles()">
+            <option value="auto">الإرسال: تلقائي (wa.me)</option>
+            <option value="web">الإرسال عبر واتساب ويب</option>
+            <option value="desktop">الإرسال عبر برنامج الكمبيوتر</option>
+            <option value="embedded">الإرسال داخل صفحة البرنامج</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="openClinicWhatsAppWorkspace()">فتح واتساب</button>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="openFollowupWhatsAppContactsFolder()">📂 مجلد الجهات</button>
           <button class="btn btn-primary btn-sm" type="button" onclick="runMessagingAutomation(true)">▶️ فحص وإرسال الآن</button>
           <button class="btn btn-ghost btn-sm" type="button" onclick="showPage('messages')">قوالب الرسائل</button>
         </div>
       </div>
-      <p class="followup-arch">الإرسال بدون تدخل موظف الاستقبال يعمل في الخلفية عبر <strong>مزود واتساب رسمي (Business API / urWhats)</strong> الموجود في بوابة التكامل. فتح واتساب ويب هنا للدردشة والمراجعة فقط — لا يمكن الاعتماد على تضمين واتساب داخل نافذة البرنامج للإرسال الصامت. جلسة جديدة تُسجَّل برقم الهاتف ورقم الملف، ثم تُرسل المتابعة والمواعيد والتنبيه حسب الجداول حتى لو كان الموظف يعمل في السجل اليومي.</p>
+      <p class="followup-arch">اختر كيف يُفتح واتساب: ويب، برنامج الكمبيوتر، أو النافذة داخل هذه الصفحة. الإرسال الصامت بدون نقر يحتاج مزود API. أرقام العملاء تُحدَّث تلقائياً في ملف CSV/vCard باسم العميل ورقم ملفه.</p>
       <div id="fu-bridge-status" style="margin-top:12px;font-size:12px;color:var(--text-muted)">—</div>
       <div class="form-grid form-grid-3" style="gap:12px;margin-top:12px">
         <label style="display:flex;align-items:center;gap:6px;font-size:13px">
@@ -7322,6 +7353,9 @@ body.license-readonly-mode .page-readonly textarea {
           <input type="checkbox" id="fu-overdue-enabled" onchange="syncFollowupMessagingToggles()"> تنبيه غياب العملاء
         </label>
       </div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;margin-top:12px;cursor:pointer">
+        <input type="checkbox" id="fu-auto-sync" checked onchange="syncFollowupMessagingToggles()"> مزامنة جهات واتساب تلقائياً عند تسجيل عميل جديد
+      </label>
     </div>
     <div class="followup-kpi-grid" data-feature="msg_auto">
       <div class="followup-kpi"><strong id="fu-kpi-due">0</strong><span>رسائل مستحقة الآن</span></div>
@@ -7336,27 +7370,40 @@ body.license-readonly-mode .page-readonly textarea {
       <div class="table-wrap">
         <table class="table-compact table-reports">
           <thead><tr>
-            <th>النوع</th><th>رقم الملف</th><th>العميل</th><th>الهاتف</th><th>الحالة</th>
+            <th class="col-index">#</th><th>النوع</th><th>رقم الملف</th><th>العميل</th><th>الهاتف</th><th>الحالة</th>
           </tr></thead>
-          <tbody id="fu-due-body"><tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr></tbody>
+          <tbody id="fu-due-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr></tbody>
         </table>
       </div>
+      <div id="fu-due-pagination" class="table-pagination" style="display:none"></div>
     </div>
     <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
-      <div class="card-header"><div class="card-title">👥 تسلسل العملاء — الاسم ورقم الملف</div></div>
+      <div class="card-header" style="flex-wrap:wrap;gap:8px">
+        <div class="card-title">👥 تسلسل العملاء — الاسم ورقم الملف</div>
+        <input class="form-control" id="fu-roster-search" style="width:200px" placeholder="بحث: اسم أو ملف أو هاتف" oninput="onFollowupRosterSearch()">
+        <label class="list-sort-wrap">ترتيب
+          <select class="form-control" id="sort-followupRoster" onchange="onListSortChange('followupRoster', this.value)"></select>
+        </label>
+        <button class="btn btn-primary btn-sm" type="button" onclick="exportFollowupWhatsAppContacts('csv')">⬇️ CSV لواتساب</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="exportFollowupWhatsAppContacts('google')">⬇️ CSV لجوجل</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="exportFollowupWhatsAppContacts('vcf')">⬇️ vCard</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="syncFollowupWhatsAppContacts(true)">🔄 مزامنة الآن</button>
+      </div>
+      <p class="followup-arch" style="margin-bottom:10px">الاسم في الملف = اسم العميل + رقم الملف، والرقم = جوال العميل بصيغة دولية. يُحفظ تلقائياً ويمكن رفعه إلى جهات Google/الهاتف فيظهر في واتساب.</p>
       <div class="table-wrap">
         <table class="table-compact table-reports">
           <thead><tr>
-            <th>رقم الملف</th><th>الاسم</th><th>الهاتف</th><th>آخر زيارة</th><th>آخر رسالة</th>
+            <th class="col-index">#</th><th>رقم الملف</th><th>الاسم على واتساب</th><th>الهاتف</th><th>آخر زيارة</th><th>آخر رسالة</th>
           </tr></thead>
-          <tbody id="fu-roster-body"><tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr></tbody>
+          <tbody id="fu-roster-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr></tbody>
         </table>
       </div>
       <div id="fu-roster-pagination" class="table-pagination" style="display:none"></div>
     </div>
     <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
       <div class="card-header"><div class="card-title">🔗 مطابقة قائمة واتساب مع عملاء البرنامج</div></div>
-      <p class="followup-arch" style="margin-bottom:10px">انسخ من واتساب الأسماء والأرقام (سطر لكل جهة: الاسم ثم الفاصلة ثم الرقم). البرنامج يقارن بآخر 9 أرقام ثم بالاسم، ويربط النتيجة برقم الملف. لا يتم سحب جهات واتساب تلقائياً.</p>
+      <p class="followup-arch" style="margin-bottom:10px">ارفع CSV/vCard من واتساب أو الصق الأسماء والأرقام. البرنامج يقارن بآخر 9 أرقام ثم بالاسم، ويربط النتيجة برقم الملف.</p>
+      <input class="form-control" type="file" id="fu-import-file" accept=".csv,.txt,.vcf" style="margin-bottom:8px" onchange="onFollowupContactsFile(this)">
       <textarea class="form-control" id="fu-import-contacts" rows="6" placeholder="أحمد علي، 0500000001&#10;فاطمة، 9665xxxxxxxx"></textarea>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
         <button class="btn btn-primary btn-sm" type="button" onclick="runFollowupContactMatch()">مطابقة القائمة</button>
@@ -7366,10 +7413,21 @@ body.license-readonly-mode .page-readonly textarea {
       <div class="table-wrap">
         <table class="table-compact table-reports">
           <thead><tr>
-            <th>من واتساب</th><th>رقم واتساب</th><th>المطابقة</th><th>في البرنامج</th><th>رقم الملف</th><th>إجراء</th>
+            <th class="col-index">#</th><th>من واتساب</th><th>رقم واتساب</th><th>المطابقة</th><th>في البرنامج</th><th>رقم الملف</th><th>إجراء</th>
           </tr></thead>
-          <tbody id="fu-match-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">الصق القائمة ثم اضغط مطابقة</td></tr></tbody>
+          <tbody id="fu-match-body"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-light)">ارفع ملفاً أو الصق القائمة ثم اضغط مطابقة</td></tr></tbody>
         </table>
+      </div>
+      <div id="fu-match-pagination" class="table-pagination" style="display:none"></div>
+    </div>
+      </div>
+      <div class="fu-wa-col" data-feature="msg_auto">
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><div class="card-title">واتساب داخل البرنامج</div></div>
+          <div class="fu-wa-embed-host" id="fu-wa-embed">
+            <div class="fu-wa-embed-fallback" id="fu-wa-fallback">امسح رمز واتساب ويب من هنا بعد فتح الجلسة. إن لم تظهر النافذة داخل البرنامج استخدم زر «فتح واتساب».</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -11147,6 +11205,8 @@ const DEFAULT_CLIENT_FILE_FIELDS = {
 const defaultMessagingConfig = {
   enabled: false,
   channel: 'auto',
+  waClient: 'auto',
+  autoSyncContacts: true,
   followup: { enabled: true, hoursAfter: 24 },
   appointment: { enabled: true, hoursBefore: 24 },
   overdue: { enabled: true, days: 75, cooldownDays: 30 },
@@ -11640,6 +11700,7 @@ function showPageAfterRestoreGate(id) {
   });
   const mainScroll = document.getElementById('main-scroll');
   if (mainScroll) mainScroll.scrollTop = 0;
+  if (id !== 'followup' && typeof hideFollowupWhatsAppEmbed === 'function') hideFollowupWhatsAppEmbed();
   if (typeof applyBranchViewModeUi === 'function') applyBranchViewModeUi();
   updateContextForPage(id);
   if (id === 'dashboard') { refreshDashboard(); refreshBookingsTable(); refreshDashboardAlerts(); }
@@ -12414,6 +12475,9 @@ function ensureClientRegistry({ name, phone, patientId, nationality, isVip, regi
     } else {
       DB.set('clientsRegistry', clientsRegistry);
     }
+  }
+  if (!deferPersist && typeof scheduleFollowupWhatsAppContactSync === 'function') {
+    scheduleFollowupWhatsAppContactSync();
   }
   return client;
 }
@@ -17446,6 +17510,16 @@ const MessagingBridge = {
     } else if (payloadMeta.attachMedia && !payloadMeta.media && typeof getMessageMediaMeta === 'function') {
       payloadMeta.media = getMessageMediaMeta(payloadMeta.type);
     }
+    const launch = typeof getWhatsAppLaunchTarget === 'function' ? getWhatsAppLaunchTarget() : 'auto';
+    payloadMeta.waClient = payloadMeta.waClient || launch;
+    const st = await this.getStatus();
+    const apiReady = st?.whatsapp?.mode === 'api';
+    if (!apiReady && launch === 'embedded' && getCuppingElectron()?.whatsapp?.openChat) {
+      try {
+        if (typeof showFollowupWhatsAppEmbed === 'function') await showFollowupWhatsAppEmbed();
+        return await getCuppingElectron().whatsapp.openChat(formatted, text);
+      } catch (e) { return { ok: false, reason: e.message }; }
+    }
     if (getCuppingElectron()?.communication?.send) {
       try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
       catch (e) { return { ok: false, reason: e.message }; }
@@ -17460,8 +17534,15 @@ const MessagingBridge = {
         : payloadMeta.media;
       await copyMessageMediaToClipboard(clip);
     }
-    window.open(`https://wa.me/${formatted}?text=${encodeURIComponent(text)}`, '_blank');
-    return { ok: true, mode: 'browser', mediaHint: payloadMeta.media ? 'افتح واتساب والصق الصورة (Ctrl+V) إن نُسخت' : '' };
+    const launchUrl = (typeof WaFollowup !== 'undefined' && WaFollowup.buildWhatsAppSendUrl)
+      ? WaFollowup.buildWhatsAppSendUrl(formatted, text, launch)
+      : `https://wa.me/${formatted}?text=${encodeURIComponent(text)}`;
+    if (launch === 'desktop' && getCuppingElectron()?.app?.openExternal) {
+      await getCuppingElectron().app.openExternal(launchUrl);
+    } else {
+      window.open(launchUrl, '_blank');
+    }
+    return { ok: true, mode: 'browser', launch, mediaHint: payloadMeta.media ? 'افتح واتساب والصق الصورة (Ctrl+V) إن نُسخت' : '' };
   },
   async sendSMS(phone, text, meta) {
     if (!phone) return { ok: false, reason: 'invalid_phone' };
@@ -23171,6 +23252,7 @@ function loadMessagingConfigUI() {
   const val = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
   chk('msg-auto-enabled', m.enabled);
   val('msg-channel', m.channel || 'auto');
+  val('msg-wa-client', m.waClient || 'auto');
   chk('msg-followup-enabled', m.followup?.enabled);
   chk('msg-appt-enabled', m.appointment?.enabled);
   chk('msg-overdue-enabled', m.overdue?.enabled);
@@ -23186,6 +23268,12 @@ function saveMessagingConfig() {
   ensureMessagingSettings();
   settings.messaging.enabled = !!document.getElementById('msg-auto-enabled')?.checked;
   settings.messaging.channel = document.getElementById('msg-channel')?.value || 'auto';
+  settings.messaging.waClient = typeof getWhatsAppLaunchTarget === 'function'
+    ? getWhatsAppLaunchTarget()
+    : (document.getElementById('msg-wa-client')?.value || settings.messaging.waClient || 'auto');
+  if (document.getElementById('page-followup')?.classList.contains('active') && document.getElementById('fu-auto-sync')) {
+    settings.messaging.autoSyncContacts = !!document.getElementById('fu-auto-sync').checked;
+  }
   settings.messaging.followup.enabled = !!document.getElementById('msg-followup-enabled')?.checked;
   settings.messaging.followup.hoursAfter = parseInt(document.getElementById('msg-followup-hours')?.value, 10) || 24;
   settings.messaging.appointment.enabled = !!document.getElementById('msg-appt-enabled')?.checked;
@@ -23988,6 +24076,8 @@ let attLogPage = 1;
 let bookingsPage = 1;
 let expensesPage = 1;
 let fuRosterPage = 1;
+let fuDuePage = 1;
+let fuMatchPage = 1;
 const TABLE_PAGE_SIZE_OPTIONS = [10, 20, 30, 50];
 
 function getTablePageSize() {
@@ -24004,7 +24094,7 @@ function setTablePageSize(n) {
 
 function onTablePageSizeChange(size) {
   setTablePageSize(size);
-  messageLogPage = bulkTablePage = invoiceSearchPage = clientsListPage = dailyTablePage = attLogPage = bookingsPage = expensesPage = fuRosterPage = 1;
+  messageLogPage = bulkTablePage = invoiceSearchPage = clientsListPage = dailyTablePage = attLogPage = bookingsPage = expensesPage = fuRosterPage = fuDuePage = fuMatchPage = 1;
   if (typeof globalThis._invoicesListPage !== 'undefined') globalThis._invoicesListPage = 1;
   if (typeof refreshMessageLog === 'function') refreshMessageLog();
   if (typeof refreshBulkTable === 'function') refreshBulkTable();
@@ -24016,6 +24106,11 @@ function onTablePageSizeChange(size) {
   if (typeof refreshBookingsTable === 'function') refreshBookingsTable();
   if (typeof refreshExpenses === 'function') refreshExpenses();
   if (typeof refreshFollowupRoster === 'function') refreshFollowupRoster(false);
+  if (typeof refreshFollowupDueTable === 'function') refreshFollowupDueTable(false);
+  if (typeof renderFollowupMatchTable === 'function') renderFollowupMatchTable(false);
+  if (typeof showFollowupWhatsAppEmbed === 'function' && typeof isFollowupPageActive === 'function' && isFollowupPageActive()) {
+    showFollowupWhatsAppEmbed();
+  }
 }
 
 function sortClinicList(listId, items, getter) {
@@ -24056,6 +24151,7 @@ function onListSortChange(listId, value) {
     invoices: function () { if (typeof refreshInvoicesPage === 'function') refreshInvoicesPage(false); },
     invoiceSearch: function () { if (typeof performInvoiceSearch === 'function') performInvoiceSearch(false); },
     messages: function () { if (typeof refreshBulkTable === 'function') refreshBulkTable(false); },
+    followupRoster: function () { if (typeof refreshFollowupRoster === 'function') refreshFollowupRoster(false); },
     messageLog: function () { if (typeof refreshMessageLog === 'function') refreshMessageLog(false); },
     bookings: function () { if (typeof refreshBookingsTable === 'function') refreshBookingsTable(); },
     expenses: function () { if (typeof refreshExpenses === 'function') refreshExpenses(); },
@@ -24224,35 +24320,91 @@ function lookupClientFileNo(phone) {
 }
 
 let _fuMatchState = { matched: [], unmatchedImported: [], unmatchedClinic: [] };
+let _fuContactSyncTimer = null;
+let _fuEmbedBound = false;
+let _fuEmbedVisible = false;
+
+function isFollowupPageActive() {
+  return !!document.getElementById('page-followup')?.classList.contains('active');
+}
+
+function getWhatsAppLaunchTarget() {
+  if (typeof ensureMessagingSettings === 'function') ensureMessagingSettings();
+  const fu = document.getElementById('fu-wa-client')?.value;
+  const msg = document.getElementById('msg-wa-client')?.value;
+  const stored = (typeof settings !== 'undefined' && settings.messaging && settings.messaging.waClient) || 'auto';
+  if (isFollowupPageActive() && fu) return fu;
+  return msg || fu || stored || 'auto';
+}
 
 function getFollowupRoster() {
   const map = typeof buildClientsMap === 'function' ? buildClientsMap() : {};
-  const rows = Object.values(map).map((v) => ({
-    key: v.key,
-    name: v.name,
-    phone: v.phone,
-    fileNo: v.fileNo || '',
-    lastDate: v.lastDate || '',
-    visits: v.visits || [],
-  }));
-  const seen = new Set(rows.map((r) => r.fileNo || r.key));
+  const rows = [];
+  const seenFile = new Set();
+  const seenPhone = new Set();
+  const last9 = (phone) => (typeof WaFollowup !== 'undefined' ? WaFollowup.last9(phone) : String(phone || '').replace(/\D/g, '').slice(-9));
+  function pushRow(v) {
+    if (!v) return;
+    const fileNo = String(v.fileNo || '').trim();
+    const name = String(v.name || v.fullName || '').trim();
+    const phone = String(v.phone || '').trim();
+    if (!fileNo && !name && !phone) return;
+    if (fileNo) {
+      if (seenFile.has(fileNo)) return;
+      seenFile.add(fileNo);
+    } else {
+      const key = last9(phone) || ('id:' + (v.key || v.id || name));
+      if (seenPhone.has(key)) return;
+      seenPhone.add(key);
+    }
+    const p9 = last9(phone);
+    if (p9) seenPhone.add(p9);
+    const row = {
+      key: v.key || fileNo || phone,
+      name: name || '—',
+      phone,
+      fileNo,
+      lastDate: v.lastDate || v.lastVisit || '',
+      visits: v.visits || [],
+      latestCreatedAt: v.latestCreatedAt || v.createdAt || '',
+    };
+    row.displayName = typeof WaFollowup !== 'undefined' ? WaFollowup.contactDisplayName(row) : (fileNo ? (name + ' ' + fileNo) : name);
+    row.intlPhone = typeof WaFollowup !== 'undefined' ? WaFollowup.internationalPhone(phone) : phone;
+    rows.push(row);
+  }
+  Object.values(map).forEach(pushRow);
   (typeof clientsRegistry !== 'undefined' && Array.isArray(clientsRegistry) ? clientsRegistry : []).forEach((c) => {
-    if (!c || !c.phone) return;
-    const id = c.fileNo || c.id;
-    if (id && seen.has(id)) return;
-    seen.add(id);
-    rows.push({
-      key: id,
-      name: c.name || '—',
+    pushRow({
+      key: c.fileNo || c.id,
+      name: c.name,
       phone: c.phone,
       fileNo: c.fileNo || '',
       lastDate: '',
       visits: [],
+      createdAt: c.createdAt,
     });
   });
   return typeof sortClinicList === 'function'
-    ? sortClinicList('messages', rows, function (v, field) { return clientEntrySortValue(v, field); })
+    ? sortClinicList('followupRoster', rows, function (v, field) { return clientEntrySortValue(v, field); })
     : rows;
+}
+
+function getFollowupRosterFiltered() {
+  const q = String(document.getElementById('fu-roster-search')?.value || '').trim().toLowerCase();
+  const rows = getFollowupRoster().filter((r) => r.phone);
+  if (!q) return rows;
+  const qDigits = q.replace(/\D/g, '');
+  return rows.filter((r) => {
+    const hay = [r.name, r.fileNo, r.phone, r.displayName, r.intlPhone].join(' ').toLowerCase();
+    if (hay.includes(q)) return true;
+    if (qDigits && String(r.phone || '').replace(/\D/g, '').includes(qDigits)) return true;
+    return false;
+  });
+}
+
+function onFollowupRosterSearch() {
+  fuRosterPage = 1;
+  refreshFollowupRoster(false);
 }
 
 function syncFollowupMessagingToggles() {
@@ -24267,6 +24419,9 @@ function syncFollowupMessagingToggles() {
     const to = document.getElementById(toId);
     if (from && to) to.checked = !!from.checked;
   });
+  const fuWa = document.getElementById('fu-wa-client');
+  const msgWa = document.getElementById('msg-wa-client');
+  if (fuWa && msgWa && fuWa.value) msgWa.value = fuWa.value;
   if (typeof saveMessagingConfig === 'function') saveMessagingConfig();
   refreshFollowupWorkspace();
 }
@@ -24283,17 +24438,94 @@ function copyMessagingTogglesToFollowup() {
     const to = document.getElementById(toId);
     if (from && to) to.checked = !!from.checked;
   });
+  const wa = (typeof settings !== 'undefined' && settings.messaging && settings.messaging.waClient)
+    || document.getElementById('msg-wa-client')?.value
+    || 'auto';
+  ['fu-wa-client', 'msg-wa-client'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && wa) el.value = wa;
+  });
+  const auto = document.getElementById('fu-auto-sync');
+  if (auto) auto.checked = !(typeof settings !== 'undefined' && settings.messaging && settings.messaging.autoSyncContacts === false);
 }
 
-function openClinicWhatsAppWorkspace() {
+function bindFollowupWhatsAppEmbedLayout() {
+  if (_fuEmbedBound) return;
+  _fuEmbedBound = true;
+  const update = () => {
+    if (!isFollowupPageActive()) return;
+    showFollowupWhatsAppEmbed();
+  };
+  window.addEventListener('resize', update);
+  document.getElementById('main-scroll')?.addEventListener('scroll', update, { passive: true });
+}
+
+async function showFollowupWhatsAppEmbed() {
+  const host = document.getElementById('fu-wa-embed');
+  const fallback = document.getElementById('fu-wa-fallback');
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (!host) return { ok: false };
+  if (!isFollowupPageActive()) return hideFollowupWhatsAppEmbed();
+  if (!api?.whatsapp?.show) {
+    if (fallback) fallback.style.display = 'flex';
+    return { ok: false, reason: 'not_electron' };
+  }
+  const r = host.getBoundingClientRect();
+  const bounds = {
+    x: Math.round(r.left),
+    y: Math.round(r.top),
+    width: Math.round(r.width),
+    height: Math.round(r.height),
+  };
+  if (bounds.width < 200 || bounds.height < 200) return { ok: false, reason: 'too_small' };
+  try {
+    const fn = _fuEmbedVisible && api.whatsapp.setBounds ? 'setBounds' : 'show';
+    const res = await api.whatsapp[fn](bounds);
+    _fuEmbedVisible = !!res?.ok;
+    if (fallback) fallback.style.display = res?.ok ? 'none' : 'flex';
+    bindFollowupWhatsAppEmbedLayout();
+    return res;
+  } catch (e) {
+    _fuEmbedVisible = false;
+    if (fallback) fallback.style.display = 'flex';
+    return { ok: false, reason: e.message };
+  }
+}
+
+function hideFollowupWhatsAppEmbed() {
+  _fuEmbedVisible = false;
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (api?.whatsapp?.hide) {
+    try { api.whatsapp.hide(); } catch { /* view already detached */ }
+  }
+  return { ok: true, hidden: true };
+}
+
+async function openClinicWhatsAppWorkspace() {
+  const target = getWhatsAppLaunchTarget();
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (target === 'embedded' || ((target === 'web' || target === 'auto') && api?.whatsapp?.show && isFollowupPageActive())) {
+    const shown = await showFollowupWhatsAppEmbed();
+    if (shown?.ok || target === 'embedded') return shown;
+  }
+  if (target === 'desktop') {
+    const url = 'whatsapp://send';
+    try {
+      if (api?.app?.openExternal) await api.app.openExternal(url);
+      else window.location.href = url;
+    } catch {
+      window.location.href = url;
+    }
+    return { ok: true, mode: 'desktop' };
+  }
   const url = 'https://web.whatsapp.com';
   try {
-    const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
-    if (api?.app?.openExternal) api.app.openExternal(url);
+    if (api?.app?.openExternal) await api.app.openExternal(url);
     else window.open(url, '_blank');
   } catch {
     window.open(url, '_blank');
   }
+  return { ok: true, mode: 'web' };
 }
 
 async function refreshFollowupStatus() {
@@ -24303,15 +24535,23 @@ async function refreshFollowupStatus() {
   const waMode = st?.whatsapp?.mode || 'browser';
   const provider = st?.whatsapp?.provider || '';
   const auto = settings.messaging?.enabled ? 'مفعّل' : 'يدوي';
+  const launch = getWhatsAppLaunchTarget();
+  const launchLabel = { auto: 'wa.me', web: 'واتساب ويب', desktop: 'برنامج الكمبيوتر', embedded: 'داخل البرنامج' }[launch] || launch;
   const bg = waMode === 'api'
     ? 'إرسال خلفي جاهز عبر المزود'
-    : 'وضع الرابط (wa.me) يحتاج نقرة — للإرسال الصامت اربط مزود واتساب API';
-  el.textContent = `واتساب: ${waMode}${provider ? ' — ' + provider : ''} | الوضع: ${auto} | ${bg}`;
+    : 'وضع الرابط يحتاج نقرة — للإرسال الصامت اربط مزود واتساب API';
+  el.textContent = `واتساب: ${waMode}${provider ? ' — ' + provider : ''} | فتح: ${launchLabel} | الوضع: ${auto} | ${bg}`;
 }
 
-function refreshFollowupDueTable() {
+function goFollowupDuePage(page) {
+  fuDuePage = Math.max(1, parseInt(page, 10) || 1);
+  refreshFollowupDueTable(false);
+}
+
+function refreshFollowupDueTable(resetPage) {
   const tbody = document.getElementById('fu-due-body');
   if (!tbody || typeof WaFollowup === 'undefined') return [];
+  if (resetPage !== false) fuDuePage = 1;
   ensureMessagingSettings();
   const due = WaFollowup.listDueAutomatedMessages({
     now: Date.now(),
@@ -24326,10 +24566,16 @@ function refreshFollowupDueTable() {
   const kpi = document.getElementById('fu-kpi-due');
   if (kpi) kpi.textContent = String(due.length);
   if (!due.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">لا توجد رسائل مستحقة</td></tr>';
+    renderTablePagination('fu-due-pagination', 1, 0, 0, 'goFollowupDuePage');
     return due;
   }
-  tbody.innerHTML = due.map((d) => `<tr>
+  const pg = paginateList(due, fuDuePage);
+  fuDuePage = pg.page;
+  renderTablePagination('fu-due-pagination', pg.page, pg.totalPages, pg.total, 'goFollowupDuePage');
+  const base = (pg.page - 1) * pg.pageSize;
+  tbody.innerHTML = pg.items.map((d, i) => `<tr>
+    <td class="col-index">${base + i + 1}</td>
     <td><span class="tag tag-blue">${d.label || d.type}</span></td>
     <td dir="ltr">${d.fileNo || '—'}</td>
     <td>${d.name || '—'}</td>
@@ -24348,24 +24594,26 @@ function refreshFollowupRoster(resetPage) {
   const tbody = document.getElementById('fu-roster-body');
   if (!tbody) return [];
   if (resetPage !== false) fuRosterPage = 1;
-  const rows = getFollowupRoster().filter((r) => r.phone);
+  const rows = getFollowupRosterFiltered();
   const kpi = document.getElementById('fu-kpi-clients');
   if (kpi) kpi.textContent = String(rows.length);
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">لا يوجد عملاء</td></tr>';
     renderTablePagination('fu-roster-pagination', 1, 0, 0, 'goFollowupRosterPage');
     return rows;
   }
   const pg = paginateList(rows, fuRosterPage);
   fuRosterPage = pg.page;
   renderTablePagination('fu-roster-pagination', pg.page, pg.totalPages, pg.total, 'goFollowupRosterPage');
-  tbody.innerHTML = pg.items.map((r) => {
+  const base = (pg.page - 1) * pg.pageSize;
+  tbody.innerHTML = pg.items.map((r, i) => {
     const lastMsg = typeof getClientLastMessage === 'function' ? getClientLastMessage(r.phone) : null;
     const lastMsgDate = lastMsg?.sentAt ? new Date(lastMsg.sentAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' }) : '—';
     return `<tr>
+      <td class="col-index">${base + i + 1}</td>
       <td dir="ltr">${r.fileNo || '—'}</td>
-      <td>${r.name || '—'}</td>
-      <td dir="ltr">${r.phone || '—'}</td>
+      <td>${r.displayName || r.name || '—'}</td>
+      <td dir="ltr">${r.intlPhone || r.phone || '—'}</td>
       <td>${r.lastDate || '—'}</td>
       <td dir="ltr" style="font-size:12px">${lastMsgDate}</td>
     </tr>`;
@@ -24385,71 +24633,96 @@ function saveFollowupImportedText(text) {
   try { localStorage.setItem(followupImportStorageKey(), text || ''); } catch { /* local only */ }
 }
 
-function runFollowupContactMatch() {
+function onFollowupContactsFile(input) {
+  const file = input && input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function () {
+    const ta = document.getElementById('fu-import-contacts');
+    if (ta) ta.value = String(reader.result || '');
+    runFollowupContactMatch(true);
+  };
+  reader.onerror = function () {
+    notify('⚠️ تعذر قراءة الملف', 'danger');
+  };
+  reader.readAsText(file);
+}
+
+function runFollowupContactMatch(resetPage) {
   const ta = document.getElementById('fu-import-contacts');
   const text = ta ? ta.value : '';
   saveFollowupImportedText(text);
   if (typeof WaFollowup === 'undefined') return;
-  const imported = WaFollowup.parseContactLines(text);
+  const imported = (WaFollowup.parseAnyContacts || WaFollowup.parseContactLines)(text);
   const clinic = getFollowupRoster().filter((r) => r.phone || r.name);
   _fuMatchState = WaFollowup.matchImportedContacts(imported, clinic);
-  renderFollowupMatchTable();
+  renderFollowupMatchTable(resetPage !== false);
 }
 
 function clearFollowupContactImport() {
   const ta = document.getElementById('fu-import-contacts');
   if (ta) ta.value = '';
+  const file = document.getElementById('fu-import-file');
+  if (file) file.value = '';
   saveFollowupImportedText('');
   _fuMatchState = { matched: [], unmatchedImported: [], unmatchedClinic: [] };
-  renderFollowupMatchTable();
+  renderFollowupMatchTable(true);
 }
 
-function renderFollowupMatchTable() {
+function goFollowupMatchPage(page) {
+  fuMatchPage = Math.max(1, parseInt(page, 10) || 1);
+  renderFollowupMatchTable(false);
+}
+
+function renderFollowupMatchTable(resetPage) {
   const tbody = document.getElementById('fu-match-body');
   const summary = document.getElementById('fu-match-summary');
   if (!tbody) return;
+  if (resetPage !== false) fuMatchPage = 1;
   const st = _fuMatchState || { matched: [], unmatchedImported: [], unmatchedClinic: [] };
   if (document.getElementById('fu-kpi-matched')) document.getElementById('fu-kpi-matched').textContent = String(st.matched.length);
   if (document.getElementById('fu-kpi-unmatched')) {
     document.getElementById('fu-kpi-unmatched').textContent = String(st.unmatchedImported.length + st.unmatchedClinic.length);
   }
-  const rows = [];
-  st.matched.forEach((m, i) => {
-    const how = m.how === 'phone' ? '<span class="tag tag-green">رقم متطابق</span>' : '<span class="tag tag-gold">اسم متطابق — راجع الرقم</span>';
-    rows.push(`<tr>
-      <td>${m.imported.name || '—'}</td>
-      <td dir="ltr">${m.imported.displayPhone || m.imported.phone || '—'}</td>
-      <td>${how}</td>
-      <td>${m.clinic.name || '—'}</td>
-      <td dir="ltr">${m.clinic.fileNo || '—'}</td>
-      <td>—</td>
-    </tr>`);
-  });
-  st.unmatchedImported.forEach((imp, i) => {
-    rows.push(`<tr>
-      <td>${imp.name || '—'}</td>
-      <td dir="ltr">${imp.displayPhone || imp.phone || '—'}</td>
-      <td><span class="tag tag-red">غير موجود في البرنامج</span></td>
-      <td>—</td>
-      <td>—</td>
-      <td>${imp.phone ? `<button type="button" class="btn btn-ghost btn-sm" onclick="registerFollowupImportedClient(${i})">تسجيل كعميل سابق</button>` : '—'}</td>
-    </tr>`);
-  });
-  st.unmatchedClinic.slice(0, 80).forEach((c) => {
-    rows.push(`<tr>
-      <td>—</td>
-      <td>—</td>
-      <td><span class="tag tag-gray">ليس في قائمة واتساب المستوردة</span></td>
-      <td>${c.name || '—'}</td>
-      <td dir="ltr">${c.fileNo || '—'}</td>
-      <td dir="ltr">${c.phone || '—'}</td>
-    </tr>`);
-  });
+  const rows = (typeof WaFollowup !== 'undefined' && WaFollowup.flattenMatchRows)
+    ? WaFollowup.flattenMatchRows(st)
+    : [];
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">الصق القائمة ثم اضغط مطابقة</td></tr>';
-  } else {
-    tbody.innerHTML = rows.join('');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-light)">ارفع ملفاً أو الصق القائمة ثم اضغط مطابقة</td></tr>';
+    renderTablePagination('fu-match-pagination', 1, 0, 0, 'goFollowupMatchPage');
+    if (summary) summary.textContent = '—';
+    return;
   }
+  const pg = paginateList(rows, fuMatchPage);
+  fuMatchPage = pg.page;
+  renderTablePagination('fu-match-pagination', pg.page, pg.totalPages, pg.total, 'goFollowupMatchPage');
+  const base = (pg.page - 1) * pg.pageSize;
+  tbody.innerHTML = pg.items.map((row, i) => {
+    let how = '—';
+    let action = '—';
+    if (row.kind === 'matched') {
+      how = row.how === 'phone'
+        ? '<span class="tag tag-green">رقم متطابق</span>'
+        : '<span class="tag tag-gold">اسم متطابق — راجع الرقم</span>';
+    } else if (row.kind === 'imported') {
+      how = '<span class="tag tag-red">غير موجود في البرنامج</span>';
+      action = row.phone
+        ? `<button type="button" class="btn btn-ghost btn-sm" onclick="registerFollowupImportedClient(${row.index})">تسجيل كعميل سابق</button>`
+        : '—';
+    } else {
+      how = '<span class="tag tag-gray">ليس في قائمة واتساب المستوردة</span>';
+      action = row.phone || '—';
+    }
+    return `<tr>
+      <td class="col-index">${base + i + 1}</td>
+      <td>${row.importedName || '—'}</td>
+      <td dir="ltr">${row.importedPhone || '—'}</td>
+      <td>${how}</td>
+      <td>${row.clinicName || '—'}</td>
+      <td dir="ltr">${row.fileNo || '—'}</td>
+      <td>${action}</td>
+    </tr>`;
+  }).join('');
   if (summary) {
     summary.textContent = st.matched.length || st.unmatchedImported.length
       ? `مطابق: ${st.matched.length} — غير مسجّل من واتساب: ${st.unmatchedImported.length} — في البرنامج دون قائمة واتساب: ${st.unmatchedClinic.length}`
@@ -24463,25 +24736,108 @@ function registerFollowupImportedClient(index) {
   if (typeof ensureClientRegistry !== 'function') { notify('⚠️ تعذر تسجيل العميل', 'danger'); return; }
   const client = ensureClientRegistry({ name: imp.name, phone: imp.displayPhone || imp.phone });
   notify(client?.fileNo ? `✅ سُجّل ${client.name || imp.name} برقم ملف ${client.fileNo}` : '✅ تم تسجيل العميل');
-  runFollowupContactMatch();
-  refreshFollowupRoster();
+  runFollowupContactMatch(false);
+  refreshFollowupRoster(false);
+}
+
+function followupContactsPayload() {
+  const rows = getFollowupRoster().filter((r) => r.phone);
+  if (typeof WaFollowup === 'undefined') return { rows, csv: '', googleCsv: '', vcf: '' };
+  return {
+    rows,
+    csv: WaFollowup.buildWhatsAppCsv(rows),
+    googleCsv: WaFollowup.buildGoogleContactsCsv(rows),
+    vcf: WaFollowup.buildVcard(rows),
+  };
+}
+
+function downloadFollowupContactBlob(content, filename, mime) {
+  const body = String(content || '');
+  const withBom = mime.indexOf('csv') >= 0 && body.charCodeAt(0) !== 0xFEFF ? ('\uFEFF' + body) : body;
+  if (typeof downloadFile === 'function') downloadFile(withBom, filename, mime);
+}
+
+async function exportFollowupWhatsAppContacts(kind) {
+  const payload = followupContactsPayload();
+  if (!payload.rows.length) {
+    notify('⚠️ لا يوجد عملاء بأرقام هاتف للتصدير', 'danger');
+    return;
+  }
+  if (kind === 'vcf') downloadFollowupContactBlob(payload.vcf, 'clients-whatsapp.vcf', 'text/vcard;charset=utf-8');
+  else if (kind === 'google') downloadFollowupContactBlob(payload.googleCsv, 'clients-google-contacts.csv', 'text/csv;charset=utf-8');
+  else downloadFollowupContactBlob(payload.csv, 'clients-whatsapp.csv', 'text/csv;charset=utf-8');
+  await syncFollowupWhatsAppContacts(false);
+  notify(`✅ تم تجهيز ${payload.rows.length} جهة — الاسم = العميل + رقم الملف`);
+}
+
+function scheduleFollowupWhatsAppContactSync() {
+  if (typeof ensureMessagingSettings === 'function') ensureMessagingSettings();
+  if (settings.messaging && settings.messaging.autoSyncContacts === false) return;
+  clearTimeout(_fuContactSyncTimer);
+  _fuContactSyncTimer = setTimeout(() => {
+    syncFollowupWhatsAppContacts(false);
+  }, 800);
+}
+
+async function syncFollowupWhatsAppContacts(manual) {
+  const payload = followupContactsPayload();
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (api?.whatsapp?.writeContacts) {
+    try {
+      const res = await api.whatsapp.writeContacts({
+        csv: payload.csv,
+        googleCsv: payload.googleCsv,
+        vcf: payload.vcf,
+      });
+      if (manual) {
+        notify(res?.ok
+          ? `✅ حُفظت ${payload.rows.length} جهة تلقائياً في ${res.dir || 'المستندات'}`
+          : '⚠️ تعذر حفظ جهات واتساب', res?.ok ? undefined : 'danger');
+      }
+      return res;
+    } catch (e) {
+      if (manual) notify('⚠️ ' + (e.message || 'تعذر المزامنة'), 'danger');
+      return { ok: false, reason: e.message };
+    }
+  }
+  if (manual) {
+    downloadFollowupContactBlob(payload.csv, 'clients-whatsapp.csv', 'text/csv;charset=utf-8');
+    downloadFollowupContactBlob(payload.vcf, 'clients-whatsapp.vcf', 'text/vcard;charset=utf-8');
+    notify(`✅ تم تنزيل ${payload.rows.length} جهة (CSV + vCard)`);
+  }
+  return { ok: true, mode: 'download', count: payload.rows.length };
+}
+
+async function openFollowupWhatsAppContactsFolder() {
+  await syncFollowupWhatsAppContacts(false);
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (api?.whatsapp?.openContactsFolder) {
+    return api.whatsapp.openContactsFolder();
+  }
+  notify('ℹ️ في المتصفح استخدم أزرار تنزيل CSV / vCard', 'warning');
 }
 
 function loadFollowupWorkspace() {
+  if (typeof ListSort !== 'undefined' && ListSort.fillSelect) ListSort.fillSelect('followupRoster');
   if (typeof loadMessagingConfigUI === 'function') loadMessagingConfigUI();
   copyMessagingTogglesToFollowup();
   const ta = document.getElementById('fu-import-contacts');
   if (ta && !ta.value) ta.value = loadFollowupImportedText();
   refreshFollowupWorkspace();
+  requestAnimationFrame(() => {
+    showFollowupWhatsAppEmbed();
+    scheduleFollowupWhatsAppContactSync();
+  });
 }
 
 function refreshFollowupWorkspace() {
   copyMessagingTogglesToFollowup();
   refreshFollowupStatus();
-  refreshFollowupDueTable();
+  refreshFollowupDueTable(false);
   refreshFollowupRoster(false);
-  if (document.getElementById('fu-import-contacts')?.value) runFollowupContactMatch();
-  else renderFollowupMatchTable();
+  if (document.getElementById('fu-import-contacts')?.value) runFollowupContactMatch(false);
+  else renderFollowupMatchTable(false);
+  if (isFollowupPageActive()) showFollowupWhatsAppEmbed();
 }
 
 function paginateList(arr, page, pageSize) {
@@ -24518,6 +24874,7 @@ function renderTablePagination(containerId, page, totalPages, totalItems, goFnNa
       btns += `<button type="button" class="pg-btn${p === page ? ' active' : ''}" onclick="${goFnName}(${p})">${p}</button>`;
     }
     btns += `<button type="button" class="pg-btn" ${page >= totalPages ? 'disabled' : ''} onclick="${goFnName}(${page + 1})">›</button>`;
+    btns += `<label class="pg-jump">انتقل إلى<input type="number" min="1" max="${totalPages}" value="${page}" onkeydown="if(event.key==='Enter')${goFnName}(this.value)"></label>`;
   }
   btns += `<span class="pg-info">${totalItems} سجل${totalPages > 1 ? ` — صفحة ${page} من ${totalPages}` : ''}</span>`;
   el.innerHTML = btns;

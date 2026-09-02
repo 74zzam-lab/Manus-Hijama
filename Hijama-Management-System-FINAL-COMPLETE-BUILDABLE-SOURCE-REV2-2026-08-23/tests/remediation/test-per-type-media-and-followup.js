@@ -69,6 +69,40 @@ check(/id="msg-followup-media"/.test(indexSrc) && /id="msg-shared-media"/.test(i
 check(/function loadFollowupWorkspace/.test(indexSrc) && /openClinicWhatsAppWorkspace/.test(indexSrc), 'follow-up page wires WhatsApp workspace + auto send');
 check(/registerFollowupImportedClient/.test(indexSrc), 'unmatched WhatsApp contacts can be registered as previous clients');
 check(/ADDON_PAGE_MODULES = \{[\s\S]*followup: 'messages'/.test(indexSrc), 'follow-up page uses the messages license module');
+check(/function getWhatsAppLaunchTarget/.test(indexSrc), 'WhatsApp launch target is selectable');
+check(/function goFollowupDuePage/.test(indexSrc) && /function goFollowupRosterPage/.test(indexSrc) && /function goFollowupMatchPage/.test(indexSrc), 'follow-up tables have page jump functions');
+check(/id="fu-due-pagination"/.test(indexSrc) && /id="fu-roster-pagination"/.test(indexSrc) && /id="fu-match-pagination"/.test(indexSrc), 'follow-up tables have pagination containers');
+check(/function exportFollowupWhatsAppContacts/.test(indexSrc) && /function syncFollowupWhatsAppContacts/.test(indexSrc), 'WhatsApp contact CSV/vCard export and auto-sync exist');
+check(/function showFollowupWhatsAppEmbed/.test(indexSrc) && /function hideFollowupWhatsAppEmbed/.test(indexSrc), 'embedded WhatsApp Web workspace can show and hide');
+check(/sortClinicList\('followupRoster'/.test(indexSrc), 'follow-up roster uses its own sort list');
+check(/messages: function \(\) \{ if \(typeof refreshBulkTable === 'function'\) refreshBulkTable\(false\); \}/.test(indexSrc), 'messages sort still refreshes the bulk table');
+check(/id="fu-wa-client"/.test(indexSrc) && /id="msg-wa-client"/.test(indexSrc), 'web vs desktop vs in-app WhatsApp launch is selectable');
+check(/whatsapp:embedShow/.test(fs.readFileSync(path.join(root, 'electron/preload.js'), 'utf8')), 'preload exposes WhatsApp embed IPC');
+check(/whatsapp:/.test(fs.readFileSync(path.join(root, 'electron/security/window-policy.js'), 'utf8')), 'whatsapp: protocol is allowed for desktop deep links');
+
+const named = { name: 'أحمد علي', phone: '0500000001', fileNo: 'CL-00007' };
+check(WaFollowup.contactDisplayName(named) === 'أحمد علي CL-00007', 'WhatsApp contact name is client name plus file number');
+check(WaFollowup.internationalPhone(named.phone) === '+966500000001', 'Saudi mobiles become +966 international numbers');
+const simpleCsv = WaFollowup.buildWhatsAppCsv([named]);
+check(simpleCsv.indexOf('أحمد علي CL-00007') >= 0 && simpleCsv.indexOf('+966500000001') >= 0, 'CSV rows use display name and international phone');
+const googleCsv = WaFollowup.buildGoogleContactsCsv([named]);
+check(googleCsv.indexOf('Name,Given Name') === 0 && googleCsv.indexOf('أحمد علي CL-00007') >= 0, 'Google Contacts CSV keeps the same display name');
+const vcf = WaFollowup.buildVcard([named]);
+check(/FN:أحمد علي CL-00007/.test(vcf) && /TEL;TYPE=CELL:\+966500000001/.test(vcf), 'vCard uses display name and cell phone');
+
+check(WaFollowup.buildWhatsAppSendUrl('0500000001', 'مرحبا', 'auto').indexOf('https://wa.me/') === 0, 'auto launch uses wa.me');
+check(WaFollowup.buildWhatsAppSendUrl('0500000001', 'مرحبا', 'web').indexOf('https://web.whatsapp.com/send') === 0, 'web launch uses WhatsApp Web send URL');
+check(WaFollowup.buildWhatsAppSendUrl('0500000001', 'مرحبا', 'desktop').indexOf('whatsapp://send') === 0, 'desktop launch uses whatsapp: protocol');
+check(WaFollowup.buildWhatsAppSendUrl('0500000001', 'مرحبا', 'embedded').indexOf('https://web.whatsapp.com/send') === 0, 'embedded launch uses WhatsApp Web send URL');
+
+const flat = WaFollowup.flattenMatchRows(matched);
+check(flat.length === matched.matched.length + matched.unmatchedImported.length + matched.unmatchedClinic.length, 'flattened match rows include matched, unmatched imported, and unmatched clinic');
+check(flat.filter((r) => r.kind === 'imported').every((r) => Number.isInteger(r.index)), 'register action keeps original unmatched imported index');
+
+const parsedCsv = WaFollowup.parseAnyContacts(simpleCsv);
+check(parsedCsv.length === 1 && parsedCsv[0].phone.endsWith('500000001'), 'exported CSV can be re-imported for matching');
+const parsedGoogle = WaFollowup.parseAnyContacts(googleCsv);
+check(parsedGoogle.length === 1 && parsedGoogle[0].phone.endsWith('500000001'), 'Google Contacts CSV re-imports the phone value column not the type column');
 
 if (errors.length) {
   console.error('FAIL per-type-media-and-followup');

@@ -14,6 +14,7 @@
     invoiceSearch: 'date-desc',
     messages: 'lastVisit-desc',
     messageLog: 'sentAt-desc',
+    followupRoster: 'lastVisit-desc',
     bookings: 'date-desc',
     expenses: 'date-desc',
     attendance: 'date-desc',
@@ -75,6 +76,14 @@
     messageLog: [
       { value: 'sentAt-desc', label: 'وقت الإرسال — الأحدث أولاً' },
       { value: 'sentAt-asc', label: 'وقت الإرسال — الأقدم أولاً' },
+      { value: 'name-asc', label: 'الاسم (أ—ي)' },
+    ],
+    followupRoster: [
+      { value: 'lastVisit-desc', label: 'آخر زيارة — الأحدث أولاً' },
+      { value: 'lastVisit-asc', label: 'آخر زيارة — الأقدم أولاً' },
+      { value: 'fileNo-desc', label: 'رقم الملف — الأكبر' },
+      { value: 'fileNo-asc', label: 'رقم الملف — الأصغر' },
+      { value: 'lastMsg-desc', label: 'آخر رسالة — الأحدث' },
       { value: 'name-asc', label: 'الاسم (أ—ي)' },
     ],
     bookings: [

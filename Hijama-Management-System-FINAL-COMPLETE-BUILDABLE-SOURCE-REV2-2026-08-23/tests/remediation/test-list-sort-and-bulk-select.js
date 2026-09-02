@@ -74,6 +74,8 @@ check(/bulkSelection\.values\(\)/.test(indexSrc), 'bulk send uses persisted sele
 check(/id="sort-clients"/.test(indexSrc) && /id="sort-daily"/.test(indexSrc), 'clients and daily have sort controls');
 check(/id="sort-invoices"/.test(indexSrc) && /id="sort-messages"/.test(indexSrc), 'invoices and messages have sort controls');
 check(/id="sort-messageLog"/.test(indexSrc), 'message log has sort control');
+check(/id="sort-followupRoster"/.test(indexSrc), 'follow-up roster has sort control');
+check(ListSort.DEFAULTS.followupRoster === 'lastVisit-desc', 'follow-up roster default newest last-visit');
 check(/onMessageMediaPicked/.test(indexSrc) && /accept="image\/\*,video\/\*"/.test(indexSrc), 'message media file picker');
 check(/getMessageMediaMeta/.test(indexSrc) && /attachMedia/.test(indexSrc), 'send path attaches media meta');
 check(/msg-shared-media/.test(indexSrc) && /msg-bulk-media/.test(indexSrc), 'shared media applies to all message types and bulk send');

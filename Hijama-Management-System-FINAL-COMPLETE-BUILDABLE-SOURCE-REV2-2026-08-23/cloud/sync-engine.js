@@ -1,5 +1,5 @@
 /**
- * Sync Engine — Push on write + Poll every 60s (Cloud V2 Sprint 4).
+ * Sync Engine — push on write (2s debounce) + poll every 15s (clamped 5s–300s).
  */
 (function (global) {
   'use strict';

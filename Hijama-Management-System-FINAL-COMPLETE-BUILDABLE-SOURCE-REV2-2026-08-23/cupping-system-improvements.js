@@ -38,17 +38,20 @@ function performInvoiceSearch(resetPage) {
     return (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q) ||
       (c.fileNo || '').toLowerCase().includes(q) || String(c.invoice ?? '').toLowerCase().includes(q) ||
       (c.patientId || '').includes(q);
-  }).sort((a, b) => b.date.localeCompare(a.date));
-  if (countEl) countEl.textContent = `${results.length} نتيجة`;
-  if (!results.length) {
+  });
+  const sortedResults = typeof sortClinicList === 'function'
+    ? sortClinicList('invoiceSearch', results, typeof caseListSortValue === 'function' ? caseListSortValue : function (c) { return c.date || ''; })
+    : results.slice().sort((a, b) => b.date.localeCompare(a.date));
+  if (countEl) countEl.textContent = `${sortedResults.length} نتيجة`;
+  if (!sortedResults.length) {
     body.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-light)">لا توجد نتائج</td></tr>`;
     if (typeof renderTablePagination === 'function') renderTablePagination('invoiceSearchPagination', 1, 0, 0, 'goInvoiceSearchPage');
     return;
   }
   const pageSize = typeof getTablePageSize === 'function' ? getTablePageSize() : 10;
   const pg = typeof paginateList === 'function'
-    ? paginateList(results, invoiceSearchPage || 1, pageSize)
-    : { items: results.slice(0, pageSize), page: 1, totalPages: 1, total: results.length, pageSize };
+    ? paginateList(sortedResults, invoiceSearchPage || 1, pageSize)
+    : { items: sortedResults.slice(0, pageSize), page: 1, totalPages: 1, total: sortedResults.length, pageSize };
   if (typeof invoiceSearchPage !== 'undefined') invoiceSearchPage = pg.page;
   if (typeof renderTablePagination === 'function') {
     renderTablePagination('invoiceSearchPagination', pg.page, pg.totalPages, pg.total, 'goInvoiceSearchPage');

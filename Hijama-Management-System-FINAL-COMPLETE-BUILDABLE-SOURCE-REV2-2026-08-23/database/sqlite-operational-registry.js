@@ -76,6 +76,7 @@ const UI_ONLY_KEYS = [
 /** Backup/sync infra — not clinical SoT; may stay in localStorage until dedicated PRs. */
 const NON_OPERATIONAL_KNOWN = [
   'backupRegistry',
+  'backupCoverage',
   'backupUploadQueue',
   'backupOpCounter',
   'hardwareLog',

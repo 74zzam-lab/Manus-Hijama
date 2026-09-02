@@ -7,7 +7,7 @@
   const LOCAL_ONLY_KEYS = new Set([
     'hardwareLog', 'backupLog', 'backupRegistry',
     'logsPageSize', 'preImportBackup',
-    'importStudioLog', 'communicationQueue'
+    'importStudioLog', 'communicationQueue', 'backupCoverage'
   ]);
 
   function ensureBridge() {

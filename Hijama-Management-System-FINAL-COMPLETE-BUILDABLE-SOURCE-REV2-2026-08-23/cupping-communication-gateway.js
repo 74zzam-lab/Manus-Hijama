@@ -58,7 +58,13 @@ function getCommElectron() {
 
 function getCommunicationConfigPayload() {
   ensureCommunicationSettings();
-  return { communication: settings.communication };
+  if (typeof ensureMessagingSettings === 'function') ensureMessagingSettings();
+  return {
+    communication: settings.communication,
+    messaging: {
+      waClient: (settings.messaging && settings.messaging.waClient) || 'auto',
+    },
+  };
 }
 
 function ensureCommunicationSettings() {

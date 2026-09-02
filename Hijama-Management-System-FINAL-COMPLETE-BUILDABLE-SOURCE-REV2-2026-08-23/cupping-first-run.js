@@ -239,7 +239,40 @@
       { id: 'thermal', label: 'الطابعة الحرارية', ok: !!(d.thermal?.name || d.thermalPrinter), msg: d.thermal?.name ? 'الطابعة الحرارية جاهزة' : 'لا توجد طابعة حرارية محددة', fix: () => { global.showPage?.('settings'); global.switchSettingsTab?.('devices'); } },
       { id: 'a4', label: 'طابعة A4', ok: !!(d.report?.name || d.a4Printer), msg: d.report?.name ? 'طابعة A4 جاهزة' : 'لم تُحدد طابعة A4', fix: () => { global.showPage?.('settings'); global.switchSettingsTab?.('devices'); } },
       { id: 'backup', label: 'النسخ الاحتياطي', ok: s.backup?.localEnabled !== false, msg: s.backup?.localEnabled !== false ? 'النسخ المحلي مفعّل' : 'النسخ الاحتياطي غير مفعّل', fix: () => { global.showPage?.('settings'); global.switchSettingsTab?.('backup'); } },
-      { id: 'bkage', label: 'آخر نسخة', ok: bkDays == null || bkDays <= 15, msg: bkDays == null ? 'لم تُنشأ نسخة بعد' : (bkDays <= 15 ? `آخر نسخة منذ ${bkDays} يوم` : `آخر نسخة منذ ${bkDays} يومًا — يُنصح بالنسخ`), fix: () => global.runBackupNow?.('health') },
+      { id: 'bkage', label: 'آخر نسخة', ok: (() => {
+        if (typeof global.BackupCoverage?.evaluateNag === 'function') {
+          const v = global.BackupCoverage.evaluateNag({
+            backupLog: global.backupLog || [],
+            backupRegistry: global.backupRegistry || [],
+            cloudV2: s.cloudV2 || {},
+            coverage: global.BackupCoverage.loadCoverage?.() || null,
+            cases: global.cases || [],
+            clientsRegistry: global.clientsRegistry || [],
+            bookings: global.bookings || [],
+            syncHealthy: !!(global.DriveAdapter?.isConnected?.() || global.CloudMeta?.isCloudV2Enabled?.()),
+          });
+          return !v.nag;
+        }
+        return bkDays == null || bkDays <= 15;
+      })(), msg: (() => {
+        if (typeof global.BackupCoverage?.evaluateNag === 'function') {
+          const v = global.BackupCoverage.evaluateNag({
+            backupLog: global.backupLog || [],
+            backupRegistry: global.backupRegistry || [],
+            cloudV2: s.cloudV2 || {},
+            coverage: global.BackupCoverage.loadCoverage?.() || null,
+            cases: global.cases || [],
+            clientsRegistry: global.clientsRegistry || [],
+            bookings: global.bookings || [],
+            syncHealthy: !!(global.DriveAdapter?.isConnected?.() || global.CloudMeta?.isCloudV2Enabled?.()),
+          });
+          if (v.reason === 'restored_current') return 'تم استعادة نسخة مكتملة — النسخ الدوري يتابع مع المزامنة';
+          if (v.reason === 'live_sync_current') return 'البيانات محدّثة بالمزامنة الحية';
+          if (v.reason === 'recent_backup') return `آخر نسخة منذ ${v.ageDays} يوم`;
+          return v.reason === 'never' ? 'لم تُنشأ نسخة بعد' : `آخر نسخة منذ ${v.ageDays} يومًا — يُنصح بالنسخ`;
+        }
+        return bkDays == null ? 'لم تُنشأ نسخة بعد' : (bkDays <= 15 ? `آخر نسخة منذ ${bkDays} يوم` : `آخر نسخة منذ ${bkDays} يومًا — يُنصح بالنسخ`);
+      })(), fix: () => { global.showPage?.('settings'); global.switchSettingsTab?.('backup'); } },
       { id: 'svc', label: 'الخدمات', ok: (global.services || []).length > 0, msg: (global.services || []).length ? `${global.services.length} خدمة` : 'لم تُضف أي خدمة', fix: () => global.showPage?.('packages') },
       { id: 'staff', label: 'الموظفون', ok: (global.doctors || []).length > 0, msg: (global.doctors || []).length ? `${global.doctors.length} موظف` : 'لا يوجد موظفون', fix: () => global.showPage?.('doctors') },
       { id: 'users', label: 'المستخدمون', ok: (global.users || []).length > 0, msg: (global.users || []).length ? `${global.users.length} مستخدم` : 'لا يوجد مستخدمون', fix: () => global.showPage?.('users') },

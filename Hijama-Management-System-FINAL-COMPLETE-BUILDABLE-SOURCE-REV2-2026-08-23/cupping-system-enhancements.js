@@ -10,7 +10,7 @@
     'bookings', 'nextSessions', 'attendance', 'expenses', 'budget', 'invoiceCounter',
     'employeeLeaveRequests', 'employeeLedgerAccruals', 'employeeLedgerPayments', 'employeeLedgerEntries',
     'messageLog', 'importHistory', 'activityLog', 'hardwareLog', 'backupLog', 'backupRegistry',
-    'backupUploadQueue', 'backupOpCounter', 'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
+    'backupCoverage', 'backupUploadQueue', 'backupOpCounter', 'inventoryItems', 'inventorySuppliers', 'inventoryMovements',
     'systemLogs', 'cashDrawerSession', 'communicationWebhookLog', 'communicationQueue',
     'preImportBackup', 'luxQueue', 'logCounter', 'tablePageSize', 'logsPageSize'
   ];
@@ -193,14 +193,46 @@
   }
 
   // ── Dashboard backup reminder ──
+  function gatherBackupNagInput() {
+    const cv2 = (global.settings && global.settings.cloudV2) || {};
+    let syncHealthy = false;
+    try {
+      syncHealthy = !!(global.DriveAdapter?.isConnected?.() || global.CloudMeta?.isCloudV2Enabled?.());
+      if (global.SyncEngine?.getStatus) {
+        const st = global.SyncEngine.getStatus();
+        if (st && st.lastError) syncHealthy = false;
+        else if (st && (st.lastPullAt || st.lastSyncedAt || st.running)) syncHealthy = true;
+      }
+    } catch { /* empty */ }
+    return {
+      backupLog: global.backupLog || [],
+      backupRegistry: global.backupRegistry || [],
+      cloudV2: cv2,
+      coverage: (typeof global.BackupCoverage !== 'undefined' && global.BackupCoverage.loadCoverage)
+        ? global.BackupCoverage.loadCoverage()
+        : (global.DB?.get?.('backupCoverage', null) || null),
+      cases: global.cases || [],
+      clientsRegistry: global.clientsRegistry || [],
+      bookings: global.bookings || [],
+      syncHealthy,
+      restoreVerified: false,
+    };
+  }
+
   function renderBackupReminder() {
     const host = document.getElementById('dash-backup-reminder');
     if (!host || !isAdmin()) { if (host) host.style.display = 'none'; return; }
+    const input = gatherBackupNagInput();
+    const verdict = (typeof global.BackupCoverage !== 'undefined' && global.BackupCoverage.evaluateNag)
+      ? global.BackupCoverage.evaluateNag(input)
+      : null;
+    if (verdict && !verdict.nag) { host.style.display = 'none'; return; }
+
     const log = global.backupLog || [];
     const last = log.find(e => e.status === 'success');
-    const daysSince = last?.at
-      ? Math.floor((Date.now() - new Date(last.at).getTime()) / 86400000)
-      : null;
+    const daysSince = verdict && verdict.ageDays != null
+      ? verdict.ageDays
+      : (last?.at ? Math.floor((Date.now() - new Date(last.at).getTime()) / 86400000) : null);
     if (daysSince != null && daysSince < 7) { host.style.display = 'none'; return; }
     host.style.display = '';
     host.className = 'dash-alert dash-alert-warning';
@@ -384,6 +416,7 @@
     global.clientsRegistry = []; global.bookings = []; global.expenses = [];
     global.activityLog = []; global.hardwareLog = []; global.messageLog = [];
     global.backupLog = []; global.backupRegistry = [];
+    try { global.DB?.set?.('backupCoverage', null); } catch { /* empty */ }
     global.invoiceCounter = 1; global.clientFileCounter = 1;
     global.otRecords = [];
 

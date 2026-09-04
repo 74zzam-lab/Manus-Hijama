@@ -202,6 +202,7 @@ const remediation = [
   ['tests/remediation/test-sync-after-restore-soft-pull.js', 'remediation:sync-after-restore-soft-pull'],
   ['tests/remediation/test-boot-after-restore-local-sync.js', 'remediation:boot-after-restore-local-sync'],
   ['tests/remediation/test-boot-google-after-syncdone.js', 'remediation:boot-google-after-syncdone'],
+  ['tests/remediation/test-clients-excel-export.js', 'remediation:clients-excel-export'],
 ];
 
 const existing = [

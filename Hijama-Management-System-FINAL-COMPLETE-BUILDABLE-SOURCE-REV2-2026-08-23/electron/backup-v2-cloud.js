@@ -6,7 +6,7 @@
 const { classifyBackupFile, isPrunableAutomaticBackup } = require('./backup-v2-classify');
 
 const CLOUD_V2_PREFIX = 'Backups/V2';
-const DEFAULT_CLOUD_RETENTION = 3;
+const DEFAULT_CLOUD_RETENTION = 1;
 
 function isV2FullBackupName(name) {
   const n = String(name || '');

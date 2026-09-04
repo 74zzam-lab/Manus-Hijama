@@ -132,9 +132,16 @@
       if (typeof global.syncAppGlobals === 'function') global.syncAppGlobals();
     } catch { /* empty */ }
 
-    emit('reconcile_sequences', 0.96);
+    emit('reconcile_sequences', 0.94);
     try {
       global.DocumentSequences?.reconcileDocumentSequences?.();
+    } catch { /* empty */ }
+
+    emit('seed_branch_settings', 0.97);
+    try {
+      const bid = global.DeviceConfig?.getLockedBranchId?.()
+        || global.BranchScope?.getActiveBranchId?.();
+      if (bid) global.BranchDataIsolation?.persistBranchSettings?.(bid);
     } catch { /* empty */ }
 
     emit('verify_memory', 1);

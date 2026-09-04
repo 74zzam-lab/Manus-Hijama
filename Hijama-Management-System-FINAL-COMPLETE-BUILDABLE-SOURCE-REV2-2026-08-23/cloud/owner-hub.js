@@ -127,7 +127,23 @@
     const devices = global.DeviceRegistry?.listDevices?.(license) || [];
     const pendingDevices = global.DeviceRegistry?.listPending?.(license) || [];
     const sync = global.SyncEngine?.getStatus?.() || global.SyncState?.getStatus?.() || {};
-    const backup = global.BackupLayer?.getStatus?.() || {};
+    const backupLayer = global.BackupLayer?.getStatus?.() || {};
+    const cv2 = global.settings?.cloudV2 || {};
+    const cache = global._tdwBackupSyncSummary || {};
+    const backup = {
+      ...backupLayer,
+      lastAutoBackupAt: backupLayer.lastAutoBackupAt
+        || cv2.lastAutoBackupAt
+        || cache.cloudAt
+        || cache.localAt
+        || null,
+      lastBackupAt: backupLayer.lastBackupAt
+        || cv2.lastLocalBackupAt
+        || cache.localAt
+        || backupLayer.lastAutoBackupAt
+        || cv2.lastAutoBackupAt
+        || null,
+    };
     const branches = (license.branches || []).filter(b => b && b.active !== false);
     const activeUsers = (global.users || []).filter(u => u && u.active).length;
     const centerId = license.centerId || global.ConfigLayer?.getCenterId?.() || '—';

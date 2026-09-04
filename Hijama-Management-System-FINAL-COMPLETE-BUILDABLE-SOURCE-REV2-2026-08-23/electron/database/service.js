@@ -20,9 +20,47 @@ const upgradeOrchestrator = require('../../database/upgrade-migration-orchestrat
 let db = null;
 let repos = null;
 let syncPlatform = null;
+let upgradeAutoRan = false;
+let lastUpgradeResult = null;
+let lastUpgradeAttemptMs = 0;
+const UPGRADE_RETRY_MS = 8000;
+const LOG_KV_KEYS = new Set(['systemLogs', 'logCounter']);
 
 function getDbPath() {
   return defaultDbPath(app.getPath('userData'));
+}
+
+function autoCompleteUpgradeOnOpen(options = {}) {
+  if (!db || !repos) return null;
+  if (upgradeAutoRan) return lastUpgradeResult;
+  const now = Date.now();
+  if (lastUpgradeResult && (now - lastUpgradeAttemptMs) < UPGRADE_RETRY_MS) {
+    return lastUpgradeResult;
+  }
+  lastUpgradeAttemptMs = now;
+  try {
+    const result = upgradeOrchestrator.autoCompletePendingUpgrade(db, repos, {
+      dbPath: getDbPath(),
+      syncPlatform: syncPlatform || createSyncPlatform(db),
+      skipBackup: true,
+      ...options,
+    });
+    lastUpgradeResult = result;
+    const stillBlocking = !!(result?.assessment?.owner_corrupted
+      || result?.assessment?.unresolved_null_branch
+      || (result?.assessment?.migration_pending && result?.ok === false)
+      || (result?.assessment?.migration_failed && result?.ok === false));
+    if (result && result.ok !== false && !stillBlocking) {
+      upgradeAutoRan = true;
+    } else {
+      console.error('[sqlite] auto upgrade incomplete:', result?.error || result?.assessment?.error || 'upgrade_failed');
+    }
+    return result;
+  } catch (err) {
+    console.error('[sqlite] auto upgrade failed:', err.code || err.message);
+    lastUpgradeResult = { ok: false, error: err.code || 'upgrade_failed', message: err.message };
+    return lastUpgradeResult;
+  }
 }
 
 function ensureDb() {
@@ -31,6 +69,7 @@ function ensureDb() {
     db = openDatabase(getDbPath());
     repos = createRepositories(db);
     syncPlatform = createSyncPlatform(db);
+    autoCompleteUpgradeOnOpen();
     return db;
   } catch (err) {
     // DATA-007: never silently open empty replacement after corrupt/missing-required.
@@ -55,8 +94,16 @@ function getUpgradeAssessment() {
   return upgradeOrchestrator.assessUpgradeState(db, repos, { syncPlatform: ensureSync() });
 }
 
+function leftoverPendingIsSoft(upgrade) {
+  const pending = Array.isArray(upgrade?.pending) ? upgrade.pending : [];
+  if (!pending.length) return !upgrade?.migration_pending && !upgrade?.migration_failed;
+  const soft = upgradeOrchestrator.SOFT_UPGRADE_STEPS || [];
+  return pending.every((step) => soft.includes(step));
+}
+
 function assertOperationalWriteAllowed() {
   ensureDb();
+  autoCompleteUpgradeOnOpen();
   const health = operationalDbHealth.assessHealth(db, operationalDbHealth.RUNTIME_HEALTH_OPTIONS);
   const healthGate = operationalDbHealth.assertWriteAllowed(health);
   if (!healthGate.ok) {
@@ -65,13 +112,14 @@ function assertOperationalWriteAllowed() {
 
   const meta = readMeta(db);
   const upgrade = getUpgradeAssessment();
+  const softPendingOnly = leftoverPendingIsSoft(upgrade);
   const readinessGate = operationalReadiness.assertOperationalReady({
     health,
     sqlitePrimary: meta.sqlitePrimary === 'true',
     sqlitePrimaryRequired: false,
-    migrationPending: !!upgrade.migration_pending,
+    migrationPending: !!upgrade.migration_pending && !softPendingOnly,
     migrationInProgress: !!upgrade.migration_in_progress,
-    migrationFailed: !!upgrade.migration_failed,
+    migrationFailed: !!upgrade.migration_failed && !softPendingOnly,
     ownerCorrupted: !!upgrade.owner_corrupted,
     legacyBranchMigrationBlocked: !!upgrade.unresolved_null_branch,
   });
@@ -86,13 +134,14 @@ function getStatus() {
   const meta = readMeta(db);
   const operationalHealth = operationalDbHealth.assessHealth(db, operationalDbHealth.RUNTIME_HEALTH_OPTIONS);
   const upgradeState = getUpgradeAssessment();
+  const softPendingOnly = leftoverPendingIsSoft(upgradeState);
   const operationalReadinessReport = operationalReadiness.assessOperationalReadiness({
     health: operationalHealth,
     sqlitePrimary: meta.sqlitePrimary === 'true',
     sqlitePrimaryRequired: false,
-    migrationPending: !!upgradeState.migration_pending,
+    migrationPending: !!upgradeState.migration_pending && !softPendingOnly,
     migrationInProgress: !!upgradeState.migration_in_progress,
-    migrationFailed: !!upgradeState.migration_failed,
+    migrationFailed: !!upgradeState.migration_failed && !softPendingOnly,
     ownerCorrupted: !!upgradeState.owner_corrupted,
     legacyBranchMigrationBlocked: !!upgradeState.unresolved_null_branch,
   });
@@ -120,6 +169,7 @@ function getStatus() {
 
 function hydrate() {
   ensureDb();
+  autoCompleteUpgradeOnOpen();
   const data = {
     clientsRegistry: repos.clients.getAll(),
     cases: repos.visits.getAll(),
@@ -166,8 +216,10 @@ function persistTable(tableKey, records, options = {}) {
 }
 
 function persistKv(key, value) {
-  const gate = assertOperationalWriteAllowed();
-  if (!gate.ok) return gate;
+  if (!LOG_KV_KEYS.has(String(key || ''))) {
+    const gate = assertOperationalWriteAllowed();
+    if (!gate.ok) return gate;
+  }
   ensureDb();
   repos.kv.set(key, value);
   return { ok: true };
@@ -542,6 +594,9 @@ function close() {
   db = null;
   repos = null;
   syncPlatform = null;
+  upgradeAutoRan = false;
+  lastUpgradeResult = null;
+  lastUpgradeAttemptMs = 0;
 }
 
 module.exports = {
@@ -575,5 +630,10 @@ module.exports = {
       dbPath: getDbPath(),
       syncPlatform: ensureSync(),
     });
+  },
+  autoCompletePendingUpgrade: (options = {}) => {
+    ensureDb();
+    upgradeAutoRan = false;
+    return autoCompleteUpgradeOnOpen(options);
   },
 };

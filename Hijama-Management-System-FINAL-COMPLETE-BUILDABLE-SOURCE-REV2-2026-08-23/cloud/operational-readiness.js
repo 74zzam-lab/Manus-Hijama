@@ -70,14 +70,15 @@
     const legacyBlocked = !!(global.LegacyBranchMigration?.isPushBlocked?.()
       || (global.LegacyBranchMigration?.needsMigration?.() && !global.LegacyBranchMigration?.isMigrationComplete?.()));
     const upgrade = status.upgradeState || {};
+    const readinessBlockers = status.operationalReadiness?.blockers || [];
     const readiness = assessFromParts({
       health: status.operationalHealth || healthAllow?.health,
       legacyBranchMigrationBlocked: legacyBlocked || !!upgrade.unresolved_null_branch,
       sqlitePrimary: status.sqlitePrimary,
       sqlitePrimaryRequired: !!global.SqliteBridge?.isPrimary,
-      migrationPending: !!upgrade.migration_pending,
-      migrationInProgress: !!upgrade.migration_in_progress,
-      migrationFailed: !!upgrade.migration_failed,
+      migrationPending: readinessBlockers.includes('migration_pending') || (!status.operationalReadiness && !!upgrade.migration_pending),
+      migrationInProgress: readinessBlockers.includes('migration_in_progress') || !!upgrade.migration_in_progress,
+      migrationFailed: readinessBlockers.includes('migration_failed') || (!status.operationalReadiness && !!upgrade.migration_failed),
       ownerCorrupted: !!upgrade.owner_corrupted,
     });
     cached = readiness;

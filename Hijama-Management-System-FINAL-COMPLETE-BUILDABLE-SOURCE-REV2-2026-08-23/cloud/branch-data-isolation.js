@@ -18,20 +18,24 @@
     'communicationWebhookLog', 'communicationQueue', 'luxQueue'
   ]);
 
-  const BRANCH_PRICE_KEYS = [
+  const BRANCH_PRICE_KEYS = global.SettingsSplit?.PRICE_KEYS || [
     'cupPrice', 'vatRate', 'threshold', 'commissionRate',
     'siliconFacePrice', 'siliconCommission', 'siliconCommissionType',
     'massagePrice', 'massageCommission', 'bankRates'
   ];
 
   function branchSettingsKeys() {
+    const local = global.SettingsSplit?.SETTINGS_LOCAL_KEYS;
+    const live = global.settings && typeof global.settings === 'object' ? Object.keys(global.settings) : [];
+    const fromLive = live.filter((k) => !local || !local.has(k));
     const base = global.SettingsSplit?.BRANCH_SETTINGS_KEYS || [
       'centerName', 'centerNameEn', 'address', 'phone', 'taxNum', 'brandLogo',
-      'centerName', 'branchName', 'messaging', 'communication', 'leavePolicy',
-      'attendanceDefaults', 'waTemplate', 'promoTemplate', 'appointmentTemplate', 'printReports',
+      'centerCity', 'centerEmail', 'centerWebsite', 'branchName', 'messaging',
+      'communication', 'leavePolicy', 'attendanceDefaults', 'waTemplate',
+      'promoTemplate', 'appointmentTemplate', 'overdueTemplate', 'printReports',
       'simplifiedTaxInvoice', 'invoiceSystem', 'clientOverdueDays'
     ];
-    return [...new Set(base.concat(BRANCH_PRICE_KEYS))];
+    return [...new Set(fromLive.concat(base, BRANCH_PRICE_KEYS))];
   }
 
   function getLoginBranchId() {

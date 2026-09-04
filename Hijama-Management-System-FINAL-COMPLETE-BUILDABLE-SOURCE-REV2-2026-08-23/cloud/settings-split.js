@@ -27,7 +27,13 @@
     'crNum', 'waNumber', 'defaultBranchId', 'clientOverdueDays',
     'simplifiedTaxInvoice', 'invoiceSystem', 'messaging', 'communication',
     'leavePolicy', 'attendanceDefaults', 'waTemplate', 'promoTemplate',
-    'appointmentTemplate', 'printReports'
+    'appointmentTemplate', 'overdueTemplate', 'printReports'
+  ];
+
+  const PRICE_KEYS = [
+    'cupPrice', 'vatRate', 'threshold', 'commissionRate',
+    'siliconFacePrice', 'siliconCommission', 'siliconCommissionType',
+    'massagePrice', 'massageCommission', 'bankRates'
   ];
 
   function deepClone(obj) {
@@ -55,22 +61,18 @@
   }
 
   function extractBranchSettings(settings) {
-    settings = sanitizeSettingsForSync(settings || global.settings || {});
-    const out = { branchId: settings.defaultBranchId || global.BranchScope?.DEFAULT_BRANCH_ID || 'BR-MAIN' };
-    BRANCH_SETTINGS_KEYS.forEach(k => {
-      if (settings[k] !== undefined) out[k] = settings[k];
-    });
+    const out = sanitizeSettingsForSync(settings || global.settings || {});
+    out.branchId = out.branchId || out.defaultBranchId || global.BranchScope?.DEFAULT_BRANCH_ID || 'BR-MAIN';
     return out;
   }
 
   function extractPrices(settings) {
     settings = settings || global.settings || {};
-    return {
-      cupPrice: settings.cupPrice ?? 50,
-      vatRate: settings.vatRate ?? 15,
-      threshold: settings.threshold ?? 6,
-      commissionRate: settings.commissionRate ?? 10
-    };
+    const out = {};
+    PRICE_KEYS.forEach((k) => {
+      if (settings[k] !== undefined) out[k] = settings[k];
+    });
+    return out;
   }
 
   function filterUsersForBranch(users, branchId) {
@@ -113,6 +115,7 @@
     SETTINGS_LOCAL_KEYS,
     DB_LOCAL_KEYS,
     BRANCH_SETTINGS_KEYS,
+    PRICE_KEYS,
     sanitizeSettingsForSync,
     sanitizeSettingsForBackup,
     extractBranchSettings,

@@ -26,6 +26,7 @@ const SECURITY_PATH = 'security/field-key.json';
 const RESTORE_ROOTS = Object.freeze(['database', 'attachments', 'settings', 'center-assets']);
 const MAX_ARCHIVE_ENTRIES = 25000;
 const MAX_UNCOMPRESSED_BYTES = 8 * 1024 * 1024 * 1024;
+const DEFAULT_LOCAL_RETENTION = 1;
 const CURRENT_SCHEMA_VERSION = Math.max(0, ...MIGRATIONS.map((migration) => Number(migration.version) || 0));
 
 const EXCLUDED_SEGMENT = /^(?:cache|caches|temp|tmp|logs?|license-admin|admin-data)$/i;
@@ -138,11 +139,12 @@ function assertOperationalRestoreAllowed(inspected, options = {}) {
   throw err;
 }
 
-function listLocalBackupFiles(backupDir) {
+function listLocalBackupFiles(backupDir, options = {}) {
   const dir = path.resolve(backupDir || '');
   if (!dir || !fs.existsSync(dir)) return [];
+  const ext = options.includeJson ? /\.(tdw|json)$/i : /\.tdw$/i;
   return fs.readdirSync(dir)
-    .filter((name) => /\.tdw$/i.test(name))
+    .filter((name) => ext.test(name))
     .map((name) => {
       const filePath = path.join(dir, name);
       let mtimeMs = 0;
@@ -742,16 +744,19 @@ function classifyRetention(file, options = {}) {
   if (pinned.has(filePath) || /(?:^|[._-])pinned(?:[._-]|$)/.test(name)) return 'pinned';
   if (/(?:emergency|safety|pre-restore|before-restore)/.test(name)) return 'safety';
   if (/(?:^|[._-])import(?:[._-]|$)/.test(name)) return 'imported';
-  if (/(?:^|[._-])scheduled(?:[._-]|$)/.test(name)) return 'scheduled';
+  if (/(?:^|[._-])manual(?:[._-]|$)/.test(name)) return 'manual';
+  if (/(?:^|[._-])(scheduled|auto|periodic)(?:[._-]|$)/.test(name)) return 'scheduled';
+  // Legacy unlabeled Brand-Backup-{iso} dumps (15-min timer) — prune as automatic.
+  if (/backup-\d{4}-\d{2}-\d{2}t/.test(name) && !/tadawi-backup-v2/.test(name)) return 'scheduled';
   return 'manual';
 }
 
 function pruneLocalBackups(backupDir, retentionCount, options = {}) {
   const dir = path.resolve(backupDir || '');
-  const keep = Math.max(1, Number(retentionCount) || 20);
+  const keep = Math.max(1, Number(retentionCount) || DEFAULT_LOCAL_RETENTION);
   const keepPath = options.keepPath ? path.resolve(options.keepPath) : null;
   if (!dir || !fs.existsSync(dir)) return { ok: true, pruned: 0, kept: 0, files: [] };
-  const files = listLocalBackupFiles(dir)
+  const files = listLocalBackupFiles(dir, { includeJson: true })
     .filter((f) => !String(f.name).includes('.partial'))
     .sort((a, b) => b.mtimeMs - a.mtimeMs);
   const kept = [];
@@ -1193,6 +1198,7 @@ module.exports = {
   pruneLocalBackups,
   classifyRetention,
   backupFormatPolicy,
+  DEFAULT_LOCAL_RETENTION,
   recoverInterruptedRestore: restoreValidation.recoverInterruptedRestore,
   RESTORE_STAGES: restoreValidation.STAGES,
 };

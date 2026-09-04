@@ -43,8 +43,8 @@
       exportedAt: new Date().toISOString(),
       settings: Split?.extractBranchSettings?.(global.settings) || {},
       prices: Split?.extractPrices?.(global.settings) || {},
-      services: Array.isArray(services) ? services.filter(s => s && s.active !== false) : [],
-      packages: Array.isArray(packages) ? packages.filter(p => p && p.active !== false) : [],
+      services: Array.isArray(services) ? services.slice() : [],
+      packages: Array.isArray(packages) ? packages.slice() : [],
       users: Split?.filterUsersForBranch?.(users, branchId) || []
     };
   }
@@ -118,6 +118,10 @@
     return { ok: true, merged: merge.merged, stats: merge.stats };
   }
 
+  function persistImportedBranchSettings(branchId) {
+    try { global.BranchDataIsolation?.persistBranchSettings?.(branchId); } catch { /* empty */ }
+  }
+
   async function importBranchPackAuthoritative(pack, options) {
     options = options || {};
     if (!pack || typeof pack !== 'object') return { ok: false, error: 'invalid_pack' };
@@ -141,6 +145,7 @@
         global.settings.defaultBranchId = branchId;
         const committed = await commitConfigTable('settings', global.settings, branchId);
         if (!committed.ok) return committed;
+        persistImportedBranchSettings(branchId);
       }
     }
 
@@ -160,6 +165,7 @@
         Object.assign(global.settings, pricesMerge.settings);
         const committed = await commitConfigTable('settings', global.settings, branchId);
         if (!committed.ok) return committed;
+        persistImportedBranchSettings(branchId);
       }
     }
 
@@ -269,6 +275,7 @@
         global.settings.defaultBranchId = branchId;
         global.Repository?.setAll?.('settings', global.settings, { branchId, source: 'config_import' })
           || global.DB?.set?.('settings', global.settings);
+        persistImportedBranchSettings(branchId);
       }
     }
 
@@ -286,6 +293,7 @@
         Object.assign(global.settings, pricesMerge.settings);
         global.Repository?.setAll?.('settings', global.settings, { branchId, source: 'config_import' })
           || global.DB?.set?.('settings', global.settings);
+        persistImportedBranchSettings(branchId);
       }
     }
 

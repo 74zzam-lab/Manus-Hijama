@@ -1,0 +1,15 @@
+{
+  "id": "R08-prior-gates",
+  "title": "Prior phase release gates still exit 0",
+  "result": "PASS",
+  "ms": 123,
+  "evidence": {
+    "verify-v2-5-6-completion.cjs": 0,
+    "verify-v2-5-5-completion.cjs": 0,
+    "verify-v2-5-4-completion.cjs": 0,
+    "verify-v2-5-3-completion.cjs": 0,
+    "verify-v2-5-2-completion.cjs": 0,
+    "verify-v2-5-1-completion.cjs": 0,
+    "verify-v2-4-completion.cjs": 0
+  }
+}

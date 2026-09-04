@@ -1,0 +1,18 @@
+{
+  "id": "MIG-257-003",
+  "ok": true,
+  "attachmentsBefore": [
+    {
+      "id": "ATT-LEGACY-1",
+      "path": "attachments/C-LEGACY-1/note.bin",
+      "entity_id": "C-LEGACY-1"
+    }
+  ],
+  "attachmentsAfter": [
+    {
+      "id": "ATT-LEGACY-1",
+      "path": "attachments/C-LEGACY-1/note.bin",
+      "entity_id": "C-LEGACY-1"
+    }
+  ]
+}

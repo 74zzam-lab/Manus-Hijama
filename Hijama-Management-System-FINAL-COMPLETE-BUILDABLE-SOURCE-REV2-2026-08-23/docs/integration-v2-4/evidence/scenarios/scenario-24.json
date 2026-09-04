@@ -1,0 +1,11 @@
+{
+  "id": 24,
+  "name": "attachment_sync",
+  "result": "PASS",
+  "ms": 9050,
+  "detail": {
+    "sha256": "0edd1efc17f8…",
+    "size": 34
+  },
+  "secretsPrinted": false
+}

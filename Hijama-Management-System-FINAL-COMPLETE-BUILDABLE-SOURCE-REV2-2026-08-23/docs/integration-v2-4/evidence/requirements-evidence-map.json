@@ -1,0 +1,2238 @@
+{
+  "at": "2026-07-30T07:58:42.081Z",
+  "scenariosPass": true,
+  "count": 223,
+  "map": {
+    "PROTO-4-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-001"
+    },
+    "PROTO-4-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-002"
+    },
+    "PROTO-4-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-003"
+    },
+    "PROTO-4-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-004"
+    },
+    "PROTO-4-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-005"
+    },
+    "PROTO-4-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-006"
+    },
+    "PROTO-4-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-007"
+    },
+    "PROTO-4-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "PROTO-4-008"
+    },
+    "ARCH-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "ARCH-001"
+    },
+    "ARCH-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "ARCH-002"
+    },
+    "ARCH-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "ARCH-003"
+    },
+    "ARCH-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "ARCH-004"
+    },
+    "ARCH-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "ARCH-005"
+    },
+    "AUTH-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUTH-001"
+    },
+    "AUTH-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUTH-002"
+    },
+    "AUTH-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUTH-003"
+    },
+    "AUTH-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUTH-004"
+    },
+    "OAUTH-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-001"
+    },
+    "OAUTH-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-002"
+    },
+    "OAUTH-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-003"
+    },
+    "OAUTH-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-004"
+    },
+    "OAUTH-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-005"
+    },
+    "OAUTH-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-006"
+    },
+    "OAUTH-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-007"
+    },
+    "OAUTH-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OAUTH-008"
+    },
+    "ORG-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ORG-001"
+    },
+    "ORG-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ORG-002"
+    },
+    "CENTER-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CENTER-001"
+    },
+    "CENTER-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CENTER-002"
+    },
+    "CENTER-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CENTER-003"
+    },
+    "CENTER-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CENTER-004"
+    },
+    "CENTER-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CENTER-005"
+    },
+    "OWNER-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-001"
+    },
+    "OWNER-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-002"
+    },
+    "OWNER-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-003"
+    },
+    "OWNER-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-004"
+    },
+    "OWNER-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-005"
+    },
+    "OWNER-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-006"
+    },
+    "OWNER-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-007"
+    },
+    "OWNER-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-008"
+    },
+    "OWNER-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-009"
+    },
+    "OWNER-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OWNER-010"
+    },
+    "BRANCH-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-001"
+    },
+    "BRANCH-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-002"
+    },
+    "BRANCH-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-003"
+    },
+    "BRANCH-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-004"
+    },
+    "BRANCH-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-005"
+    },
+    "BRANCH-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-006"
+    },
+    "BRANCH-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-007"
+    },
+    "BRANCH-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-008"
+    },
+    "BRANCH-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-009"
+    },
+    "BRANCH-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-010"
+    },
+    "BRANCH-011": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BRANCH-011"
+    },
+    "DEVICE-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-001"
+    },
+    "DEVICE-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-002"
+    },
+    "DEVICE-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-003"
+    },
+    "DEVICE-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-004"
+    },
+    "DEVICE-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-005"
+    },
+    "DEVICE-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-006"
+    },
+    "DEVICE-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DEVICE-007"
+    },
+    "DB-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-001"
+    },
+    "DB-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-002"
+    },
+    "DB-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-003"
+    },
+    "DB-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-004"
+    },
+    "DB-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-005"
+    },
+    "DB-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-006"
+    },
+    "DB-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "DB-007"
+    },
+    "REPO-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "REPO-001"
+    },
+    "REPO-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "REPO-002"
+    },
+    "REPO-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "REPO-003"
+    },
+    "REPO-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "REPO-004"
+    },
+    "OUTBOX-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-001"
+    },
+    "OUTBOX-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-002"
+    },
+    "OUTBOX-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-003"
+    },
+    "OUTBOX-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-004"
+    },
+    "OUTBOX-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-005"
+    },
+    "OUTBOX-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-006"
+    },
+    "OUTBOX-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-007"
+    },
+    "OUTBOX-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-008"
+    },
+    "OUTBOX-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-009"
+    },
+    "OUTBOX-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-010"
+    },
+    "OUTBOX-011": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OUTBOX-011"
+    },
+    "INBOX-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "INBOX-001"
+    },
+    "INBOX-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "INBOX-002"
+    },
+    "INBOX-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "INBOX-003"
+    },
+    "SYNC-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Real Drive A↔B scenarios 3–4 + conflict/branch"
+    },
+    "SYNC-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-002"
+    },
+    "SYNC-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-003"
+    },
+    "SYNC-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-004"
+    },
+    "SYNC-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-005"
+    },
+    "SYNC-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-006"
+    },
+    "SYNC-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SYNC-007"
+    },
+    "PUSH-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-001"
+    },
+    "PUSH-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-002"
+    },
+    "PUSH-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-003"
+    },
+    "PUSH-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-004"
+    },
+    "PUSH-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-005"
+    },
+    "PUSH-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-006"
+    },
+    "PUSH-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-007"
+    },
+    "PUSH-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-008"
+    },
+    "PUSH-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-009"
+    },
+    "PUSH-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-010"
+    },
+    "PUSH-011": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-011"
+    },
+    "PUSH-012": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-012"
+    },
+    "PUSH-013": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-013"
+    },
+    "PUSH-014": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-014"
+    },
+    "PUSH-015": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-015"
+    },
+    "PUSH-016": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PUSH-016"
+    },
+    "POLL-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-001"
+    },
+    "POLL-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-002"
+    },
+    "POLL-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-003"
+    },
+    "POLL-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-004"
+    },
+    "POLL-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-005"
+    },
+    "POLL-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-006"
+    },
+    "POLL-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-007"
+    },
+    "POLL-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "POLL-008"
+    },
+    "VERS-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "VERS-001"
+    },
+    "VERS-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "VERS-002"
+    },
+    "VERS-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "VERS-003"
+    },
+    "VERS-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "VERS-004"
+    },
+    "MERGE-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-001"
+    },
+    "MERGE-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-002"
+    },
+    "MERGE-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-003"
+    },
+    "MERGE-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-004"
+    },
+    "MERGE-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-005"
+    },
+    "MERGE-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-006"
+    },
+    "MERGE-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-007"
+    },
+    "MERGE-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-008"
+    },
+    "MERGE-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-009"
+    },
+    "MERGE-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MERGE-010"
+    },
+    "CONF-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-001"
+    },
+    "CONF-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-002"
+    },
+    "CONF-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-003"
+    },
+    "CONF-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-004"
+    },
+    "CONF-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-005"
+    },
+    "CONF-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-006"
+    },
+    "CONF-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-007"
+    },
+    "CONF-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "CONF-008"
+    },
+    "LOCK-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "LOCK-001"
+    },
+    "LOCK-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "LOCK-002"
+    },
+    "LOCK-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "LOCK-003"
+    },
+    "OFFLINE-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OFFLINE-001"
+    },
+    "OFFLINE-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OFFLINE-002"
+    },
+    "OFFLINE-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OFFLINE-003"
+    },
+    "OFFLINE-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OFFLINE-004"
+    },
+    "OFFLINE-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OFFLINE-005"
+    },
+    "RETRY-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RETRY-001"
+    },
+    "RETRY-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RETRY-002"
+    },
+    "RETRY-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RETRY-003"
+    },
+    "ATT-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-001"
+    },
+    "ATT-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-002"
+    },
+    "ATT-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-003"
+    },
+    "ATT-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-004"
+    },
+    "ATT-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-005"
+    },
+    "ATT-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-006"
+    },
+    "ATT-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "ATT-007"
+    },
+    "BACKUP-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-001"
+    },
+    "BACKUP-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-002"
+    },
+    "BACKUP-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-003"
+    },
+    "BACKUP-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-004"
+    },
+    "BACKUP-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-005"
+    },
+    "BACKUP-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "BACKUP-006"
+    },
+    "RESTORE-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RESTORE-001"
+    },
+    "RESTORE-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RESTORE-002"
+    },
+    "RESTORE-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "RESTORE-003"
+    },
+    "AUDIT-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUDIT-001"
+    },
+    "AUDIT-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "AUDIT-002"
+    },
+    "OBS-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OBS-001"
+    },
+    "OBS-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "OBS-002"
+    },
+    "SEC-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-001"
+    },
+    "SEC-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-002"
+    },
+    "SEC-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-003"
+    },
+    "SEC-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-004"
+    },
+    "SEC-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-005"
+    },
+    "SEC-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-006"
+    },
+    "SEC-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-007"
+    },
+    "SEC-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "SEC-008"
+    },
+    "PERF-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PERF-001"
+    },
+    "PERF-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PERF-002"
+    },
+    "PERF-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PERF-003"
+    },
+    "PERF-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PERF-004"
+    },
+    "PERF-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "PERF-005"
+    },
+    "QUOTA-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "QUOTA-001"
+    },
+    "MIG-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MIG-001"
+    },
+    "MIG-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MIG-002"
+    },
+    "MIG-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MIG-003"
+    },
+    "MIG-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MIG-004"
+    },
+    "MIG-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "MIG-005"
+    },
+    "UAT-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/uat-v2-4-cloud-dataset.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Dataset manifest"
+    },
+    "UAT-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-01.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 1"
+    },
+    "UAT-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-02.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 2"
+    },
+    "UAT-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-03.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 3"
+    },
+    "UAT-005": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-04.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 4"
+    },
+    "UAT-006": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-05.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 5"
+    },
+    "UAT-007": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-06.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 6"
+    },
+    "UAT-008": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-07.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 7"
+    },
+    "UAT-009": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-08.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 8"
+    },
+    "UAT-010": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-09.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 9"
+    },
+    "UAT-011": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-10.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 10"
+    },
+    "UAT-012": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-11.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 11"
+    },
+    "UAT-013": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-12.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 12"
+    },
+    "UAT-014": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-13.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 13"
+    },
+    "UAT-015": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-14.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 14"
+    },
+    "UAT-016": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-15.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 15"
+    },
+    "UAT-017": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-16.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 16"
+    },
+    "UAT-018": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-17.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 17"
+    },
+    "UAT-019": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-18.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 18"
+    },
+    "UAT-020": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-19.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 19"
+    },
+    "UAT-021": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-20.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 20"
+    },
+    "UAT-022": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-21.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 21"
+    },
+    "UAT-023": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-22.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 22"
+    },
+    "UAT-024": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-23.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 23"
+    },
+    "UAT-025": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-24.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 24"
+    },
+    "UAT-026": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/scenarios/scenario-25.json",
+      "deviceA": "scenarios/",
+      "deviceB": "scenarios/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "failure": "docs/integration-v2-4/evidence/scenarios-1-25.json",
+      "notes": "Scenario 25"
+    },
+    "GHA-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "GHA-001"
+    },
+    "GHA-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "GHA-002"
+    },
+    "GHA-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "GHA-003"
+    },
+    "GHA-004": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "GHA-004"
+    },
+    "REL-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "REL-001"
+    },
+    "REL-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "REL-002"
+    },
+    "REL-003": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "docs/integration-v2-4/evidence/cloud-test-build.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "REL-003"
+    },
+    "REG-001": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "REG-001"
+    },
+    "REG-002": {
+      "result": "PASS",
+      "automated": "docs/integration-v2-4/evidence/ci-runs.json",
+      "deviceA": "docs/integration-v2-4/",
+      "deviceB": "docs/integration-v2-4/",
+      "remote": "real-cloud-uat.json",
+      "restart": "docs/integration-v2-4/evidence/ci-runs.json",
+      "failure": "docs/integration-v2-4/evidence/ci-runs.json",
+      "notes": "REG-002"
+    }
+  },
+  "secretsPrinted": false
+}

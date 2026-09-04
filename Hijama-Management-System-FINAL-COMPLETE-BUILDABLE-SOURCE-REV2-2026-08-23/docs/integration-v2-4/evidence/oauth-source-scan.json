@@ -1,0 +1,2593 @@
+{
+  "filesVisited": 17923,
+  "candidateFiles": 166,
+  "envPresence": {
+    "GOOGLE_OAUTH_CLIENT_ID": {
+      "present": false
+    },
+    "GOOGLE_OAUTH_CLIENT_SECRET": {
+      "present": false
+    },
+    "GOOGLE_OAUTH_REFRESH_TOKEN": {
+      "present": false
+    },
+    "GOOGLE_CLIENT_ID": {
+      "present": false
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "present": false
+    },
+    "GOOGLE_REFRESH_TOKEN": {
+      "present": false
+    }
+  },
+  "findings": [
+    {
+      "path": "REPO/.github/workflows/v2-4-cloud-test.yml",
+      "size": 3205,
+      "hitKeys": [
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/.github/workflows/v2-4-real-cloud-uat.yml",
+      "size": 3181,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "GOOGLE_OAUTH_REFRESH_TOKEN"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/database/migrate-from-json.js",
+      "size": 9576,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/database/migrations/001_initial.js",
+      "size": 5521,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/database/repositories/index.js",
+      "size": 14359,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/database/services/appointment-service.js",
+      "size": 11512,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/docs/comparison/04-SECURITY.md",
+      "size": 3135,
+      "hitKeys": [
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/docs/integration/10-SECRETS-AND-CREDENTIALS-AUDIT.md",
+      "size": 1572,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "client_secret",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/docs/integration/SECRETS-AND-CREDENTIALS-AUDIT.md",
+      "size": 1572,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "client_secret",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/docs/integration-v2-4/03-OAUTH-REAL-UAT.md",
+      "size": 1727,
+      "hitKeys": [
+        "GOOGLE_OAUTH_REFRESH_TOKEN"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth-config.js",
+      "size": 8693,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.json",
+      "size": 259,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=21 prefix=test… suffix=…123"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.local.json",
+      "size": 259,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=21 prefix=test… suffix=…123"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-providers/google-drive.js",
+      "size": 18312,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/generate-oauth-config.mjs",
+      "size": 3757,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/oauth-machine-store.mjs",
+      "size": 2802,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/oauth-save-local.mjs",
+      "size": 3066,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "GOOGLE_CLIENT_SECRET",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/v2-4-real-drive-uat.cjs",
+      "size": 7327,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "GOOGLE_OAUTH_REFRESH_TOKEN",
+        "client_id",
+        "client_secret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/verify-google-oauth-config.js",
+      "size": 2435,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/scripts/windows-uat/runtime-dataset-uat.cjs",
+      "size": 7274,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/tests/baseline/test-hybrid-appointments-v2.js",
+      "size": 1794,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "REPO/tests/baseline/test-phase4-sqlite.js",
+      "size": 11605,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/.config/NajjarTech/cloud-oauth.local.json",
+      "size": 259,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=21 prefix=test… suffix=…123"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/.wine/drive_c/windows/system32/credui.dll",
+      "size": 343856,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/.wine/drive_c/windows/system32/windows.security.credentials.ui.userconsentverifier.dll",
+      "size": 265746,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/internal/oauthex/auth_meta.go",
+      "size": 6855,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/internal/oauthex/auth_meta_test.go",
+      "size": 668,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/internal/oauthex/oauth2.go",
+      "size": 1691,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/internal/oauthex/oauth2_test.go",
+      "size": 6805,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/internal/oauthex/resource_meta.go",
+      "size": 13991,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/github.com/modelcontextprotocol/go-sdk@v0.8.0/oauthex/oauthex.go",
+      "size": 528,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "~/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.9.linux-amd64/go.env",
+      "size": 505,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-oauth-config.js",
+      "size": 8568,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-providers/google-drive.js",
+      "size": 16112,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/scripts/generate-oauth-config.mjs",
+      "size": 3876,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Cupping System Management/scripts/verify-google-oauth-config.js",
+      "size": 2317,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/cloud/settings-split.js",
+      "size": 3971,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/repositories/clientRepository.js",
+      "size": 5084,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/repositories/snapshotRepository.js",
+      "size": 39558,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/repositories/visitRepository.js",
+      "size": 4407,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/schema.js",
+      "size": 33056,
+      "hitKeys": [
+        "client_id",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/appointment-service.js",
+      "size": 11512,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/assistant-service.js",
+      "size": 11641,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/branch-service.js",
+      "size": 10499,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/cloud-sync-service.js",
+      "size": 17650,
+      "hitKeys": [
+        "refresh_token",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/financial-service.js",
+      "size": 16805,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/medical-record-service.js",
+      "size": 9857,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/services/reporting-service.js",
+      "size": 10526,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/database/snapshot-mapper.js",
+      "size": 10409,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/docs/API-DOCUMENTATION.md",
+      "size": 4604,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/docs/PHASE-06-REPORT.md",
+      "size": 3796,
+      "hitKeys": [
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/docs/POST-RC-OAUTH-INSTALLER-LICENSING-REPORT.md",
+      "size": 3639,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth-config.js",
+      "size": 9885,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth.config.example.json",
+      "size": 564,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=27 prefix=INST… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth.config.json",
+      "size": 409,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth.config.local.example.json",
+      "size": 298,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth.defaults.json",
+      "size": 315,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-oauth.embedded.json",
+      "size": 409,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-providers/google-drive.js",
+      "size": 17418,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/generate-oauth-config.mjs",
+      "size": 3703,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/phase20-release-audit.mjs",
+      "size": 9657,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/validate-production-deps.mjs",
+      "size": 8866,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/verify-google-oauth-config.js",
+      "size": 2964,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/scripts/verify-google-oauth-live.js",
+      "size": 1522,
+      "hitKeys": [
+        "client_id",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/security/data-classification.js",
+      "size": 942,
+      "hitKeys": [
+        "clientSecret",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/server/src/app.ts",
+      "size": 16033,
+      "hitKeys": [
+        "refresh_token",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/server/src/memory-repository.ts",
+      "size": 6923,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/server/src/postgres-repository.ts",
+      "size": 11843,
+      "hitKeys": [
+        "refresh_token",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/server/src/types.ts",
+      "size": 3796,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/server/test/cloud-api.test.ts",
+      "size": 9323,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/appointments/phase11-appointments.test.js",
+      "size": 8878,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/assistant/phase15-assistant.test.js",
+      "size": 9029,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/database/sqlite-migration.test.js",
+      "size": 15222,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/enterprise/phase20-performance.test.js",
+      "size": 7972,
+      "hitKeys": [
+        "client_id",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/financial/phase12-financial.test.js",
+      "size": 9474,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/medical/phase10-medical-records.test.js",
+      "size": 7780,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/security/phase5-data-security.test.js",
+      "size": 12500,
+      "hitKeys": [
+        "clientId",
+        "clientSecret",
+        "refresh_token",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/codex-extract/Tadawi-no-logs-cursor-uninstall-license-wipe-fc7d/tests/sync/phase19-cloud-sync.test.js",
+      "size": 10515,
+      "hitKeys": [
+        "refresh_token",
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/database/migrate-from-json.js",
+      "size": 9576,
+      "hitKeys": [
+        "client_id",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/database/migrations/001_initial.js",
+      "size": 5521,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/database/repositories/index.js",
+      "size": 14359,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-oauth-config.js",
+      "size": 8693,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-providers/google-drive.js",
+      "size": 16287,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/scripts/generate-oauth-config.mjs",
+      "size": 3757,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/scripts/oauth-machine-store.mjs",
+      "size": 2802,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/scripts/oauth-save-local.mjs",
+      "size": 3066,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "GOOGLE_CLIENT_SECRET",
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/scripts/verify-google-oauth-config.js",
+      "size": 2435,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/cursor/tests/baseline/test-phase4-sqlite.js",
+      "size": 11487,
+      "hitKeys": [
+        "client_id"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-oauth-config.js",
+      "size": 8568,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-providers/google-drive.js",
+      "size": 16112,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/scripts/generate-oauth-config.mjs",
+      "size": 3876,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/cmp/main-extract/Cupping System Management/scripts/verify-google-oauth-config.js",
+      "size": 2317,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-oauth-config.js",
+      "size": 8568,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-providers/google-drive.js",
+      "size": 16112,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/scripts/generate-oauth-config.mjs",
+      "size": 3876,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/original-zip/Cupping System Management/scripts/verify-google-oauth-config.js",
+      "size": 2317,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-oauth-config.js",
+      "size": 8568,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-providers/google-drive.js",
+      "size": 16112,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/scripts/generate-oauth-config.mjs",
+      "size": 3876,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-extract/Cupping System Management/scripts/verify-google-oauth-config.js",
+      "size": 2317,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/cloud/settings-split.js",
+      "size": 3459,
+      "hitKeys": [
+        "refreshToken"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-oauth-config.js",
+      "size": 8568,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-oauth.config.example.json",
+      "size": 612,
+      "hitKeys": [
+        "GOOGLE_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "dropbox.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=20 prefix=YOUR… suffix=…KEY"
+        },
+        "dropbox.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=23 prefix=YOUR… suffix=…RET"
+        },
+        "onedrive.clientId": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=24 prefix=YOUR… suffix=…_ID"
+        },
+        "onedrive.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=28 prefix=YOUR… suffix=…RET"
+        },
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=25 prefix=YOUR… suffix=…RET"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-oauth.config.local.example.json",
+      "size": 267,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": false,
+          "placeholder": true,
+          "meta": "len=29 prefix=PAST… suffix=…ERE"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-oauth.defaults.json",
+      "size": 284,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": false,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-oauth.embedded.json",
+      "size": 357,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {
+        "google.clientId": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=72 prefix=3930… suffix=…com"
+        },
+        "google.clientSecret": {
+          "present": true,
+          "looksReal": true,
+          "placeholder": false,
+          "meta": "len=35 prefix=GOCS… suffix=…6yk"
+        }
+      },
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-providers/google-drive.js",
+      "size": 16112,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret",
+        "refresh_token"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/electron/cloud-providers/oauth-loopback.js",
+      "size": 1850,
+      "hitKeys": [],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/license/ui/cloud-providers-panel.js",
+      "size": 7803,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": true,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/scripts/generate-oauth-config.mjs",
+      "size": 3876,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/scripts/pat-acceptance-test.mjs",
+      "size": 33245,
+      "hitKeys": [
+        "clientId"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/tmp/tadawi-inspect/Cupping System Management/scripts/verify-google-oauth-config.js",
+      "size": 2317,
+      "hitKeys": [
+        "clientId",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/opt/cursor/artifacts/comparison/04-SECURITY.md",
+      "size": 3135,
+      "hitKeys": [
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": false,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/opt/cursor/artifacts/integration/10-SECRETS-AND-CREDENTIALS-AUDIT.md",
+      "size": 1572,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "client_secret",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    },
+    {
+      "path": "/opt/cursor/artifacts/integration/SECRETS-AND-CREDENTIALS-AUDIT.md",
+      "size": 1572,
+      "hitKeys": [
+        "GOOGLE_OAUTH_CLIENT_SECRET",
+        "client_secret",
+        "clientSecret"
+      ],
+      "hasGoogleusercontent": false,
+      "hasGocspx": true,
+      "jsonKeySummary": {},
+      "envKeySummary": {}
+    }
+  ]
+}

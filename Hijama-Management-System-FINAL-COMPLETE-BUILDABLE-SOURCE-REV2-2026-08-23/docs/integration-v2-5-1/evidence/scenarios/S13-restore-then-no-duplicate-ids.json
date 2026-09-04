@@ -1,0 +1,12 @@
+{
+  "id": "S13-restore-then-no-duplicate-ids",
+  "title": "Restore preserves IDs (sync-safe stable keys)",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "ids": [
+      "a1"
+    ],
+    "unique": 1
+  }
+}

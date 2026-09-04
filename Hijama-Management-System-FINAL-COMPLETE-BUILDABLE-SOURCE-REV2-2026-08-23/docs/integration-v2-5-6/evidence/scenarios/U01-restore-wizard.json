@@ -1,0 +1,11 @@
+{
+  "id": "U01-restore-wizard",
+  "title": "Restore wizard happy path + cancel",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "step": "done",
+    "cancel": "cancelled",
+    "phrase": "استعادة"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": 14,
+  "name": "rate_limit_classify_retry",
+  "result": "PASS",
+  "ms": 6513,
+  "detail": {
+    "hits": 2,
+    "category": "rate_limit"
+  },
+  "secretsPrinted": false
+}

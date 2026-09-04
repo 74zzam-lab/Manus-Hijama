@@ -1,0 +1,11 @@
+{
+  "at": "2026-08-01T20:34:35.502Z",
+  "result": "UNVERIFIED",
+  "cases": [
+    "scenario_a_conflict_offline",
+    "scenario_b_branch_creation_pending",
+    "scenario_c_restore_reconcile",
+    "scenario_d_owner_readonly_leakage",
+    "scenario_e_oauth_429_timeout"
+  ]
+}

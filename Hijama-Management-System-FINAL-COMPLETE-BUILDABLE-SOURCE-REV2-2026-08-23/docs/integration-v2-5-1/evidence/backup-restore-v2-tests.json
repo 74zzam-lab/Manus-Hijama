@@ -1,0 +1,5 @@
+{
+  "command": "node tests/backup/backup-restore-v2.test.js",
+  "note": "Also covered by npm test label v2-5.1:backup-restore-v2",
+  "scenariosSummary": "13/13"
+}

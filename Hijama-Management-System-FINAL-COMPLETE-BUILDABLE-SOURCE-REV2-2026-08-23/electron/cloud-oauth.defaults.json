@@ -1,0 +1,11 @@
+{
+  "google": {
+    "clientId": "393099979986-nbt694pvof6bs7nslnug3ndh1k75mvfo.apps.googleusercontent.com",
+    "projectId": "najjartech-hijama-management",
+    "redirectPort": 42813,
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ],
+    "enabled": true
+  }
+}

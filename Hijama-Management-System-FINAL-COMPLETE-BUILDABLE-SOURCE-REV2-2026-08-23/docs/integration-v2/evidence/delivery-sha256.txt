@@ -1,0 +1,4 @@
+577c1f3900d83de45395216e2ce94c20a696ea754eac0c9ddc7936bd01d9d010  HijamaManagement-Setup-2.0.1.exe
+c538c8416349d875435b82ba827e3fc557a8925d1acc03f3f675efeda0e98d36  win-unpacked-CuppingCenter-2.0.1.zip
+c2cd43b24e2c96c1d7b0f2dac4d90a53e567dbb6d26e419da2c2d2d5e937ed36  source-integration-hybrid-cloud-owner-v2-a46ab02.zip
+bad1bd481ed1bce1b42fcc1778fdabeca585dedc2299423a5631959e80cecb29  Hijama Management System.exe

@@ -1,0 +1,565 @@
+:root {
+  --tdw-color-primary-700: #263f5e;
+  --tdw-color-primary-600: #355779;
+  --tdw-color-primary-500: #4b7398;
+  --tdw-color-accent-500: #2f8f83;
+  --tdw-color-neutral-0: #fff;
+  --tdw-color-neutral-50: #f7f9fc;
+  --tdw-color-neutral-100: #eef2f7;
+  --tdw-color-neutral-300: #cbd5e1;
+  --tdw-color-neutral-700: #334155;
+  --tdw-color-neutral-900: #111827;
+  --tdw-color-danger-600: #a94045;
+  --tdw-color-warning-600: #9a6515;
+  --tdw-color-success-600: #26705f;
+  --tdw-space-1: .25rem;
+  --tdw-space-2: .5rem;
+  --tdw-space-3: .75rem;
+  --tdw-space-4: 1rem;
+  --tdw-space-5: 1.25rem;
+  --tdw-space-6: 1.5rem;
+  --tdw-radius-sm: .5rem;
+  --tdw-radius-md: .75rem;
+  --tdw-radius-lg: 1rem;
+  --tdw-shadow-card: 0 1px 2px rgba(15,23,42,.05), 0 10px 28px rgba(15,23,42,.07);
+  --tdw-focus-ring: 0 0 0 3px rgba(47,143,131,.3);
+  --tdw-control-height: 2.75rem;
+}
+
+html { font-size: 16px; text-rendering: optimizeLegibility; }
+body { min-width: 320px; color: var(--text, var(--tdw-color-neutral-900)); }
+
+:where(button, [role="button"], a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--tdw-color-accent-500) !important;
+  outline-offset: 2px;
+  box-shadow: var(--tdw-focus-ring);
+}
+
+.skip-link {
+  position: fixed;
+  inset-block-start: var(--tdw-space-3);
+  inset-inline-start: var(--tdw-space-3);
+  z-index: 100000;
+  transform: translateY(-160%);
+  padding: var(--tdw-space-3) var(--tdw-space-5);
+  border-radius: var(--tdw-radius-sm);
+  color: #fff;
+  background: var(--tdw-color-primary-700);
+}
+.skip-link:focus { transform: translateY(0); }
+
+:where(.btn, button, input, select, textarea) { min-height: 40px; }
+.btn {
+  min-height: var(--tdw-control-height);
+  border-radius: var(--tdw-radius-sm);
+  font-weight: 700;
+  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.btn:disabled, button:disabled, input:disabled, select:disabled, textarea:disabled {
+  opacity: .55 !important;
+  cursor: not-allowed !important;
+  filter: saturate(.6);
+}
+.btn-primary { background: var(--tdw-color-primary-600); }
+.btn-primary:hover:not(:disabled) { background: var(--tdw-color-primary-700); }
+.btn-danger { background: var(--tdw-color-danger-600); }
+
+:where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  border-radius: var(--tdw-radius-sm) !important;
+  border-color: color-mix(in srgb, var(--border, #d8dee8) 78%, #64748b) !important;
+  font: inherit;
+}
+:where(label, .form-label) { font-weight: 700; color: var(--text, var(--tdw-color-neutral-900)); }
+:where(input, select, textarea)[aria-invalid="true"] { border-color: var(--tdw-color-danger-600) !important; }
+
+:where(.card, .stat-card, .report-card) {
+  border-radius: var(--tdw-radius-lg);
+  box-shadow: var(--tdw-shadow-card);
+}
+:where(table) { border-collapse: separate; border-spacing: 0; }
+:where(th) { position: sticky; inset-block-start: 0; z-index: 1; font-weight: 800; }
+:where(th, td) { min-height: 44px; vertical-align: middle; }
+:where(tbody tr):focus-within { outline: 2px solid color-mix(in srgb, var(--tdw-color-accent-500) 55%, transparent); }
+
+.modal-overlay[aria-hidden="true"] { display: none !important; }
+.modal-overlay.open { backdrop-filter: blur(4px); }
+.modal { border-radius: var(--tdw-radius-lg); box-shadow: 0 24px 64px rgba(15,23,42,.22); }
+.modal-close { min-width: 44px; min-height: 44px; }
+
+.tdw-system-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--tdw-space-3);
+  min-height: 180px;
+  padding: var(--tdw-space-6);
+  text-align: center;
+  color: var(--text-muted, #64748b);
+}
+.tdw-system-state__icon { font-size: 2rem; }
+.tdw-system-state--error { color: var(--tdw-color-danger-600); }
+.tdw-system-state--success { color: var(--tdw-color-success-600); }
+.tdw-system-state--loading .tdw-system-state__icon { animation: tdw-pulse 1s ease-in-out infinite alternate; }
+@keyframes tdw-pulse { to { opacity: .35; transform: scale(.92); } }
+
+.tdw-drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 1100;
+  width: min(460px, 100vw);
+  padding: var(--tdw-space-6);
+  overflow: auto;
+  background: var(--card, #fff);
+  box-shadow: -16px 0 48px rgba(15,23,42,.18);
+  transform: translateX(calc(100% * var(--tdw-drawer-direction, -1)));
+  transition: transform .22s ease;
+}
+.tdw-drawer[aria-hidden="false"] { transform: translateX(0); }
+
+.tdw-stepper { display: flex; gap: var(--tdw-space-2); padding: 0; list-style: none; }
+.tdw-stepper > li { flex: 1; padding: var(--tdw-space-3); border-block-end: 3px solid var(--tdw-color-neutral-300); }
+.tdw-stepper > li[aria-current="step"] { color: var(--tdw-color-primary-700); border-color: var(--tdw-color-accent-500); }
+
+@media (max-width: 1366px) {
+  :root { --tdw-control-height: 2.625rem; }
+  .page { padding-inline: var(--tdw-space-5) !important; }
+}
+@media (max-width: 900px) {
+  .form-row, .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .table-wrap, .table-container { overflow-x: auto; overscroll-behavior-inline: contain; }
+  .modal { width: min(94vw, 720px) !important; }
+}
+@media (max-width: 600px) {
+  html { font-size: 15px; }
+  .form-row, .grid-2, .grid-3, .grid-4, .stats-grid, .dash-kpi-row { grid-template-columns: 1fr !important; }
+  .card-header, .modal-footer { flex-wrap: wrap; gap: var(--tdw-space-2); }
+  .modal-footer .btn { flex: 1 1 140px; }
+  .page { padding: var(--tdw-space-3) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+@media (forced-colors: active) {
+  .btn, .card, input, select, textarea { border: 1px solid ButtonText !important; }
+}
+
+/* V2-5.9 — Safe area + modal-shell (Header / Scroll Body / Sticky Footer) */
+:root {
+  --tdw-safe-block: clamp(24px, 5vh, 48px);
+  --tdw-safe-inline: clamp(16px, 3vw, 32px);
+  --tdw-modal-max-h: calc(100dvh - (2 * var(--tdw-safe-block)));
+}
+@supports not (height: 100dvh) {
+  :root { --tdw-modal-max-h: calc(100vh - (2 * var(--tdw-safe-block))); }
+}
+
+.modal-overlay,
+.tdw-modal-overlay,
+.bf-overlay,
+.cs-overlay,
+.auth-page,
+.activation-page,
+#loginScreen:not(.hidden),
+#licenseScreen:not(.hidden) {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  padding-block: var(--tdw-safe-block);
+  padding-inline: var(--tdw-safe-inline);
+  display: none;
+  place-items: center;
+  overflow: hidden;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+.modal-overlay.open,
+.tdw-modal-overlay.open,
+.bf-overlay.open,
+.cs-overlay.open,
+#loginScreen:not(.hidden),
+#licenseScreen:not(.hidden) {
+  display: grid;
+}
+@supports (width: 100dvw) {
+  .modal-overlay, .tdw-modal-overlay, .bf-overlay, .cs-overlay,
+  #loginScreen, #licenseScreen { max-width: 100dvw; }
+}
+
+/* Unified shell — aliases: .modal-shell, .tdw-modal, .bf-card, auth cards */
+.modal-shell,
+.tdw-modal,
+.bf-card.modal-shell,
+.login-box.modal-shell,
+.lic-box.modal-shell,
+.cs-modal.modal-shell,
+.modal.modal-shell,
+.modal:has(> .modal-body) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(1100px, 100%);
+  max-height: var(--tdw-modal-max-h);
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--card, var(--tdw-color-neutral-0));
+  border-radius: var(--tdw-radius-lg);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, .28);
+}
+.login-box.modal-shell { width: min(420px, 100%); }
+.tdw-modal--sm, .modal.modal-shell--sm { width: min(420px, 100%); }
+.tdw-modal--lg, .tdw-modal--wizard, .bf-card.modal-shell { width: min(720px, 100%); }
+.tdw-modal--full { width: min(960px, 100%); }
+.lic-box.modal-shell,
+.lic-box--auth.modal-shell { width: min(1100px, 100%); }
+.tdw-modal--blocking { border: 2px solid var(--tdw-color-danger-600); }
+
+.modal-shell > .modal-header,
+.modal-shell > .bf-card-header,
+.modal-shell > .tdw-modal__header,
+.modal-shell > .cs-head,
+.modal:has(> .modal-body) > .modal-header,
+.tdw-modal__header,
+.bf-card-header {
+  flex: 0 0 auto;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 3;
+  padding: var(--tdw-space-4) var(--tdw-space-5);
+  background: inherit;
+  border-block-end: 1px solid var(--border, var(--tdw-color-neutral-100));
+  min-height: 0;
+}
+
+.modal-shell > .modal-body,
+.modal-shell > .bf-card-body,
+.modal-shell > .tdw-modal__body,
+.modal-shell > .cs-body,
+.modal-shell > .lic-scroll,
+.modal:has(> .modal-body) > .modal-body,
+.tdw-modal__body,
+.bf-card-body,
+.lic-box.modal-shell .lic-scroll,
+#lic-step-manage .lic-scroll {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--tdw-space-4) var(--tdw-space-5);
+}
+
+.modal-shell > .modal-footer,
+.modal-shell > .bf-card-footer,
+.modal-shell > .tdw-modal__footer,
+.modal:has(> .modal-body) > .modal-footer,
+.tdw-modal__footer,
+.bf-card-footer,
+.login-box.modal-shell > .modal-footer,
+.lic-box.modal-shell > .modal-footer {
+  flex-shrink: 0;
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 3;
+  padding: var(--tdw-space-3) var(--tdw-space-5);
+  background: inherit;
+  border-block-start: 1px solid var(--border, var(--tdw-color-neutral-100));
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.modal-actions,
+.bf-card-footer .bf-nav-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+}
+/* Multi-action CTAs stack vertically — never crush into overlapping nowrap row */
+.bf-card-footer .bf-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+.bf-card-footer .bf-actions:empty { display: none; }
+.modal-actions .btn,
+.bf-card-footer .btn,
+.modal-footer .btn {
+  min-width: 0;
+  min-height: 44px;
+  width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+.bf-card-footer .bf-nav-row .btn {
+  flex: 1 1 0;
+  width: auto;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .modal-actions,
+  .bf-card-footer .bf-nav-row,
+  .login-box.modal-shell > .modal-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-wrap: unset;
+  }
+  .modal-actions .btn,
+  .bf-card-footer .bf-nav-row .btn,
+  .modal-footer .btn { min-width: 0; width: 100%; }
+}
+
+.tdw-modal__title { margin: 0; font-size: 1.15rem; font-weight: 900; color: var(--tdw-color-primary-700); }
+.tdw-field-error { color: var(--tdw-color-danger-600); font-size: .8rem; font-weight: 700; margin-top: .25rem; }
+.tdw-password-row { display: flex; gap: .5rem; align-items: center; }
+.tdw-password-row .form-control { flex: 1; min-width: 0; }
+
+/* Hide duplicate pre-login Google panel — BootFlow owns first-run activation.
+   Keep #lic-drive-bootstrap-panel visible for License Recovery (old customers). */
+#login-drive-bootstrap-panel { display: none !important; }
+
+/* Activation & Licensing responsive grid (3 → 2 → 1) — prefer grid over flex-wrap */
+#licenseScreen .lic-auth-grid,
+#lic-step-manage .lic-manage-grid,
+.lic-activation-grid,
+.activation-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: start;
+  min-height: 0;
+}
+@media (max-width: 1100px) {
+  #licenseScreen .lic-auth-grid,
+  #lic-step-manage .lic-manage-grid,
+  .lic-activation-grid,
+  .activation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  #licenseScreen .lic-auth-grid,
+  #lic-step-manage .lic-manage-grid,
+  .lic-activation-grid,
+  .activation-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Compact horizontal stepper — avoid tall wrap in modal header */
+.tdw-stepper.bf-stepper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 2.75rem;
+  padding-bottom: 4px;
+  overscroll-behavior-x: contain;
+}
+.tdw-stepper.bf-stepper > li {
+  flex: 1 0 auto;
+  min-width: 4.5rem;
+  max-width: 7rem;
+  font-size: 11px;
+  text-align: center;
+  padding: 6px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 720px) {
+  .tdw-stepper.bf-stepper > li { min-width: 3.25rem; font-size: 10px; max-width: 5rem; }
+  .bf-step-meta { font-size: 11px; }
+}
+
+/* Only one license step visible — never force both with display:!important */
+#lic-step-devlogin,
+#lic-step-manage {
+  display: none;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  width: 100%;
+  flex: 1 1 auto;
+}
+#lic-step-devlogin.lic-step-visible,
+#lic-step-manage.lic-step-visible {
+  display: grid;
+}
+#lic-step-devlogin:not(.lic-step-visible),
+#lic-step-manage:not(.lic-step-visible) {
+  display: none !important;
+}
+
+/* Login glass card keeps translucent surface inside shell */
+.login-box.modal-shell {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  text-align: center;
+  padding: 0;
+}
+.login-box.modal-shell > .modal-header { border-color: rgba(255, 255, 255, 0.08); background: transparent; }
+.login-box.modal-shell > .modal-body { text-align: center; background: transparent; }
+.login-box.modal-shell > .modal-footer {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.08);
+  justify-content: stretch;
+}
+.lic-box.modal-shell {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  padding: 0;
+  text-align: center;
+}
+.lic-box.modal-shell > .modal-header,
+.lic-box.modal-shell > .modal-footer { background: transparent; border-color: rgba(255, 255, 255, 0.1); }
+.lic-box.modal-shell > .modal-body,
+.lic-box.modal-shell .lic-scroll { text-align: right; }
+
+@media (max-width: 1280px) {
+  .tdw-modal--lg, .tdw-modal--wizard, .bf-card.modal-shell { width: min(680px, 100%); }
+}
+@media (max-width: 1024px) {
+  .tdw-modal, .modal.modal-shell, .bf-card.modal-shell { width: min(100%, 640px); }
+}
+@media (max-height: 720px) {
+  .modal-shell > .modal-header,
+  .modal-shell > .modal-footer,
+  .tdw-modal__header,
+  .tdw-modal__footer,
+  .bf-card-header,
+  .bf-card-footer { padding-block: .65rem; }
+}
+
+
+/* UI remediation — responsive containment and reusable layout primitives.
+   This layer intentionally changes layout only; it does not change product policy or handlers. */
+:root {
+  --tdw-layout-gap: var(--tdw-space-4);
+  --tdw-toolbar-control-min: 11rem;
+}
+
+:where(.page, .card, .form-grid, .form-grid-2, .form-grid-3, .form-grid-4,
+  .pkg-form-grid, .set-system-grid, .backup-config-grid, .backup-stack-grid,
+  .backup-dual-grid, .set-systems-toggle-grid) {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+:where(.form-grid, .form-grid-2, .form-grid-3, .form-grid-4, .pkg-form-grid) > * {
+  min-inline-size: 0;
+}
+
+/* Wide data belongs in a table wrapper, never in the page shell. */
+#page-inventory, #page-inventory #inv-content-wrap, #page-inventory #inv-content-wrap > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+#page-inventory .table-wrap,
+#page-logs .table-wrap { max-inline-size: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+
+/* The activity-log toolbar used fixed grid tracks that exceeded narrow desktop shells. */
+#page-logs .form-grid {
+  grid-template-columns: minmax(min(100%, 16rem), 1fr) repeat(3, minmax(0, 11rem)) repeat(3, max-content) !important;
+}
+#page-logs .form-grid > :is(input, select) { min-inline-size: 0; }
+
+/* Preserve readable controls at Windows 125% and 150% scaling. */
+@media (max-width: 1180px) {
+  .form-grid-4, .form-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pkg-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #page-logs .form-grid {
+    grid-template-columns: repeat(3, minmax(min(100%, var(--tdw-toolbar-control-min)), 1fr)) !important;
+  }
+  #page-logs .form-grid > .btn { inline-size: 100%; }
+}
+@media (max-width: 820px) {
+  .form-grid-4, .form-grid-3, .form-grid-2, .pkg-form-grid,
+  .backup-config-grid, .set-system-grid, .backup-stack-grid,
+  .backup-dual-grid, .set-systems-toggle-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  #page-logs .form-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+/* A modal with explicit body/footer must reserve the footer and scroll its body. */
+.tdw-modal-scroll-body { min-block-size: 0; overflow: auto; overscroll-behavior: contain; padding: var(--tdw-space-4) var(--tdw-space-5); }
+.modal-shell > .tdw-modal-scroll-body + .modal-footer { flex: 0 0 auto; }
+
+/* Empty/loading rows remain visibly centred without forcing a page-wide width. */
+.table-wrap td[colspan] { text-align: center; }
+
+/* Use logical properties for remediation surfaces so Arabic/LTR islands stay stable. */
+.tdw-input-context-menu { inset-inline-start: auto; }
+
+/* Partial reset is destructive: keep confirmation actions reachable even at 150% scale. */
+#partialResetModal .modal-shell {
+  max-block-size: min(470px, var(--tdw-modal-max-h));
+}
+#partialResetModal .tdw-modal-scroll-body { scrollbar-gutter: stable; }
+
+/* Legacy dialogs without an explicit modal-body still need a reachable action row on short, scaled desktops. */
+@media (max-height: 720px) {
+  .modal-overlay .modal:not(.modal-shell) {
+    max-block-size: min(450px, var(--tdw-modal-max-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .modal-overlay .modal:not(.modal-shell) > .modal-footer {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 3;
+    background: var(--card, #fff);
+    border-block-start: 1px solid var(--border, var(--tdw-color-neutral-100));
+  }
+  .modal-overlay .modal.modal-shell {
+    max-block-size: min(450px, var(--tdw-modal-max-h));
+  }
+}
+
+/* Keep the Backup V2 primary actions visible on a standard desktop viewport. */
+@media (min-width: 1181px) {
+  #bk-status-summary .backup-status-card {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--tdw-space-2);
+  }
+  #bk-status-summary .backup-status-item { min-inline-size: 0; padding: var(--tdw-space-2); }
+}
+
+/* Logs toolbar: scale-safe control widths on standard 1280px desktops. */
+@media (max-width: 1366px) {
+  #page-logs .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #page-logs .form-grid > .btn { inline-size: 100%; }
+}
+
+/* Final remediation: Packages controls must retain readable Arabic option labels at Windows 125–150% scaling. */
+@media (max-width: 1450px) {
+  #page-packages .pkg-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #page-packages #pkg-share-mode {
+    min-inline-size: 12rem;
+  }
+}
+
+@media (max-width: 900px) {
+  #page-packages #pkg-share-mode {
+    min-inline-size: 0;
+  }
+}
+
+/* Final remediation: retain report and inventory action rows at 720px under Windows 125–150% scaling. */
+@media (max-height: 720px) {
+  #reportPreviewModal .modal-shell {
+    height: min(58vh, var(--tdw-modal-max-h)) !important;
+  }
+  #invItemModal .modal-shell {
+    max-height: min(56vh, var(--tdw-modal-max-h)) !important;
+    overflow: hidden !important;
+  }
+}

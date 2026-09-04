@@ -1,0 +1,7 @@
+{
+  "at": "2026-07-30T00:56:40.6328296Z",
+  "installer": "HijamaManagement-Setup-2.0.1.exe",
+  "sha256": "B32BCF770D3FBEB64CA33D34B406A8A5A113678672DA445519C268FCC97675C3",
+  "note": "PR-safe cloud-test build; real-cloud UAT is a separate workflow",
+  "commit": "d57828bd6ea217db36eb4a0d9baede83cf290fe7"
+}

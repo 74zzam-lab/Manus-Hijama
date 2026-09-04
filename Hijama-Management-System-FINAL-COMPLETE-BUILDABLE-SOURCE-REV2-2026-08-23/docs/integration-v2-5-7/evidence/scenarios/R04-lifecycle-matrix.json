@@ -1,0 +1,10 @@
+{
+  "id": "R04-lifecycle-matrix",
+  "title": "LIFE matrix uninstall/update/wipe/updater policies",
+  "result": "PASS",
+  "ms": 94,
+  "evidence": {
+    "passed": 13,
+    "total": 13
+  }
+}

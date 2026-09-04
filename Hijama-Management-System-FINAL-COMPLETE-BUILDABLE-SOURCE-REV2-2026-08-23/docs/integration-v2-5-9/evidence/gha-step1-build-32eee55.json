@@ -1,0 +1,17 @@
+{
+  "step": "STEP1_BUILD",
+  "source": "GitHub Actions windows-2022",
+  "runId": 30722116340,
+  "runUrl": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30722116340",
+  "commit": "32eee55ee2ba40ffbdbb016c223c35e316f363c3",
+  "at": "2026-08-01T22:55:48Z",
+  "setupExe": "HijamaManagement-Setup-2.0.1.exe",
+  "setupSizeBytes": 106794410,
+  "setupSha256": "5a816fe08a2b02aeb94202e5caf6235e61423f568b34ef2228eb11093bf953ca",
+  "validNsis": true,
+  "artifactsListedViaApi": 0,
+  "artifactUpload": "FAILED_QUOTA_RECALC_LAG",
+  "note": "Owner deleted all artifacts (API total=0, caches=0). GitHub still rejects CreateArtifact until storage usage recalculates (6-12 hours).",
+  "scenariosAtoE": "UNVERIFIED",
+  "requirementPass": false
+}

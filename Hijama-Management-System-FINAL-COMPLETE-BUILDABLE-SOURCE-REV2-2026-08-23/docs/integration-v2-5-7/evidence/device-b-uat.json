@@ -1,0 +1,24 @@
+{
+  "device": "B",
+  "role": "production-release-adversarial-uat",
+  "startedAt": "2026-08-23T13:57:31.171Z",
+  "finishedAt": "2026-08-23T13:57:33.124Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "focus": [
+    "corrupt DB refuse empty replace",
+    "app-only uninstall preserve license",
+    "portable unsupported honesty",
+    "Win10 policy vs Win11 CI runner"
+  ],
+  "scenarios": [
+    "R02-migration-preserve",
+    "R03-migration-failure",
+    "R04-lifecycle-matrix",
+    "R06-compat-matrix"
+  ],
+  "result": "FAIL"
+}

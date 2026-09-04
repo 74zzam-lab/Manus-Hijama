@@ -1,0 +1,8 @@
+{
+  "id": "R02-migration-preserve",
+  "title": "V2-4→V2-5 preserve records/attachments/outbox/owner/license",
+  "result": "FAIL",
+  "ms": 26,
+  "evidence": {},
+  "error": "migration harness fail"
+}

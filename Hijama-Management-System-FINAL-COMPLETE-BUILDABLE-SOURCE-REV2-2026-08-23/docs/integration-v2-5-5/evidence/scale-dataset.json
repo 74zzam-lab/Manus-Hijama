@@ -1,0 +1,34 @@
+{
+  "phase": "V2-5.5",
+  "startedAt": "2026-08-18T19:27:48.835Z",
+  "finishedAt": "2026-08-18T19:27:52.389Z",
+  "profile": "FULL",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+",
+    "node": "v22.14.0",
+    "cpus": 4,
+    "cpuModel": "Intel(R) Xeon(R) Processor",
+    "totalMemMb": 16014,
+    "freeMemMb": 15139,
+    "hostname": "cursor"
+  },
+  "dbPath": "/tmp/v255-scale-fS99aO/scale.db",
+  "targets": {
+    "clients": 100000,
+    "visits": 500000,
+    "invoices": 50000,
+    "appointments": 50000,
+    "attachments": 10000
+  },
+  "ok": true,
+  "counts": {
+    "clients": 100000,
+    "visits": 500000,
+    "invoices": 50000,
+    "appointments": 50000,
+    "attachments": 10000
+  },
+  "ms": 3534
+}

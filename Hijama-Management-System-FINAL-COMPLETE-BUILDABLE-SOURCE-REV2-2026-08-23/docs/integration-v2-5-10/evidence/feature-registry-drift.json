@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-02T23:01:53.367Z",
+  "inlineCount": 74,
+  "jsonCount": 74,
+  "sharedCount": 74,
+  "onlyInline": [],
+  "onlyJson": [],
+  "note": "Dual registries are known Category B residual debt. Runtime UI uses inline FEATURE_REGISTRY; packaging/licensing uses JSON. Unification is post-PC Stage-4 extract — not a UAT blocker."
+}

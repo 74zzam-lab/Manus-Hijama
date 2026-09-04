@@ -1,0 +1,17 @@
+{
+  "phase": "V2-5.6",
+  "note": "Evidence from UX/ops harnesses. No secrets.",
+  "artifacts": [
+    "tests/baseline/test-v2-5-6-ux-hardening.js",
+    "scripts/v2-5-6-scenarios-all.cjs",
+    "scripts/windows-uat/v2-5-6-ux-runtime.cjs",
+    "docs/integration-v2-5-6/evidence/ux-unit.json",
+    "docs/integration-v2-5-6/evidence/scenarios-all.json",
+    "docs/integration-v2-5-6/evidence/device-a-uat.json",
+    "docs/integration-v2-5-6/evidence/device-b-uat.json",
+    "docs/integration-v2-5-6/evidence/windows-build.json",
+    "docs/integration-v2-5-6/evidence/failure-recovery.json",
+    "docs/integration-v2-5-6/evidence/screenshots-index.json",
+    "docs/integration-v2-5-6/evidence/layout-branding-regression.json"
+  ]
+}

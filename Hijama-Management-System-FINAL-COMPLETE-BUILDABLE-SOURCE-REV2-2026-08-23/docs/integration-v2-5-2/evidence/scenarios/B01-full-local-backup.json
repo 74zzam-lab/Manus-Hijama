@@ -1,0 +1,10 @@
+{
+  "id": "B01-full-local-backup",
+  "title": "Full local Backup V2",
+  "result": "PASS",
+  "ms": 312,
+  "evidence": {
+    "hash": "f03ef01f2491d05a6149d6373da2c55c2abbd8dad638e1eafe26de1a54e0a50e",
+    "files": 3
+  }
+}

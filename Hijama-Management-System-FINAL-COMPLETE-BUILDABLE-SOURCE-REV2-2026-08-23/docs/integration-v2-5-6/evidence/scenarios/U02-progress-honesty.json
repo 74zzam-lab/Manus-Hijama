@@ -1,0 +1,21 @@
+{
+  "id": "U02-progress-honesty",
+  "title": "Honest progress + pause/resume/cancel/retry",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "backup": {
+      "beforeComplete": 99,
+      "after": 100
+    },
+    "sync": {
+      "beforeComplete": 99,
+      "after": 100
+    },
+    "restore": {
+      "beforeComplete": 99,
+      "after": 100
+    },
+    "controls": "pause/resume/cancel/retry"
+  }
+}

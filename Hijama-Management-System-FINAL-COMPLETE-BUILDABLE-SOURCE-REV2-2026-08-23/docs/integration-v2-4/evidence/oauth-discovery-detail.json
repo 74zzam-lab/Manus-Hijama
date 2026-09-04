@@ -1,0 +1,226 @@
+{
+  "at": "2026-07-30T05:18:53.820Z",
+  "candidates": [
+    {
+      "path": "REPO/electron/cloud-oauth.config.json",
+      "exists": true,
+      "size": 259,
+      "gitignored": true,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": false,
+          "looksReal": false,
+          "len": 21,
+          "prefix": "test",
+          "suffix": "123"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.local.json",
+      "exists": true,
+      "size": 259,
+      "gitignored": true,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": false,
+          "looksReal": false,
+          "len": 21,
+          "prefix": "test",
+          "suffix": "123"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.defaults.json",
+      "exists": true,
+      "size": 284,
+      "gitignored": false,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "present": false
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.embedded.json",
+      "exists": true,
+      "size": 357,
+      "gitignored": false,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 35,
+          "prefix": "GOCS",
+          "suffix": "6yk"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.example.json",
+      "exists": true,
+      "size": 612,
+      "gitignored": false,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": true,
+          "looksReal": false,
+          "len": 25,
+          "prefix": "YOUR",
+          "suffix": "RET"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "REPO/electron/cloud-oauth.config.local.example.json",
+      "exists": true,
+      "size": 267,
+      "gitignored": false,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": true,
+          "looksReal": false,
+          "len": 29,
+          "prefix": "PAST",
+          "suffix": "ERE"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "~/.config/NajjarTech/cloud-oauth.local.json",
+      "exists": true,
+      "size": 259,
+      "gitignored": true,
+      "keys": {
+        "client_id": {
+          "path": "google.clientId",
+          "present": true,
+          "placeholder": false,
+          "looksReal": true,
+          "len": 72,
+          "prefix": "3930",
+          "suffix": "com"
+        },
+        "client_secret": {
+          "path": "google.clientSecret",
+          "present": true,
+          "placeholder": false,
+          "looksReal": false,
+          "len": 21,
+          "prefix": "test",
+          "suffix": "123"
+        },
+        "refresh_token": {
+          "present": false
+        }
+      }
+    },
+    {
+      "path": "~/.config/Cupping Center/cloud-oauth.local.json",
+      "exists": false
+    }
+  ],
+  "discovered": {
+    "client_id": true,
+    "client_secret": true,
+    "refresh_token": false,
+    "sources": [
+      {
+        "key": "client_id",
+        "from": "REPO/electron/cloud-oauth.config.json",
+        "preferred": false
+      },
+      {
+        "key": "client_secret",
+        "from": "REPO/electron/cloud-oauth.embedded.json",
+        "preferred": false
+      }
+    ]
+  },
+  "vaultWritten": true,
+  "vaultMode": "0600",
+  "secretsInEvidence": false
+}

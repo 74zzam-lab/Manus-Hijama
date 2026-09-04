@@ -1,0 +1,10 @@
+{
+  "id": "B05-upload-resume",
+  "title": "Interrupted upload resume",
+  "result": "PASS",
+  "ms": 63,
+  "evidence": {
+    "bytes": 6814,
+    "sha256": "f03ef01f2491d05a6149d6373da2c55c2abbd8dad638e1eafe26de1a54e0a50e"
+  }
+}

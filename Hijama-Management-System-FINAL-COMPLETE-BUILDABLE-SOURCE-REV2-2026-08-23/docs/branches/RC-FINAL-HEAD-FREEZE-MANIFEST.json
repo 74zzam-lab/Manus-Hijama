@@ -1,0 +1,90 @@
+{
+  "status": "SOURCE VERIFIED / RUNTIME UAT PENDING",
+  "rcBranch": "cursor/final-stable-operational-rc-7c71",
+  "runtimeBuildSourceCommit": "c2c2ad6650797af8e9769722aaa094f76176459e",
+  "evidenceDocHeadCommit": "a3bfb74f460736cd6925bf5cccd4085bf060466c",
+  "priorEvidenceDocHeadBeforeIdentityFix": "28d77d91835bda1c551944f0d3e1619e025e82c4",
+  "pr13BaseCommit": "59d443a148fc271b26065f84b5a697f015504f35",
+  "version": "2.0.1",
+  "productName": "Hijama Management System",
+  "buildTimeUtc": "2026-08-20T20:38:24Z",
+  "buildCommand": "npm run build:dir",
+  "platform": "win32-x64",
+  "electronVersion": "43.2.0",
+  "postBuildVerification": {
+    "commitsAfterBuildSourceAreDocOnly": true,
+    "commitRange": "c2c2ad6..a3bfb74",
+    "packagedRuntimePathsChanged": false,
+    "rebuildRequired": false
+  },
+  "artifacts": {
+    "exe": {
+      "path": "dist/win-unpacked/Hijama Management System.exe",
+      "filename": "Hijama Management System.exe",
+      "sha256": "174ab10a016deddfe3758e08bec59e47cd953a0535b167bbd108e4bbb25747a9"
+    },
+    "asar": {
+      "path": "dist/win-unpacked/resources/app.asar",
+      "sha256": "f8a02983e7fedf5c8027c18665e6c8a48fdd8aea2302b7b00cb4f8056d6400fe"
+    }
+  },
+  "lineageVerified": true,
+  "prChain": [
+    "PR1 Sync Safety (7c28800)",
+    "PR2 Backup Cloud (8f01499)",
+    "PR3 Backup Scope Truth (345eb5d)",
+    "PR4 SQLite Operational Truth (556b42c)",
+    "PR5 Transactions & Crash Safety (1a2f3ad)",
+    "PR6 Remove Backup Encryption (371d9b6)",
+    "PR7 Branch SQL Isolation (ecef2d3)",
+    "PR8 Branch Switching (ee2b082)",
+    "PR9 Atomic Restore (2a99cb9)",
+    "PR9.5 Restore Consolidation (e3e0dbc)",
+    "PR10 Conflict/Tombstone (c70c859)",
+    "PR11 Owner Lifecycle (2afd4fd)",
+    "PR12 Owner/Admin Separation (2f9446e)",
+    "PR13 Error Truth + Migration (59d443a)"
+  ],
+  "sourceGates": {
+    "npmCi": "PASS",
+    "npmLint": "PASS (exit 0)",
+    "npmTest": "122/122 PASS",
+    "npmTestE2e": "N/A — not defined in package.json",
+    "verifyStableOperationalCore": "15/15 PASS",
+    "rcLineage": "14/14 PASS",
+    "rcStaticAudit": "PASS"
+  },
+  "uatMatrix": {
+    "status": "PENDING",
+    "singleBuildRequired": true,
+    "authorizedExeSha256": "174ab10a016deddfe3758e08bec59e47cd953a0535b167bbd108e4bbb25747a9",
+    "executionOrder": [
+      "Clean install",
+      "Owner/Admin login",
+      "Branch A/B switching",
+      "Migration/Existing upgrade",
+      "Backup/Restore",
+      "Device A/B",
+      "Offline/Reconnect",
+      "Google OAuth",
+      "Live Drive CAS",
+      "Final restart/integrity checks"
+    ]
+  },
+  "finalInvariants": {
+    "status": "SOURCE-LEVEL VERIFIED — runtime UAT pending",
+    "checks": [
+      "PRAGMA integrity_check = ok (orchestrator tests)",
+      "Owner primary count = 1 (static + PR11/PR13 tests)",
+      "0 cross-branch leakage (PR7/PR8 tests)",
+      "0 resurrected deletes (PR10 tests)",
+      "0 legacy direct restore (restore consolidation tests)",
+      "0 Owner-only IPC bypass (PR12 tests)"
+    ]
+  },
+  "freezeEligible": false,
+  "freezeBlockers": [
+    "Windows/Google/Device A/B runtime UAT not executed on authorized EXE",
+    "NSIS installer not produced (build:dir unpacked only)"
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "id": "A",
+  "title": "Device A/B sync journey (BLOCKING)",
+  "result": "UNVERIFIED",
+  "reason": "REQUIRES_INSTALLED_WINDOWS_SETUP_EXE_LIVE_PROOF",
+  "checks": [
+    {
+      "name": "device_a_google_login",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_a_license_pull_validate",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_a_branch_initial_sync",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_a_login_crud_attachment_push",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_a_restart_verify",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_b_clean_install",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_b_same_license_branch_pull",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "device_b_crud_push_restart",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "conflict_offline_queue_reconnect_resolution",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    },
+    {
+      "name": "final_verification_zero_runtime_errors",
+      "result": "UNVERIFIED",
+      "evidence": null,
+      "requiredArtifacts": [
+        "windows_runtime_log",
+        "artifact_path",
+        "sha256",
+        "screenshot_or_video",
+        "db_counts",
+        "hashes",
+        "remote_ids_if_any",
+        "restart_evidence",
+        "failure_recovery_evidence"
+      ]
+    }
+  ]
+}

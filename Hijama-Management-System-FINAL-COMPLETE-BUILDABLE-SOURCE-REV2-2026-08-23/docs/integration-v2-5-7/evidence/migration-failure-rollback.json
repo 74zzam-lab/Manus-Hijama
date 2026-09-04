@@ -1,0 +1,10 @@
+{
+  "id": "MIG-257-007",
+  "ok": true,
+  "errorName": "DatabaseOpenError",
+  "errorCode": "DATABASE_PRAGMA_FAILED",
+  "message": "Database pragmas failed — original preserved.",
+  "preserved": true,
+  "refusedEmptyReplace": true,
+  "note": "Corrupt open throws DatabaseOpenError; original file preserved (no empty replace)"
+}

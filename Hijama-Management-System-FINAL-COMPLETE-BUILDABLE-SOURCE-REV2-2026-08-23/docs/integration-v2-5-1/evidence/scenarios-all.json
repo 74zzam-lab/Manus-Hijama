@@ -1,0 +1,432 @@
+{
+  "phase": "V2-5.1",
+  "startedAt": "2026-07-30T20:18:57.813Z",
+  "finishedAt": "2026-07-30T20:18:59.419Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "commit": null,
+  "total": 13,
+  "passed": 13,
+  "failed": 0,
+  "results": [
+    {
+      "id": "S01-clean-install-restore",
+      "title": "Restore after clean install path",
+      "result": "PASS",
+      "ms": 75,
+      "evidence": {
+        "restoredOk": true,
+        "counts": {
+          "schema_migrations": 2,
+          "meta": 1,
+          "kv_store": 2,
+          "clients": 1,
+          "visits": 0,
+          "visit_cups": 0,
+          "invoices": 0,
+          "invoice_items": 0,
+          "payments": 0,
+          "appointments": 0,
+          "employees": 0,
+          "attendance": 0,
+          "payroll_periods": 0,
+          "payroll_entries": 0,
+          "commissions": 0,
+          "expenses": 0,
+          "services": 0,
+          "practitioners": 0,
+          "users": 0,
+          "roles": 0,
+          "permissions": 0,
+          "settings": 0,
+          "attachments": 0,
+          "audit_events": 0,
+          "sync_outbox": 0,
+          "sync_inbox_applied": 0,
+          "sync_conflicts": 0,
+          "sync_meta": 0,
+          "device_registry_local": 0,
+          "sync_audit": 0
+        },
+        "beforeA": {
+          "schema_migrations": 2,
+          "meta": 1,
+          "kv_store": 2,
+          "clients": 1,
+          "visits": 0,
+          "visit_cups": 0,
+          "invoices": 0,
+          "invoice_items": 0,
+          "payments": 0,
+          "appointments": 0,
+          "employees": 0,
+          "attendance": 0,
+          "payroll_periods": 0,
+          "payroll_entries": 0,
+          "commissions": 0,
+          "expenses": 0,
+          "services": 0,
+          "practitioners": 0,
+          "users": 0,
+          "roles": 0,
+          "permissions": 0,
+          "settings": 0,
+          "attachments": 0,
+          "audit_events": 0,
+          "sync_outbox": 0,
+          "sync_inbox_applied": 0,
+          "sync_conflicts": 0,
+          "sync_meta": 0,
+          "device_registry_local": 0,
+          "sync_audit": 0
+        }
+      }
+    },
+    {
+      "id": "S02-license-org-branch-restore",
+      "title": "Restore with license/org/branch identity meta",
+      "result": "PASS",
+      "ms": 64,
+      "evidence": {
+        "source": {
+          "centerName": "",
+          "deviceName": "",
+          "organizationId": "CTR-A",
+          "centerId": "CTR-A",
+          "branchId": "BR-1",
+          "deviceId": ""
+        },
+        "scope": {
+          "type": "organization",
+          "organizationId": "CTR-A",
+          "branchIds": [
+            "BR-1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "S03-manual-selected-restore",
+      "title": "Manual restore of selected backup",
+      "result": "PASS",
+      "ms": 79,
+      "evidence": {
+        "ok": true,
+        "rowCounts": {
+          "schema_migrations": 2,
+          "meta": 1,
+          "kv_store": 2,
+          "clients": 1,
+          "visits": 0,
+          "visit_cups": 0,
+          "invoices": 0,
+          "invoice_items": 0,
+          "payments": 0,
+          "appointments": 0,
+          "employees": 0,
+          "attendance": 0,
+          "payroll_periods": 0,
+          "payroll_entries": 0,
+          "commissions": 0,
+          "expenses": 0,
+          "services": 0,
+          "practitioners": 0,
+          "users": 0,
+          "roles": 0,
+          "permissions": 0,
+          "settings": 0,
+          "attachments": 0,
+          "audit_events": 0,
+          "sync_outbox": 0,
+          "sync_inbox_applied": 0,
+          "sync_conflicts": 0,
+          "sync_meta": 0,
+          "device_registry_local": 0,
+          "sync_audit": 0
+        }
+      }
+    },
+    {
+      "id": "S04-auto-latest-authorized",
+      "title": "Pick latest authorized among local+cloud",
+      "result": "PASS",
+      "ms": 628,
+      "evidence": {
+        "selected": "newer-authorized.tdw",
+        "rejected": 1
+      }
+    },
+    {
+      "id": "S05-sqlite-attachments-settings",
+      "title": "SQLite + attachments/images/docs/settings",
+      "result": "PASS",
+      "ms": 5,
+      "evidence": {
+        "attachmentFiles": [
+          "a1-doc.pdf",
+          "a1-img.bin",
+          "a1-note.txt"
+        ],
+        "settingsOk": true
+      }
+    },
+    {
+      "id": "S06-reject-wrong-center-branch",
+      "title": "Reject wrong center and branch",
+      "result": "PASS",
+      "ms": 129,
+      "evidence": {
+        "centerRejected": true,
+        "branchRejected": true
+      }
+    },
+    {
+      "id": "S07-corrupt-atomic-rollback",
+      "title": "Corrupt reject + failpoint rollback",
+      "result": "PASS",
+      "ms": 135,
+      "evidence": {
+        "corruptRejected": true,
+        "reopenCalled": true,
+        "diagnosticPresent": true
+      }
+    },
+    {
+      "id": "S08-delete-sqlite-dr",
+      "title": "DR after deleting SQLite",
+      "result": "PASS",
+      "ms": 75,
+      "evidence": {
+        "counts": {
+          "schema_migrations": 2,
+          "meta": 1,
+          "kv_store": 2,
+          "clients": 1,
+          "visits": 0,
+          "visit_cups": 0,
+          "invoices": 0,
+          "invoice_items": 0,
+          "payments": 0,
+          "appointments": 0,
+          "employees": 0,
+          "attendance": 0,
+          "payroll_periods": 0,
+          "payroll_entries": 0,
+          "commissions": 0,
+          "expenses": 0,
+          "services": 0,
+          "practitioners": 0,
+          "users": 0,
+          "roles": 0,
+          "permissions": 0,
+          "settings": 0,
+          "attachments": 0,
+          "audit_events": 0,
+          "sync_outbox": 0,
+          "sync_inbox_applied": 0,
+          "sync_conflicts": 0,
+          "sync_meta": 0,
+          "device_registry_local": 0,
+          "sync_audit": 0
+        },
+        "gate": {
+          "version": 1,
+          "pending": false,
+          "verified": true,
+          "backupId": "c7e49ba1-9a31-4a79-a72f-76aaff0c6968",
+          "integrity": {
+            "ok": true,
+            "quickCheck": "ok",
+            "schemaVersion": 5,
+            "size": 327680
+          },
+          "rowCounts": {
+            "schema_migrations": 2,
+            "meta": 1,
+            "kv_store": 2,
+            "clients": 1,
+            "visits": 0,
+            "visit_cups": 0,
+            "invoices": 0,
+            "invoice_items": 0,
+            "payments": 0,
+            "appointments": 0,
+            "employees": 0,
+            "attendance": 0,
+            "payroll_periods": 0,
+            "payroll_entries": 0,
+            "commissions": 0,
+            "expenses": 0,
+            "services": 0,
+            "practitioners": 0,
+            "users": 0,
+            "roles": 0,
+            "permissions": 0,
+            "settings": 0,
+            "attachments": 0,
+            "audit_events": 0,
+            "sync_outbox": 0,
+            "sync_inbox_applied": 0,
+            "sync_conflicts": 0,
+            "sync_meta": 0,
+            "device_registry_local": 0,
+            "sync_audit": 0
+          },
+          "source": {
+            "centerName": "",
+            "deviceName": "",
+            "organizationId": "CTR-A",
+            "centerId": "CTR-A",
+            "branchId": "BR-1",
+            "deviceId": ""
+          },
+          "updatedAt": "2026-07-30T20:18:59.263Z",
+          "missing": false
+        }
+      }
+    },
+    {
+      "id": "S09-new-device-cloud-only",
+      "title": "New device restore from cloud cache only",
+      "result": "PASS",
+      "ms": 73,
+      "evidence": {
+        "deviceBCounts": {
+          "schema_migrations": 2,
+          "meta": 1,
+          "kv_store": 2,
+          "clients": 1,
+          "visits": 0,
+          "visit_cups": 0,
+          "invoices": 0,
+          "invoice_items": 0,
+          "payments": 0,
+          "appointments": 0,
+          "employees": 0,
+          "attendance": 0,
+          "payroll_periods": 0,
+          "payroll_entries": 0,
+          "commissions": 0,
+          "expenses": 0,
+          "services": 0,
+          "practitioners": 0,
+          "users": 0,
+          "roles": 0,
+          "permissions": 0,
+          "settings": 0,
+          "attachments": 0,
+          "audit_events": 0,
+          "sync_outbox": 0,
+          "sync_inbox_applied": 0,
+          "sync_conflicts": 0,
+          "sync_meta": 0,
+          "device_registry_local": 0,
+          "sync_audit": 0
+        },
+        "source": "cloud-cache-only"
+      }
+    },
+    {
+      "id": "S10-no-silent-empty-fallback",
+      "title": "No silent empty DB when restore fails",
+      "result": "PASS",
+      "ms": 11,
+      "evidence": {
+        "beforeClients": 1,
+        "afterClients": 1
+      }
+    },
+    {
+      "id": "S11-stable-ids-and-gate",
+      "title": "Stable IDs + restore gate verified",
+      "result": "PASS",
+      "ms": 4,
+      "evidence": {
+        "clientId": "a1",
+        "gate": {
+          "version": 1,
+          "pending": false,
+          "verified": true,
+          "backupId": "c7e49ba1-9a31-4a79-a72f-76aaff0c6968",
+          "integrity": {
+            "ok": true,
+            "quickCheck": "ok",
+            "schemaVersion": 5,
+            "size": 327680
+          },
+          "rowCounts": {
+            "schema_migrations": 2,
+            "meta": 1,
+            "kv_store": 2,
+            "clients": 1,
+            "visits": 0,
+            "visit_cups": 0,
+            "invoices": 0,
+            "invoice_items": 0,
+            "payments": 0,
+            "appointments": 0,
+            "employees": 0,
+            "attendance": 0,
+            "payroll_periods": 0,
+            "payroll_entries": 0,
+            "commissions": 0,
+            "expenses": 0,
+            "services": 0,
+            "practitioners": 0,
+            "users": 0,
+            "roles": 0,
+            "permissions": 0,
+            "settings": 0,
+            "attachments": 0,
+            "audit_events": 0,
+            "sync_outbox": 0,
+            "sync_inbox_applied": 0,
+            "sync_conflicts": 0,
+            "sync_meta": 0,
+            "device_registry_local": 0,
+            "sync_audit": 0
+          },
+          "source": {
+            "centerName": "",
+            "deviceName": "",
+            "organizationId": "CTR-A",
+            "centerId": "CTR-A",
+            "branchId": "BR-1",
+            "deviceId": ""
+          },
+          "updatedAt": "2026-07-30T20:18:59.336Z",
+          "missing": false
+        },
+        "integrity": "ok"
+      }
+    },
+    {
+      "id": "S12-resume-after-interrupt",
+      "title": "Resume staging after network interrupt",
+      "result": "PASS",
+      "ms": 65,
+      "evidence": {
+        "bytes": 7443,
+        "sha256": "d931b6ec64edabc5ab52efbf2980d25f9802fe2fac9acf1e4d8f0f35d0af698c"
+      }
+    },
+    {
+      "id": "S13-restore-then-no-duplicate-ids",
+      "title": "Restore preserves IDs (sync-safe stable keys)",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "ids": [
+          "a1"
+        ],
+        "unique": 1
+      }
+    }
+  ],
+  "createdBackup": {
+    "ok": true,
+    "hash": "d931b6ec64edabc5ab52efbf2980d25f9802fe2fac9acf1e4d8f0f35d0af698c"
+  }
+}

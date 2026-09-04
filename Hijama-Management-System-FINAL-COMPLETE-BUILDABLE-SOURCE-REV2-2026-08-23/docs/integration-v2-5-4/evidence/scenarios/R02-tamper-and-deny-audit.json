@@ -1,0 +1,9 @@
+{
+  "id": "R02-tamper-and-deny-audit",
+  "title": "Tampered role/branch denied + audited",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "unitOk": true
+  }
+}

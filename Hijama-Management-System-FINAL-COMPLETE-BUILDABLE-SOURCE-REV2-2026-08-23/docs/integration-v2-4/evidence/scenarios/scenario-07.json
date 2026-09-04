@@ -1,0 +1,10 @@
+{
+  "id": 7,
+  "name": "same_record_conflict",
+  "result": "PASS",
+  "ms": 15357,
+  "detail": {
+    "open": 1
+  },
+  "secretsPrinted": false
+}

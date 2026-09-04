@@ -1,0 +1,11 @@
+{
+  "id": "S06-owner-independent-role",
+  "title": "Owner is independent top role; Admin cannot mint Owner",
+  "result": "PASS",
+  "ms": 6,
+  "evidence": {
+    "ownerLogin": true,
+    "mintGuard": true,
+    "hubMutateOwnerOnly": true
+  }
+}

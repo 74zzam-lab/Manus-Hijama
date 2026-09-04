@@ -1,0 +1,108 @@
+{
+  "phase": "V2-5.7",
+  "at": "2026-08-23T13:57:32.816Z",
+  "version": "2.0.1",
+  "productName": "Hijama Management System",
+  "platform": "linux",
+  "arch": "x64",
+  "distExists": true,
+  "artifactsPresent": true,
+  "distDeferred": false,
+  "artifacts": {
+    "setup": {
+      "path": "dist/HijamaManagement-Setup-2.0.1.exe",
+      "sizeBytes": 554408,
+      "sha256": "ea1e6346d50189eeb8d4b72c1a0b1c9f621a740a348bfba1f318906303716ce6",
+      "mtime": "2026-08-23T04:42:28.471Z"
+    },
+    "allSetupExes": [
+      {
+        "path": "dist/HijamaManagement-Setup-2.0.1.exe",
+        "sizeBytes": 554408,
+        "sha256": "ea1e6346d50189eeb8d4b72c1a0b1c9f621a740a348bfba1f318906303716ce6",
+        "mtime": "2026-08-23T04:42:28.471Z"
+      }
+    ],
+    "winUnpacked": {
+      "path": "dist/win-unpacked/Hijama Management System.exe",
+      "sizeBytes": 225949696,
+      "sha256": "cfa2e3aef69addcc99b65cc09d888510b171fa60f21a7da8ed09d6a905a4251c",
+      "mtime": "2026-08-23T12:05:09.110Z"
+    },
+    "winUnpackedPresent": true,
+    "portable": {
+      "supported": false,
+      "reason": "package.json build.win.target lists only nsis (x64); portable is not an official build target for V2-5.7",
+      "configuredTargets": [
+        "nsis"
+      ],
+      "foundArtifacts": []
+    },
+    "icons": {
+      "appIcon": "build/Program-Icon.ico",
+      "winIcon": "build/Program-Icon.ico",
+      "installerIcon": "build/Program-Icon.ico",
+      "uninstallerIcon": "build/Program-Icon.ico",
+      "installerHeaderIcon": "build/Program-Icon.ico",
+      "exists": {
+        "appIcon": true,
+        "winIcon": true,
+        "installerIcon": true,
+        "uninstallerIcon": true,
+        "installerHeaderIcon": true
+      }
+    },
+    "iconInspect": {
+      "ok": true,
+      "exePath": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/dist/win-unpacked/Hijama Management System.exe",
+      "sizeBytes": 225949696,
+      "iconGroupCount": 1,
+      "iconResourceEntries": 8,
+      "groups": [
+        {
+          "id": 1,
+          "lang": 1033,
+          "iconCount": 7
+        }
+      ],
+      "inspectedAt": "2026-08-23T13:57:32.727Z"
+    },
+    "sourceArchive": {
+      "at": "2026-08-23T13:57:32.816Z",
+      "commit": "UNKNOWN",
+      "archive": {
+        "path": "docs/integration-v2-5-7/evidence/source-release-UNKNOWN.tar.gz",
+        "sizeBytes": 692623,
+        "sha256": "929c31dcca3c09b0f4b3d64e33c605924764da8101d2c5c14281f7d89c4523b9",
+        "mtime": "2026-08-23T13:57:32.810Z",
+        "ok": true
+      },
+      "method": "tar",
+      "paths": [
+        "package.json",
+        "package-lock.json",
+        "electron",
+        "database",
+        "cloud",
+        "build",
+        "license",
+        "renderer",
+        "scripts/verify-v2-5-7-completion.cjs",
+        "scripts/v2-5-7-release-artifacts.cjs",
+        "scripts/v2-5-7-migration-harness.cjs",
+        "scripts/v2-5-7-lifecycle-matrix.cjs",
+        "docs/integration-v2-5-7/00-CURRENT-REALITY.md",
+        "docs/integration-v2-5-7/01-TARGET-DESIGN.md",
+        "docs/integration-v2-5-7/09-RELEASE-READINESS.md",
+        "docs/integration-v2-5-7/REQUIREMENTS-TRACEABILITY.md"
+      ]
+    }
+  },
+  "notes": [
+    "Portable is unsupported unless listed in package.json build.win.target",
+    "Setup exe on non-Windows hosts may be a wine/NSIS stub; win-unpacked Electron binary is authoritative when present",
+    "Icon paths taken from package.json build / nsis; PE icon groups inspected via resedit when EXE present",
+    "When dist/ is absent (npm test before build:win), indexer still exits 0 with distDeferred=true; re-run after build for SHA evidence"
+  ],
+  "ok": true
+}

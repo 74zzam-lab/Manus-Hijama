@@ -1,0 +1,19 @@
+{
+  "id": "B04-retention-prune",
+  "title": "Retention prune keeps newest N",
+  "result": "PASS",
+  "ms": 857,
+  "evidence": {
+    "ok": true,
+    "pruned": 2,
+    "kept": 2,
+    "removed": [
+      "p-1.tdw",
+      "p-0.tdw"
+    ],
+    "files": [
+      "p-3.tdw",
+      "p-2.tdw"
+    ]
+  }
+}

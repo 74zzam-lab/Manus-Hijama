@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-07-21T13:59:36.844Z",
+  "environment": "Linux + Wine64 (cross-build NSIS)",
+  "results": {
+    "build": {
+      "pass": true,
+      "detail": "Build artifact verified"
+    },
+    "buildMetadata": {
+      "pass": true,
+      "detail": "Product/Version/Company OK"
+    },
+    "bundledAssets": {
+      "pass": true,
+      "detail": "Logo, branding, OAuth deps in asar"
+    },
+    "productionDeps": {
+      "pass": true,
+      "detail": "validate-production-deps PASS"
+    },
+    "cleanInstall": {
+      "pass": true,
+      "detail": "Silent install to C:\\TadawiTest OK"
+    },
+    "firstLaunch": {
+      "pass": true,
+      "detail": "Process started (timeout expected)"
+    },
+    "upgrade": {
+      "pass": true,
+      "detail": "exit=0 data=true"
+    },
+    "dataPreservation": {
+      "pass": true,
+      "detail": "DB, backups preserved"
+    },
+    "licensePreservation": {
+      "pass": true,
+      "detail": "license-test.json preserved"
+    },
+    "uninstall": {
+      "pass": true,
+      "detail": "exit=0 appRemoved=true"
+    },
+    "uninstallKeepData": {
+      "pass": true,
+      "detail": "AppData preserved after silent uninstall"
+    },
+    "reinstall": {
+      "pass": true,
+      "detail": "Reinstall OK, data still present"
+    },
+    "cloudCompatibility": {
+      "pass": true,
+      "detail": "Cloud V2 + OAuth packaged"
+    },
+    "overall": {
+      "pass": true,
+      "detail": "PASS"
+    }
+  },
+  "table": {
+    "Build": true,
+    "Clean Install": true,
+    "Upgrade": true,
+    "Uninstall": true,
+    "Reinstall": true,
+    "First Launch": true,
+    "Data Preservation": true,
+    "License Preservation": true,
+    "Cloud Compatibility": true
+  },
+  "overall": "PASS",
+  "notes": [
+    "Wine emulation used — native Windows GUI tests (uninstall archive, wizard dialogs) still recommended before release."
+  ]
+}

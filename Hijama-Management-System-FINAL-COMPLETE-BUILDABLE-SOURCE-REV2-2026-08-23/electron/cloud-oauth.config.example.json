@@ -1,0 +1,22 @@
+{
+  "google": {
+    "clientId": "393099979986-nbt694pvof6bs7nslnug3ndh1k75mvfo.apps.googleusercontent.com",
+    "clientSecret": "YOUR_GOOGLE_CLIENT_SECRET",
+    "projectId": "najjartech-hijama-management",
+    "redirectPort": 42813,
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "onedrive": {
+    "clientId": "YOUR_AZURE_APP_CLIENT_ID",
+    "clientSecret": "YOUR_AZURE_APP_CLIENT_SECRET",
+    "redirectPort": 42814,
+    "tenant": "common"
+  },
+  "dropbox": {
+    "clientId": "YOUR_DROPBOX_APP_KEY",
+    "clientSecret": "YOUR_DROPBOX_APP_SECRET",
+    "redirectPort": 42815
+  }
+}

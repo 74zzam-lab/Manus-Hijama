@@ -138,6 +138,7 @@ const CHANNEL_POLICY = {
   'whatsapp:embedHide': { minRank: 2 },
   'whatsapp:embedBounds': { minRank: 2 },
   'whatsapp:openChat': { minRank: 2 },
+  'whatsapp:openSendSlot': { minRank: 2 },
   'whatsapp:writeContacts': { minRank: 2 },
   'whatsapp:openContactsFolder': { minRank: 2 },
   'whatsapp:openVcard': { minRank: 2 },

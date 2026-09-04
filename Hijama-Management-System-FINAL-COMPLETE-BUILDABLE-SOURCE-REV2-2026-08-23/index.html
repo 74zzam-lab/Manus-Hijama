@@ -1553,6 +1553,14 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 }
 #page-followup .table-pagination { margin-top: 10px; flex-wrap: wrap; }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
+.wa-slot-bar {
+  display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  margin-top: 12px; padding: 10px 12px; background: #fff8e1; border: 1px solid #f0c040; border-radius: 10px;
+  font-size: 13px; line-height: 1.6;
+}
+.wa-slot-bar.is-on { display: flex; }
+.wa-slot-bar .wa-slot-text { flex: 1; min-width: 200px; }
+.wa-slot-bar .wa-slot-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* Printer picker drawer */
 .printer-picker-row { display: flex; gap: 8px; align-items: stretch; }
@@ -7238,6 +7246,15 @@ body.license-readonly-mode .page-readonly textarea {
         </div>
       </div>
       <div id="msg-bridge-status" style="margin-top:12px;font-size:12px;color:var(--text-muted)">—</div>
+      <div class="wa-slot-bar" data-wa-slot-bar>
+        <span class="wa-slot-text">طابور واتساب فارغ</span>
+        <span class="wa-slot-actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="resumeWhatsAppSendSlot()">تشغيل</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="pauseWhatsAppSendSlot()">إيقاف</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="skipWhatsAppSendSlot()">التالي</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="cancelWhatsAppSendSlot()">إلغاء الباقي</button>
+        </span>
+      </div>
     </div>
 
     <!-- BULK SEND — إجراءات سريعة لكل عميل -->
@@ -7342,6 +7359,15 @@ body.license-readonly-mode .page-readonly textarea {
       </div>
       <p class="followup-arch">اختر كيف يُفتح واتساب: ويب، برنامج الكمبيوتر، أو النافذة داخل هذه الصفحة. الإرسال الصامت بدون نقر يحتاج مزود API. أرقام العملاء تُحدَّث تلقائياً في ملف CSV/vCard باسم العميل ورقم ملفه.</p>
       <div id="fu-bridge-status" style="margin-top:12px;font-size:12px;color:var(--text-muted)">—</div>
+      <div class="wa-slot-bar" data-wa-slot-bar>
+        <span class="wa-slot-text">طابور واتساب فارغ</span>
+        <span class="wa-slot-actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="resumeWhatsAppSendSlot()">تشغيل</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="pauseWhatsAppSendSlot()">إيقاف</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="skipWhatsAppSendSlot()">التالي</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="cancelWhatsAppSendSlot()">إلغاء الباقي</button>
+        </span>
+      </div>
       <div class="form-grid form-grid-3" style="gap:12px;margin-top:12px">
         <label style="display:flex;align-items:center;gap:6px;font-size:13px">
           <input type="checkbox" id="fu-followup-enabled" onchange="syncFollowupMessagingToggles()"> متابعة بعد الجلسة
@@ -15190,7 +15216,12 @@ function openWhatsApp(phone, clientName) {
   if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return false; }
   const msg = getWAMessage(clientName);
   if (!msg) { notify('⚠️ لم يتم كتابة رسالة المتابعة — اذهب لصفحة الرسائل', 'danger'); return false; }
-  window.open(`https://wa.me/${formatted}?text=${msg}`, '_blank');
+  const slotName = (typeof WaSendSlot !== 'undefined' && WaSendSlot.WINDOW_NAME) || 'tdw-whatsapp-send';
+  if (typeof MessagingBridge !== 'undefined' && MessagingBridge.sendWhatsApp) {
+    MessagingBridge.sendWhatsApp(phone, decodeURIComponent(msg), { type: 'followup' });
+    return true;
+  }
+  window.open(`https://web.whatsapp.com/send?phone=${formatted}&text=${msg}`, slotName);
   return true;
 }
 
@@ -17230,6 +17261,7 @@ window.BackupBridge = BackupBridge;
 <script src="cloud/bulk-select.js"></script>
 <script src="cloud/message-media.js"></script>
 <script src="cloud/wa-followup.js"></script>
+<script src="cloud/wa-send-slot.js"></script>
 <script>if (typeof ListSort !== 'undefined' && ListSort.fillAllSelects) ListSort.fillAllSelects();</script>
 <script src="cloud/overdue-followup.js"></script>
 <script src="cloud/repository.js"></script>
@@ -17528,17 +17560,14 @@ const MessagingBridge = {
     payloadMeta.waClient = payloadMeta.waClient || launch;
     const st = await this.getStatus();
     const apiReady = st?.whatsapp?.mode === 'api';
-    if (!apiReady && launch === 'embedded' && getCuppingElectron()?.whatsapp?.openChat) {
-      try {
-        if (typeof showFollowupWhatsAppEmbed === 'function') await showFollowupWhatsAppEmbed();
-        return await getCuppingElectron().whatsapp.openChat(formatted, text);
-      } catch (e) { return { ok: false, reason: e.message }; }
+    if (payloadMeta.deferLaunch && !apiReady) {
+      return { ok: true, mode: 'queued', launch, reason: 'single_slot' };
     }
-    if (getCuppingElectron()?.communication?.send) {
+    if (apiReady && getCuppingElectron()?.communication?.send) {
       try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
-    if (getCuppingElectron()?.messaging?.sendWhatsApp) {
+    if (apiReady && getCuppingElectron()?.messaging?.sendWhatsApp) {
       try { return await getCuppingElectron().messaging.sendWhatsApp(formatted, text, cfg, payloadMeta); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
@@ -17549,14 +17578,29 @@ const MessagingBridge = {
       await copyMessageMediaToClipboard(clip);
     }
     const launchUrl = (typeof WaFollowup !== 'undefined' && WaFollowup.buildWhatsAppSendUrl)
-      ? WaFollowup.buildWhatsAppSendUrl(formatted, text, launch)
-      : `https://wa.me/${formatted}?text=${encodeURIComponent(text)}`;
+      ? WaFollowup.buildWhatsAppSendUrl(formatted, text, launch === 'auto' ? 'web' : launch)
+      : `https://web.whatsapp.com/send?phone=${formatted}&text=${encodeURIComponent(text)}`;
+    const slotName = (typeof WaSendSlot !== 'undefined' && WaSendSlot.WINDOW_NAME) || 'tdw-whatsapp-send';
+    if (getCuppingElectron()?.whatsapp?.openSendSlot) {
+      try { return await getCuppingElectron().whatsapp.openSendSlot(launchUrl); }
+      catch (e) { return { ok: false, reason: e.message }; }
+    }
+    if (launch === 'embedded' && getCuppingElectron()?.whatsapp?.openChat) {
+      try {
+        if (typeof showFollowupWhatsAppEmbed === 'function') await showFollowupWhatsAppEmbed();
+        return await getCuppingElectron().whatsapp.openChat(formatted, text);
+      } catch (e) { return { ok: false, reason: e.message }; }
+    }
     if (launch === 'desktop' && getCuppingElectron()?.app?.openExternal) {
       await getCuppingElectron().app.openExternal(launchUrl);
-    } else {
-      window.open(launchUrl, '_blank');
+      return { ok: true, mode: 'desktop-slot', launch };
     }
-    return { ok: true, mode: 'browser', launch, mediaHint: payloadMeta.media ? 'افتح واتساب والصق الصورة (Ctrl+V) إن نُسخت' : '' };
+    if (getCuppingElectron()?.communication?.send) {
+      try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
+      catch (e) { return { ok: false, reason: e.message }; }
+    }
+    const opened = window.open(launchUrl, slotName);
+    return { ok: !!opened, mode: 'named-window', launch };
   },
   async sendSMS(phone, text, meta) {
     if (!phone) return { ok: false, reason: 'invalid_phone' };
@@ -23300,6 +23344,296 @@ function logMessage(entry) {
   refreshMessageLog();
 }
 
+let _waSendSlotState = {
+  queue: [],
+  current: null,
+  running: false,
+  paused: false,
+  launched: 0,
+  failed: 0,
+  total: 0,
+};
+
+function waSendSlotDelayMs(apiReady) {
+  const configured = (typeof ensureCommunicationSettings === 'function' && settings.communication?.queue?.delayMs)
+    || 0;
+  const electron = typeof MessagingBridge !== 'undefined' && MessagingBridge.isElectron();
+  if (typeof WaSendSlot !== 'undefined' && WaSendSlot.launchStrategy) {
+    return WaSendSlot.launchStrategy({
+      apiReady: !!apiReady,
+      electron: !!electron,
+      delayMs: configured,
+    }).delayMs;
+  }
+  return apiReady ? 400 : 2500;
+}
+
+function updateWhatsAppSendSlotUi() {
+  const st = _waSendSlotState;
+  const pending = st.queue.length + (st.current ? 1 : 0);
+  const active = st.running || pending > 0 || st.paused;
+  const name = st.current ? (st.current.clientName || st.current.phone || '') : '';
+  let text = 'طابور واتساب فارغ';
+  if (active) {
+    text = st.paused
+      ? `متوقف — المتبقي ${pending} من ${st.total || pending}`
+      : `إرسال متتابع: ${st.launched}/${st.total || (st.launched + pending)} — نافذة واحدة`;
+    if (name) text += ` — الآن: ${name}`;
+    text += ' · لن تُفتح تبويبات لكل عميل';
+  }
+  document.querySelectorAll('[data-wa-slot-bar]').forEach((bar) => {
+    bar.classList.toggle('is-on', !!active);
+    const label = bar.querySelector('.wa-slot-text');
+    if (label) label.textContent = text;
+  });
+}
+
+function pauseWhatsAppSendSlot() {
+  _waSendSlotState.paused = true;
+  updateWhatsAppSendSlotUi();
+}
+
+function resumeWhatsAppSendSlot() {
+  _waSendSlotState.paused = false;
+  processWhatsAppSendSlot();
+}
+
+function skipWhatsAppSendSlot() {
+  _waSendSlotState.current = null;
+  _waSendSlotState.paused = false;
+  processWhatsAppSendSlot();
+}
+
+function cancelWhatsAppSendSlot() {
+  _waSendSlotState.queue = [];
+  _waSendSlotState.current = null;
+  _waSendSlotState.paused = false;
+  _waSendSlotState.running = false;
+  updateWhatsAppSendSlotUi();
+  notify('تم إلغاء الرسائل المتبقية في طابور واتساب', 'warning');
+}
+
+function enqueueWhatsAppSlotJobs(jobs) {
+  const incoming = (typeof WaSendSlot !== 'undefined' && WaSendSlot.dedupeJobs)
+    ? WaSendSlot.dedupeJobs(jobs)
+    : (Array.isArray(jobs) ? jobs : []);
+  const seen = new Set(_waSendSlotState.queue.map((j) => j.refId).filter(Boolean));
+  if (_waSendSlotState.current?.refId) seen.add(_waSendSlotState.current.refId);
+  incoming.forEach((job) => {
+    if (job.refId && seen.has(job.refId)) return;
+    if (job.refId) seen.add(job.refId);
+    _waSendSlotState.queue.push(job);
+  });
+  _waSendSlotState.total = (_waSendSlotState.launched || 0) + _waSendSlotState.queue.length + (_waSendSlotState.current ? 1 : 0);
+  updateWhatsAppSendSlotUi();
+  return _waSendSlotState.queue.length;
+}
+
+async function launchWhatsAppSlotJob(job, index) {
+  const body = job.text || (typeof buildAutomatedMessage === 'function'
+    ? buildAutomatedMessage(job.type, job.clientName, job.vars || {})
+    : '');
+  if (!body) return { ok: false, reason: 'no_template' };
+  const result = await MessagingBridge.sendWhatsApp(job.phone, body, {
+    type: job.type,
+    refId: job.refId,
+    attachMedia: index === 0 && job.attachMedia !== false,
+    launchNow: true,
+  });
+  const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
+  logMessage({
+    clientName: job.clientName || '—',
+    phone: job.phone,
+    type: job.type,
+    channel: job.channel || 'whatsapp',
+    refId: job.refId,
+    preview: body.slice(0, 80) + (body.length > 80 ? '…' : ''),
+    body,
+    fileNo: job.fileNo || (typeof lookupClientFileNo === 'function' ? lookupClientFileNo(job.phone) : '') || undefined,
+    status: msgStatus,
+    detail: result,
+  });
+  return result;
+}
+
+async function processWhatsAppSendSlot() {
+  if (_waSendSlotState.running) return { ok: true, busy: true };
+  _waSendSlotState.running = true;
+  _waSendSlotState.paused = false;
+  updateWhatsAppSendSlotUi();
+  try {
+    let index = _waSendSlotState.launched;
+    while (_waSendSlotState.queue.length) {
+      if (_waSendSlotState.paused) break;
+      const job = _waSendSlotState.queue.shift();
+      _waSendSlotState.current = job;
+      updateWhatsAppSendSlotUi();
+      const delayMs = waSendSlotDelayMs(false);
+      const wait = (typeof WaSendSlot !== 'undefined' && WaSendSlot.nextDelayMs)
+        ? WaSendSlot.nextDelayMs(index, delayMs)
+        : (index ? delayMs : 0);
+      if (wait) await new Promise((r) => setTimeout(r, wait));
+      if (_waSendSlotState.paused) {
+        _waSendSlotState.queue.unshift(job);
+        break;
+      }
+      const result = await launchWhatsAppSlotJob(job, index);
+      if (result?.ok === false) _waSendSlotState.failed++;
+      else _waSendSlotState.launched++;
+      index++;
+      _waSendSlotState.current = null;
+    }
+  } finally {
+    _waSendSlotState.running = false;
+    if (!_waSendSlotState.queue.length) _waSendSlotState.current = null;
+    updateWhatsAppSendSlotUi();
+  }
+  return { ok: true, launched: _waSendSlotState.launched, remaining: _waSendSlotState.queue.length };
+}
+
+async function dispatchMessagingJobs(jobs, opts) {
+  const list = (typeof WaSendSlot !== 'undefined' && WaSendSlot.dedupeJobs)
+    ? WaSendSlot.dedupeJobs(jobs)
+    : (Array.isArray(jobs) ? jobs : []);
+  const manual = !!(opts && opts.manual);
+  if (!list.length) {
+    if (manual) notify('ℹ️ لا توجد رسائل مستحقة الآن');
+    return { sent: 0, queued: 0 };
+  }
+  const st = (typeof MessagingBridge !== 'undefined' && MessagingBridge.getStatus)
+    ? await MessagingBridge.getStatus()
+    : null;
+  const apiReady = st?.whatsapp?.mode === 'api';
+  const delayMs = waSendSlotDelayMs(apiReady);
+  if (!apiReady && typeof WaSendSlot !== 'undefined' && WaSendSlot.confirmNeeded(list.length) && manual) {
+    const msg = WaSendSlot.confirmMessage(list.length, delayMs);
+    if (!confirm(msg)) return { sent: 0, queued: 0, cancelled: true };
+  }
+  if (apiReady) {
+    let sent = 0;
+    for (let i = 0; i < list.length; i++) {
+      const job = list[i];
+      const res = await sendClientMessage({
+        phone: job.phone,
+        clientName: job.clientName,
+        type: job.type,
+        refId: job.refId,
+        text: job.text,
+        cooldownDays: job.cooldownDays,
+      });
+      if (res?.ok !== false && res?.reason !== 'already_sent' && res?.reason !== 'disabled') sent++;
+      const wait = (typeof WaSendSlot !== 'undefined' && WaSendSlot.nextDelayMs)
+        ? WaSendSlot.nextDelayMs(i, delayMs)
+        : (i ? delayMs : 0);
+      if (wait && i < list.length - 1) await new Promise((r) => setTimeout(r, wait));
+    }
+    if (manual) notify(sent ? `✅ تم إرسال/جدولة ${sent} رسالة عبر المزود` : 'ℹ️ لا توجد رسائل مستحقة الآن');
+    return { sent, queued: 0, api: true };
+  }
+  enqueueWhatsAppSlotJobs(list);
+  if (!manual) {
+    _waSendSlotState.paused = true;
+    updateWhatsAppSendSlotUi();
+    return { sent: 0, queued: list.length, waiting: true };
+  }
+  processWhatsAppSendSlot();
+  if (manual) {
+    notify(`جاري الإرسال واحداً تلو الآخر في نافذة واتساب واحدة (${list.length} رسالة) — لن تُفتح تبويبات متعددة`);
+  }
+  return { sent: 0, queued: list.length };
+}
+
+function collectDueMessagingJobs() {
+  ensureMessagingSettings();
+  const cfg = settings.messaging;
+  const jobs = [];
+  const now = Date.now();
+
+  if (cfg.followup?.enabled) {
+    const hours = parseInt(cfg.followup.hoursAfter, 10) || 24;
+    const threshold = now - hours * 3600000;
+    for (const c of cases) {
+      if (!c.phone || c.sharedRole === 'partner') continue;
+      const at = new Date(c.createdAt || c.date).getTime();
+      if (at > threshold) continue;
+      const refId = 'case_' + c.id;
+      if (wasMessageSent(refId, 'followup')) continue;
+      jobs.push({
+        phone: c.phone,
+        clientName: c.name,
+        type: 'followup',
+        refId,
+        text: buildAutomatedMessage('followup', c.name),
+      });
+    }
+  }
+
+  if (cfg.appointment?.enabled) {
+    const hoursBefore = parseInt(cfg.appointment.hoursBefore, 10) || 24;
+    const windowEnd = now + hoursBefore * 3600000;
+    for (const b of bookings) {
+      if (!b.phone || !['pending', 'confirmed'].includes(b.status)) continue;
+      const apptMs = parseDateTimeMs(b.date, b.time);
+      if (apptMs <= now || apptMs > windowEnd) continue;
+      const refId = 'booking_' + b.id;
+      if (wasMessageSent(refId, 'appointment')) continue;
+      jobs.push({
+        phone: b.phone,
+        clientName: b.name,
+        type: 'appointment',
+        refId,
+        text: buildAutomatedMessage('appointment', b.name, {
+          date: fmtDate(b.date),
+          time: to12h(b.time) || b.time || '—'
+        }),
+      });
+    }
+    const map = buildClientsMap();
+    for (const s of nextSessions) {
+      if (!s.clientKey) continue;
+      const client = map[s.clientKey];
+      if (!client?.phone) continue;
+      const apptMs = parseDateTimeMs(s.date, '09:00');
+      if (apptMs <= now || apptMs > windowEnd) continue;
+      const refId = 'session_' + s.id;
+      if (wasMessageSent(refId, 'appointment')) continue;
+      jobs.push({
+        phone: client.phone,
+        clientName: client.name,
+        type: 'appointment',
+        refId,
+        text: buildAutomatedMessage('appointment', client.name, {
+          date: fmtDate(s.date),
+          time: '—'
+        }),
+      });
+    }
+  }
+
+  if (cfg.overdue?.enabled) {
+    const overdueDays = parseInt(cfg.overdue.days, 10) || getClientOverdueDays();
+    const cooldown = parseInt(cfg.overdue.cooldownDays, 10) || 30;
+    const map = buildClientsMap();
+    const today = new Date();
+    for (const [key, v] of Object.entries(map)) {
+      if (!v.phone || !v.lastDate) continue;
+      const days = Math.floor((today - new Date(v.lastDate)) / 86400000);
+      if (days < overdueDays) continue;
+      const refId = 'overdue_' + key;
+      if (wasMessageSent(refId, 'overdue', cooldown)) continue;
+      jobs.push({
+        phone: v.phone,
+        clientName: v.name,
+        type: 'overdue',
+        refId,
+        cooldownDays: cooldown,
+        text: buildAutomatedMessage('overdue', v.name, { days: String(days) }),
+      });
+    }
+  }
+  return (typeof WaSendSlot !== 'undefined' && WaSendSlot.dedupeJobs) ? WaSendSlot.dedupeJobs(jobs) : jobs;
+}
+
 async function sendClientMessage({ phone, clientName, type, refId, text, cooldownDays }) {
   ensureMessagingSettings();
   if (!settings.messaging.enabled) return { ok: false, reason: 'disabled' };
@@ -23357,89 +23691,8 @@ async function runMessagingAutomation(manual) {
     notify('⚠️ الإرسال التلقائي معطّل — فعّله من الأعلى أولاً', 'danger');
     return { sent: 0 };
   }
-  let sent = 0;
-  const now = Date.now();
-
-  if (cfg.followup?.enabled) {
-    const hours = parseInt(cfg.followup.hoursAfter, 10) || 24;
-    const threshold = now - hours * 3600000;
-    for (const c of cases) {
-      if (!c.phone || c.sharedRole === 'partner') continue;
-      const at = new Date(c.createdAt || c.date).getTime();
-      if (at > threshold) continue;
-      const res = await sendClientMessage({
-        phone: c.phone,
-        clientName: c.name,
-        type: 'followup',
-        refId: 'case_' + c.id
-      });
-      if (res?.ok !== false && res?.reason !== 'already_sent' && res?.reason !== 'disabled') sent++;
-    }
-  }
-
-  if (cfg.appointment?.enabled) {
-    const hoursBefore = parseInt(cfg.appointment.hoursBefore, 10) || 24;
-    const windowEnd = now + hoursBefore * 3600000;
-    for (const b of bookings) {
-      if (!b.phone || !['pending', 'confirmed'].includes(b.status)) continue;
-      const apptMs = parseDateTimeMs(b.date, b.time);
-      if (apptMs <= now || apptMs > windowEnd) continue;
-      const res = await sendClientMessage({
-        phone: b.phone,
-        clientName: b.name,
-        type: 'appointment',
-        refId: 'booking_' + b.id,
-        text: buildAutomatedMessage('appointment', b.name, {
-          date: fmtDate(b.date),
-          time: to12h(b.time) || b.time || '—'
-        })
-      });
-      if (res?.ok !== false && res?.reason !== 'already_sent') sent++;
-    }
-    const map = buildClientsMap();
-    for (const s of nextSessions) {
-      if (!s.clientKey) continue;
-      const client = map[s.clientKey];
-      if (!client?.phone) continue;
-      const apptMs = parseDateTimeMs(s.date, '09:00');
-      if (apptMs <= now || apptMs > windowEnd) continue;
-      const res = await sendClientMessage({
-        phone: client.phone,
-        clientName: client.name,
-        type: 'appointment',
-        refId: 'session_' + s.id,
-        text: buildAutomatedMessage('appointment', client.name, {
-          date: fmtDate(s.date),
-          time: '—'
-        })
-      });
-      if (res?.ok !== false && res?.reason !== 'already_sent') sent++;
-    }
-  }
-
-  if (cfg.overdue?.enabled) {
-    const overdueDays = parseInt(cfg.overdue.days, 10) || getClientOverdueDays();
-    const cooldown = parseInt(cfg.overdue.cooldownDays, 10) || 30;
-    const map = buildClientsMap();
-    const today = new Date();
-    for (const [key, v] of Object.entries(map)) {
-      if (!v.phone || !v.lastDate) continue;
-      const days = Math.floor((today - new Date(v.lastDate)) / 86400000);
-      if (days < overdueDays) continue;
-      const res = await sendClientMessage({
-        phone: v.phone,
-        clientName: v.name,
-        type: 'overdue',
-        refId: 'overdue_' + key,
-        cooldownDays: cooldown,
-        text: buildAutomatedMessage('overdue', v.name, { days: String(days) })
-      });
-      if (res?.ok !== false && res?.reason !== 'already_sent') sent++;
-    }
-  }
-
-  if (manual) notify(sent ? `✅ تم إرسال/جدولة ${sent} رسالة` : 'ℹ️ لا توجد رسائل مستحقة الآن');
-  return { sent };
+  const jobs = collectDueMessagingJobs();
+  return dispatchMessagingJobs(jobs, { manual: !!manual, source: 'auto' });
 }
 
 function loadMessagingConfigUI() {
@@ -23606,7 +23859,12 @@ function openWhatsAppPromo(phone, clientName) {
   if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return; }
   const msg = getPromoMessage(clientName);
   if (!msg) { notify('⚠️ لم يتم كتابة رسالة العروض — اذهب لصفحة الرسائل', 'danger'); return; }
-  window.open(`https://wa.me/${formatted}?text=${msg}`, '_blank');
+  if (typeof MessagingBridge !== 'undefined' && MessagingBridge.sendWhatsApp) {
+    MessagingBridge.sendWhatsApp(phone, decodeURIComponent(msg), { type: 'promo' });
+    return;
+  }
+  const slotName = (typeof WaSendSlot !== 'undefined' && WaSendSlot.WINDOW_NAME) || 'tdw-whatsapp-send';
+  window.open(`https://web.whatsapp.com/send?phone=${formatted}&text=${msg}`, slotName);
 }
 
 function buildQuickMessageBody(type, clientName, lastDate) {
@@ -23909,9 +24167,7 @@ async function sendBulkWA() {
       notify(emptyLabels[msgType] || '⚠️ القالب فارغ', 'danger');
       return;
     }
-    const delayMs = (typeof ensureCommunicationSettings === 'function' && settings.communication?.queue?.delayMs) || 400;
-    let sent = 0;
-    let queued = 0;
+    const jobs = [];
     for (let i = 0; i < selected.length; i++) {
       const client = selected[i];
       const today = new Date();
@@ -23924,38 +24180,19 @@ async function sendBulkWA() {
         days: String(days)
       });
       if (!body) continue;
-      const mediaList = typeof getMessageMediaList === 'function' ? getMessageMediaList(msgType) : [];
-      const media = mediaList.length ? mediaList[mediaList.length - 1] : (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(msgType) : null);
-      const result = await MessagingBridge.sendWhatsApp(client.phone, body, { type: msgType, bulk: true, attachMedia: true, mediaList: mediaList.length ? mediaList : undefined, media: media || undefined });
-      const msgStatus = result?.ok === false ? 'failed' : (result?.mode === 'queued' ? 'queued' : 'sent');
-      if (msgStatus === 'queued') queued++;
-      else if (msgStatus === 'sent') sent++;
-      logMessage({
-        clientName: client.name,
+      jobs.push({
         phone: client.phone,
+        clientName: client.name,
         type: msgType,
-        channel: 'whatsapp',
-        refId: 'bulk_' + Date.now() + '_' + i,
-        preview: ((mediaList && mediaList.length) ? '📎 ' : '') + body.slice(0, 80),
-        messageId: result?.messageId || result?.message_id || result?.id || null,
-        status: msgStatus,
-        detail: result,
-        fileNo: client.fileNo || (typeof lookupClientFileNo === 'function' ? lookupClientFileNo(client.phone) : '') || undefined,
-        hasMedia: !!(mediaList && mediaList.length)
+        refId: 'bulk_' + (client.fileNo || client.phone || i) + '_' + msgType,
+        text: body,
+        fileNo: client.fileNo || '',
+        attachMedia: true,
       });
-      if (i < selected.length - 1) await new Promise(r => setTimeout(r, delayMs));
     }
-    if (typeof processCommQueueNow === 'function' && getCuppingElectron()?.communication) {
+    const result = await dispatchMessagingJobs(jobs, { manual: true, source: 'bulk' });
+    if (typeof processCommQueueNow === 'function' && result?.api && getCuppingElectron()?.communication) {
       await processCommQueueNow();
-    }
-    const total = sent + queued;
-    if (!total) notify(emptyLabels[msgType] || '⚠️ فشل الإرسال', 'danger');
-    else if (queued && !sent) notify(`✅ تمت جدولة ${queued} رسالة في الطابور`);
-    else {
-      const mediaHint = (typeof getMessageMediaList === 'function' && getMessageMediaList(msgType).length)
-        ? ' — أرفق الصورة/الفيديو من الحافظة أو المجلد المفتوح (المشترك ثم مرفق النوع)'
-        : '';
-      notify(`✅ تم إرسال/جدولة ${total} رسالة${queued ? ` (${queued} في الطابور)` : ''}${mediaHint}`);
     }
     refreshBulkTable(false);
   });

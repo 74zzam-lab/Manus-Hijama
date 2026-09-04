@@ -494,6 +494,10 @@ handle('whatsapp:openChat', (_e, phone, text) =>
     V.asString(phone, { name: 'phone', max: 40, required: true }),
     V.asString(text || '', { name: 'text', max: 10000 })
   ));
+handle('whatsapp:openSendSlot', (_e, url) =>
+  whatsappWorkspace.openSendSlot(
+    V.asString(url, { name: 'url', max: 50000, required: true })
+  ));
 handle('whatsapp:writeContacts', (_e, payload) => {
   const body = V.asObject(payload, { required: true });
   return whatsappWorkspace.writeContacts({

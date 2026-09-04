@@ -156,6 +156,17 @@ async function testProvider(storedProvider) {
   return adapter.testConnection(cfg);
 }
 
+async function launchWhatsAppUrl(url) {
+  try {
+    const workspace = require('../whatsapp-workspace');
+    if (workspace && typeof workspace.openSendSlot === 'function') {
+      return workspace.openSendSlot(url);
+    }
+  } catch { /* fall through to OS handler only if the slot is unavailable */ }
+  await shell.openExternal(url);
+  return { ok: true, mode: 'deeplink', reused: false };
+}
+
 async function sendOneMessage(config, payload, media) {
   const channel = payload.channel || 'whatsapp';
   const phone = payload.phone;
@@ -199,16 +210,18 @@ async function sendOneMessage(config, payload, media) {
   }
   const staged = await stageMediaForDeeplink(media);
   const launchUrl = whatsappDeeplink(phone, message, payload.waClient || config?.messaging?.waClient);
-  await shell.openExternal(launchUrl);
+  const launched = await launchWhatsAppUrl(launchUrl);
   return {
-    ok: true,
+    ok: launched?.ok !== false,
     channel: 'whatsapp',
-    mode: 'deeplink',
+    mode: launched?.mode || 'deeplink',
     phone,
     launch: payload.waClient || config?.messaging?.waClient || 'auto',
+    reused: !!launched?.reused,
     mediaCopied: !!staged.copied,
     mediaPath: staged.stagedPath || '',
     mediaHint: staged.hint || '',
+    reason: launched?.reason,
   };
 }
 
@@ -264,13 +277,14 @@ async function sendMessage(config, payload) {
       return { ok: true, channel: 'sms', mode: 'deeplink', phone, mediaAttached: false };
     }
     const launchUrl = whatsappDeeplink(phone, message, payload.waClient || config?.messaging?.waClient);
-    await shell.openExternal(launchUrl);
+    const launched = await launchWhatsAppUrl(launchUrl);
     return {
-      ok: true,
+      ok: launched?.ok !== false,
       channel: 'whatsapp',
-      mode: 'deeplink',
+      mode: launched?.mode || 'deeplink',
       phone,
       launch: payload.waClient || config?.messaging?.waClient || 'auto',
+      reused: !!launched?.reused,
       mediaCopied: copied,
       mediaPath: stagedPath,
       mediaParts: mediaItems.length,

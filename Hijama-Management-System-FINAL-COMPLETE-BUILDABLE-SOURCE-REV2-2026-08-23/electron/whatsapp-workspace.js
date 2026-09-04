@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const electron = require('electron');
-const { app, shell } = electron;
+const { app, shell, BrowserWindow } = electron;
 const { normalizeWhatsAppEmbedBounds } = require('../cloud/whatsapp-embed-bounds');
 
 const WA_ORIGIN = 'https://web.whatsapp.com';
@@ -14,6 +14,7 @@ const WA_BG = '#0b141a';
 let view = null;
 let attachedWin = null;
 let viewKind = 'none';
+let sendWin = null;
 
 function isWhatsAppUrl(urlString) {
   try {
@@ -222,14 +223,71 @@ function setBounds(mainWindow, bounds) {
   return { ok: true, bounds: normalized, kind: viewKind };
 }
 
-async function openChat(phone, text) {
+function viewLooksVisible() {
+  try {
+    if (!view || typeof view.getBounds !== 'function') return false;
+    const b = view.getBounds();
+    return !!(b && b.width >= 200 && b.height >= 200);
+  } catch {
+    return false;
+  }
+}
+
+async function openSendSlot(urlString) {
+  if (!isWhatsAppUrl(urlString)) return { ok: false, reason: 'invalid_url' };
   const wc = webContentsOf(view);
-  if (!wc || wc.isDestroyed()) return { ok: false, reason: 'no_view' };
+  if (wc && !wc.isDestroyed() && viewLooksVisible()) {
+    await wc.loadURL(urlString);
+    return { ok: true, mode: 'embed-reuse', reused: true };
+  }
+  if (sendWin && !sendWin.isDestroyed()) {
+    await sendWin.loadURL(urlString);
+    try {
+      if (typeof sendWin.isMinimized === 'function' && sendWin.isMinimized()) sendWin.restore();
+      sendWin.show();
+      sendWin.focus();
+    } catch { /* focus is best-effort */ }
+    return { ok: true, mode: 'window-reuse', reused: true };
+  }
+  sendWin = new BrowserWindow({
+    width: 1100,
+    height: 800,
+    title: 'واتساب — إرسال',
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      webSecurity: true,
+      partition: 'persist:tdw-whatsapp',
+    },
+  });
+  const swc = sendWin.webContents;
+  applyChromeUa(swc);
+  swc.setWindowOpenHandler(({ url }) => {
+    if (isWhatsAppUrl(url)) {
+      sendWin.loadURL(url).catch(() => {});
+    } else if (/^https?:/i.test(url)) {
+      shell.openExternal(url).catch(() => {});
+    }
+    return { action: 'deny' };
+  });
+  swc.on('will-navigate', (event, url) => {
+    if (isWhatsAppUrl(url)) return;
+    event.preventDefault();
+    if (/^https?:/i.test(url)) shell.openExternal(url).catch(() => {});
+  });
+  sendWin.on('closed', () => { sendWin = null; });
+  await sendWin.loadURL(urlString);
+  return { ok: true, mode: 'window-new', reused: false };
+}
+
+async function openChat(phone, text) {
   const digits = String(phone || '').replace(/\D/g, '');
   if (!digits) return { ok: false, reason: 'invalid_phone' };
   const url = `${WA_ORIGIN}/send?phone=${digits}&text=${encodeURIComponent(text || '')}`;
-  await wc.loadURL(url);
-  return { ok: true, mode: 'embedded', phone: digits };
+  const opened = await openSendSlot(url);
+  return { ...opened, phone: digits, mode: opened.mode || 'embedded' };
 }
 
 function withBom(text) {
@@ -284,6 +342,7 @@ module.exports = {
   detachView,
   setBounds,
   openChat,
+  openSendSlot,
   writeContacts,
   openContactsFolder,
   openVcard,

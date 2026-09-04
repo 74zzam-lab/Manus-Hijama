@@ -54,7 +54,9 @@ const autoFn = extractFn(indexSrc, 'runMessagingAutomation');
 const bulkFn = extractFn(indexSrc, 'sendBulkWA');
 const bridgeChunk = indexSrc.slice(indexSrc.indexOf('const MessagingBridge'), indexSrc.indexOf('function getReceiptCase'));
 
-check(autoFn && /dispatchMessagingJobs/.test(autoFn), 'automation dispatches through the single-slot queue');
+check(autoFn && /dispatchMessagingJobs/.test(autoFn), 'automation dispatches through the shared job queue');
+check(/enqueueApiMessagingBatch/.test(indexSrc) && /drainQueue/.test(indexSrc), 'API automations enqueue then drain in the background');
+check(/needs_api/.test(indexSrc), 'large no-API batches are refused instead of opening windows');
 check(autoFn && !/window\.open/.test(autoFn), 'automation function itself does not open tabs');
 check(bulkFn && /dispatchMessagingJobs/.test(bulkFn), 'bulk send uses the single-slot queue');
 check(bulkFn && !/window\.open/.test(bulkFn), 'bulk send does not open a tab per client');

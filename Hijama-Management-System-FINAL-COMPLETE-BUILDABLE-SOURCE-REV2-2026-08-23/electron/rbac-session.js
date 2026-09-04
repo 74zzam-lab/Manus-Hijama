@@ -134,6 +134,8 @@ const CHANNEL_POLICY = {
   'communication:processQueue': { minRank: 4 },
   'communication:getQueue': { minRank: 2 },
   'communication:clearQueue': { minRank: 4 },
+  'communication:enqueueBatch': { minRank: 2 },
+  'communication:drainQueue': { minRank: 2 },
   'whatsapp:embedShow': { minRank: 2 },
   'whatsapp:embedHide': { minRank: 2 },
   'whatsapp:embedBounds': { minRank: 2 },

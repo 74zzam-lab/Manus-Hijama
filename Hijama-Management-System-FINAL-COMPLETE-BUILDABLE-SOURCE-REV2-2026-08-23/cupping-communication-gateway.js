@@ -6,6 +6,7 @@ const COMM_BUILTIN_LABELS = {
   '4jawaly': '4jawaly — فورجوالي',
   taqnyat: 'Taqnyat — تقنيات',
   urwhats: 'urWhats',
+  'whatsapp-cloud': 'واتساب Cloud API (رسمي — ميتا)',
   imissive: 'iMissive',
   deewan: 'Deewan — ديوان',
   unifonic: 'Unifonic — يونيفونيك',
@@ -139,7 +140,7 @@ async function initCommunicationGateway() {
   if (!api?.communication) return;
   await api.communication.init(getCommunicationConfigPayload());
   api.communication.onWebhook(handleCommWebhookEvent);
-  api.communication.onQueueUpdate(() => refreshCommQueueUI());
+  api.communication.onQueueUpdate(onCommQueueUpdate);
 }
 
 function handleCommWebhookEvent(event) {
@@ -334,6 +335,14 @@ function onCommProviderSlugChange() {
   const builtin = commBuiltinList.find((b) => b.id === slug);
   const baseEl = document.getElementById('comm-prov-base');
   if (baseEl && builtin?.defaultBaseUrl && !baseEl.value) baseEl.placeholder = builtin.defaultBaseUrl;
+  const senderEl = document.getElementById('comm-prov-sender');
+  if (senderEl) {
+    senderEl.placeholder = slug === 'whatsapp-cloud' ? 'Phone Number ID من Meta' : 'اسم المرسل';
+  }
+  const hint = document.getElementById('comm-test-result');
+  if (hint && slug === 'whatsapp-cloud') {
+    hint.textContent = 'واتساب Cloud API: Token من Meta، وSender ID = Phone Number ID. العروض الجماعية تحتاج قالب معتمد.';
+  }
 }
 
 function saveCommProviderModal() {
@@ -502,16 +511,42 @@ function refreshCommWebhookLogUI() {
   ).join('');
 }
 
+function onCommQueueUpdate(event) {
+  const ev = event || {};
+  refreshCommQueueUI();
+  if (typeof refreshCommStatusUI === 'function') refreshCommStatusUI();
+  if (ev.type === 'drain_done' || ev.event === 'drain_done') {
+    const sent = Number(ev.sent != null ? ev.sent : ev.processed || 0);
+    const failed = Number(ev.failed || 0);
+    if (typeof notify === 'function') {
+      notify(
+        'اكتمل الإرسال الخلفي: نجح ' + sent + (failed ? ' · فشل ' + failed : ''),
+        failed && !sent ? 'danger' : (failed ? 'warning' : 'success')
+      );
+    }
+  }
+}
+
 async function processCommQueueNow() {
   ensureCommunicationSettings();
   const api = getCommElectron();
-  if (!api?.communication?.processQueue) {
+  if (!api?.communication?.processQueue && !api?.communication?.drainQueue) {
     notify('⚠️ ' + (typeof CommercialLicense?.developerPanel?.ELECTRON_ONLY_MSG_AR === 'string'
       ? CommercialLicense.developerPanel.ELECTRON_ONLY_MSG_AR
       : 'هذه الوظيفة متاحة فقط في تطبيق Electron لسطح المكتب.'), 'warning');
     return;
   }
-  const res = await api.communication.processQueue(getCommunicationConfigPayload());
+  const cfg = getCommunicationConfigPayload();
+  if (api.communication.drainQueue) {
+    const start = await api.communication.drainQueue(cfg);
+    notify(start?.started || start?.background
+      ? 'بدأ الإرسال الخلفي — يمكنك متابعة العمل'
+      : (start?.busy ? 'الطابور يعمل بالفعل في الخلفية' : 'ℹ️ لا رسائل في الطابور'));
+    refreshCommQueueUI();
+    refreshCommStatusUI();
+    return;
+  }
+  const res = await api.communication.processQueue(cfg);
   notify(res?.processed ? `✅ تم إرسال ${res.processed} من الطابور` : 'ℹ️ لا رسائل في الطابور');
   refreshCommQueueUI();
   refreshCommStatusUI();

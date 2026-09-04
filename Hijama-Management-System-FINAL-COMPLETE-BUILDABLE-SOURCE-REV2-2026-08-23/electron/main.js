@@ -469,6 +469,19 @@ handle('communication:processQueue', (_e, config) => gateway.processQueueNow(V.a
 handle('communication:getQueue', () => gateway.getQueueItems(80));
 handle('communication:clearQueue', (_e, status) =>
   gateway.clearQueue(V.asOptionalString(status, { name: 'status', max: 40 })));
+handle('communication:enqueueBatch', (_e, payload) => {
+  const body = V.asObject(payload, { required: true });
+  const raw = Array.isArray(body.items) ? body.items.slice(0, 400) : [];
+  const items = raw.map((item) => V.asObject(item));
+  return gateway.enqueueBatch(V.asObject(body.config || {}), items);
+});
+handle('communication:drainQueue', (_e, config) => {
+  const cfg = V.asObject(config);
+  setImmediate(() => {
+    gateway.drainQueue(cfg).catch(() => {});
+  });
+  return { ok: true, started: true, background: true };
+});
 handle('communication:init', (_e, config) => {
   if (mainWindow) return gateway.initGateway(V.asObject(config), mainWindow);
   return { ok: false };

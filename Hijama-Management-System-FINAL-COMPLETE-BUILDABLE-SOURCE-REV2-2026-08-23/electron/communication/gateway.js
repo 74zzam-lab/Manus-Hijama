@@ -296,17 +296,85 @@ async function sendMessage(config, payload) {
   return sendOneMessage(config, base, media);
 }
 
+function isApiProvider(provider) {
+  return !!(provider && provider.slug && provider.slug !== 'manual' && (provider.baseUrl || provider.apiKey || provider.senderId));
+}
+
+function enqueueBatch(config, items) {
+  runtimeConfig = config || runtimeConfig;
+  const comm = config?.communication || runtimeConfig?.communication || {};
+  const waId = comm.activeProviders?.whatsapp;
+  const providers = comm.providers || [];
+  const active = providers.find((p) => p.id === waId) || findProviderForChannel(config || runtimeConfig, 'whatsapp');
+  if (!isApiProvider(active)) {
+    return { ok: false, reason: 'no_api_provider', queued: 0 };
+  }
+  const list = (Array.isArray(items) ? items : []).map((item) => ({
+    phone: item.phone,
+    message: item.message,
+    channel: item.channel || 'whatsapp',
+    type: item.type || '',
+    refId: item.refId || '',
+    clientName: item.clientName || '',
+    providerId: active.id,
+    slug: active.slug,
+  }));
+  return queue.enqueueMany(list);
+}
+
+async function sendQueuedItem(config, item) {
+  const providers = config?.communication?.providers || [];
+  const provider = providers.find((p) => p.id === item.providerId) ||
+    providers.find((p) => p.slug === item.slug) ||
+    findProviderForChannel(config, item.channel || 'whatsapp');
+  if (!isApiProvider(provider)) {
+    return { ok: false, reason: 'no_api_provider' };
+  }
+  return sendViaProvider(provider, item);
+}
+
 async function processQueueNow(config) {
   runtimeConfig = config;
-  return queue.processQueue(async (item) => {
-    const providers = config?.communication?.providers || [];
-    const provider = providers.find((p) => p.id === item.providerId) ||
-      providers.find((p) => p.slug === item.slug);
-    if (!provider) {
-      return sendMessage(config, { phone: item.phone, message: item.message, channel: item.channel, allowQueue: false });
+  return queue.processQueue(
+    (item) => sendQueuedItem(config, item),
+    { batchSize: 1, retryFailed: true, ...(config?.communication?.queue || {}) }
+  );
+}
+
+let draining = false;
+async function drainQueue(config) {
+  if (draining) return { ok: true, busy: true, processed: 0, sent: 0, failed: 0 };
+  draining = true;
+  runtimeConfig = config || runtimeConfig;
+  let processed = 0;
+  let failed = 0;
+  try {
+    const opts = {
+      batchSize: 1,
+      delayMs: 400,
+      retryFailed: false,
+      ...(config?.communication?.queue || {}),
+    };
+    if (opts.delayMs < 200) opts.delayMs = 200;
+    opts.retryFailed = false;
+    for (;;) {
+      const res = await queue.processQueue((item) => sendQueuedItem(config || runtimeConfig, item), opts);
+      if (!res || res.reason === 'busy') break;
+      processed += res.processed || 0;
+      failed += res.failed || 0;
+      if (!res.attempted) break;
+      if ((res.remaining || 0) <= 0) break;
     }
-    return sendViaProvider(provider, item);
-  }, config?.communication?.queue || {});
+  } finally {
+    draining = false;
+  }
+  notifyRenderer('communication:queueUpdate', {
+    type: 'drain_done',
+    processed,
+    sent: processed,
+    failed,
+  });
+  return { ok: true, processed, sent: processed, failed };
 }
 
 async function initGateway(config, mainWindow) {
@@ -332,12 +400,12 @@ function getGatewayStatus(config) {
   return {
     whatsapp: {
       available: true,
-      mode: waProvider?.slug && waProvider.slug !== 'manual' ? 'api' : 'deeplink',
+      mode: isApiProvider(waProvider) ? 'api' : 'deeplink',
       provider: waProvider?.name || null,
     },
     sms: {
       available: true,
-      mode: smsProvider?.slug && smsProvider.slug !== 'manual' ? 'api' : 'deeplink',
+      mode: isApiProvider(smsProvider) ? 'api' : 'deeplink',
       provider: smsProvider?.name || null,
     },
     queue: q,
@@ -351,6 +419,10 @@ module.exports = {
   testProvider,
   sendMessage,
   processQueueNow,
+  drainQueue,
+  enqueueBatch,
+  sendQueuedItem,
+  isApiProvider,
   initGateway,
   getGatewayStatus,
   getQueueItems: queue.getQueueItems,

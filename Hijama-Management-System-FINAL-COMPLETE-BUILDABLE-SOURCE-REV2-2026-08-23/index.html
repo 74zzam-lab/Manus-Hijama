@@ -7357,7 +7357,7 @@ body.license-readonly-mode .page-readonly textarea {
           <button class="btn btn-ghost btn-sm" type="button" onclick="showPage('messages')">قوالب الرسائل</button>
         </div>
       </div>
-      <p class="followup-arch">اختر كيف يُفتح واتساب: ويب، برنامج الكمبيوتر، أو النافذة داخل هذه الصفحة. الإرسال الصامت بدون نقر يحتاج مزود API. أرقام العملاء تُحدَّث تلقائياً في ملف CSV/vCard باسم العميل ورقم ملفه.</p>
+      <p class="followup-arch">للإرسال التلقائي بدون انتظار تأكيد: اربط واتساب Cloud API أو urWhats من الإعدادات → بوابة الاتصال، فيعمل الإرسال في الخلفية مثل طلبات الشبكة. بدون API تُفتح محادثة واحدة تلو الأخرى وتحتاج نقرة إرسال. أرقام العملاء تُحدَّث تلقائياً في ملف CSV/vCard باسم العميل ورقم ملفه.</p>
       <div id="fu-bridge-status" style="margin-top:12px;font-size:12px;color:var(--text-muted)">—</div>
       <div class="wa-slot-bar" data-wa-slot-bar>
         <span class="wa-slot-text">طابور واتساب فارغ</span>
@@ -23322,9 +23322,33 @@ function resolveMessagingChannel() {
   return 'whatsapp';
 }
 
+function messageSentKey(refId, type) {
+  return String(refId || '') + '|' + String(type || '');
+}
+
+function rememberQueuedMessageRefs(jobs) {
+  const list = Array.isArray(jobs) ? jobs : [];
+  if (!list.length || typeof DB === 'undefined' || !DB.get) return;
+  const index = DB.get('messageSentIndex', {}) || {};
+  const now = new Date().toISOString();
+  list.forEach((job) => {
+    if (!job || !job.refId) return;
+    index[messageSentKey(job.refId, job.type)] = now;
+  });
+  DB.set('messageSentIndex', index);
+}
+
 function wasMessageSent(refId, type, cooldownDays) {
+  const key = messageSentKey(refId, type);
+  const index = (typeof DB !== 'undefined' && DB.get) ? (DB.get('messageSentIndex', {}) || {}) : {};
+  const indexedAt = index[key];
+  if (indexedAt) {
+    if (!cooldownDays) return true;
+    const indexedDays = (Date.now() - new Date(indexedAt).getTime()) / 86400000;
+    if (indexedDays < cooldownDays) return true;
+  }
   const entry = messageLog
-    .filter(m => m.refId === refId && m.type === type && m.status === 'sent')
+    .filter(m => m.refId === refId && m.type === type && (m.status === 'sent' || m.status === 'queued'))
     .sort((a, b) => (b.sentAt || '').localeCompare(a.sentAt || ''))[0];
   if (!entry) return false;
   if (!cooldownDays) return true;
@@ -23333,14 +23357,18 @@ function wasMessageSent(refId, type, cooldownDays) {
 }
 
 function logMessage(entry) {
-  messageLog.unshift({
+  const row = {
     id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
     sentAt: new Date().toISOString(),
     status: 'sent',
     ...entry
-  });
+  };
+  messageLog.unshift(row);
   if (messageLog.length > 500) messageLog.length = 500;
   DB.set('messageLog', messageLog);
+  if (row.refId && (row.status === 'sent' || row.status === 'queued')) {
+    rememberQueuedMessageRefs([{ refId: row.refId, type: row.type }]);
+  }
   refreshMessageLog();
 }
 
@@ -23491,6 +23519,48 @@ async function processWhatsAppSendSlot() {
   return { ok: true, launched: _waSendSlotState.launched, remaining: _waSendSlotState.queue.length };
 }
 
+async function enqueueApiMessagingBatch(list, channel) {
+  const api = (typeof getCuppingElectron === 'function' ? getCuppingElectron() : null)?.communication;
+  if (!api?.enqueueBatch || !api?.drainQueue) return { ok: false, reason: 'no_enqueue', queued: 0 };
+  const cfg = typeof getCommunicationConfigPayload === 'function'
+    ? getCommunicationConfigPayload()
+    : { communication: (typeof settings !== 'undefined' && settings.communication) || {} };
+  const CHUNK = 400;
+  let queued = 0;
+  let dropped = 0;
+  for (let i = 0; i < list.length; i += CHUNK) {
+    const chunk = list.slice(i, i + CHUNK).map((job) => ({
+      phone: job.phone,
+      message: job.text || '',
+      channel: channel || 'whatsapp',
+      type: job.type || '',
+      refId: job.refId || '',
+      clientName: job.clientName || '',
+    }));
+    const res = await api.enqueueBatch({ config: cfg, items: chunk });
+    if (res?.ok === false) return { ok: false, reason: res.reason || 'enqueue_failed', queued };
+    queued += Number(res?.queued || 0);
+    dropped += Number(res?.dropped || 0);
+  }
+  rememberQueuedMessageRefs(list);
+  logMessage({
+    clientName: 'دفعة خلفية',
+    phone: '—',
+    type: list[0]?.type || 'bulk',
+    channel: channel || 'whatsapp',
+    refId: 'batch_' + Date.now(),
+    preview: 'طابور خلفي: ' + queued + ' رسالة' + (dropped ? ' (تجاوز الحد: ' + dropped + ')' : ''),
+    status: 'queued',
+  });
+  const start = await api.drainQueue(cfg);
+  return {
+    ok: true,
+    queued,
+    dropped,
+    background: !!(start && start.background),
+  };
+}
+
 async function dispatchMessagingJobs(jobs, opts) {
   const list = (typeof WaSendSlot !== 'undefined' && WaSendSlot.dedupeJobs)
     ? WaSendSlot.dedupeJobs(jobs)
@@ -23503,32 +23573,42 @@ async function dispatchMessagingJobs(jobs, opts) {
   const st = (typeof MessagingBridge !== 'undefined' && MessagingBridge.getStatus)
     ? await MessagingBridge.getStatus()
     : null;
-  const apiReady = st?.whatsapp?.mode === 'api';
+  const channel = typeof resolveMessagingChannel === 'function' ? resolveMessagingChannel() : 'whatsapp';
+  const apiReady = channel === 'sms' ? st?.sms?.mode === 'api' : st?.whatsapp?.mode === 'api';
   const delayMs = waSendSlotDelayMs(apiReady);
-  if (!apiReady && typeof WaSendSlot !== 'undefined' && WaSendSlot.confirmNeeded(list.length) && manual) {
+  const needsApi = typeof WaSendSlot !== 'undefined' && WaSendSlot.silentSendNeedsApi
+    ? WaSendSlot.silentSendNeedsApi(list.length)
+    : list.length > 20;
+  if (apiReady && typeof WaSendSlot !== 'undefined' && WaSendSlot.confirmNeeded(list.length) && manual) {
+    const msg = WaSendSlot.apiConfirmMessage
+      ? WaSendSlot.apiConfirmMessage(list.length)
+      : ('وضع ' + list.length + ' رسالة في الطابور الخلفي؟');
+    if (!confirm(msg)) return { sent: 0, queued: 0, cancelled: true };
+  }
+  if (!apiReady && typeof WaSendSlot !== 'undefined' && WaSendSlot.confirmNeeded(list.length) && manual && !needsApi) {
     const msg = WaSendSlot.confirmMessage(list.length, delayMs);
     if (!confirm(msg)) return { sent: 0, queued: 0, cancelled: true };
   }
   if (apiReady) {
-    let sent = 0;
-    for (let i = 0; i < list.length; i++) {
-      const job = list[i];
-      const res = await sendClientMessage({
-        phone: job.phone,
-        clientName: job.clientName,
-        type: job.type,
-        refId: job.refId,
-        text: job.text,
-        cooldownDays: job.cooldownDays,
-      });
-      if (res?.ok !== false && res?.reason !== 'already_sent' && res?.reason !== 'disabled') sent++;
-      const wait = (typeof WaSendSlot !== 'undefined' && WaSendSlot.nextDelayMs)
-        ? WaSendSlot.nextDelayMs(i, delayMs)
-        : (i ? delayMs : 0);
-      if (wait && i < list.length - 1) await new Promise((r) => setTimeout(r, wait));
+    const queued = await enqueueApiMessagingBatch(list, channel);
+    if (queued.ok === false && queued.reason === 'no_api_provider') {
+      if (manual) notify('⚠️ المزود غير مكتمل — أدخل التوكن ورقم الهاتف من الإعدادات → بوابة الاتصال', 'danger');
+      return { sent: 0, queued: 0, reason: 'no_api_provider' };
     }
-    if (manual) notify(sent ? `✅ تم إرسال/جدولة ${sent} رسالة عبر المزود` : 'ℹ️ لا توجد رسائل مستحقة الآن');
-    return { sent, queued: 0, api: true };
+    if (queued.ok === false) {
+      if (manual) notify('⚠️ تعذر بدء الإرسال الخلفي', 'danger');
+      return { sent: 0, queued: 0, reason: queued.reason || 'enqueue_failed' };
+    }
+    if (manual) {
+      notify('✅ وُضعت ' + queued.queued + ' رسالة في الطابور الخلفي — البرنامج يبقى يعمل بدون نوافذ');
+    }
+    return { sent: 0, queued: queued.queued, api: true, background: true };
+  }
+  if (needsApi) {
+    if (manual) {
+      notify('⚠️ الإرسال الصامت لعدد كبير يحتاج مزود واتساب API من الإعدادات → بوابة الاتصال. بدون API لا يمكن الضغط على إرسال نيابة عنك.', 'danger');
+    }
+    return { sent: 0, queued: 0, reason: 'needs_api', refused: true };
   }
   enqueueWhatsAppSlotJobs(list);
   if (!manual) {
@@ -23756,7 +23836,10 @@ async function updateMessagingBridgeStatus() {
   const wa = st?.whatsapp?.mode || 'browser';
   const sms = st?.sms?.available ? 'SMS جاهز' : 'SMS عبر المتصفح/Electron';
   const auto = settings.messaging?.enabled ? 'مفعّل' : 'يدوي';
-  el.textContent = `البيئة: ${mode} | واتساب: ${wa} | ${sms} | الوضع: ${auto}`;
+  const bg = wa === 'api'
+    ? 'إرسال خلفي عبر المزود — بدون نوافذ أو انتظار تأكيد'
+    : 'بدون API كل محادثة تحتاج نقرة إرسال — اربط المزود من بوابة الاتصال';
+  el.textContent = `البيئة: ${mode} | واتساب: ${wa} | ${sms} | الوضع: ${auto} | ${bg}`;
 }
 
 function refreshMessageLog(resetPage) {
@@ -24190,10 +24273,7 @@ async function sendBulkWA() {
         attachMedia: true,
       });
     }
-    const result = await dispatchMessagingJobs(jobs, { manual: true, source: 'bulk' });
-    if (typeof processCommQueueNow === 'function' && result?.api && getCuppingElectron()?.communication) {
-      await processCommQueueNow();
-    }
+    await dispatchMessagingJobs(jobs, { manual: true, source: 'bulk' });
     refreshBulkTable(false);
   });
 }

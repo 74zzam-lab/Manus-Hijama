@@ -7,9 +7,11 @@ const deewan = require('./deewan');
 const unifonic = require('./unifonic');
 const qalaama = require('./qalaama');
 const zajel = require('./zajel');
+const whatsappCloud = require('./whatsapp-cloud');
 
 const BUILTIN = {
   custom,
+  'whatsapp-cloud': whatsappCloud,
   '4jawaly': jawaly,
   taqnyat,
   urwhats,

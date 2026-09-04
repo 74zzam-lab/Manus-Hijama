@@ -86,6 +86,17 @@
       + 'مدة تقريبية: حوالي ' + minutes + ' دقيقة.\n\nمتابعة؟';
   }
 
+  function apiConfirmMessage(count) {
+    const n = toInt(count, 0);
+    return 'سيتم وضع ' + n + ' رسالة في الطابور الخلفي وإرسالها عبر مزود واتساب API مثل طلبات الشبكة.\n'
+      + 'لن تُفتح نوافذ ولن ينتظر البرنامج نقرة إرسال.\n'
+      + 'يمكنك مواصلة العمل أثناء الإرسال.\n\nمتابعة؟';
+  }
+
+  function silentSendNeedsApi(count) {
+    return toInt(count, 0) > CONFIRM_ABOVE;
+  }
+
   const api = {
     WINDOW_NAME: WINDOW_NAME,
     MAX_OPEN: MAX_OPEN,
@@ -99,6 +110,8 @@
     estimateMinutes: estimateMinutes,
     dedupeJobs: dedupeJobs,
     confirmMessage: confirmMessage,
+    apiConfirmMessage: apiConfirmMessage,
+    silentSendNeedsApi: silentSendNeedsApi,
   };
   global.WaSendSlot = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

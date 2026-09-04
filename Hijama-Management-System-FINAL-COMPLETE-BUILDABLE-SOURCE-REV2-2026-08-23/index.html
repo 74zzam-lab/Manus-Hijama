@@ -7460,6 +7460,7 @@ body.license-readonly-mode .page-readonly textarea {
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
           <input class="form-control" id="client-search" style="width:200px" placeholder="بحث: اسم، هاتف، ملف، فاتورة" oninput="debouncedRefreshClientsView()">
           <button class="btn btn-accent btn-sm admin-only" data-feature="tech_import" onclick="openImportStudio()" title="استيراد Excel">📥 استيراد Excel</button>
+          <button class="btn btn-primary btn-sm" type="button" onclick="exportClientsExcel()" title="نسخة Excel منسّقة بكل العملاء والزيارات والتواريخ">📥 تصدير Excel</button>
           <select class="form-control" id="client-search-field" style="width:140px" onchange="refreshClientsView()">
             <option value="all">كل الحقول</option>
             <option value="name">الاسم فقط</option>
@@ -17333,6 +17334,7 @@ window.__LICENSE_VAULT_DEFAULTS__ = window.__LICENSE_VAULT_DEFAULTS__ || {
 <script src="cloud/boot-flow-ui.js"></script>
 <script src="cloud/activation-sync-defaults.js"></script>
 <script src="cloud/cloud-v2-init.js"></script>
+<script src="cloud/clients-excel.js"></script>
 <script>
 
 // ESC/POS cash drawer kick pulse (via thermal printer RJ11/RJ12)
@@ -25177,6 +25179,174 @@ function clientEntryMatchesSearch(key, v, q, searchField) {
       if ((v.patientId || '').includes(q)) return true;
       if (allC.some(invMatch)) return true;
       return false;
+  }
+}
+
+function getClientsDateFilterLabel() {
+  const mode = document.getElementById('client-date-mode')?.value || 'all';
+  const fromEl = document.getElementById('client-date-from');
+  const toEl = document.getElementById('client-date-to');
+  const monEl = document.getElementById('client-month');
+  const q = (document.getElementById('client-search')?.value || '').trim();
+  let label = 'كل العملاء';
+  if (mode === 'day' && fromEl?.value) label = 'يوم ' + fromEl.value;
+  else if (mode === 'month' && monEl?.value) label = 'شهر ' + monEl.value;
+  else if (mode === 'range' && fromEl?.value) label = 'من ' + fromEl.value + ' إلى ' + (toEl?.value || fromEl.value);
+  if (q) label += ' — بحث: ' + q;
+  return label;
+}
+
+function getFilteredClientsForExport() {
+  const mode = document.getElementById('client-date-mode')?.value || 'all';
+  const fromEl = document.getElementById('client-date-from');
+  const toEl = document.getElementById('client-date-to');
+  const monEl = document.getElementById('client-month');
+  const q = (document.getElementById('client-search')?.value || '').toLowerCase().trim();
+  const searchField = document.getElementById('client-search-field')?.value || 'all';
+  const scopedCases = typeof getUiScopedRecords === 'function' ? getUiScopedRecords(cases) : (cases || []);
+  const scopedRegistry = typeof getUiScopedRecords === 'function' ? getUiScopedRecords(clientsRegistry) : (clientsRegistry || []);
+  let filteredCases = scopedCases;
+  if (mode === 'day' && fromEl?.value) filteredCases = scopedCases.filter((c) => c.date === fromEl.value);
+  else if (mode === 'month' && monEl?.value) filteredCases = scopedCases.filter((c) => String(c.date || '').startsWith(monEl.value));
+  else if (mode === 'range' && fromEl?.value) {
+    const to = toEl?.value || fromEl.value;
+    filteredCases = scopedCases.filter((c) => c.date >= fromEl.value && c.date <= to);
+  }
+  const filteredMap = {};
+  filteredCases.forEach((c) => {
+    const key = getClientMapKey(c);
+    if (!filteredMap[key]) {
+      filteredMap[key] = {
+        key,
+        name: c.name,
+        phone: c.phone || '',
+        fileNo: c.fileNo || '',
+        clientRegistryId: c.clientRegistryId || '',
+        visits: [],
+        visitRecords: [],
+        lastDate: null,
+        nationality: c.nationality || '',
+        patientId: c.patientId || '',
+        isVip: !!c.isVip,
+        registryOnly: false,
+      };
+    }
+    filteredMap[key].visits.push({ date: c.date, invoice: c.invoice });
+    filteredMap[key].visitRecords.push(c);
+    if (!filteredMap[key].lastDate || c.date > filteredMap[key].lastDate) filteredMap[key].lastDate = c.date;
+    if (c.patientId) filteredMap[key].patientId = c.patientId;
+    if (c.fileNo) filteredMap[key].fileNo = c.fileNo;
+    if (c.clientRegistryId) filteredMap[key].clientRegistryId = c.clientRegistryId;
+    if (c.isVip) filteredMap[key].isVip = true;
+    if (c.nationality) filteredMap[key].nationality = c.nationality;
+  });
+  mergeRegistryClientsIntoMap(filteredMap, mode, scopedRegistry);
+  const entries = Object.entries(filteredMap)
+    .filter(([k, v]) => clientEntryMatchesSearch(k, v, q, searchField))
+    .sort((a, b) => {
+      const da = a[1].lastDate || a[1].registryCreatedAt || '';
+      const db = b[1].lastDate || b[1].registryCreatedAt || '';
+      return String(db).localeCompare(String(da));
+    });
+  return { entries, filterLabel: getClientsDateFilterLabel() };
+}
+
+function buildClientExcelDataset() {
+  const { entries, filterLabel } = getFilteredClientsForExport();
+  const today = new Date();
+  const clients = entries.map(([key, v]) => {
+    const reg = (v.clientRegistryId && typeof findClientByRegistryId === 'function')
+      ? findClientByRegistryId(v.clientRegistryId)
+      : (v.fileNo && typeof findClientByFileNo === 'function' ? findClientByFileNo(v.fileNo) : null);
+    const visitDates = (v.visitRecords || []).map((c) => c.date).filter(Boolean).sort();
+    const ns = (typeof nextSessions !== 'undefined' ? nextSessions : [])
+      .filter((s) => s.clientKey === key && new Date(s.date) >= today)
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    return {
+      fileNo: v.fileNo || (reg && reg.fileNo) || '',
+      name: v.name || (reg && reg.name) || '',
+      phone: v.phone || (reg && reg.phone) || '',
+      patientId: v.patientId || (reg && reg.patientId) || '',
+      nationality: v.nationality || (reg && reg.nationality) || '',
+      isVip: !!(v.isVip || (reg && reg.isVip)),
+      visitCount: (v.visitRecords || v.visits || []).length,
+      firstVisit: visitDates[0] || '',
+      lastVisit: v.lastDate || '',
+      nextVisit: ns[0]?.date || '',
+      registeredAt: (reg && (reg.createdAt || reg.updatedAt)) || v.registryCreatedAt || '',
+    };
+  });
+  const visits = [];
+  entries.forEach(([, v]) => {
+    (v.visitRecords || []).forEach((c) => {
+      visits.push({
+        fileNo: c.fileNo || v.fileNo || '',
+        name: c.name || v.name || '',
+        phone: c.phone || v.phone || '',
+        invoice: c.invoice || '',
+        date: c.date || '',
+        doctorName: c.doctorName || '',
+        serviceType: c.serviceType || '',
+        cups: c.cups,
+        total: c.total,
+        cash: c.cash,
+        card: c.card,
+      });
+    });
+  });
+  visits.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(a.fileNo).localeCompare(String(b.fileNo)));
+  return { clients, visits, filterLabel };
+}
+
+function exportClientsExcel() {
+  if (typeof hasPermission === 'function' && !hasPermission('clients.view')) {
+    notify('⛔ لا صلاحية لتصدير بيانات العملاء', 'danger');
+    return;
+  }
+  if (typeof RbacGuard !== 'undefined' && RbacGuard.requirePermission) {
+    const gate = RbacGuard.requirePermission('clients.view', { label: 'تصدير بيانات العملاء' });
+    if (!gate.ok) return;
+  }
+  if (typeof ClientsExcel === 'undefined') {
+    notify('⚠️ وحدة تصدير العملاء غير محمّلة', 'danger');
+    return;
+  }
+  const data = buildClientExcelDataset();
+  if (!data.clients.length) {
+    notify('⚠️ لا توجد بيانات عملاء للتصدير', 'danger');
+    return;
+  }
+  const exportedAt = typeof getTodayISO === 'function' ? getTodayISO() : new Date().toISOString().slice(0, 10);
+  const model = ClientsExcel.buildWorkbookModel({
+    centerName: (typeof settings !== 'undefined' && settings.centerName) || 'مركز الحجامة',
+    exportedAt,
+    filterLabel: data.filterLabel,
+    overdueDays: typeof getClientOverdueDays === 'function' ? getClientOverdueDays() : 75,
+    nowMs: Date.now(),
+    clients: data.clients,
+    visits: data.visits,
+  });
+  try {
+    if (typeof XLSX !== 'undefined' && ClientsExcel.writeWorkbook) {
+      ClientsExcel.writeWorkbook(XLSX, model);
+    } else {
+      const sheet = model.sheets.find((s) => s.name === 'العملاء') || model.sheets[1];
+      const csv = '\uFEFF' + (sheet.rows || []).map((r) => r.map((cell) => {
+        const t = String(cell == null ? '' : cell);
+        return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+      }).join(',')).join('\n');
+      downloadFile(csv, model.filename.replace(/\.xlsx$/i, '.csv'), 'text/csv;charset=utf-8');
+    }
+    if (typeof logAudit === 'function') {
+      logAudit('CLIENTS_EXPORTED', `تصدير Excel للعملاء (${data.clients.length} عميل / ${data.visits.length} زيارة)`, {
+        clients: data.clients.length,
+        visits: data.visits.length,
+        filter: data.filterLabel,
+      });
+    }
+    notify(`✅ تم تصدير ${data.clients.length} عميل و ${data.visits.length} زيارة إلى Excel`);
+  } catch (e) {
+    notify('⚠️ تعذر إنشاء ملف Excel — ' + (e.message || ''), 'danger');
   }
 }
 

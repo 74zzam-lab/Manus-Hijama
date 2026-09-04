@@ -209,6 +209,7 @@ const remediation = [
   ['tests/remediation/test-sync-extended-operational.js', 'remediation:sync-extended-operational'],
   ['tests/remediation/test-list-sort-and-bulk-select.js', 'remediation:list-sort-and-bulk-select'],
   ['tests/remediation/test-per-type-media-and-followup.js', 'remediation:per-type-media-and-followup'],
+  ['tests/remediation/test-whatsapp-embed-bounds.js', 'remediation:whatsapp-embed-bounds'],
   ['tests/remediation/test-backup-coverage-restore-nag.js', 'remediation:backup-coverage-restore-nag'],
   ['tests/remediation/test-clients-excel-export.js', 'remediation:clients-excel-export'],
 ];

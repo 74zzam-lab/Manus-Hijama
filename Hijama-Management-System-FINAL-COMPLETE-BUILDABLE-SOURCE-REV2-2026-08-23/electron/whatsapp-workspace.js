@@ -2,14 +2,18 @@
 
 const fs = require('fs');
 const path = require('path');
-const { app, BrowserView, shell } = require('electron');
+const electron = require('electron');
+const { app, shell } = electron;
+const { normalizeWhatsAppEmbedBounds } = require('../cloud/whatsapp-embed-bounds');
 
 const WA_ORIGIN = 'https://web.whatsapp.com';
 const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
 const WA_HOST_RE = /(^|\.)whatsapp\.(com|net)$/i;
+const WA_BG = '#0b141a';
 
 let view = null;
 let attachedWin = null;
+let viewKind = 'none';
 
 function isWhatsAppUrl(urlString) {
   try {
@@ -37,34 +41,93 @@ function documentsDir() {
   }
 }
 
-function ensureView(mainWindow) {
-  if (view && !view.webContents.isDestroyed()) return view;
-  view = new BrowserView({
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true,
-      webSecurity: true,
-      partition: 'persist:tdw-whatsapp',
-    },
-  });
-  try { view.webContents.setUserAgent(CHROME_UA); } catch { /* older electron */ }
-  view.webContents.setWindowOpenHandler(({ url }) => {
+function webContentsOf(v) {
+  return v && v.webContents ? v.webContents : null;
+}
+
+function applyChromeUa(wc) {
+  if (!wc) return;
+  try { wc.setUserAgent(CHROME_UA); } catch { /* older electron */ }
+}
+
+function wireNavigation(wc) {
+  if (!wc) return;
+  wc.setWindowOpenHandler(({ url }) => {
     if (isWhatsAppUrl(url)) {
-      view.webContents.loadURL(url).catch(() => {});
+      wc.loadURL(url).catch(() => {});
     } else {
       shell.openExternal(url).catch(() => {});
     }
     return { action: 'deny' };
   });
-  view.webContents.on('will-navigate', (event, url) => {
+  wc.on('will-navigate', (event, url) => {
     if (isWhatsAppUrl(url)) return;
     event.preventDefault();
     if (/^https?:/i.test(url)) shell.openExternal(url).catch(() => {});
   });
-  view.webContents.loadURL(WA_ORIGIN).catch(() => {});
+}
+
+function paintBackground(v) {
+  try {
+    if (v && typeof v.setBackgroundColor === 'function') v.setBackgroundColor(WA_BG);
+  } catch { /* optional */ }
+}
+
+function disableAutoResize(v) {
+  try {
+    if (v && typeof v.setAutoResize === 'function') {
+      v.setAutoResize({ width: false, height: false, horizontal: false, vertical: false });
+    }
+  } catch { /* WebContentsView has no auto-resize */ }
+}
+
+function ensureView(mainWindow) {
+  const wc = webContentsOf(view);
+  if (view && wc && !wc.isDestroyed()) return view;
+
+  const webPreferences = {
+    contextIsolation: true,
+    nodeIntegration: false,
+    sandbox: true,
+    webSecurity: true,
+    partition: 'persist:tdw-whatsapp',
+  };
+
+  if (typeof electron.WebContentsView === 'function') {
+    view = new electron.WebContentsView({ webPreferences });
+    viewKind = 'webcontents';
+  } else {
+    view = new electron.BrowserView({ webPreferences });
+    viewKind = 'browserview';
+  }
+
+  const created = webContentsOf(view);
+  applyChromeUa(created);
+  wireNavigation(created);
+  paintBackground(view);
+  disableAutoResize(view);
   attachedWin = mainWindow;
+  if (created) {
+    created.loadURL(WA_ORIGIN).catch(() => {});
+  }
   return view;
+}
+
+function contentViewOf(win) {
+  try {
+    return win && typeof win.contentView !== 'undefined' ? win.contentView : null;
+  } catch {
+    return null;
+  }
+}
+
+function childViewsOf(parent) {
+  if (!parent) return [];
+  if (Array.isArray(parent.children)) return parent.children;
+  try {
+    if (typeof parent.getBrowserViews === 'function') return parent.getBrowserViews() || [];
+  } catch { /* ignore */ }
+  return [];
 }
 
 function attachView(mainWindow) {
@@ -72,26 +135,58 @@ function attachView(mainWindow) {
   const v = ensureView(mainWindow);
   attachedWin = mainWindow;
   try {
-    if (typeof mainWindow.addBrowserView === 'function') {
+    if (viewKind === 'webcontents') {
+      const parent = contentViewOf(mainWindow);
+      if (parent && typeof parent.addChildView === 'function') {
+        if (!childViewsOf(parent).includes(v)) parent.addChildView(v);
+      } else if (typeof mainWindow.addBrowserView === 'function') {
+        const current = typeof mainWindow.getBrowserViews === 'function' ? mainWindow.getBrowserViews() : [];
+        if (!current.includes(v)) mainWindow.addBrowserView(v);
+      }
+    } else if (typeof mainWindow.addBrowserView === 'function') {
       const current = typeof mainWindow.getBrowserViews === 'function' ? mainWindow.getBrowserViews() : [];
       if (!current.includes(v)) mainWindow.addBrowserView(v);
     } else if (typeof mainWindow.setBrowserView === 'function') {
       mainWindow.setBrowserView(v);
     }
+    if (typeof v.setVisible === 'function') v.setVisible(true);
   } catch (e) {
     return { ok: false, reason: e.message };
   }
-  return { ok: true };
+  return { ok: true, kind: viewKind };
 }
 
 function detachView(mainWindow) {
   const win = mainWindow || attachedWin;
-  if (!win || win.isDestroyed() || !view) return { ok: true, hidden: true };
+  if (!view) return { ok: true, hidden: true };
   try {
-    if (typeof win.removeBrowserView === 'function') win.removeBrowserView(view);
-    else if (typeof win.setBrowserView === 'function') win.setBrowserView(null);
+    if (typeof view.setVisible === 'function') {
+      view.setVisible(false);
+      return { ok: true, hidden: true };
+    }
+  } catch { /* fall through to remove */ }
+  if (!win || win.isDestroyed()) return { ok: true, hidden: true };
+  try {
+    const parent = contentViewOf(win);
+    if (viewKind === 'webcontents' && parent && typeof parent.removeChildView === 'function') {
+      parent.removeChildView(view);
+    } else if (typeof win.removeBrowserView === 'function') {
+      win.removeBrowserView(view);
+    } else if (typeof win.setBrowserView === 'function') {
+      win.setBrowserView(null);
+    }
   } catch { /* already detached */ }
   return { ok: true, hidden: true };
+}
+
+function contentSizeOf(win) {
+  try {
+    if (typeof win.getContentSize === 'function') {
+      const size = win.getContentSize();
+      return { width: Math.round(Number(size && size[0]) || 0), height: Math.round(Number(size && size[1]) || 0) };
+    }
+  } catch { /* ignore */ }
+  return { width: 0, height: 0 };
 }
 
 function setBounds(mainWindow, bounds) {
@@ -99,32 +194,41 @@ function setBounds(mainWindow, bounds) {
   if (!view || !win || win.isDestroyed()) return { ok: false, reason: 'no_view' };
   const attached = attachView(win);
   if (!attached.ok) return attached;
-  const x0 = Math.max(0, Math.round(Number(bounds?.x) || 0));
-  const y0 = Math.max(0, Math.round(Number(bounds?.y) || 0));
-  let x = x0;
-  let y = y0;
-  try {
-    const content = typeof win.getContentBounds === 'function' ? win.getContentBounds() : null;
-    const winBounds = typeof win.getBounds === 'function' ? win.getBounds() : null;
-    if (content && winBounds) {
-      x += Math.max(0, Math.round(content.x - winBounds.x));
-      y += Math.max(0, Math.round(content.y - winBounds.y));
-    }
-  } catch { /* renderer coordinates already match on frameless windows */ }
-  const width = Math.max(320, Math.round(Number(bounds?.width) || 480));
-  const height = Math.max(360, Math.round(Number(bounds?.height) || 560));
-  try { view.setBounds({ x, y, width, height }); } catch (e) {
+
+  const content = contentSizeOf(win);
+  const normalized = normalizeWhatsAppEmbedBounds({
+    x: bounds && bounds.x,
+    y: bounds && bounds.y,
+    width: bounds && bounds.width,
+    height: bounds && bounds.height,
+    rtl: bounds && bounds.rtl,
+    viewportWidth: (bounds && bounds.viewportWidth) || content.width,
+    viewportHeight: (bounds && bounds.viewportHeight) || content.height,
+    zoom: bounds && bounds.zoom,
+  });
+
+  if (content.width > 0) {
+    normalized.width = Math.min(normalized.width, Math.max(1, content.width - normalized.x));
+  }
+  if (content.height > 0) {
+    normalized.height = Math.min(normalized.height, Math.max(1, content.height - normalized.y));
+  }
+
+  paintBackground(view);
+  disableAutoResize(view);
+  try { view.setBounds(normalized); } catch (e) {
     return { ok: false, reason: e.message };
   }
-  return { ok: true, bounds: { x, y, width, height } };
+  return { ok: true, bounds: normalized, kind: viewKind };
 }
 
 async function openChat(phone, text) {
-  if (!view || view.webContents.isDestroyed()) return { ok: false, reason: 'no_view' };
+  const wc = webContentsOf(view);
+  if (!wc || wc.isDestroyed()) return { ok: false, reason: 'no_view' };
   const digits = String(phone || '').replace(/\D/g, '');
   if (!digits) return { ok: false, reason: 'invalid_phone' };
   const url = `${WA_ORIGIN}/send?phone=${digits}&text=${encodeURIComponent(text || '')}`;
-  await view.webContents.loadURL(url);
+  await wc.loadURL(url);
   return { ok: true, mode: 'embedded', phone: digits };
 }
 

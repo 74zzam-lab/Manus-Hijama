@@ -1538,13 +1538,13 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 @media (max-width: 900px) { .followup-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .fu-split { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
 @media (min-width: 1280px) {
-  .fu-split { grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr); }
-  .fu-wa-col { position: sticky; top: 8px; }
+  .fu-split { grid-template-columns: minmax(0, 1.15fr) minmax(440px, 0.9fr); }
+  .fu-wa-col { position: sticky; top: 8px; min-width: 0; }
 }
 .fu-wa-embed-host {
-  min-height: 560px; height: calc(100vh - 180px); max-height: 860px;
+  min-height: 560px; height: calc(100vh - 220px); max-height: 860px; width: 100%;
   background: #0b141a; border-radius: 12px; border: 1px solid var(--border);
-  overflow: hidden; position: relative;
+  overflow: hidden; position: relative; isolation: isolate;
 }
 .fu-wa-embed-fallback {
   position: absolute; inset: 0; display: flex; flex-direction: column;
@@ -7328,7 +7328,7 @@ body.license-readonly-mode .page-readonly textarea {
             <input type="checkbox" id="fu-auto-enabled" onchange="syncFollowupMessagingToggles()">
             <strong>تفعيل الإرسال الأوتوماتيكي</strong>
           </label>
-          <select class="form-control" id="fu-wa-client" style="width:230px" onchange="syncFollowupMessagingToggles()">
+          <select class="form-control" id="fu-wa-client" style="width:230px" onchange="saveFollowupLaunchTarget(this.value)">
             <option value="auto">الإرسال: تلقائي (wa.me)</option>
             <option value="web">الإرسال عبر واتساب ويب</option>
             <option value="desktop">الإرسال عبر برنامج الكمبيوتر</option>
@@ -23465,9 +23465,16 @@ function saveMessagingConfig() {
   ensureMessagingSettings();
   settings.messaging.enabled = !!document.getElementById('msg-auto-enabled')?.checked;
   settings.messaging.channel = document.getElementById('msg-channel')?.value || 'auto';
-  settings.messaging.waClient = typeof getWhatsAppLaunchTarget === 'function'
-    ? getWhatsAppLaunchTarget()
+  const chosenWa = typeof pinWhatsAppLaunchTarget === 'function'
+    ? pinWhatsAppLaunchTarget(
+        (document.getElementById('page-followup')?.classList.contains('active')
+          && document.getElementById('fu-wa-client')?.value)
+        || document.getElementById('msg-wa-client')?.value
+        || settings.messaging.waClient
+        || 'auto'
+      )
     : (document.getElementById('msg-wa-client')?.value || settings.messaging.waClient || 'auto');
+  settings.messaging.waClient = chosenWa;
   if (document.getElementById('page-followup')?.classList.contains('active') && document.getElementById('fu-auto-sync')) {
     settings.messaging.autoSyncContacts = !!document.getElementById('fu-auto-sync').checked;
   }
@@ -24520,9 +24527,24 @@ let _fuMatchState = { matched: [], unmatchedImported: [], unmatchedClinic: [] };
 let _fuContactSyncTimer = null;
 let _fuEmbedBound = false;
 let _fuEmbedVisible = false;
+let _fuEmbedLayoutTimer = null;
+let _fuEmbedInFlight = null;
+let _fuEmbedNeedsReplay = false;
 
 function isFollowupPageActive() {
   return !!document.getElementById('page-followup')?.classList.contains('active');
+}
+
+function pinWhatsAppLaunchTarget(value) {
+  const allowed = { auto: true, web: true, desktop: true, embedded: true };
+  const wa = allowed[value] ? value : 'auto';
+  if (typeof ensureMessagingSettings === 'function') ensureMessagingSettings();
+  if (typeof settings !== 'undefined' && settings.messaging) settings.messaging.waClient = wa;
+  ['fu-wa-client', 'msg-wa-client'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = wa;
+  });
+  return wa;
 }
 
 function getWhatsAppLaunchTarget() {
@@ -24532,6 +24554,14 @@ function getWhatsAppLaunchTarget() {
   const stored = (typeof settings !== 'undefined' && settings.messaging && settings.messaging.waClient) || 'auto';
   if (isFollowupPageActive() && fu) return fu;
   return msg || fu || stored || 'auto';
+}
+
+function saveFollowupLaunchTarget(value) {
+  const wa = pinWhatsAppLaunchTarget(value);
+  try { DB.set('settings', settings); } catch { /* persist best-effort */ }
+  if (typeof logAudit === 'function') logAudit('SETTINGS_CHANGED', 'طريقة فتح واتساب: ' + wa, { section: 'messaging', waClient: wa });
+  if (typeof refreshFollowupStatus === 'function') refreshFollowupStatus();
+  return wa;
 }
 
 function getFollowupRoster() {
@@ -24616,11 +24646,7 @@ function syncFollowupMessagingToggles() {
     const to = document.getElementById(toId);
     if (from && to) to.checked = !!from.checked;
   });
-  const fuWa = document.getElementById('fu-wa-client');
-  const msgWa = document.getElementById('msg-wa-client');
-  if (fuWa && msgWa && fuWa.value) msgWa.value = fuWa.value;
   if (typeof saveMessagingConfig === 'function') saveMessagingConfig();
-  refreshFollowupWorkspace();
 }
 
 function copyMessagingTogglesToFollowup() {
@@ -24638,12 +24664,17 @@ function copyMessagingTogglesToFollowup() {
   const wa = (typeof settings !== 'undefined' && settings.messaging && settings.messaging.waClient)
     || document.getElementById('msg-wa-client')?.value
     || 'auto';
-  ['fu-wa-client', 'msg-wa-client'].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el && wa) el.value = wa;
-  });
+  pinWhatsAppLaunchTarget(wa);
   const auto = document.getElementById('fu-auto-sync');
   if (auto) auto.checked = !(typeof settings !== 'undefined' && settings.messaging && settings.messaging.autoSyncContacts === false);
+}
+
+function scheduleFollowupWhatsAppEmbedLayout() {
+  if (_fuEmbedLayoutTimer) return;
+  _fuEmbedLayoutTimer = setTimeout(() => {
+    _fuEmbedLayoutTimer = null;
+    if (isFollowupPageActive()) showFollowupWhatsAppEmbed();
+  }, 60);
 }
 
 function bindFollowupWhatsAppEmbedLayout() {
@@ -24651,13 +24682,31 @@ function bindFollowupWhatsAppEmbedLayout() {
   _fuEmbedBound = true;
   const update = () => {
     if (!isFollowupPageActive()) return;
-    showFollowupWhatsAppEmbed();
+    scheduleFollowupWhatsAppEmbedLayout();
   };
   window.addEventListener('resize', update);
   document.getElementById('main-scroll')?.addEventListener('scroll', update, { passive: true });
 }
 
-async function showFollowupWhatsAppEmbed() {
+function measureFollowupWhatsAppHost(host) {
+  const r = host.getBoundingClientRect();
+  const doc = document.documentElement;
+  const vv = window.visualViewport;
+  const rtlDir = doc.dir === 'rtl'
+    || doc.getAttribute('dir') === 'rtl'
+    || (typeof getComputedStyle === 'function' && getComputedStyle(doc).direction === 'rtl');
+  return {
+    x: r.left + (vv && vv.offsetLeft ? vv.offsetLeft : 0),
+    y: r.top + (vv && vv.offsetTop ? vv.offsetTop : 0),
+    width: r.width,
+    height: r.height,
+    rtl: !!rtlDir,
+    viewportWidth: doc.clientWidth,
+    viewportHeight: doc.clientHeight,
+  };
+}
+
+async function showFollowupWhatsAppEmbedNow() {
   const host = document.getElementById('fu-wa-embed');
   const fallback = document.getElementById('fu-wa-fallback');
   const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
@@ -24667,13 +24716,7 @@ async function showFollowupWhatsAppEmbed() {
     if (fallback) fallback.style.display = 'flex';
     return { ok: false, reason: 'not_electron' };
   }
-  const r = host.getBoundingClientRect();
-  const bounds = {
-    x: Math.round(r.left),
-    y: Math.round(r.top),
-    width: Math.round(r.width),
-    height: Math.round(r.height),
-  };
+  const bounds = measureFollowupWhatsAppHost(host);
   if (bounds.width < 200 || bounds.height < 200) return { ok: false, reason: 'too_small' };
   try {
     const fn = _fuEmbedVisible && api.whatsapp.setBounds ? 'setBounds' : 'show';
@@ -24689,8 +24732,30 @@ async function showFollowupWhatsAppEmbed() {
   }
 }
 
+async function showFollowupWhatsAppEmbed() {
+  if (_fuEmbedInFlight) {
+    _fuEmbedNeedsReplay = true;
+    return _fuEmbedInFlight;
+  }
+  _fuEmbedInFlight = showFollowupWhatsAppEmbedNow();
+  try {
+    return await _fuEmbedInFlight;
+  } finally {
+    _fuEmbedInFlight = null;
+    if (_fuEmbedNeedsReplay) {
+      _fuEmbedNeedsReplay = false;
+      showFollowupWhatsAppEmbed();
+    }
+  }
+}
+
 function hideFollowupWhatsAppEmbed() {
   _fuEmbedVisible = false;
+  _fuEmbedNeedsReplay = false;
+  if (_fuEmbedLayoutTimer) {
+    clearTimeout(_fuEmbedLayoutTimer);
+    _fuEmbedLayoutTimer = null;
+  }
   const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
   if (api?.whatsapp?.hide) {
     try { api.whatsapp.hide(); } catch { /* view already detached */ }

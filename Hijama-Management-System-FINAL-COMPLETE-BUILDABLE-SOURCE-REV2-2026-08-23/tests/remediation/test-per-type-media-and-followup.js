@@ -70,6 +70,7 @@ check(/function loadFollowupWorkspace/.test(indexSrc) && /openClinicWhatsAppWork
 check(/registerFollowupImportedClient/.test(indexSrc), 'unmatched WhatsApp contacts can be registered as previous clients');
 check(/ADDON_PAGE_MODULES = \{[\s\S]*followup: 'messages'/.test(indexSrc), 'follow-up page uses the messages license module');
 check(/function getWhatsAppLaunchTarget/.test(indexSrc), 'WhatsApp launch target is selectable');
+check(/function saveFollowupLaunchTarget/.test(indexSrc) && /function pinWhatsAppLaunchTarget/.test(indexSrc), 'send-method dropdown saves without rebuilding the page');
 check(/function goFollowupDuePage/.test(indexSrc) && /function goFollowupRosterPage/.test(indexSrc) && /function goFollowupMatchPage/.test(indexSrc), 'follow-up tables have page jump functions');
 check(/id="fu-due-pagination"/.test(indexSrc) && /id="fu-roster-pagination"/.test(indexSrc) && /id="fu-match-pagination"/.test(indexSrc), 'follow-up tables have pagination containers');
 check(/function exportFollowupWhatsAppContacts/.test(indexSrc) && /function syncFollowupWhatsAppContacts/.test(indexSrc), 'WhatsApp contact CSV/vCard export and auto-sync exist');

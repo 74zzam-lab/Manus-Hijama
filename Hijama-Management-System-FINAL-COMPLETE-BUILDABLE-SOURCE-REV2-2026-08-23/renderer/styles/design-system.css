@@ -555,8 +555,9 @@ body { min-width: 320px; color: var(--text, var(--tdw-color-neutral-900)); }
 
 /* Final remediation: retain report and inventory action rows at 720px under Windows 125–150% scaling. */
 @media (max-height: 720px) {
-  #reportPreviewModal .modal-shell {
-    height: min(58vh, var(--tdw-modal-max-h)) !important;
+  #reportPreviewModal .modal-shell--preview {
+    height: min(78vh, calc(100dvh - 32px)) !important;
+    max-height: min(78vh, calc(100dvh - 32px)) !important;
   }
   #invItemModal .modal-shell {
     max-height: min(56vh, var(--tdw-modal-max-h)) !important;

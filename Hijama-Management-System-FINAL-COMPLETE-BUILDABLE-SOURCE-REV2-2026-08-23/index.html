@@ -884,6 +884,15 @@ tbody tr:last-child { border-bottom: none; }
 }
 .modal.modal-shell--sm { width: min(480px, calc(100vw - 24px)); max-width: min(480px, calc(100vw - 24px)); }
 .modal.modal-shell--lg { width: min(1100px, calc(100vw - 24px)); max-width: min(1100px, calc(100vw - 24px)); }
+.modal.modal-shell--preview {
+  width: min(1000px, calc(100vw - 32px)) !important;
+  max-width: min(1000px, calc(100vw - 32px)) !important;
+  height: min(90vh, calc(100dvh - 40px)) !important;
+  max-height: min(90vh, calc(100dvh - 40px)) !important;
+}
+.modal.modal-shell--preview .modal-body { display: flex; flex-direction: column; min-height: 0; padding: 0; }
+.modal.modal-shell--preview .modal-body iframe { flex: 1; min-height: 360px; width: 100%; border: 0; background: #fff; }
+#msgPreviewModal .modal.modal-shell { max-width: min(560px, calc(100vw - 24px)); }
 .modal.modal-shell:has(> .modal-body),
 .modal:has(> .modal-body) {
   display: grid;
@@ -1582,6 +1591,14 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 .mm-promo-card input[type="checkbox"] { margin-top: 4px; flex-shrink: 0; }
 .mm-promo-card-main { flex: 1; min-width: 0; }
 .mm-timing.promo { background: #e8f0ff; color: #2a4a8a; }
+.mm-wa-drawer { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
+.mm-wa-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.mm-wa-drawer-head strong { font-size: 14px; color: var(--primary); }
+#mm-wa-embed.fu-wa-embed-host { min-height: 420px; height: min(56vh, 640px); max-height: 640px; border-radius: 0; border: none; }
+#page-employee-ledger .table-action-btns-primary { flex-wrap: wrap; gap: 4px; }
+#page-employee-ledger .btn-action .btn-lbl { max-width: none; font-size: 10px !important; }
+#page-employee-ledger .table-reports td.actions-col { min-width: 320px; }
+.ledger-strip-actions .table-action-btns-primary { flex-wrap: wrap; }
 #page-followup { display: none !important; }
 [data-auto-suspended] { opacity: 0.55; pointer-events: none; user-select: none; }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
@@ -7506,6 +7523,7 @@ body.license-readonly-mode .page-readonly textarea {
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
       <button class="btn btn-primary btn-sm" type="button" onclick="loadManualMessagingBoard()">🔄 تحديث القوائم</button>
+      <button class="btn btn-accent btn-sm" type="button" onclick="openClinicWhatsAppWorkspace()">📱 فتح واتساب المركز</button>
       <button class="btn btn-ghost btn-sm" type="button" onclick="showPage('messages')">📝 قوالب الرسائل</button>
       <span id="mm-last-refresh" style="font-size:12px;color:var(--text-muted)">—</span>
     </div>
@@ -7560,11 +7578,21 @@ body.license-readonly-mode .page-readonly textarea {
           <div class="mm-promo-send-actions">
             <span class="mm-promo-selected-count" id="mm-promo-selected-count">محدّد: 0</span>
             <button type="button" class="btn btn-primary btn-sm" onclick="sendMmPromoBulk('selected')">💬 إرسال للمحددين</button>
+            <button type="button" class="btn btn-accent btn-sm" onclick="sendMmPromoBulk('count')" title="إرسال لأول N عميل في القائمة حسب حقل العدد">📤 إرسال للعدد المحدد</button>
             <button type="button" class="btn btn-ghost btn-sm" onclick="sendMmPromoBulk('all')">📤 إرسال للكل في القائمة</button>
             <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('messages')">📝 تعديل نص العرض</button>
           </div>
         </div>
         <div class="mm-col-body" id="mm-body-promo"><div class="mm-empty">لا يوجد عملاء</div></div>
+      </div>
+    </div>
+    <div class="mm-wa-drawer" id="mm-wa-panel" hidden>
+      <div class="mm-wa-drawer-head">
+        <strong>📱 واتساب المركز — الجلسة المحفوظة</strong>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="hideManualWhatsAppPanel()">إخفاء</button>
+      </div>
+      <div class="fu-wa-embed-host" id="mm-wa-embed">
+        <div class="fu-wa-embed-fallback" id="mm-wa-fallback">امسح رمز واتساب ويب من هنا بعد فتح الجلسة. إن لم تظهر النافذة داخل البرنامج استخدم «فتح واتساب المركز» مرة أخرى.</div>
       </div>
     </div>
   </div>
@@ -8699,41 +8727,44 @@ body.license-readonly-mode .page-readonly textarea {
 
 <!-- MESSAGE PREVIEW MODAL -->
 <div class="modal-overlay" id="msgPreviewModal" onclick="if(event.target===this)closeMsgPreviewModal()">
-  <div class="modal modal-shell" style="max-width:520px">
+  <div class="modal modal-shell">
     <div class="modal-header">
       <div class="modal-title">📨 معاينة الرسالة</div>
       <button class="modal-close" onclick="closeMsgPreviewModal()">✕</button>
     </div>
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.7">
-      <div><strong>العميل:</strong> <span id="msg-preview-client">—</span></div>
-      <div><strong>الهاتف:</strong> <span id="msg-preview-phone" dir="ltr">—</span></div>
-      <div><strong>النوع:</strong> <span id="msg-preview-type">—</span></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.7">
+        <div><strong>العميل:</strong> <span id="msg-preview-client">—</span></div>
+        <div><strong>الهاتف:</strong> <span id="msg-preview-phone" dir="ltr">—</span></div>
+        <div><strong>النوع:</strong> <span id="msg-preview-type">—</span></div>
+      </div>
+      <textarea class="form-control" id="msg-preview-body" rows="6" readonly style="font-size:13px;line-height:1.6"></textarea>
+      <div class="msg-media-preview" id="msg-preview-media" style="margin-top:10px"></div>
     </div>
-    <textarea class="form-control" id="msg-preview-body" rows="6" readonly style="font-size:13px;line-height:1.6"></textarea>
-    <div class="msg-media-preview" id="msg-preview-media" style="margin-top:10px"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeMsgPreviewModal()">إلغاء</button>
-      <button class="btn btn-primary" id="btn-msg-preview-send" onclick="confirmMsgPreviewSend()">💬 إرسال عبر واتساب</button>
+      <button class="btn btn-primary" id="btn-msg-preview-send" onclick="confirmMsgPreviewSend()">📤 إرسال مباشر</button>
     </div>
   </div>
 </div>
 
 <!-- CLIENT HISTORY MODAL -->
 <div class="modal-overlay" id="clientHistoryModal">
-  <div class="modal modal-shell modal-shell--lg" style="max-width:min(1280px,96vw);width:96vw">
+  <div class="modal modal-shell modal-shell--lg modal-shell--preview">
     <div class="modal-header">
       <div class="modal-title" id="clientHistoryTitle">📋 سجل زيارات العميل</div>
       <button class="modal-close" onclick="document.getElementById('clientHistoryModal').classList.remove('open')">✕</button>
     </div>
-    <div id="clientHistorySummary" class="ch-summary-grid"></div>
-    <div class="table-wrap">
-      <table class="table-compact table-reports">
-        <thead><tr><th>الفاتورة</th><th class="col-date">التاريخ</th><th>الأخصائي</th><th>الخدمة</th><th class="num">الكاسات</th><th class="currency">الإجمالي</th><th>الدفع</th><th class="actions-col">إجراءات</th></tr></thead>
-        <tbody id="clientHistoryBody"></tbody>
-      </table>
+    <div class="modal-body">
+      <div id="clientHistorySummary" class="ch-summary-grid"></div>
+      <div class="table-wrap">
+        <table class="table-compact table-reports">
+          <thead><tr><th>الفاتورة</th><th class="col-date">التاريخ</th><th>الأخصائي</th><th>الخدمة</th><th class="num">الكاسات</th><th class="currency">الإجمالي</th><th>الدفع</th><th class="actions-col">إجراءات</th></tr></thead>
+          <tbody id="clientHistoryBody"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="divider"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+    <div class="modal-footer">
       <button class="btn btn-ghost" onclick="document.getElementById('clientHistoryModal').classList.remove('open')">إغلاق</button>
       <button class="btn btn-accent btn-sm" id="clientHistoryPrintBtn" onclick="">🖨️ طباعة جميع الفواتير الحرارية</button>
     </div>
@@ -8742,13 +8773,13 @@ body.license-readonly-mode .page-readonly textarea {
 
 <!-- REPORT PREVIEW MODAL -->
 <div class="modal-overlay" id="reportPreviewModal" onclick="if(event.target===this)closeReportPreview()">
-  <div class="modal modal-shell modal-shell--lg" style="max-width:min(960px,96vw);width:96vw;height:min(88vh,900px)">
+  <div class="modal modal-shell modal-shell--lg modal-shell--preview">
     <div class="modal-header">
       <div class="modal-title" id="reportPreviewTitle">معاينة التقرير</div>
       <button class="modal-close" onclick="closeReportPreview()">✕</button>
     </div>
-    <div class="modal-body" style="padding:0;display:flex;min-height:0">
-      <iframe id="reportPreviewFrame" title="معاينة التقرير" style="flex:1;min-height:0;width:100%;border:0;background:#fff;border-radius:8px"></iframe>
+    <div class="modal-body">
+      <iframe id="reportPreviewFrame" title="معاينة التقرير"></iframe>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeReportPreview()">إغلاق</button>
@@ -11855,7 +11886,8 @@ function showPageAfterRestoreGate(id) {
   });
   const mainScroll = document.getElementById('main-scroll');
   if (mainScroll) mainScroll.scrollTop = 0;
-  if (id !== 'followup' && typeof hideFollowupWhatsAppEmbed === 'function') hideFollowupWhatsAppEmbed();
+  if (id !== 'followup' && id !== 'manual-msg' && typeof hideFollowupWhatsAppEmbed === 'function') hideFollowupWhatsAppEmbed();
+  if (id !== 'manual-msg' && typeof hideManualWhatsAppPanel === 'function') hideManualWhatsAppPanel(true);
   if (typeof applyBranchViewModeUi === 'function') applyBranchViewModeUi();
   updateContextForPage(id);
   if (id === 'dashboard') { refreshDashboard(); refreshBookingsTable(); refreshDashboardAlerts(); }
@@ -24756,7 +24788,7 @@ function onTablePageSizeChange(size) {
   if (typeof refreshFollowupRoster === 'function') refreshFollowupRoster(false);
   if (typeof refreshFollowupDueTable === 'function') refreshFollowupDueTable(false);
   if (typeof renderFollowupMatchTable === 'function') renderFollowupMatchTable(false);
-  if (typeof showFollowupWhatsAppEmbed === 'function' && typeof isFollowupPageActive === 'function' && isFollowupPageActive()) {
+  if (typeof showFollowupWhatsAppEmbed === 'function' && typeof isWhatsAppWorkspacePageActive === 'function' && isWhatsAppWorkspacePageActive()) {
     showFollowupWhatsAppEmbed();
   }
 }
@@ -24979,6 +25011,38 @@ function isFollowupPageActive() {
   return !!document.getElementById('page-followup')?.classList.contains('active');
 }
 
+function isWhatsAppWorkspacePageActive() {
+  return !!document.getElementById('page-manual-msg')?.classList.contains('active')
+    || isFollowupPageActive();
+}
+
+function getWhatsAppEmbedHost() {
+  if (document.getElementById('page-manual-msg')?.classList.contains('active')) {
+    const host = document.getElementById('mm-wa-embed');
+    if (host) return host;
+  }
+  return document.getElementById('fu-wa-embed');
+}
+
+function getWhatsAppEmbedFallback() {
+  if (document.getElementById('page-manual-msg')?.classList.contains('active')) {
+    return document.getElementById('mm-wa-fallback') || document.getElementById('fu-wa-fallback');
+  }
+  return document.getElementById('fu-wa-fallback');
+}
+
+async function showManualWhatsAppPanel() {
+  const panel = document.getElementById('mm-wa-panel');
+  if (panel) panel.hidden = false;
+  return showFollowupWhatsAppEmbed();
+}
+
+function hideManualWhatsAppPanel(silent) {
+  const panel = document.getElementById('mm-wa-panel');
+  if (panel) panel.hidden = true;
+  if (!silent) hideFollowupWhatsAppEmbed();
+}
+
 function pinWhatsAppLaunchTarget(value) {
   const allowed = { auto: true, web: true, desktop: true, embedded: true };
   const wa = allowed[value] ? value : 'auto';
@@ -24996,7 +25060,7 @@ function getWhatsAppLaunchTarget() {
   const fu = document.getElementById('fu-wa-client')?.value;
   const msg = document.getElementById('msg-wa-client')?.value;
   const stored = (typeof settings !== 'undefined' && settings.messaging && settings.messaging.waClient) || 'auto';
-  if (isFollowupPageActive() && fu) return fu;
+  if (isWhatsAppWorkspacePageActive() && fu) return fu;
   return msg || fu || stored || 'auto';
 }
 
@@ -25117,7 +25181,7 @@ function scheduleFollowupWhatsAppEmbedLayout() {
   if (_fuEmbedLayoutTimer) return;
   _fuEmbedLayoutTimer = setTimeout(() => {
     _fuEmbedLayoutTimer = null;
-    if (isFollowupPageActive()) showFollowupWhatsAppEmbed();
+    if (isWhatsAppWorkspacePageActive()) showFollowupWhatsAppEmbed();
   }, 60);
 }
 
@@ -25125,7 +25189,7 @@ function bindFollowupWhatsAppEmbedLayout() {
   if (_fuEmbedBound) return;
   _fuEmbedBound = true;
   const update = () => {
-    if (!isFollowupPageActive()) return;
+    if (!isWhatsAppWorkspacePageActive()) return;
     scheduleFollowupWhatsAppEmbedLayout();
   };
   window.addEventListener('resize', update);
@@ -25151,11 +25215,11 @@ function measureFollowupWhatsAppHost(host) {
 }
 
 async function showFollowupWhatsAppEmbedNow() {
-  const host = document.getElementById('fu-wa-embed');
-  const fallback = document.getElementById('fu-wa-fallback');
+  const host = getWhatsAppEmbedHost();
+  const fallback = getWhatsAppEmbedFallback();
   const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
   if (!host) return { ok: false };
-  if (!isFollowupPageActive()) return hideFollowupWhatsAppEmbed();
+  if (!isWhatsAppWorkspacePageActive()) return hideFollowupWhatsAppEmbed();
   if (!api?.whatsapp?.show) {
     if (fallback) fallback.style.display = 'flex';
     return { ok: false, reason: 'not_electron' };
@@ -25210,7 +25274,9 @@ function hideFollowupWhatsAppEmbed() {
 async function openClinicWhatsAppWorkspace() {
   const target = getWhatsAppLaunchTarget();
   const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
-  if (target === 'embedded' || ((target === 'web' || target === 'auto') && api?.whatsapp?.show && isFollowupPageActive())) {
+  const onManual = document.getElementById('page-manual-msg')?.classList.contains('active');
+  if (onManual) await showManualWhatsAppPanel();
+  if (target === 'embedded' || ((target === 'web' || target === 'auto') && api?.whatsapp?.show && isWhatsAppWorkspacePageActive())) {
     const shown = await showFollowupWhatsAppEmbed();
     if (shown?.ok || target === 'embedded') return shown;
   }
@@ -25433,7 +25499,7 @@ function renderManualMessagingColumn(type, items) {
       <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
       <span class="mm-timing ${tcls}">${item.timing || '—'}</span>
       <div class="mm-client-actions">
-        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">💬 إرسال</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال مباشر</button>
         <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}')">👁️ معاينة</button>
       </div>
     </div>`;
@@ -25588,7 +25654,7 @@ function renderManualPromoColumn(resetSelection) {
         <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
         <span class="mm-timing promo">آخر عرض: ${lastPromo}</span>
         <div class="mm-client-actions">
-          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">💬 إرسال</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال مباشر</button>
           <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}')">👁️ معاينة</button>
         </div>
       </div>
@@ -25608,7 +25674,15 @@ async function sendMmPromoBulk(mode) {
   let clients = [];
   if (mode === 'selected') {
     clients = mmPromoSelection.values().slice();
-    if (!clients.length) { notify('⚠️ حدّد عملاء أولاً — أو استخدم «تحديد العدد» / «تحديد الكل»', 'danger'); return; }
+    if (!clients.length) { notify('⚠️ حدّد عملاء من القائمة أولاً — أو استخدم «تحديد العدد» / «تحديد الكل»', 'danger'); return; }
+    if (clients.length > 1 && !confirm('إرسال رسالة العروض إلى ' + clients.length + ' عميل محدّد؟')) return;
+  } else if (mode === 'count') {
+    const n = Math.max(1, parseInt(document.getElementById('mm-promo-limit')?.value, 10) || 10);
+    clients = getMmPromoVisibleClients().slice(0, n).map((item) => ({
+      phone: item.phone, name: item.name, lastDate: item.lastDate || '', key: item.key, fileNo: item.fileNo || '',
+    }));
+    if (!clients.length) { notify('⚠️ لا يوجد عملاء في القائمة الحالية', 'danger'); return; }
+    if (!confirm('إرسال رسالة العروض إلى أول ' + clients.length + ' عميل في القائمة المفلترة؟')) return;
   } else if (mode === 'all') {
     clients = getMmPromoVisibleClients().map((item) => ({
       phone: item.phone, name: item.name, lastDate: item.lastDate || '', key: item.key, fileNo: item.fileNo || '',
@@ -25895,7 +25969,7 @@ function refreshFollowupWorkspace() {
   refreshFollowupRoster(false);
   if (document.getElementById('fu-import-contacts')?.value) runFollowupContactMatch(false);
   else renderFollowupMatchTable(false);
-  if (isFollowupPageActive()) showFollowupWhatsAppEmbed();
+  if (isWhatsAppWorkspacePageActive()) showFollowupWhatsAppEmbed();
 }
 
 function paginateList(arr, page, pageSize) {

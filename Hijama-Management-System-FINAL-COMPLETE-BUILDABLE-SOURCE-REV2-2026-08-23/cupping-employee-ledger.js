@@ -1399,32 +1399,38 @@
     else notify(e.description || '—', 'success');
   }
 
+  function renderLedgerActions(primary, more) {
+    const all = [...(primary || []), ...(more || [])].filter(a => !a.hidden);
+    if (typeof global.actionBtnRowUnified === 'function') {
+      return global.actionBtnRowUnified(all, [], { maxPrimary: 12 });
+    }
+    return all.map(a => actionBtn(a.icon, a.label, { onclick: a.onclick, title: a.title || a.label })).join('');
+  }
+
   function buildDoctorPeriodPrintActions(doctorId, month, year, opts = {}) {
     const primary = [];
-    const more = [];
     const remaining = opts.remaining ?? 0;
     if (opts.includePay && hasPerm('ledger.pay') && remaining > 0) {
-      primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${doctorId}',${month},${year})`, title: 'تسجيل صرف' });
+      primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${doctorId}',${month},${year})`, title: 'تسجيل صرف مستحقات' });
     }
     const pid = findLatestPaymentForPeriod(doctorId, month, year)?.id;
     if (pid) {
       primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printVoucher('${pid}')`, title: 'طباعة سند إقرار استلام' });
     } else {
-      primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printPeriodVoucher('${doctorId}',${month},${year})`, title: 'طباعة سند إقرار استلام (بعد تسجيل الصرف)' });
+      primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printPeriodVoucher('${doctorId}',${month},${year})`, title: 'طباعة سند إقرار استلام' });
     }
     primary.push({ icon: '📒', label: 'كشف', short: 'كشف', onclick: `EmployeeLedger.printStatement('${doctorId}',${month},${year})`, title: 'طباعة كشف حساب' });
     primary.push({ icon: '📄', label: 'مفردات', short: 'مفردات', onclick: `EmployeeLedger.printPayslip('${doctorId}',${month},${year})`, title: 'طباعة مفردات المرتب' });
     primary.push({ icon: '📋', label: 'تفصيل', short: 'تفصيل', onclick: `EmployeeLedger.previewStatement('${doctorId}',${month},${year})`, title: 'معاينة تفصيل المستحقات' });
-    more.push({ icon: '📂', label: 'فتح', short: 'فتح', onclick: `EmployeeLedger.openLedgerForDoctor('${doctorId}',${month},${year})`, title: 'فتح صفحة مستحقات الموظف' });
-    return { primary, more };
+    primary.push({ icon: '📂', label: 'صفحة', short: 'صفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${doctorId}',${month},${year})`, title: 'فتح صفحة مستحقات الموظف' });
+    return { primary, more: [] };
   }
 
   function renderEntryActions(e) {
     const primary = [];
-    const more = [];
     if (!e.synthetic && e.doctorId && e.periodMonth && e.periodYear) {
       if (hasPerm('ledger.pay') && e.payStatus?.code !== 'paid' && e.payStatus?.code !== 'none') {
-        primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'تسجيل صرف' });
+        primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'تسجيل صرف مستحقات' });
       }
       if (e._paymentId || e.paymentId) {
         const pid = e._paymentId || e.paymentId;
@@ -1437,13 +1443,10 @@
       primary.push({ icon: '📋', label: 'تفصيل', short: 'تفصيل', onclick: `EmployeeLedger.previewStatement('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'معاينة تفصيل المستحقات' });
     }
     if (!e.synthetic) {
-      more.push({ icon: '📂', label: 'فتح', short: 'فتح', onclick: `EmployeeLedger.openLedgerForDoctor('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'فتح صفحة المستحقات' });
-      more.push({ icon: '📄', label: 'مصدر', short: 'مصدر', onclick: `EmployeeLedger.openSourceDocument('${e.id}')`, title: 'عرض المصدر' });
+      primary.push({ icon: '📂', label: 'صفحة', short: 'صفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'فتح صفحة مستحقات الموظف' });
+      primary.push({ icon: '🔗', label: 'مصدر', short: 'مصدر', onclick: `EmployeeLedger.openSourceDocument('${e.id}')`, title: 'عرض مستند المصدر' });
     }
-    if (typeof global.actionBtnRowUnified === 'function') {
-      return global.actionBtnRowUnified(primary, more);
-    }
-    return primary.map(a => actionBtn(a.icon, a.label, { onclick: a.onclick, title: a.title || a.label })).join('');
+    return renderLedgerActions(primary, []);
   }
 
   function saveAutoPrintSetting(enabled) {
@@ -1472,9 +1475,7 @@
     </div><div class="ledger-strip-actions table-action-btns">
       ${(() => {
         const acts = buildDoctorPeriodPrintActions(d.id, month, year, { includePay: true, remaining: s.remaining });
-        return typeof global.actionBtnRowUnified === 'function'
-          ? global.actionBtnRowUnified(acts.primary, acts.more)
-          : acts.primary.map(a => actionBtn(a.icon, a.label, { onclick: a.onclick, title: a.title || a.label })).join('');
+        return renderLedgerActions(acts.primary, acts.more);
       })()}
     </div></div>`;
   }
@@ -1584,9 +1585,7 @@
     const cards = f.doctorId ? '' : docs.slice(0, 12).map(d => {
       const s = getSummary(d.id, f.month, f.year);
       const cardActs = buildDoctorPeriodPrintActions(d.id, f.month, f.year, { includePay: true, remaining: s.remaining });
-      const cardActions = typeof global.actionBtnRowUnified === 'function'
-        ? global.actionBtnRowUnified(cardActs.primary, cardActs.more)
-        : cardActs.primary.map(a => actionBtn(a.icon, a.label, { onclick: a.onclick, title: a.title || a.label })).join('');
+      const cardActions = renderLedgerActions(cardActs.primary, cardActs.more);
       return `<div class="card" style="margin-bottom:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <div><strong>${d.name}</strong> <span class="tag ${paymentStatusBadge(s.status)}">${s.statusLabel}</span></div>
         <div dir="ltr" style="font-weight:900">${fmtMoney(s.remaining)}</div>

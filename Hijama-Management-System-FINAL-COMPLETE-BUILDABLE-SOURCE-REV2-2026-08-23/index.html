@@ -1552,8 +1552,9 @@ table.table-compact.table-reports td { padding: 8px 6px; }
   color: #d1e4dd; font-size: 13px; line-height: 1.7;
 }
 #page-followup .table-pagination { margin-top: 10px; flex-wrap: wrap; }
-.mm-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
-@media (max-width: 1100px) { .mm-board { grid-template-columns: 1fr; } }
+.mm-board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-items: start; }
+@media (max-width: 1400px) { .mm-board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .mm-board { grid-template-columns: 1fr; } }
 .mm-col { display: flex; flex-direction: column; min-height: 320px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .mm-col-head { padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--surface); }
 .mm-col-head h3 { margin: 0 0 4px; font-size: 15px; color: var(--primary); }
@@ -1571,6 +1572,16 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 .mm-client-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .mm-empty { text-align: center; padding: 28px 12px; color: var(--text-light); font-size: 13px; }
 .mm-notice { margin-bottom: 16px; padding: 14px 16px; border: 1px solid #f0c040; border-radius: 12px; background: linear-gradient(135deg, #fff8e1, #fff); font-size: 13px; line-height: 1.75; }
+.mm-col-promo .mm-col-body { max-height: calc(100vh - 420px); }
+.mm-promo-toolbar { padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; gap: 8px; }
+.mm-promo-toolbar .form-control { font-size: 12px; }
+.mm-promo-bulk-actions, .mm-promo-send-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.mm-promo-selected-count { font-size: 12px; font-weight: 800; color: var(--primary); }
+.mm-promo-card { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.mm-promo-card.is-selected { border-color: var(--primary-light); background: #f0faf7; }
+.mm-promo-card input[type="checkbox"] { margin-top: 4px; flex-shrink: 0; }
+.mm-promo-card-main { flex: 1; min-width: 0; }
+.mm-timing.promo { background: #e8f0ff; color: #2a4a8a; }
 #page-followup { display: none !important; }
 [data-auto-suspended] { opacity: 0.55; pointer-events: none; user-select: none; }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
@@ -7486,11 +7497,11 @@ body.license-readonly-mode .page-readonly textarea {
   <div class="page" id="page-manual-msg">
     <header class="dash-hero-glass page-hero compact-hero">
       <h2>الرسائل اليدوية</h2>
-      <p>إرسال المتابعة والتذكير وتنبيه الغياب يدوياً — مع تنبيه بالوقت المناسب لكل عميل</p>
+      <p>إرسال المتابعة والتذكير وتنبيه الغياب والعروض يدوياً — مع تنبيه بالوقت المناسب لكل عميل</p>
     </header>
     <div class="mm-notice" id="mm-suspended-notice">
       <strong>⏸️ الإرسال التلقائي معطّل مؤقتاً</strong> — استخدم الأعمدة أدناه لإرسال الرسائل يدوياً حسب الوقت المستحق.
-      للعروض والإرسال الجماعي انتقل إلى <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('messages')">صفحة رسائل العملاء</button>.
+      لتعديل نصوص الرسائل انتقل إلى <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('messages')">صفحة رسائل العملاء</button>.
       أوقات الإرسال تُحسب من وقت تسجيل الجلسة أو آخر زيارة أو موعد الحجز وفق الإعدادات في صفحة الرسائل.
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
@@ -7522,6 +7533,38 @@ body.license-readonly-mode .page-readonly textarea {
           <span class="mm-col-count" id="mm-count-overdue">0 عميل</span>
         </div>
         <div class="mm-col-body" id="mm-body-overdue"><div class="mm-empty">لا يوجد عملاء غائبون</div></div>
+      </div>
+      <div class="mm-col mm-col-promo" id="mm-col-promo">
+        <div class="mm-col-head">
+          <h3>عروض وترويج</h3>
+          <p>إرسال رسالة العروض — تحديد عملاء أو عدد معيّن أو الكل</p>
+          <span class="mm-col-count" id="mm-count-promo">0 عميل</span>
+        </div>
+        <div class="mm-promo-toolbar">
+          <input class="form-control" type="search" id="mm-promo-search" placeholder="بحث: اسم، ملف، هاتف..." oninput="onMmPromoSearch()">
+          <select class="form-control" id="mm-promo-filter" onchange="onMmPromoFilterChange()">
+            <option value="all">كل العملاء بأرقام</option>
+            <option value="recent">زاروا خلال 90 يوم</option>
+            <option value="inactive">عملاء غياب</option>
+            <option value="no-promo">لم يُرسل لهم عرض</option>
+          </select>
+          <div class="mm-promo-bulk-actions">
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px">
+              عدد
+              <input class="form-control" type="number" id="mm-promo-limit" min="1" value="10" style="width:72px">
+            </label>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="mmPromoSelectFirstN()">تحديد العدد</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="mmPromoSelectAll()">تحديد الكل</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="mmPromoDeselectAll()">إلغاء التحديد</button>
+          </div>
+          <div class="mm-promo-send-actions">
+            <span class="mm-promo-selected-count" id="mm-promo-selected-count">محدّد: 0</span>
+            <button type="button" class="btn btn-primary btn-sm" onclick="sendMmPromoBulk('selected')">💬 إرسال للمحددين</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="sendMmPromoBulk('all')">📤 إرسال للكل في القائمة</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('messages')">📝 تعديل نص العرض</button>
+          </div>
+        </div>
+        <div class="mm-col-body" id="mm-body-promo"><div class="mm-empty">لا يوجد عملاء</div></div>
       </div>
     </div>
   </div>
@@ -25403,8 +25446,201 @@ function loadManualMessagingBoard() {
   renderManualMessagingColumn('followup', queues.followup);
   renderManualMessagingColumn('appointment', queues.appointment);
   renderManualMessagingColumn('overdue', queues.overdue);
+  renderManualPromoColumn();
   const stamp = document.getElementById('mm-last-refresh');
   if (stamp) stamp.textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+let mmPromoClientsCache = [];
+const mmPromoSelection = (typeof BulkSelect !== 'undefined' && BulkSelect.createSelection)
+  ? BulkSelect.createSelection()
+  : { add() {}, remove() {}, has() { return false; }, clear() {}, toggle() {}, values() { return []; }, size() { return 0; } };
+
+function getClientLastPromoMessage(phone) {
+  if (!phone) return null;
+  messageLog = DB.get('messageLog', messageLog || []);
+  const norm = (p) => String(p || '').replace(/\D/g, '');
+  const target = norm(phone);
+  let best = null;
+  for (let i = 0; i < messageLog.length; i++) {
+    const m = messageLog[i];
+    if (m.type !== 'promo' || norm(m.phone) !== target) continue;
+    if (!best || String(m.sentAt || '') > String(best.sentAt || '')) best = m;
+  }
+  return best;
+}
+
+function collectPromoClientList() {
+  const map = typeof buildClientsMap === 'function' ? buildClientsMap() : {};
+  const today = new Date();
+  const overdueDays = typeof getClientOverdueDays === 'function' ? getClientOverdueDays() : 75;
+  const list = Object.entries(map)
+    .filter(([, v]) => v?.phone)
+    .map(([key, v]) => {
+      const days = v.lastDate ? Math.floor((today - new Date(v.lastDate)) / 86400000) : null;
+      const lastPromo = getClientLastPromoMessage(v.phone);
+      return {
+        key,
+        type: 'promo',
+        name: v.name || '—',
+        phone: v.phone,
+        fileNo: v.fileNo || '',
+        lastDate: v.lastDate || null,
+        days,
+        lastPromoAt: lastPromo?.sentAt || null,
+        lastPromoStatus: lastPromo?.status || null,
+      };
+    });
+  if (typeof sortClinicList === 'function') {
+    return sortClinicList('messages', list, function (item, field) {
+      return clientEntrySortValue(item, field);
+    });
+  }
+  return list.sort((a, b) => String(b.lastDate || '').localeCompare(String(a.lastDate || '')));
+}
+
+function filterMmPromoClients(list) {
+  const filter = document.getElementById('mm-promo-filter')?.value || 'all';
+  const q = (document.getElementById('mm-promo-search')?.value || '').trim().toLowerCase();
+  const overdueDays = typeof getClientOverdueDays === 'function' ? getClientOverdueDays() : 75;
+  return list.filter((item) => {
+    if (filter === 'recent' && (!(item.days != null) || item.days > 90)) return false;
+    if (filter === 'inactive' && (!(item.days != null) || item.days < overdueDays)) return false;
+    if (filter === 'no-promo' && item.lastPromoAt) return false;
+    if (!q) return true;
+    const hay = [item.name, item.fileNo, item.phone, item.lastDate].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+function updateMmPromoSelectedCount() {
+  const el = document.getElementById('mm-promo-selected-count');
+  if (el) el.textContent = 'محدّد: ' + mmPromoSelection.size();
+}
+
+function onMmPromoSearch() { renderManualPromoColumn(false); }
+function onMmPromoFilterChange() { renderManualPromoColumn(true); }
+
+function mmPromoSelectAll() {
+  getMmPromoVisibleClients().forEach((item) => mmPromoSelection.add({ phone: item.phone, name: item.name, lastDate: item.lastDate || '', key: item.key, fileNo: item.fileNo || '' }));
+  renderManualPromoColumn(false);
+  notify('✅ تم تحديد ' + mmPromoSelection.size() + ' عميل');
+}
+
+function mmPromoDeselectAll() {
+  mmPromoSelection.clear();
+  renderManualPromoColumn(false);
+}
+
+function mmPromoSelectFirstN() {
+  const n = Math.max(1, parseInt(document.getElementById('mm-promo-limit')?.value, 10) || 10);
+  mmPromoSelection.clear();
+  getMmPromoVisibleClients().slice(0, n).forEach((item) => mmPromoSelection.add({ phone: item.phone, name: item.name, lastDate: item.lastDate || '', key: item.key, fileNo: item.fileNo || '' }));
+  renderManualPromoColumn(false);
+  notify('✅ تم تحديد ' + mmPromoSelection.size() + ' عميل');
+}
+
+function getMmPromoVisibleClients() {
+  return filterMmPromoClients(mmPromoClientsCache);
+}
+
+function onMmPromoRowCheck(cb) {
+  mmPromoSelection.toggle({
+    phone: cb.dataset.phone,
+    name: cb.dataset.name,
+    lastDate: cb.dataset.lastdate,
+    key: cb.dataset.key,
+    fileNo: cb.dataset.fileno,
+  }, cb.checked);
+  updateMmPromoSelectedCount();
+  const card = cb.closest('.mm-promo-card');
+  if (card) card.classList.toggle('is-selected', cb.checked);
+}
+
+function renderManualPromoColumn(resetSelection) {
+  if (resetSelection !== false) mmPromoSelection.clear();
+  mmPromoClientsCache = collectPromoClientList();
+  const items = getMmPromoVisibleClients();
+  const body = document.getElementById('mm-body-promo');
+  const countEl = document.getElementById('mm-count-promo');
+  if (countEl) countEl.textContent = items.length ? `${mmPromoSelection.size()} محدّد · ${items.length} في القائمة` : '0 عميل';
+  updateMmPromoSelectedCount();
+  if (!body) return;
+  if (!items.length) {
+    body.innerHTML = '<div class="mm-empty">لا يوجد عملاء مطابقون للفلتر</div>';
+    return;
+  }
+  body.innerHTML = items.map((item) => {
+    const nm = escMmAttr(item.name);
+    const ph = escMmAttr(item.phone);
+    const ld = escMmAttr(item.lastDate || '');
+    const checked = mmPromoSelection.has(item.phone) ? ' checked' : '';
+    const selectedCls = checked ? ' is-selected' : '';
+    const lastPromo = item.lastPromoAt
+      ? new Date(item.lastPromoAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' })
+      : 'لم يُرسل عرض';
+    const visitTag = item.days == null ? 'لا زيارة' : (item.days + ' يوم منذ آخر زيارة');
+    return `<div class="mm-promo-card${selectedCls}">
+      <input type="checkbox" data-phone="${ph}" data-name="${nm}" data-lastdate="${ld}" data-key="${escMmAttr(item.key)}" data-fileno="${escMmAttr(item.fileNo || '')}"${checked} onchange="onMmPromoRowCheck(this)">
+      <div class="mm-promo-card-main">
+        <div class="mm-client-name">${item.name || '—'}</div>
+        <div class="mm-client-meta">ملف: ${item.fileNo || '—'} · ${visitTag}</div>
+        <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
+        <span class="mm-timing promo">آخر عرض: ${lastPromo}</span>
+        <div class="mm-client-actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">💬 إرسال</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}')">👁️ معاينة</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function sendMmPromoBulk(mode) {
+  if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_bulk', 'msg_templates'])) {
+    notify('⛔ إرسال العروض غير متاح في إصدار ترخيصك', 'danger');
+    return;
+  }
+  if (!(settings.promoTemplate || '').trim()) {
+    notify('⚠️ لم يتم كتابة رسالة العروض — اذهب لصفحة رسائل العملاء', 'danger');
+    return;
+  }
+  let clients = [];
+  if (mode === 'selected') {
+    clients = mmPromoSelection.values().slice();
+    if (!clients.length) { notify('⚠️ حدّد عملاء أولاً — أو استخدم «تحديد العدد» / «تحديد الكل»', 'danger'); return; }
+  } else if (mode === 'all') {
+    clients = getMmPromoVisibleClients().map((item) => ({
+      phone: item.phone, name: item.name, lastDate: item.lastDate || '', key: item.key, fileNo: item.fileNo || '',
+    }));
+    if (!clients.length) { notify('⚠️ لا يوجد عملاء في القائمة الحالية', 'danger'); return; }
+    if (!confirm('إرسال رسالة العروض إلى ' + clients.length + ' عميل في القائمة الحالية؟')) return;
+  } else {
+    return;
+  }
+  const jobs = [];
+  for (let i = 0; i < clients.length; i++) {
+    const client = clients[i];
+    const today = new Date();
+    const days = client.lastDate
+      ? Math.floor((today - new Date(client.lastDate)) / 86400000)
+      : (typeof getClientOverdueDays === 'function' ? getClientOverdueDays() : 75);
+    const body = buildAutomatedMessage('promo', client.name, { date: '—', time: '—', days: String(days) });
+    if (!body) continue;
+    jobs.push({
+      phone: client.phone,
+      clientName: client.name,
+      type: 'promo',
+      refId: 'promo_mm_' + (client.fileNo || client.phone || i) + '_' + Date.now(),
+      text: body,
+      fileNo: client.fileNo || '',
+      attachMedia: true,
+    });
+  }
+  if (!jobs.length) { notify('⚠️ لا توجد رسائل جاهزة للإرسال', 'danger'); return; }
+  await dispatchMessagingJobs(jobs, { manual: true, source: 'manual-promo' });
+  notify('✅ تم تجهيز ' + jobs.length + ' رسالة عرض للإرسال');
+  renderManualPromoColumn(false);
 }
 
 function goFollowupRosterPage(page) {

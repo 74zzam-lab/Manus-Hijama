@@ -282,7 +282,10 @@
     el.innerHTML = `<div class="profit-report-card">
       <div class="profit-report-head">
         <div class="card-title" style="margin:0">📊 تقرير الربحية التشغيلية</div>
-        <button class="btn btn-accent btn-sm btn-print-a4" onclick="printProfitabilityReport()">طباعة الربحية A4</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm btn-print-a4" onclick="previewProfitabilityReport()" title="معاينة تقرير الربحية قبل الطباعة">👁️ معاينة الربحية</button>
+          <button class="btn btn-accent btn-sm btn-print-a4" onclick="printProfitabilityReport()">طباعة الربحية A4</button>
+        </div>
       </div>
       <div class="profit-report-grid">
         <div class="profit-kpi"><div class="profit-kpi-lbl">إيرادات الفترة</div><div class="profit-kpi-val">${global.fmtMoney(m.revenue)}</div></div>
@@ -313,14 +316,13 @@
     </div>`;
   };
 
-  global.printProfitabilityReport = function () {
-    const mc = typeof global.getRepBillableCases === 'function' ? global.getRepBillableCases()
-      : (typeof global.getRepFilteredCases === 'function' ? global.getRepFilteredCases() : []);
-    const month = parseInt(document.getElementById('rep-month-sel')?.value, 10) || (new Date().getMonth() + 1);
-    const year = parseInt(document.getElementById('rep-year-sel')?.value, 10) || currentYear();
+  function buildProfitabilityReportHtml(mc, month, year) {
     const m = calcProfitabilityMetrics(mc, month, year);
     const label = typeof global.getRepLabel === 'function' ? global.getRepLabel() : `${month}/${year}`;
-    global.printHTML(`${rHdr('تقرير الربحية التشغيلية', 'Profitability Report', [label])}
+    const rHdr = (ar, en, meta) => typeof global.buildUnifiedReportHeader === 'function'
+      ? global.buildUnifiedReportHeader(ar, en, meta)
+      : `<div class="hdr"><h1>${global.settings?.centerName || 'مركز الحجامة'}</h1><p class="meta">${[ar, en].filter(Boolean).join(' — ')}</p>${(meta || []).map(x => `<p class="meta">${x}</p>`).join('')}</div>`;
+    return `${rHdr('تقرير الربحية التشغيلية', 'Profitability Report', [label])}
       <div class="boxes">
         ${global.mbox ? global.mbox('Revenue', 'الإيراد', global.fmtMoney(m.revenue)) : ''}
         ${global.mbox ? global.mbox('Discounts', 'الخصومات', global.fmtMoney(m.discounts)) : ''}
@@ -347,7 +349,29 @@
         <tr><td>رواتب تقديرية</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.payrollEst)}</td></tr>
         <tr class="tr-total"><td>صافي الربح الحقيقي</td><td class="money">${global.fmtMoney(m.netProfit)}</td></tr>
       </tbody></table>
-      ${global.printFooterDiv?.() || ''}`, false);
+      ${global.printFooterDiv?.() || ''}`;
+  }
+
+  global.previewProfitabilityReport = function () {
+    const mc = typeof global.getRepBillableCases === 'function' ? global.getRepBillableCases()
+      : (typeof global.getRepFilteredCases === 'function' ? global.getRepFilteredCases() : []);
+    const month = parseInt(document.getElementById('rep-month-sel')?.value, 10) || (new Date().getMonth() + 1);
+    const year = parseInt(document.getElementById('rep-year-sel')?.value, 10) || currentYear();
+    const html = buildProfitabilityReportHtml(mc, month, year);
+    const label = typeof global.getRepLabel === 'function' ? global.getRepLabel() : `${month}/${year}`;
+    if (typeof global.openReportPreview === 'function') {
+      global.openReportPreview(html, `تقرير الربحية — ${label}`);
+    } else {
+      global.printProfitabilityReport();
+    }
+  };
+
+  global.printProfitabilityReport = function () {
+    const mc = typeof global.getRepBillableCases === 'function' ? global.getRepBillableCases()
+      : (typeof global.getRepFilteredCases === 'function' ? global.getRepFilteredCases() : []);
+    const month = parseInt(document.getElementById('rep-month-sel')?.value, 10) || (new Date().getMonth() + 1);
+    const year = parseInt(document.getElementById('rep-year-sel')?.value, 10) || currentYear();
+    global.printHTML(buildProfitabilityReportHtml(mc, month, year), false);
   };
 
   global.patchElectronBridges = function () {

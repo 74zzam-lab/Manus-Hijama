@@ -84,6 +84,12 @@
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
   function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
   function periodKey(y, m) { return `${y}-${m}`; }
+  function normMonth(v) { const n = parseInt(v, 10); return Number.isFinite(n) ? n : 0; }
+  function normYear(v) { const n = parseInt(v, 10); return Number.isFinite(n) ? n : 0; }
+  function periodMatches(record, month, year) {
+    if (!record) return false;
+    return normMonth(record.periodMonth) === normMonth(month) && normYear(record.periodYear) === normYear(year);
+  }
   function user() { return global.getActiveUser?.() || global.currentUser; }
 
   function resolveLedgerBranchId() {
@@ -480,13 +486,22 @@
     if (!entries.length && (accruals.length || payments.length)) rebuildEntriesFromLegacy();
   }
 
+  function mergeLedgerCollection(storeKey, currentRecords) {
+    const existing = global.DB?.get(storeKey, []) || [];
+    const byId = new Map(existing.filter(r => r && r.id).map(r => [r.id, r]));
+    (currentRecords || []).forEach(r => {
+      if (r && r.id) byId.set(r.id, r);
+    });
+    return Array.from(byId.values());
+  }
+
   function saveStore() {
     const bridge = global.SqliteBridge;
     const outerBundle = bridge?.isPrimary?.() && bridge?.beginBundle && !bridge?.isBundleActive?.();
     if (outerBundle) bridge.beginBundle();
-    global.DB?.set('employeeLedgerAccruals', accruals);
-    global.DB?.set('employeeLedgerPayments', payments);
-    global.DB?.set('employeeLedgerEntries', entries);
+    global.DB?.set('employeeLedgerAccruals', mergeLedgerCollection('employeeLedgerAccruals', accruals));
+    global.DB?.set('employeeLedgerPayments', mergeLedgerCollection('employeeLedgerPayments', payments));
+    global.DB?.set('employeeLedgerEntries', mergeLedgerCollection('employeeLedgerEntries', entries));
     global.DB?.set('settings', global.settings);
     if (typeof global.syncAppGlobals === 'function') global.syncAppGlobals();
     if (outerBundle) {
@@ -1040,7 +1055,7 @@
       totalCarried: round2(totalCarried),
       employeesWithBalance: withBalance, topFive: ranking.slice(0, 5),
       entryCount: entries.filter(e => e.status !== 'void' && e.periodMonth === month && e.periodYear === year).length,
-      voucherCount: payments.filter(p => p.periodMonth === month && p.periodYear === year).length,
+      voucherCount: payments.filter(p => periodMatches(p, month, year)).length,
       monthClosed: isMonthClosed(month, year)
     };
   }
@@ -1391,9 +1406,17 @@
 
   function findLatestPaymentForPeriod(doctorId, month, year, paymentId) {
     loadStore();
-    if (paymentId) return payments.find(x => x.id === paymentId) || null;
-    return payments
-      .filter(p => p.doctorId === doctorId && p.periodMonth === month && p.periodYear === year)
+    if (paymentId) {
+      const fromMem = payments.find(x => x.id === paymentId);
+      if (fromMem) return fromMem;
+      const all = global.DB?.get('employeeLedgerPayments', []) || [];
+      return all.find(x => x.id === paymentId) || null;
+    }
+    const m = normMonth(month);
+    const y = normYear(year);
+    const pool = payments.length ? payments : (global.DB?.get('employeeLedgerPayments', []) || []);
+    return pool
+      .filter(p => p.doctorId === doctorId && periodMatches(p, m, y))
       .sort((a, b) => String(b.paidAt || b.createdAt || '').localeCompare(String(a.paidAt || a.createdAt || '')))[0] || null;
   }
 
@@ -1449,9 +1472,7 @@
       icon: '🖨️',
       label: 'معاينة سند استلام',
       short: 'معاينة سند استلام',
-      onclick: pid
-        ? `EmployeeLedger.previewVoucher('${pid}')`
-        : `EmployeeLedger.previewPeriodVoucher('${doctorId}',${month},${year})`,
+      onclick: `EmployeeLedger.previewPeriodVoucher('${doctorId}',${month},${year}${pid ? `,'${pid}'` : ''})`,
       title: 'معاينة سند إقرار استلام قبل الطباعة'
     });
     primary.push({ icon: '📒', label: 'معاينة كشف حساب', short: 'معاينة كشف حساب', onclick: `EmployeeLedger.previewStatement('${doctorId}',${month},${year})`, title: 'معاينة كشف حساب قبل الطباعة' });
@@ -1471,9 +1492,7 @@
         icon: '🖨️',
         label: 'معاينة سند استلام',
         short: 'معاينة سند استلام',
-        onclick: pid
-          ? `EmployeeLedger.previewVoucher('${pid}')`
-          : `EmployeeLedger.previewPeriodVoucher('${e.doctorId}',${e.periodMonth},${e.periodYear})`,
+        onclick: `EmployeeLedger.previewPeriodVoucher('${e.doctorId}',${e.periodMonth},${e.periodYear}${pid ? `,'${pid}'` : ''})`,
         title: 'معاينة سند إقرار استلام قبل الطباعة'
       });
       primary.push({ icon: '📒', label: 'معاينة كشف حساب', short: 'معاينة كشف حساب', onclick: `EmployeeLedger.previewStatement('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'معاينة كشف حساب قبل الطباعة' });
@@ -1545,6 +1564,7 @@
 .ledger-strip-grid .lbl{font-size:11px;color:var(--text-muted);display:block}
 .ledger-strip-grid .val{font-size:14px;font-weight:800}
 .ledger-strip-actions{display:flex;gap:4px;flex-wrap:wrap}
+.ledger-strip-actions .btn-action .btn-lbl{max-width:92px;white-space:normal;line-height:1.25}
 #page-employee-ledger .ledger-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:16px}
 #page-employee-ledger .ledger-kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;min-height:84px}
 #page-employee-ledger .ledger-kpi .lbl{font-size:12px;color:var(--text-muted)}
@@ -1833,26 +1853,26 @@
       renderDashboardCard();
       global.generatePayroll?.();
       notify(`✅ تم تسجيل ${p.voucherNo} — ${fmtMoney(p.totalAmount)}`, 'success');
-      const autoPrint = global.settings?.employeeLedger?.autoPrintVoucher;
-      const previewAfterPay = method === 'transfer' || autoPrint;
-      if (previewAfterPay) {
-        setTimeout(() => previewVoucher(p.id), 400);
-      }
+      setTimeout(() => previewVoucher(p.id), 400);
     }
   }
 
   function buildStatementHtml(doctorId, month, year) {
     loadStore();
     const d = (global.doctors || []).find(x => x.id === doctorId);
+    const cn = global.settings?.centerName || 'مركز الحجامة';
+    const logoSrc = global.resolvePrintAssetUrl?.(global.getCenterBrandLogo?.() || global.settings?.brandLogo || 'branding/Center-Logo.png') || 'branding/Center-Logo.png';
+    const m = normMonth(month);
+    const y = normYear(year);
     const raw = entries.filter(e => {
       if (e.status === 'void') return false;
       if (doctorId && e.doctorId !== doctorId) return false;
-      if (month && year) return e.periodMonth === month && e.periodYear === year;
+      if (m && y) return periodMatches(e, m, y);
       return true;
     });
     let lines = consolidateStatementRows(raw);
     const groupAll = !doctorId;
-    if (groupAll) lines = groupStatementRowsByDoctor(lines, month, year);
+    if (groupAll) lines = groupStatementRowsByDoctor(lines, m, y);
     const rows = lines.map(e => {
       if (e._groupHeader) {
         const s = e._summary || {};
@@ -1868,12 +1888,18 @@
       <td class="money">${fmtMoney(e.balanceAfter)}</td>
     </tr>`;
     }).join('');
-    const s = doctorId ? getSummary(doctorId, month, year) : null;
-    const periodLabel = month && year ? `${MONTH_NAMES[month]} ${year}` : 'كل الفترات';
+    const s = doctorId ? getSummary(doctorId, m, y) : null;
+    const periodLabel = m && y ? `${MONTH_NAMES[m]} ${y}` : 'كل الفترات';
     const summaryBoxes = s ? `${global.mbox?.('Due', 'المستحق', fmtMoney(s.due)) || ''}${global.mbox?.('Paid', 'المدفوع', fmtMoney(s.paid)) || ''}${global.mbox?.('Bal', 'المتبقي', fmtMoney(s.remaining)) || ''}${global.mbox?.('Status', 'الحالة', s.statusLabel) || ''}` : '';
+    const header = `<div style="text-align:center;margin-bottom:16px">
+      <img src="${logoSrc}" alt="" style="max-height:72px;max-width:160px;object-fit:contain">
+      <h1 style="margin:6px 0;font-size:18px;color:#1a4a3a">${cn}</h1>
+      <div style="font-size:12px;color:#666">كشف حساب — ${d?.name || 'الكل'}</div>
+      <div style="font-size:11px;color:#666">${periodLabel}</div>
+    </div>`;
     return {
       title: `كشف حساب — ${d?.name || 'الكل'} — ${periodLabel}`,
-      html: `<div class="hdr"><h1>${global.settings?.centerName || ''}</h1><p class="meta">كشف حساب — ${d?.name || 'الكل'}</p><p class="meta">${periodLabel}</p></div>
+      html: `${header}
       <div class="boxes">${summaryBoxes}</div>
       <table><thead><tr><th>التاريخ</th><th>النوع</th><th>البيان</th><th>حالة الصرف</th><th>مدين</th><th>دائن</th><th>الرصيد</th></tr></thead><tbody>${rows || '<tr><td colspan="7" style="text-align:center">لا حركات</td></tr>'}</tbody></table>${global.printFooterDiv?.() || ''}`
     };

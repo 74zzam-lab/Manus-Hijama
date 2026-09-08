@@ -890,8 +890,9 @@ tbody tr:last-child { border-bottom: none; }
   height: min(90vh, calc(100dvh - 40px)) !important;
   max-height: min(90vh, calc(100dvh - 40px)) !important;
 }
-.modal.modal-shell--preview .modal-body { display: flex; flex-direction: column; min-height: 0; padding: 0; }
-.modal.modal-shell--preview .modal-body iframe { flex: 1; min-height: 360px; width: 100%; border: 0; background: #fff; }
+.modal.modal-shell--preview { height: auto !important; max-height: min(92vh, calc(100dvh - 32px)) !important; }
+.modal.modal-shell--preview .modal-body { display: block; min-height: 0; padding: 0; max-height: calc(92vh - 120px); overflow: auto; }
+.modal.modal-shell--preview .modal-body iframe { display: block; width: 100%; min-height: 320px; height: auto; border: 0; background: #fff; }
 #msgPreviewModal .modal.modal-shell { max-width: min(560px, calc(100vw - 24px)); }
 .modal.modal-shell:has(> .modal-body),
 .modal:has(> .modal-body) {
@@ -1591,10 +1592,7 @@ table.table-compact.table-reports td { padding: 8px 6px; }
 .mm-promo-card input[type="checkbox"] { margin-top: 4px; flex-shrink: 0; }
 .mm-promo-card-main { flex: 1; min-width: 0; }
 .mm-timing.promo { background: #e8f0ff; color: #2a4a8a; }
-.mm-wa-drawer { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); }
-.mm-wa-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
-.mm-wa-drawer-head strong { font-size: 14px; color: var(--primary); }
-#mm-wa-embed.fu-wa-embed-host { min-height: 420px; height: min(56vh, 640px); max-height: 640px; border-radius: 0; border: none; }
+.mm-promo-toolbar { position: relative; z-index: 2; }
 #page-employee-ledger .table-action-btns-primary { flex-wrap: wrap; gap: 4px; }
 #page-employee-ledger .btn-action .btn-lbl { max-width: none; font-size: 10px !important; }
 #page-employee-ledger .table-reports td.actions-col { min-width: 380px; }
@@ -4094,6 +4092,12 @@ body.license-readonly-mode .page-readonly select,
 body.license-readonly-mode .page-readonly textarea {
   pointer-events: none; opacity: 0.85;
 }
+body.license-readonly-mode .page-readonly #page-manual-msg input,
+body.license-readonly-mode .page-readonly #page-manual-msg select,
+body.license-readonly-mode .page-readonly #page-manual-msg textarea,
+body.license-readonly-mode .page-readonly #page-manual-msg button {
+  pointer-events: auto; opacity: 1;
+}
 .backup-role-badge {
   display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-bottom: 8px;
 }
@@ -6010,10 +6014,11 @@ body.license-readonly-mode .page-readonly textarea {
           </ul>
           <h4>٥) الفرق بين التقارير والأزرار</h4>
           <ul>
-            <li><strong>🖨️ سند:</strong> سند <strong>إقرار استلام</strong> لمبلغ صُرف فعلياً — يُطبع بعد تسجيل الصرف.</li>
-            <li><strong>📒 كشف:</strong> <strong>كشف حساب</strong> — كل حركات الموظف المالية (استحقاق + صرف + تسوية).</li>
-            <li><strong>📄 مفردات:</strong> <strong>مفردات مرتب</strong> — تفصيل المستحقات والخصومات للشهر.</li>
-            <li><strong>📋 تفصيل:</strong> معاينة تفصيل المستحقات على الشاشة قبل الطباعة.</li>
+            <li><strong>💵 تسجيل صرف:</strong> تسجيل صرف مستحقات الموظف وإنشاء سند الصرف.</li>
+            <li><strong>🖨️ معاينة سند استلام:</strong> معاينة <strong>سند إقرار استلام</strong> قبل الطباعة — يظهر بعد تسجيل الصرف.</li>
+            <li><strong>📒 معاينة كشف حساب:</strong> معاينة <strong>كشف الحساب</strong> — كل حركات الموظف المالية قبل الطباعة.</li>
+            <li><strong>📄 معاينة مفردات:</strong> معاينة <strong>مفردات المرتب</strong> — تفصيل المستحقات والخصومات قبل الطباعة.</li>
+            <li><strong>📂 فتح الصفحة:</strong> الانتقال لصفحة مستحقات الموظف المحدد.</li>
             <li><strong>مسير الرواتب:</strong> احتساب الرواتب الشهرية — مصدر البيانات وليس سجل الصرف النهائي.</li>
           </ul>
         </div>
@@ -7587,15 +7592,6 @@ body.license-readonly-mode .page-readonly textarea {
         <div class="mm-col-body" id="mm-body-promo"><div class="mm-empty">لا يوجد عملاء</div></div>
       </div>
     </div>
-    <div class="mm-wa-drawer" id="mm-wa-panel" hidden>
-      <div class="mm-wa-drawer-head">
-        <strong>📱 واتساب المركز — الجلسة المحفوظة</strong>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="hideManualWhatsAppPanel()">إخفاء</button>
-      </div>
-      <div class="fu-wa-embed-host" id="mm-wa-embed">
-        <div class="fu-wa-embed-fallback" id="mm-wa-fallback">امسح رمز واتساب ويب من هنا بعد فتح الجلسة. إن لم تظهر النافذة داخل البرنامج استخدم «فتح واتساب المركز» مرة أخرى.</div>
-      </div>
-    </div>
   </div>
 
   <!-- ═══════════════ CLIENTS ═══════════════ -->
@@ -8744,7 +8740,8 @@ body.license-readonly-mode .page-readonly textarea {
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeMsgPreviewModal()">إلغاء</button>
-      <button class="btn btn-primary" id="btn-msg-preview-send" onclick="confirmMsgPreviewSend()">📤 إرسال مباشر</button>
+      <button class="btn btn-ghost" id="btn-msg-preview-open-wa" onclick="openMsgPreviewWhatsApp()">📱 فتح واتساب</button>
+      <button class="btn btn-primary" id="btn-msg-preview-send" onclick="confirmMsgPreviewSend()">📤 إرسال</button>
     </div>
   </div>
 </div>
@@ -11887,8 +11884,7 @@ function showPageAfterRestoreGate(id) {
   });
   const mainScroll = document.getElementById('main-scroll');
   if (mainScroll) mainScroll.scrollTop = 0;
-  if (id !== 'followup' && id !== 'manual-msg' && typeof hideFollowupWhatsAppEmbed === 'function') hideFollowupWhatsAppEmbed();
-  if (id !== 'manual-msg' && typeof hideManualWhatsAppPanel === 'function') hideManualWhatsAppPanel(true);
+  if (id !== 'followup' && typeof hideFollowupWhatsAppEmbed === 'function') hideFollowupWhatsAppEmbed();
   if (typeof applyBranchViewModeUi === 'function') applyBranchViewModeUi();
   updateContextForPage(id);
   if (id === 'dashboard') { refreshDashboard(); refreshBookingsTable(); refreshDashboardAlerts(); }
@@ -17735,7 +17731,7 @@ const MessagingBridge = {
       try { return await getCuppingElectron().whatsapp.openSendSlot(launchUrl); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
-    if (launch === 'embedded' && getCuppingElectron()?.whatsapp?.openChat) {
+    if (launch === 'embedded' && getCuppingElectron()?.whatsapp?.openChat && typeof isFollowupPageActive === 'function' && isFollowupPageActive()) {
       try {
         if (typeof showFollowupWhatsAppEmbed === 'function') await showFollowupWhatsAppEmbed();
         return await getCuppingElectron().whatsapp.openChat(formatted, text);
@@ -22024,9 +22020,11 @@ ${printFontFaceCss}
       ${pageSize}
       * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body { font-family: 'Tajawal', Arial, sans-serif; direction: rtl; background: #fff; color: #000; font-size: 11pt; }
+      .report-preview-doc { max-width: 780px; margin: 0 auto; padding: 20px 24px 28px; }
+      .report-preview-doc { max-width: 780px; margin: 0 auto; padding: 20px 24px 28px; }
       ${getA4PrintStyleBlock()}
     </style>
-  </head><body>${htmlContent}</body></html>`;
+  </head><body><div class="report-preview-doc">${htmlContent}</div></body></html>`;
 }
 
 function openPrintWindow(htmlContent, isThermal, options) {
@@ -22094,13 +22092,31 @@ function touchReadinessUI() {
 window.touchReadinessUI = touchReadinessUI;
 
 let _reportPreviewHtml = '';
+function fitReportPreviewFrame() {
+  const frame = document.getElementById('reportPreviewFrame');
+  if (!frame) return;
+  try {
+    const doc = frame.contentDocument;
+    const body = doc?.body;
+    const html = doc?.documentElement;
+    if (!body || !html) return;
+    const h = Math.max(body.scrollHeight, html.scrollHeight, 320);
+    const maxH = Math.max(320, Math.min(h + 24, window.innerHeight * 0.78));
+    frame.style.height = maxH + 'px';
+  } catch { /* cross-origin guard */ }
+}
 function openReportPreview(html, title) {
   _reportPreviewHtml = html || '';
   const titleEl = document.getElementById('reportPreviewTitle');
   const frame = document.getElementById('reportPreviewFrame');
   if (titleEl) titleEl.textContent = title ? `معاينة: ${title}` : 'معاينة التقرير';
-  if (frame) frame.srcdoc = buildA4PrintDocument(_reportPreviewHtml, { documentTitle: title || 'Report' });
+  if (frame) {
+    frame.style.height = '360px';
+    frame.onload = () => fitReportPreviewFrame();
+    frame.srcdoc = buildA4PrintDocument(_reportPreviewHtml, { documentTitle: title || 'Report' });
+  }
   document.getElementById('reportPreviewModal')?.classList.add('open');
+  setTimeout(fitReportPreviewFrame, 120);
 }
 function closeReportPreview() {
   document.getElementById('reportPreviewModal')?.classList.remove('open');
@@ -22148,7 +22164,8 @@ const REPORT_PREVIEW_TITLES = {
   vat: 'تقرير ضريبة القيمة المضافة',
   doctors: 'أداء الأطباء',
   payroll: 'مسير الرواتب',
-  expenses: 'كشف المصروفات'
+  expenses: 'كشف المصروفات',
+  profitability: 'تقرير الربحية'
 };
 function previewMainReport(type) {
   if (typeof RbacGuard !== 'undefined' && RbacGuard.requirePermission) {
@@ -24190,6 +24207,42 @@ function closeMsgPreviewModal() {
   document.getElementById('msgPreviewModal')?.classList.remove('open');
 }
 
+function openMsgPreviewWhatsApp() {
+  const modal = document.getElementById('msgPreviewModal');
+  if (!modal) return;
+  const phone = modal.dataset.phone;
+  const type = modal.dataset.type;
+  const name = modal.dataset.name;
+  const lastDate = modal.dataset.lastdate;
+  const body = document.getElementById('msg-preview-body')?.value || buildQuickMessageBody(type, name, lastDate);
+  if (!body) {
+    notify('⚠️ لا يوجد نص للرسالة', 'danger');
+    return;
+  }
+  const formatted = formatPhoneForWA(phone);
+  if (!formatted) { notify('⚠️ لا يوجد رقم هاتف', 'danger'); return; }
+  const launch = typeof getWhatsAppLaunchTarget === 'function' ? getWhatsAppLaunchTarget() : 'web';
+  const launchMode = launch === 'auto' ? 'web' : launch;
+  const launchUrl = (typeof WaFollowup !== 'undefined' && WaFollowup.buildWhatsAppSendUrl)
+    ? WaFollowup.buildWhatsAppSendUrl(formatted, body, launchMode)
+    : `https://web.whatsapp.com/send?phone=${formatted}&text=${encodeURIComponent(body)}`;
+  const slotName = (typeof WaSendSlot !== 'undefined' && WaSendSlot.WINDOW_NAME) || 'tdw-whatsapp-send';
+  const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
+  if (launchMode === 'desktop' && api?.app?.openExternal) {
+    api.app.openExternal(launchUrl).catch(() => { window.open(launchUrl, slotName); });
+    return;
+  }
+  if (api?.whatsapp?.openSendSlot) {
+    api.whatsapp.openSendSlot(launchUrl).catch(() => { window.open(launchUrl, slotName); });
+    return;
+  }
+  if (api?.app?.openExternal) {
+    api.app.openExternal(launchUrl).catch(() => { window.open(launchUrl, slotName); });
+    return;
+  }
+  window.open(launchUrl, slotName);
+}
+
 async function confirmMsgPreviewSend() {
   const modal = document.getElementById('msgPreviewModal');
   if (!modal) return;
@@ -25013,35 +25066,15 @@ function isFollowupPageActive() {
 }
 
 function isWhatsAppWorkspacePageActive() {
-  return !!document.getElementById('page-manual-msg')?.classList.contains('active')
-    || isFollowupPageActive();
+  return isFollowupPageActive();
 }
 
 function getWhatsAppEmbedHost() {
-  if (document.getElementById('page-manual-msg')?.classList.contains('active')) {
-    const host = document.getElementById('mm-wa-embed');
-    if (host) return host;
-  }
   return document.getElementById('fu-wa-embed');
 }
 
 function getWhatsAppEmbedFallback() {
-  if (document.getElementById('page-manual-msg')?.classList.contains('active')) {
-    return document.getElementById('mm-wa-fallback') || document.getElementById('fu-wa-fallback');
-  }
   return document.getElementById('fu-wa-fallback');
-}
-
-async function showManualWhatsAppPanel() {
-  const panel = document.getElementById('mm-wa-panel');
-  if (panel) panel.hidden = false;
-  return showFollowupWhatsAppEmbed();
-}
-
-function hideManualWhatsAppPanel(silent) {
-  const panel = document.getElementById('mm-wa-panel');
-  if (panel) panel.hidden = true;
-  if (!silent) hideFollowupWhatsAppEmbed();
 }
 
 function pinWhatsAppLaunchTarget(value) {
@@ -25275,11 +25308,9 @@ function hideFollowupWhatsAppEmbed() {
 async function openClinicWhatsAppWorkspace() {
   const target = getWhatsAppLaunchTarget();
   const api = typeof getCuppingElectron === 'function' ? getCuppingElectron() : null;
-  const onManual = document.getElementById('page-manual-msg')?.classList.contains('active');
-  if (onManual) await showManualWhatsAppPanel();
-  if (target === 'embedded' || ((target === 'web' || target === 'auto') && api?.whatsapp?.show && isWhatsAppWorkspacePageActive())) {
+  if (target === 'embedded' && api?.whatsapp?.show && isFollowupPageActive()) {
     const shown = await showFollowupWhatsAppEmbed();
-    if (shown?.ok || target === 'embedded') return shown;
+    if (shown?.ok) return shown;
   }
   if (target === 'desktop') {
     const url = 'whatsapp://send';
@@ -25292,11 +25323,15 @@ async function openClinicWhatsAppWorkspace() {
     return { ok: true, mode: 'desktop' };
   }
   const url = 'https://web.whatsapp.com';
+  const slotName = (typeof WaSendSlot !== 'undefined' && WaSendSlot.WINDOW_NAME) || 'tdw-whatsapp-send';
   try {
+    if (api?.whatsapp?.openSendSlot) {
+      return await api.whatsapp.openSendSlot(url);
+    }
     if (api?.app?.openExternal) await api.app.openExternal(url);
-    else window.open(url, '_blank');
+    else window.open(url, slotName);
   } catch {
-    window.open(url, '_blank');
+    window.open(url, slotName);
   }
   return { ok: true, mode: 'web' };
 }
@@ -25500,8 +25535,8 @@ function renderManualMessagingColumn(type, items) {
       <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
       <span class="mm-timing ${tcls}">${item.timing || '—'}</span>
       <div class="mm-client-actions">
-        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال مباشر</button>
         <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}')">👁️ معاينة</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال</button>
       </div>
     </div>`;
   }).join('');
@@ -25509,6 +25544,7 @@ function renderManualMessagingColumn(type, items) {
 
 function loadManualMessagingBoard() {
   if (typeof reloadClientStoreFromDb === 'function') reloadClientStoreFromDb();
+  ensureMmPromoControlsEnabled();
   const queues = collectManualMessagingQueues();
   renderManualMessagingColumn('followup', queues.followup);
   renderManualMessagingColumn('appointment', queues.appointment);
@@ -25564,6 +25600,15 @@ function collectPromoClientList() {
     });
   }
   return list.sort((a, b) => String(b.lastDate || '').localeCompare(String(a.lastDate || '')));
+}
+
+function ensureMmPromoControlsEnabled() {
+  document.querySelectorAll('#mm-col-promo input, #mm-col-promo select, #mm-col-promo button, #mm-col-promo textarea').forEach((el) => {
+    el.disabled = false;
+    el.removeAttribute('inert');
+    el.style.pointerEvents = '';
+    el.style.opacity = '';
+  });
 }
 
 function filterMmPromoClients(list) {
@@ -25655,8 +25700,8 @@ function renderManualPromoColumn(resetSelection) {
         <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
         <span class="mm-timing promo">آخر عرض: ${lastPromo}</span>
         <div class="mm-client-actions">
-          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال مباشر</button>
           <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}')">👁️ معاينة</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال</button>
         </div>
       </div>
     </div>`;

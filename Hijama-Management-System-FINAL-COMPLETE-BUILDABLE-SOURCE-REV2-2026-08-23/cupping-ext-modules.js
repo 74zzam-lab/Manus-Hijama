@@ -144,7 +144,7 @@ const PAGE_EDIT_PERMISSIONS = {
 
 const PAGE_PERMISSIONS = {
   dashboard: 'cases.view', daily: 'cases.view', bookings: 'bookings.view',
-  clients: 'clients.view', messages: 'messages.view', followup: 'messages.view', reports: 'reports.view',
+  clients: 'clients.view', messages: 'messages.view', followup: 'messages.view', 'manual-msg': 'messages.view', reports: 'reports.view',
   expenses: 'expenses.view', attendance: 'attendance.view', payroll: 'payroll.view',
   'employee-ledger': 'ledger.view',
   doctors: 'core.edit', users: 'users.manage', packages: 'settings.edit',
@@ -1052,21 +1052,21 @@ async function fetchCurrencyRates() {
   for (const api of apis) {
     try {
       const res = await fetch(api.url);
+      if (!res.ok) continue;
       const data = await res.json();
-      if (data.rates) {
-        const base = String(data.base || 'USD').toUpperCase();
-        const next = { ...cfg.rates };
-        if (base === 'USD' && data.rates.SAR) {
-          next.USD = data.rates.SAR;
-          if (data.rates.EUR) next.EUR = data.rates.SAR / data.rates.EUR;
-          if (data.rates.GBP) next.GBP = data.rates.SAR / data.rates.GBP;
-        } else if (data.rates.SAR) {
-          next.USD = data.rates.SAR;
-        }
-        next.SAR = 1;
-        if (next.USD && next.USD < 2) next.USD = cfg.rates.USD || defaultCurrencyConfig.rates.USD;
-        cfg.rates = next;
+      if (!data.rates) continue;
+      const base = String(data.base || 'USD').toUpperCase();
+      const next = { ...cfg.rates };
+      if (base === 'USD' && data.rates.SAR) {
+        next.USD = data.rates.SAR;
+        if (data.rates.EUR) next.EUR = data.rates.SAR / data.rates.EUR;
+        if (data.rates.GBP) next.GBP = data.rates.SAR / data.rates.GBP;
+      } else if (data.rates.SAR) {
+        next.USD = data.rates.SAR;
       }
+      next.SAR = 1;
+      if (next.USD && next.USD < 2) next.USD = cfg.rates.USD || defaultCurrencyConfig.rates.USD;
+      cfg.rates = next;
       cfg.lastUpdated = new Date().toISOString();
       DB.set('settings', settings);
       logSystem('currency', 'تحديث أسعار الصرف', api.name);

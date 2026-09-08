@@ -1552,6 +1552,27 @@ table.table-compact.table-reports td { padding: 8px 6px; }
   color: #d1e4dd; font-size: 13px; line-height: 1.7;
 }
 #page-followup .table-pagination { margin-top: 10px; flex-wrap: wrap; }
+.mm-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+@media (max-width: 1100px) { .mm-board { grid-template-columns: 1fr; } }
+.mm-col { display: flex; flex-direction: column; min-height: 320px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.mm-col-head { padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.mm-col-head h3 { margin: 0 0 4px; font-size: 15px; color: var(--primary); }
+.mm-col-head p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.mm-col-count { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 800; color: var(--primary); }
+.mm-col-body { flex: 1; overflow-y: auto; max-height: calc(100vh - 280px); padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.mm-client-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.mm-client-card.is-due { border-color: #f0c040; background: linear-gradient(135deg, #fffdf5, #fff); }
+.mm-client-card.is-upcoming { border-color: var(--border); background: var(--surface); opacity: 0.92; }
+.mm-client-name { font-weight: 800; font-size: 14px; color: var(--text); }
+.mm-client-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.55; }
+.mm-timing { display: inline-block; margin-top: 6px; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.mm-timing.due { background: #fff3cd; color: #856404; }
+.mm-timing.upcoming { background: #e8f4f0; color: var(--primary); }
+.mm-client-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.mm-empty { text-align: center; padding: 28px 12px; color: var(--text-light); font-size: 13px; }
+.mm-notice { margin-bottom: 16px; padding: 14px 16px; border: 1px solid #f0c040; border-radius: 12px; background: linear-gradient(135deg, #fff8e1, #fff); font-size: 13px; line-height: 1.75; }
+#page-followup { display: none !important; }
+[data-auto-suspended] { opacity: 0.55; pointer-events: none; user-select: none; }
 .bulk-selected-count { font-size: 12px; color: var(--primary); font-weight: 800; }
 .wa-slot-bar {
   display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
@@ -4899,8 +4920,8 @@ body.license-readonly-mode .page-readonly textarea {
     <div class="nav-item no-employee" data-addon-page="messages" onclick="showPage('messages')" data-nav-title="رسائل العملاء">
       <span class="nav-icon">💬</span><span class="nav-label">رسائل العملاء</span>
     </div>
-    <div class="nav-item no-employee" data-page="followup" data-addon-page="followup" onclick="showPage('followup')" data-nav-title="متابعة العملاء">
-      <span class="nav-icon">📱</span><span class="nav-label">متابعة العملاء</span>
+    <div class="nav-item no-employee" data-page="manual-msg" data-addon-page="manual-msg" onclick="showPage('manual-msg')" data-nav-title="الرسائل اليدوية">
+      <span class="nav-icon">📨</span><span class="nav-label">الرسائل اليدوية</span>
     </div>
     <div class="nav-section-label no-employee">البيانات والتحليل</div>
 <div class="nav-item no-employee" data-page="reports" data-addon-page="reports" onclick="showPage('reports')" data-nav-title="التقارير">
@@ -7197,7 +7218,10 @@ body.license-readonly-mode .page-readonly textarea {
     </div>
 
     <!-- Automation -->
-    <div class="card" style="margin-bottom:20px;border:1px solid var(--primary);background:linear-gradient(135deg,#f0faf7,#fff)" data-feature="msg_auto">
+    <div class="card" style="margin-bottom:20px;border:1px solid var(--primary);background:linear-gradient(135deg,#f0faf7,#fff)" data-feature="msg_auto" id="msg-auto-card">
+      <div id="msg-auto-suspended-banner" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:8px;background:#fff8e1;border:1px solid #f0c040;font-size:13px;line-height:1.7">
+        ⏸️ الإرسال التلقائي معطّل مؤقتاً — استخدم <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('manual-msg')">صفحة الرسائل اليدوية</button> لإرسال الرسائل حسب الوقت المستحق.
+      </div>
       <div class="card-header" style="flex-wrap:wrap;gap:10px">
         <div class="card-title">🤖 الإرسال التلقائي</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -7454,6 +7478,50 @@ body.license-readonly-mode .page-readonly textarea {
             <div class="fu-wa-embed-fallback" id="fu-wa-fallback">امسح رمز واتساب ويب من هنا بعد فتح الجلسة. إن لم تظهر النافذة داخل البرنامج استخدم زر «فتح واتساب».</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MANUAL MESSAGING BOARD ═══════════════ -->
+  <div class="page" id="page-manual-msg">
+    <header class="dash-hero-glass page-hero compact-hero">
+      <h2>الرسائل اليدوية</h2>
+      <p>إرسال المتابعة والتذكير وتنبيه الغياب يدوياً — مع تنبيه بالوقت المناسب لكل عميل</p>
+    </header>
+    <div class="mm-notice" id="mm-suspended-notice">
+      <strong>⏸️ الإرسال التلقائي معطّل مؤقتاً</strong> — استخدم الأعمدة أدناه لإرسال الرسائل يدوياً حسب الوقت المستحق.
+      للعروض والإرسال الجماعي انتقل إلى <button type="button" class="btn btn-ghost btn-sm" onclick="showPage('messages')">صفحة رسائل العملاء</button>.
+      أوقات الإرسال تُحسب من وقت تسجيل الجلسة أو آخر زيارة أو موعد الحجز وفق الإعدادات في صفحة الرسائل.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
+      <button class="btn btn-primary btn-sm" type="button" onclick="loadManualMessagingBoard()">🔄 تحديث القوائم</button>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="showPage('messages')">📝 قوالب الرسائل</button>
+      <span id="mm-last-refresh" style="font-size:12px;color:var(--text-muted)">—</span>
+    </div>
+    <div class="mm-board">
+      <div class="mm-col" id="mm-col-followup">
+        <div class="mm-col-head">
+          <h3>متابعة بعد الجلسة</h3>
+          <p>عملاء يحتاجون رسالة متابعة بعد تسجيل الجلسة</p>
+          <span class="mm-col-count" id="mm-count-followup">0 عميل</span>
+        </div>
+        <div class="mm-col-body" id="mm-body-followup"><div class="mm-empty">لا يوجد عملاء</div></div>
+      </div>
+      <div class="mm-col" id="mm-col-appointment">
+        <div class="mm-col-head">
+          <h3>تذكير مواعيد</h3>
+          <p>حجوزات وجلسات قادمة تحتاج تذكيراً</p>
+          <span class="mm-col-count" id="mm-count-appointment">0 عميل</span>
+        </div>
+        <div class="mm-col-body" id="mm-body-appointment"><div class="mm-empty">لا يوجد مواعيد</div></div>
+      </div>
+      <div class="mm-col" id="mm-col-overdue">
+        <div class="mm-col-head">
+          <h3>عملاء غياب</h3>
+          <p>لم يزر المركز منذ فترة — تنبيه غياب</p>
+          <span class="mm-col-count" id="mm-count-overdue">0 عميل</span>
+        </div>
+        <div class="mm-col-body" id="mm-body-overdue"><div class="mm-empty">لا يوجد عملاء غائبون</div></div>
       </div>
     </div>
   </div>
@@ -11251,6 +11319,8 @@ const defaultMessagingConfig = {
   overdue: { enabled: true, days: 75, cooldownDays: 30 },
   promo: { enabled: false }
 };
+/** الإرسال التلقائي معطّل مؤقتاً حتى إصلاح مشاكل المتابعة والعروض */
+const MESSAGING_AUTO_SUSPENDED = true;
 const defaultBackupConfig = {
   mode: 'dual',
   localEnabled: true,
@@ -11346,6 +11416,7 @@ function ensureMessagingSettings() {
       promo: { ...defaultMessagingConfig.promo, ...(settings.messaging.promo || {}) }
     };
   }
+  if (MESSAGING_AUTO_SUSPENDED) settings.messaging.enabled = false;
 }
 function ensureDeviceSettings() {
   if (!settings.devices) settings.devices = JSON.parse(JSON.stringify(defaultDeviceConfig));
@@ -11553,6 +11624,7 @@ const pageTitles = {
   users:       'إدارة المستخدمين والصلاحيات',
   messages:    'رسائل العملاء',
   followup:    'متابعة العملاء',
+  'manual-msg': 'الرسائل اليدوية',
   employee:    'لوحتي الشخصية',
   inventory:   'إدارة المخزون',
   cashfloat:   'عهدة درج الكاشير',
@@ -11687,6 +11759,7 @@ function showPage(id) {
 }
 
 function showPageAfterRestoreGate(id) {
+  if (id === 'followup') { id = 'manual-msg'; }
   // V2-5.4: authoritative page gate (rejects forged role + audits denial)
   if (typeof RbacGuard !== 'undefined' && RbacGuard.requirePage) {
     const gate = RbacGuard.requirePage(id, { notify: false });
@@ -11767,8 +11840,9 @@ function showPageAfterRestoreGate(id) {
   }
   if (id === 'search')      { showPage('clients'); return; } // merged into clients — unreachable after rewrite above
   if (id === 'employee')    { showEmployeeDashboard(); }
-  if (id === 'messages')    { loadMsgTemplates(); loadMessagingConfigUI(); refreshBulkTable(); refreshMessageLog(); }
-  if (id === 'followup')    { loadFollowupWorkspace(); }
+  if (id === 'messages')    { loadMsgTemplates(); loadMessagingConfigUI(); refreshBulkTable(); refreshMessageLog(); applyMessagingAutoSuspendedUi(); }
+  if (id === 'followup')    { showPage('manual-msg'); return; }
+  if (id === 'manual-msg')  { loadManualMessagingBoard(); }
   if (id === 'clients')     { initClientOverdueDaysUI(); refreshClientsView(); populateOldCaseDoctors(); }
   if (id === 'attendance')  {
     populateAttDoctor();
@@ -23760,6 +23834,10 @@ function parseDateTimeMs(dateStr, timeStr) {
 }
 
 async function runMessagingAutomation(manual) {
+  if (MESSAGING_AUTO_SUSPENDED) {
+    if (manual) notify('⏸️ الإرسال التلقائي معطّل مؤقتاً — استخدم صفحة الرسائل اليدوية', 'warning');
+    return { sent: 0, suspended: true };
+  }
   if (typeof isFeatureEnabled === 'function' && !isFeatureEnabled('msg_auto')) {
     if (manual) notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
     return { sent: 0 };
@@ -23792,11 +23870,16 @@ function loadMessagingConfigUI() {
   val('msg-overdue-cooldown', m.overdue?.cooldownDays ?? 30);
   updateMessagingBridgeStatus();
   if (typeof copyMessagingTogglesToFollowup === 'function') copyMessagingTogglesToFollowup();
+  applyMessagingAutoSuspendedUi();
 }
 
 function saveMessagingConfig() {
   ensureMessagingSettings();
-  settings.messaging.enabled = !!document.getElementById('msg-auto-enabled')?.checked;
+  if (!MESSAGING_AUTO_SUSPENDED) {
+    settings.messaging.enabled = !!document.getElementById('msg-auto-enabled')?.checked;
+  } else {
+    settings.messaging.enabled = false;
+  }
   settings.messaging.channel = document.getElementById('msg-channel')?.value || 'auto';
   const chosenWa = typeof pinWhatsAppLaunchTarget === 'function'
     ? pinWhatsAppLaunchTarget(
@@ -23900,6 +23983,7 @@ function clearMessageLog() {
 }
 
 function scheduleMessagingCheck() {
+  if (MESSAGING_AUTO_SUSPENDED) return;
   ensureMessagingSettings();
   if (!settings.messaging?.enabled) return;
   setTimeout(() => runMessagingAutomation(false), 3000);
@@ -25162,6 +25246,165 @@ function refreshFollowupDueTable(resetPage) {
     <td>جاهزة للإرسال التلقائي</td>
   </tr>`).join('');
   return due;
+}
+
+function applyMessagingAutoSuspendedUi() {
+  const banner = document.getElementById('msg-auto-suspended-banner');
+  const card = document.getElementById('msg-auto-card');
+  const controls = card?.querySelector('.card-header, .form-grid, .wa-slot-bar, #msg-bridge-status');
+  if (banner) banner.style.display = MESSAGING_AUTO_SUSPENDED ? '' : 'none';
+  if (card) {
+    card.querySelectorAll('#msg-auto-enabled, #msg-channel, #msg-wa-client, #msg-followup-enabled, #msg-appt-enabled, #msg-overdue-enabled, #msg-followup-hours, #msg-appt-hours, #msg-overdue-days, #msg-overdue-cooldown').forEach(el => {
+      if (el) el.disabled = !!MESSAGING_AUTO_SUSPENDED;
+    });
+    card.querySelectorAll('button[onclick*="runMessagingAutomation"]').forEach(btn => {
+      btn.disabled = !!MESSAGING_AUTO_SUSPENDED;
+      btn.title = MESSAGING_AUTO_SUSPENDED ? 'معطّل مؤقتاً — استخدم الرسائل اليدوية' : '';
+    });
+  }
+  const chk = document.getElementById('msg-auto-enabled');
+  if (chk && MESSAGING_AUTO_SUSPENDED) chk.checked = false;
+}
+
+function formatManualMsgTiming(dueAt, now) {
+  if (!dueAt || Number.isNaN(dueAt)) return '—';
+  const diff = dueAt - now;
+  const abs = Math.abs(diff);
+  const mins = Math.floor(abs / 60000);
+  const hours = Math.floor(mins / 60);
+  const days = Math.floor(hours / 24);
+  let chunk = '';
+  if (days > 0) chunk = days + ' يوم';
+  else if (hours > 0) chunk = hours + ' ساعة';
+  else chunk = Math.max(1, mins) + ' دقيقة';
+  if (diff <= 0) return 'مستحق منذ ' + chunk;
+  return 'يستحق خلال ' + chunk;
+}
+
+function escMmAttr(value) {
+  return String(value == null ? '' : value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+function collectManualMessagingQueues() {
+  ensureMessagingSettings();
+  const cfg = settings.messaging;
+  const now = Date.now();
+  const queues = { followup: [], appointment: [], overdue: [] };
+  const wasSentFn = typeof wasMessageSent === 'function' ? wasMessageSent : function () { return false; };
+
+  const hoursAfter = parseInt(cfg.followup?.hoursAfter, 10) || 24;
+  for (const c of (typeof cases !== 'undefined' ? cases : [])) {
+    if (!c?.phone || c.sharedRole === 'partner') continue;
+    const at = new Date(c.createdAt || c.date).getTime();
+    if (!at) continue;
+    const dueAt = at + hoursAfter * 3600000;
+    const refId = 'case_' + c.id;
+    if (wasSentFn(refId, 'followup')) continue;
+    const urgency = now >= dueAt ? 'due' : 'upcoming';
+    queues.followup.push({
+      type: 'followup', name: c.name || '—', phone: c.phone, fileNo: c.fileNo || '',
+      refId, when: dueAt, timing: formatManualMsgTiming(dueAt, now), urgency,
+      lastDate: c.date || null, hint: 'بعد الجلسة: ' + (c.createdAt ? new Date(c.createdAt).toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' }) : fmtDate(c.date)),
+    });
+  }
+
+  const hoursBefore = parseInt(cfg.appointment?.hoursBefore, 10) || 24;
+  const windowEnd = now + hoursBefore * 3600000;
+  for (const b of (typeof bookings !== 'undefined' ? bookings : [])) {
+    if (!b?.phone || !['pending', 'confirmed'].includes(b.status)) continue;
+    const apptMs = parseDateTimeMs(b.date, b.time);
+    if (!apptMs || apptMs <= now) continue;
+    const refId = 'booking_' + b.id;
+    if (wasSentFn(refId, 'appointment')) continue;
+    const urgency = apptMs <= windowEnd ? 'due' : 'upcoming';
+    queues.appointment.push({
+      type: 'appointment', name: b.name || '—', phone: b.phone, fileNo: b.fileNo || '',
+      refId, when: apptMs, timing: formatManualMsgTiming(apptMs, now), urgency,
+      lastDate: b.date || null, hint: 'موعد: ' + fmtDate(b.date) + ' ' + (to12h(b.time) || b.time || ''),
+    });
+  }
+  const map = typeof buildClientsMap === 'function' ? buildClientsMap() : {};
+  for (const s of (typeof nextSessions !== 'undefined' ? nextSessions : [])) {
+    if (!s?.clientKey) continue;
+    const client = map[s.clientKey];
+    if (!client?.phone) continue;
+    const apptMs = parseDateTimeMs(s.date, '09:00');
+    if (!apptMs || apptMs <= now) continue;
+    const refId = 'session_' + s.id;
+    if (wasSentFn(refId, 'appointment')) continue;
+    const urgency = apptMs <= windowEnd ? 'due' : 'upcoming';
+    queues.appointment.push({
+      type: 'appointment', name: client.name || '—', phone: client.phone, fileNo: client.fileNo || '',
+      refId, when: apptMs, timing: formatManualMsgTiming(apptMs, now), urgency,
+      lastDate: s.date || null, hint: 'جلسة قادمة: ' + fmtDate(s.date),
+    });
+  }
+
+  const overdueDays = parseInt(cfg.overdue?.days, 10) || (typeof getClientOverdueDays === 'function' ? getClientOverdueDays() : 75);
+  const cooldown = parseInt(cfg.overdue?.cooldownDays, 10) || 30;
+  const today = new Date();
+  for (const [key, v] of Object.entries(map)) {
+    if (!v?.phone || !v.lastDate) continue;
+    const days = Math.floor((today - new Date(v.lastDate)) / 86400000);
+    if (days < overdueDays) continue;
+    const refId = 'overdue_' + key;
+    if (wasSentFn(refId, 'overdue', cooldown)) continue;
+    queues.overdue.push({
+      type: 'overdue', name: v.name || '—', phone: v.phone, fileNo: v.fileNo || '',
+      refId, when: now, timing: 'غياب ' + days + ' يوم', urgency: 'due',
+      lastDate: v.lastDate, hint: 'آخر زيارة: ' + fmtDate(v.lastDate),
+      days,
+    });
+  }
+
+  const sortFn = (a, b) => {
+    const ord = { due: 0, upcoming: 1 };
+    return (ord[a.urgency] - ord[b.urgency]) || ((a.when || 0) - (b.when || 0));
+  };
+  queues.followup.sort(sortFn);
+  queues.appointment.sort(sortFn);
+  queues.overdue.sort((a, b) => (b.days || 0) - (a.days || 0));
+  return queues;
+}
+
+function renderManualMessagingColumn(type, items) {
+  const body = document.getElementById('mm-body-' + type);
+  const countEl = document.getElementById('mm-count-' + type);
+  if (!body) return;
+  const dueCount = items.filter(i => i.urgency === 'due').length;
+  if (countEl) countEl.textContent = items.length ? `${dueCount} مستحق · ${items.length} إجمالي` : '0 عميل';
+  if (!items.length) {
+    const empty = { followup: 'لا يوجد عملاء للمتابعة', appointment: 'لا يوجد مواعيد للتذكير', overdue: 'لا يوجد عملاء غائبون' };
+    body.innerHTML = `<div class="mm-empty">${empty[type] || 'لا يوجد'}</div>`;
+    return;
+  }
+  body.innerHTML = items.map(item => {
+    const nm = escMmAttr(item.name);
+    const ph = escMmAttr(item.phone);
+    const ld = escMmAttr(item.lastDate || '');
+    const cls = item.urgency === 'due' ? 'is-due' : 'is-upcoming';
+    const tcls = item.urgency === 'due' ? 'due' : 'upcoming';
+    return `<div class="mm-client-card ${cls}">
+      <div class="mm-client-name">${item.name || '—'}</div>
+      <div class="mm-client-meta">ملف: ${item.fileNo || '—'} · ${item.hint || '—'}</div>
+      <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
+      <span class="mm-timing ${tcls}">${item.timing || '—'}</span>
+      <div class="mm-client-actions">
+        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">💬 إرسال</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}')">👁️ معاينة</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function loadManualMessagingBoard() {
+  if (typeof reloadClientStoreFromDb === 'function') reloadClientStoreFromDb();
+  const queues = collectManualMessagingQueues();
+  renderManualMessagingColumn('followup', queues.followup);
+  renderManualMessagingColumn('appointment', queues.appointment);
+  renderManualMessagingColumn('overdue', queues.overdue);
+  const stamp = document.getElementById('mm-last-refresh');
+  if (stamp) stamp.textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-SA', { dateStyle: 'short', timeStyle: 'short' });
 }
 
 function goFollowupRosterPage(page) {
@@ -27903,7 +28146,7 @@ function init() {
   refreshBookingsTable();
   refreshDashboardAlerts();
   ensureMessagingSettings();
-  if (typeof isFeatureEnabled === 'function' && isAnyFeatureEnabled(['msg_auto', 'dash_msg_alert']) && !window._messagingTimer) {
+  if (typeof isFeatureEnabled === 'function' && isAnyFeatureEnabled(['msg_auto', 'dash_msg_alert']) && !MESSAGING_AUTO_SUSPENDED && !window._messagingTimer) {
     window._messagingTimer = setInterval(() => runMessagingAutomation(false), 5 * 60 * 1000);
     setTimeout(() => runMessagingAutomation(false), 15000);
   }
@@ -28834,7 +29077,7 @@ const FEATURE_REGISTRY = [
 
 ];
 const ADDON_PAGE_MODULES = {
-  bookings: 'bookings', messages: 'messages', followup: 'messages', reports: 'reports',
+  bookings: 'bookings', messages: 'messages', followup: 'messages', 'manual-msg': 'messages', reports: 'reports',
   expenses: 'expenses', attendance: 'attendance', payroll: 'payroll',
   inventory: 'inventory', cashfloat: 'cashfloat', logs: 'logs', search: 'search',
   invoices: 'invoices'

@@ -34,7 +34,7 @@ const CSP = [
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
   // Google OAuth/Drive + Apps Script license vault + best-effort time checks
-  "connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://www.google.com https://googleapis.com https://script.google.com https://script.googleusercontent.com https://timeapi.io https://worldtimeapi.org",
+  "connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://www.google.com https://googleapis.com https://script.google.com https://script.googleusercontent.com https://timeapi.io https://worldtimeapi.org https://open.er-api.com https://api.frankfurter.app",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

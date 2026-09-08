@@ -1358,6 +1358,37 @@
     global.printHTML?.(html, false, { documentTitle: `مفردات مرتب — ${MONTH_NAMES[month]} ${year}` });
   }
 
+  function previewPayslip(doctorId, month, year) {
+    if (!hasPerm('ledger.print') && !hasPerm('reports.print') && !hasPerm('ledger.view')) return;
+    const doc = (global.doctors || []).find(d => d.id === doctorId);
+    const html = buildPayslipHtml(doctorId, month, year);
+    if (!html) { notify('⚠️ لا توجد بيانات مفردات لهذا الشهر', 'warning'); return; }
+    const title = `مفردات مرتب — ${doc?.name || '—'} — ${MONTH_NAMES[month]} ${year}`;
+    if (typeof global.openReportPreview === 'function') global.openReportPreview(html, title);
+    else printPayslip(doctorId, month, year);
+  }
+
+  function previewVoucher(paymentId) {
+    if (!hasPerm('ledger.print') && !hasPerm('reports.print') && !hasPerm('ledger.view')) return;
+    loadStore();
+    const p = payments.find(x => x.id === paymentId);
+    if (!p) { notify('⚠️ السند غير موجود', 'warning'); return; }
+    const html = buildVoucherHtml(p);
+    const title = `سند إقرار استلام — ${p.doctorName || '—'} — ${p.voucherNo || ''}`;
+    if (typeof global.openReportPreview === 'function') global.openReportPreview(html, title);
+    else printVoucher(paymentId);
+  }
+
+  function previewPeriodVoucher(doctorId, month, year, paymentId) {
+    loadStore();
+    const p = findLatestPaymentForPeriod(doctorId, month, year, paymentId);
+    if (!p) {
+      notify('⚠️ لا يوجد سند صرف مسجّل لهذا الشهر — استخدم «تسجيل صرف» أولاً ثم «معاينة سند استلام»', 'warning');
+      return;
+    }
+    previewVoucher(p.id);
+  }
+
   function findLatestPaymentForPeriod(doctorId, month, year, paymentId) {
     loadStore();
     if (paymentId) return payments.find(x => x.id === paymentId) || null;
@@ -1380,7 +1411,7 @@
   function printPeriodVoucher(doctorId, month, year, paymentId) {
     const p = findLatestPaymentForPeriod(doctorId, month, year, paymentId);
     if (!p) {
-      notify('⚠️ لا يوجد سند صرف لهذا الشهر — سجّل صرفاً أولاً ثم اطبع «سند إقرار استلام»', 'warning');
+      notify('⚠️ لا يوجد سند صرف مسجّل لهذا الشهر — استخدم «تسجيل صرف» أولاً ثم «معاينة سند استلام»', 'warning');
       return;
     }
     printVoucher(p.id);
@@ -1411,18 +1442,21 @@
     const primary = [];
     const remaining = opts.remaining ?? 0;
     if (opts.includePay && hasPerm('ledger.pay') && remaining > 0) {
-      primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${doctorId}',${month},${year})`, title: 'تسجيل صرف مستحقات' });
+      primary.push({ icon: '💵', label: 'تسجيل صرف', short: 'تسجيل صرف', onclick: `EmployeeLedger.openPaymentModal('${doctorId}',${month},${year})`, title: 'تسجيل صرف مستحقات الموظف' });
     }
     const pid = findLatestPaymentForPeriod(doctorId, month, year)?.id;
-    if (pid) {
-      primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printVoucher('${pid}')`, title: 'طباعة سند إقرار استلام' });
-    } else {
-      primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printPeriodVoucher('${doctorId}',${month},${year})`, title: 'طباعة سند إقرار استلام' });
-    }
-    primary.push({ icon: '📒', label: 'كشف', short: 'كشف', onclick: `EmployeeLedger.printStatement('${doctorId}',${month},${year})`, title: 'طباعة كشف حساب' });
-    primary.push({ icon: '📄', label: 'مفردات', short: 'مفردات', onclick: `EmployeeLedger.printPayslip('${doctorId}',${month},${year})`, title: 'طباعة مفردات المرتب' });
-    primary.push({ icon: '📋', label: 'تفصيل', short: 'تفصيل', onclick: `EmployeeLedger.previewStatement('${doctorId}',${month},${year})`, title: 'معاينة تفصيل المستحقات' });
-    primary.push({ icon: '📂', label: 'صفحة', short: 'صفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${doctorId}',${month},${year})`, title: 'فتح صفحة مستحقات الموظف' });
+    primary.push({
+      icon: '🖨️',
+      label: 'معاينة سند استلام',
+      short: 'معاينة سند استلام',
+      onclick: pid
+        ? `EmployeeLedger.previewVoucher('${pid}')`
+        : `EmployeeLedger.previewPeriodVoucher('${doctorId}',${month},${year})`,
+      title: 'معاينة سند إقرار استلام قبل الطباعة'
+    });
+    primary.push({ icon: '📒', label: 'معاينة كشف حساب', short: 'معاينة كشف حساب', onclick: `EmployeeLedger.previewStatement('${doctorId}',${month},${year})`, title: 'معاينة كشف حساب قبل الطباعة' });
+    primary.push({ icon: '📄', label: 'معاينة مفردات', short: 'معاينة مفردات', onclick: `EmployeeLedger.previewPayslip('${doctorId}',${month},${year})`, title: 'معاينة مفردات المرتب قبل الطباعة' });
+    primary.push({ icon: '📂', label: 'فتح الصفحة', short: 'فتح الصفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${doctorId}',${month},${year})`, title: 'فتح صفحة مستحقات الموظف' });
     return { primary, more: [] };
   }
 
@@ -1430,21 +1464,24 @@
     const primary = [];
     if (!e.synthetic && e.doctorId && e.periodMonth && e.periodYear) {
       if (hasPerm('ledger.pay') && e.payStatus?.code !== 'paid' && e.payStatus?.code !== 'none') {
-        primary.push({ icon: '💵', label: 'صرف', short: 'صرف', onclick: `EmployeeLedger.openPaymentModal('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'تسجيل صرف مستحقات' });
+        primary.push({ icon: '💵', label: 'تسجيل صرف', short: 'تسجيل صرف', onclick: `EmployeeLedger.openPaymentModal('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'تسجيل صرف مستحقات الموظف' });
       }
-      if (e._paymentId || e.paymentId) {
-        const pid = e._paymentId || e.paymentId;
-        primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printVoucher('${pid}')`, title: 'طباعة سند إقرار استلام' });
-      } else if (e.entryType === 'payment' || e.credit > 0) {
-        primary.push({ icon: '🖨️', label: 'سند', short: 'سند', onclick: `EmployeeLedger.printPeriodVoucher('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'طباعة سند إقرار استلام' });
-      }
-      primary.push({ icon: '📒', label: 'كشف', short: 'كشف', onclick: `EmployeeLedger.printStatement('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'طباعة كشف حساب' });
-      primary.push({ icon: '📄', label: 'مفردات', short: 'مفردات', onclick: `EmployeeLedger.printPayslip('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'طباعة مفردات المرتب' });
-      primary.push({ icon: '📋', label: 'تفصيل', short: 'تفصيل', onclick: `EmployeeLedger.previewStatement('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'معاينة تفصيل المستحقات' });
+      const pid = e._paymentId || e.paymentId;
+      primary.push({
+        icon: '🖨️',
+        label: 'معاينة سند استلام',
+        short: 'معاينة سند استلام',
+        onclick: pid
+          ? `EmployeeLedger.previewVoucher('${pid}')`
+          : `EmployeeLedger.previewPeriodVoucher('${e.doctorId}',${e.periodMonth},${e.periodYear})`,
+        title: 'معاينة سند إقرار استلام قبل الطباعة'
+      });
+      primary.push({ icon: '📒', label: 'معاينة كشف حساب', short: 'معاينة كشف حساب', onclick: `EmployeeLedger.previewStatement('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'معاينة كشف حساب قبل الطباعة' });
+      primary.push({ icon: '📄', label: 'معاينة مفردات', short: 'معاينة مفردات', onclick: `EmployeeLedger.previewPayslip('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'معاينة مفردات المرتب قبل الطباعة' });
     }
     if (!e.synthetic) {
-      primary.push({ icon: '📂', label: 'صفحة', short: 'صفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'فتح صفحة مستحقات الموظف' });
-      primary.push({ icon: '🔗', label: 'مصدر', short: 'مصدر', onclick: `EmployeeLedger.openSourceDocument('${e.id}')`, title: 'عرض مستند المصدر' });
+      primary.push({ icon: '📂', label: 'فتح الصفحة', short: 'فتح الصفحة', onclick: `EmployeeLedger.openLedgerForDoctor('${e.doctorId}',${e.periodMonth},${e.periodYear})`, title: 'فتح صفحة مستحقات الموظف' });
+      primary.push({ icon: '🔗', label: 'عرض المصدر', short: 'عرض المصدر', onclick: `EmployeeLedger.openSourceDocument('${e.id}')`, title: 'عرض مستند المصدر المرتبط' });
     }
     return renderLedgerActions(primary, []);
   }
@@ -1680,7 +1717,7 @@
         <button class="btn btn-ghost" onclick="document.getElementById('ledgerPaymentModal').classList.remove('open')">إلغاء</button>
         <button class="btn btn-primary" onclick="EmployeeLedger.submitPayment()" title="تسجيل الصرف وإنشاء سند — يُحدّث أرصدة البنود تلقائياً">✅ تسجيل الصرف</button>
       </div>
-      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;text-align:right">بعد التسجيل: اطبع <strong>سند إقرار استلام</strong> من زر <strong>🖨️ سند</strong> — و<strong>كشف حساب</strong> من زر <strong>📒 كشف</strong> — و<strong>مفردات المرتب</strong> من زر <strong>📄 مفردات</strong>. أو فعّل الطباعة التلقائية للسند من شريط الأدوات.</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;text-align:right">بعد التسجيل: ستُفتح <strong>معاينة سند إقرار استلام</strong> تلقائياً (أو فعّل الطباعة التلقائية من شريط الأدوات). يمكنك أيضاً معاينة <strong>كشف الحساب</strong> و<strong>مفردات المرتب</strong> من أزرار الإجراءات قبل الطباعة.</p>
       </div>`;
     document.body.appendChild(el);
     document.getElementById('lp-amount')?.addEventListener('input', updatePaymentPreview);
@@ -1797,9 +1834,9 @@
       global.generatePayroll?.();
       notify(`✅ تم تسجيل ${p.voucherNo} — ${fmtMoney(p.totalAmount)}`, 'success');
       const autoPrint = global.settings?.employeeLedger?.autoPrintVoucher;
-      const printBank = method === 'transfer' || autoPrint;
-      if (printBank) {
-        setTimeout(() => printVoucher(p.id), 400);
+      const previewAfterPay = method === 'transfer' || autoPrint;
+      if (previewAfterPay) {
+        setTimeout(() => previewVoucher(p.id), 400);
       }
     }
   }
@@ -1972,7 +2009,7 @@
     doctorHasPeriodData, monthHasAnyPayrollData, reconcileCarryoversForTargetMonth,
     openPaymentModal, submitPayment, updatePaymentPreview, onPaymentKindChange, openLedgerForDoctor, renderLedgerPage, renderDashboardCard,
     populateLedgerFilters, enhancePayrollCards, onPayrollGenerated, onSourceChange, queueSyncForDate,
-    printVoucher, printPeriodVoucher, printPayslip, printStatement, previewStatement, previewReport, printReport, registerAccrualType, reverseEntry, createAdjustment,
+    printVoucher, printPeriodVoucher, printPayslip, printStatement, previewStatement, previewVoucher, previewPeriodVoucher, previewPayslip, previewReport, printReport, registerAccrualType, reverseEntry, createAdjustment,
     closeMonth, reopenMonth, isMonthClosed, canEditPeriod, openSourceDocument, saveFilters,
     saveAutoPrintSetting, loadAutoPrintUI,
     prevPage, nextPage, debouncedRender, verifyIntegrity,

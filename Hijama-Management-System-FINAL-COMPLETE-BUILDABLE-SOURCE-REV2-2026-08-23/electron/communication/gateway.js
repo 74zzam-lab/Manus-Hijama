@@ -266,11 +266,15 @@ async function sendMessage(config, payload) {
     const hints = [];
     let copied = false;
     let stagedPath = '';
-    for (const item of mediaItems) {
+    const stagedPaths = [];
+    for (let i = 0; i < mediaItems.length; i++) {
+      const item = mediaItems[i];
       const staged = await stageMediaForDeeplink(item);
       if (staged.copied) copied = true;
-      if (staged.stagedPath) stagedPath = staged.stagedPath;
-      if (staged.hint) hints.push(staged.hint);
+      if (staged.stagedPath) {
+        stagedPath = staged.stagedPath;
+        stagedPaths.push(staged.stagedPath);
+      }
     }
     if (channel === 'sms') {
       await shell.openExternal(`sms:${phone}?body=${encodeURIComponent(message)}`);
@@ -278,6 +282,12 @@ async function sendMessage(config, payload) {
     }
     const launchUrl = whatsappDeeplink(phone, message, payload.waClient || config?.messaging?.waClient);
     const launched = await launchWhatsAppUrl(launchUrl);
+    const count = mediaItems.length;
+    const multiHint = copied
+      ? `تم نسخ آخر صورة للحافظة — أرفق ${count} مرفق/مرفقات في واتساب (Ctrl+V ثم إرفاق الباقي من المجلد المفتوح)`
+      : (stagedPaths.length
+        ? `فُتح مجلد ${stagedPaths.length} مرفق — أرفقها في واتساب بالترتيب`
+        : `أرفق ${count} مرفق/مرفقات في واتساب`);
     return {
       ok: launched?.ok !== false,
       channel: 'whatsapp',
@@ -287,9 +297,9 @@ async function sendMessage(config, payload) {
       reused: !!launched?.reused,
       mediaCopied: copied,
       mediaPath: stagedPath,
-      mediaParts: mediaItems.length,
-      mediaHint: hints.filter(Boolean).join(' — ')
-        || 'مرفقان: الصورة المشتركة ثم مرفق النوع — الصق/أرفق من المجلد المفتوح',
+      mediaPaths: stagedPaths,
+      mediaParts: count,
+      mediaHint: hints.filter(Boolean).join(' — ') || multiHint,
     };
   }
 

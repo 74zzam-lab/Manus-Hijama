@@ -1,7 +1,7 @@
 /**
  * Shared + per-type message media.
- * A pinned "shared" attachment is sent with every type; each type may add its own.
- * WhatsApp carries one media per message, so callers send the list in order.
+ * Each slot holds an array of attachments; shared items are sent first, then type-specific.
+ * WhatsApp carries one media per message — callers send the list in order.
  */
 (function (global) {
   'use strict';
@@ -14,11 +14,18 @@
     appointment: 'تذكير موعد',
     overdue: 'تنبيه غياب',
   };
+  const MAX_PER_SLOT = 5;
 
   function emptyStore() {
     const store = {};
-    SLOTS.forEach(function (slot) { store[slot] = null; });
+    SLOTS.forEach(function (slot) { store[slot] = []; });
     return store;
+  }
+
+  function normalizeSlotItems(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean);
+    return [value];
   }
 
   function collectMediaList(store, type) {
@@ -35,8 +42,10 @@
       copy.slot = slot;
       list.push(copy);
     }
-    push(src.shared, 'shared');
-    if (type && type !== 'shared') push(src[type], type);
+    normalizeSlotItems(src.shared).forEach(function (item) { push(item, 'shared'); });
+    if (type && type !== 'shared') {
+      normalizeSlotItems(src[type]).forEach(function (item) { push(item, type); });
+    }
     return list;
   }
 
@@ -45,7 +54,7 @@
     return list.length ? list[list.length - 1] : null;
   }
 
-  const api = { SLOTS, SLOT_LABELS, emptyStore, collectMediaList, primaryMedia };
+  const api = { SLOTS, SLOT_LABELS, MAX_PER_SLOT, emptyStore, normalizeSlotItems, collectMediaList, primaryMedia };
   global.MessageMedia = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

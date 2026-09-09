@@ -342,6 +342,16 @@ body.app-locked #sidebar-overlay {
 }
 .page-readonly .btn-primary:not([data-readonly-ok]),
 .page-readonly .btn-danger:not([data-readonly-ok]) { display: none !important; }
+.page-readonly #page-manual-msg .btn-primary,
+.page-readonly #page-manual-msg .btn-accent,
+.page-readonly #page-manual-msg input,
+.page-readonly #page-manual-msg select,
+.page-readonly #page-manual-msg textarea,
+.page-readonly #page-manual-msg button {
+  display: inline-flex !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
 .page-readonly input:not([type="search"]):not([type="month"]):not([type="date"]),
 .page-readonly select,
 .page-readonly textarea { background: var(--surface) !important; }
@@ -7565,8 +7575,8 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <span class="mm-col-count" id="mm-count-promo">0 عميل</span>
         </div>
         <div class="mm-promo-toolbar">
-          <input class="form-control" type="search" id="mm-promo-search" placeholder="بحث: اسم، ملف، هاتف..." oninput="onMmPromoSearch()">
-          <select class="form-control" id="mm-promo-filter" onchange="onMmPromoFilterChange()">
+          <input class="form-control" type="search" id="mm-promo-search" data-readonly-ok placeholder="بحث: اسم، ملف، هاتف..." oninput="onMmPromoSearch()">
+          <select class="form-control" id="mm-promo-filter" data-readonly-ok onchange="onMmPromoFilterChange()">
             <option value="all">كل العملاء بأرقام</option>
             <option value="recent">زاروا خلال 90 يوم</option>
             <option value="inactive">عملاء غياب</option>
@@ -7575,7 +7585,7 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <div class="mm-promo-bulk-actions">
             <label style="font-size:12px;display:flex;align-items:center;gap:4px">
               عدد
-              <input class="form-control" type="number" id="mm-promo-limit" min="1" value="10" style="width:72px">
+              <input class="form-control" type="number" id="mm-promo-limit" data-readonly-ok min="1" value="10" style="width:72px">
             </label>
             <button type="button" class="btn btn-ghost btn-sm" onclick="mmPromoSelectFirstN()">تحديد العدد</button>
             <button type="button" class="btn btn-ghost btn-sm" onclick="mmPromoSelectAll()">تحديد الكل</button>
@@ -25536,7 +25546,7 @@ function renderManualMessagingColumn(type, items) {
       <span class="mm-timing ${tcls}">${item.timing || '—'}</span>
       <div class="mm-client-actions">
         <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}')">👁️ معاينة</button>
-        <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال</button>
+        <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال</button>
       </div>
     </div>`;
   }).join('');
@@ -25701,7 +25711,7 @@ function renderManualPromoColumn(resetSelection) {
         <span class="mm-timing promo">آخر عرض: ${lastPromo}</span>
         <div class="mm-client-actions">
           <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}')">👁️ معاينة</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال</button>
+          <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال</button>
         </div>
       </div>
     </div>`;
@@ -28169,9 +28179,40 @@ function clearExpenseForm() {
   onExpPayMethodChange();
 }
 
+function ensureExpenseWriteBranch() {
+  if (typeof BranchContexts === 'undefined') return { ok: true };
+  let ctx = BranchContexts.assertOperationalWriteContext?.() || { ok: true };
+  if (ctx.ok) return ctx;
+  const active = (typeof BranchScope !== 'undefined' && BranchScope.getActiveBranchId?.())
+    || (typeof DeviceConfig !== 'undefined' && DeviceConfig.getLockedBranchId?.());
+  if (active && active !== '*' && active !== '__ALL__' && BranchContexts.setOperationalWriteBranch) {
+    BranchContexts.setOperationalWriteBranch(active);
+    ctx = BranchContexts.assertOperationalWriteContext();
+  }
+  return ctx;
+}
+
+function stampExpenseRecord(record) {
+  if (!record || typeof record !== 'object') return record;
+  if (typeof BranchDataIsolation !== 'undefined' && BranchDataIsolation.stampBranchId) {
+    return BranchDataIsolation.stampBranchId(record);
+  }
+  if (!record.branchId) {
+    record.branchId = (typeof BranchContexts !== 'undefined' && BranchContexts.getOperationalWriteBranch?.())
+      || (typeof BranchScope !== 'undefined' && BranchScope.getActiveBranchId?.())
+      || 'BR-MAIN';
+  }
+  return record;
+}
+
 function saveExpense() {
   if (typeof isFeatureEnabled === 'function' && !isFeatureEnabled('exp_track')) {
     notify('⛔ تسجيل النفقات غير متاح في إصدار ترخيصك', 'danger'); return;
+  }
+  const writeCtx = ensureExpenseWriteBranch();
+  if (!writeCtx.ok) {
+    notify('⚠️ اختر الفرع التشغيلي أولاً ثم أعد المحاولة — لا يمكن الحفظ بدون فرع نشط', 'warning');
+    return;
   }
   const desc = document.getElementById('exp-desc').value.trim();
   const amount = parseFloat(document.getElementById('exp-amount').value) || 0;
@@ -28200,7 +28241,7 @@ function saveExpense() {
     const idx = expenses.findIndex(x => x.id === editExpenseId);
     if (idx === -1) { notify('⚠️ المصروف غير موجود', 'danger'); return; }
     const prev = expenses[idx];
-    expenses[idx] = { ...prev, ...payload, id: prev.id, paidAt: isPaid ? (prev.paidAt || payload.paidAt) : '' };
+    expenses[idx] = stampExpenseRecord({ ...prev, ...payload, id: prev.id, paidAt: isPaid ? (prev.paidAt || payload.paidAt) : '' });
     if (typeof logAudit === 'function') logAudit('EXPENSE_UPDATED', `تعديل مصروف: ${desc} — ${fmtMoney(amount)}`, { desc, amount });
     editExpenseId = null;
     DB.set('expenses', expenses);
@@ -28210,10 +28251,10 @@ function saveExpense() {
     notify('✅ تم تحديث المصروف');
     return;
   }
-  expenses.push({
+  expenses.push(stampExpenseRecord({
     id: Date.now().toString(),
     ...payload
-  });
+  }));
   DB.set('expenses', expenses);
   trackBackupOperation();
   if (typeof logAudit === 'function') logAudit('EXPENSE_ADDED', `مصروف: ${desc} — ${fmtMoney(amount)}`, { desc, amount });

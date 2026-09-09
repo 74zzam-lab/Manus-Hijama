@@ -224,6 +224,44 @@
       ${global.printFooterDiv?.() || ''}`, false);
   };
 
+  function scopedExpenseRows(month, year) {
+    const all = global.DB?.get('expenses', global.expenses || []) || [];
+    const scoped = typeof global.getUiScopedRecords === 'function' ? global.getUiScopedRecords(all) : all;
+    return scoped.filter((e) => {
+      const matchMonth = typeof global.recordMatchesMonth === 'function'
+        ? global.recordMatchesMonth(e, month, year)
+        : (() => {
+          const d = new Date(e.date);
+          return d.getMonth() + 1 === month && d.getFullYear() === year;
+        })();
+      const paid = typeof global.isExpensePaid === 'function' ? global.isExpensePaid(e) : true;
+      return paid && matchMonth;
+    });
+  }
+
+  function buildExpenseCategoryBreakdown(expenses) {
+    const byCat = {};
+    (expenses || []).forEach((e) => {
+      const cat = String(e.cat || e.category || 'أخرى').trim() || 'أخرى';
+      byCat[cat] = (byCat[cat] || 0) + (Number(e.amount) || 0);
+    });
+    return Object.entries(byCat)
+      .map(([cat, amount]) => ({ cat, amount }))
+      .sort((a, b) => b.amount - a.amount);
+  }
+
+  function buildPayrollBreakdown(month, year) {
+    const rows = [];
+    let total = 0;
+    (global.doctors || []).forEach((d) => {
+      const block = buildPayrollDoctorBlock(d, month, year);
+      if (!(block.netTotal > 0)) return;
+      rows.push({ name: d.name, amount: block.netTotal });
+      total += block.netTotal;
+    });
+    return { rows, total };
+  }
+
   function calcProfitabilityMetrics(mc, month, year) {
     const revenue = mc.reduce((a, c) => a + (c.total || 0), 0);
     const discounts = mc.reduce((a, c) => a + (c.discountAmt || 0), 0);
@@ -240,11 +278,8 @@
         bankFees += (c.card || 0) * global.getBankRate(c.cardType) / 100;
       }
     });
-    const expenses = (global.DB?.get('expenses', []) || []).filter(e => {
-      const d = new Date(e.date);
-      const paid = typeof global.isExpensePaid === 'function' ? global.isExpensePaid(e) : true;
-      return paid && d.getMonth() + 1 === month && d.getFullYear() === year;
-    });
+    const expenses = scopedExpenseRows(month, year);
+    const expenseBreakdown = buildExpenseCategoryBreakdown(expenses);
     const expTotal = expenses.reduce((a, e) => a + (e.amount || 0), 0);
     const moves = global.inventoryMovements || global.DB?.get('inventoryMovements', []) || [];
     const items = global.inventoryItems || global.DB?.get('inventoryItems', []) || [];
@@ -256,18 +291,12 @@
       const price = item?.lastPrice || item?.unitCost || 0;
       return a + Math.abs(m.delta || 0) * price;
     }, 0);
-    const operatingCost = expenses
-      .filter(e => /تشغيل|operating|كهرب|إيجار|rent|utility/i.test(String(e.desc || e.description || '')))
-      .reduce((a, e) => a + (e.amount || 0), 0);
-    const otherExpenses = Math.max(0, expTotal - operatingCost);
-    let payrollEst = 0;
-    (global.doctors || []).forEach(d => {
-      payrollEst += buildPayrollDoctorBlock(d, month, year).netTotal;
-    });
+    const payroll = buildPayrollBreakdown(month, year);
+    const payrollEst = payroll.total;
     const netProfit = revenue - returns - comm - bankFees - taxes - expTotal - payrollEst - materialCost;
     return {
       grossRevenue, revenue, discounts, returns, comm, bankFees, taxes,
-      expTotal, materialCost, operatingCost, otherExpenses, payrollEst, netProfit
+      expTotal, expenseBreakdown, materialCost, payrollEst, payrollRows: payroll.rows, netProfit
     };
   }
 
@@ -298,17 +327,19 @@
         <table class="table-compact table-reports">
           <thead><tr><th>البند</th><th class="currency">المبلغ</th></tr></thead>
           <tbody>
+            <tr class="section-row"><td colspan="2"><strong>الإيرادات</strong></td></tr>
             <tr><td>إيرادات الفترة (بعد الخصم)</td><td class="currency">${global.fmtMoney(m.revenue)}</td></tr>
-            <tr><td>(-) الخصومات</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.discounts)}</td></tr>
+            <tr class="section-row"><td colspan="2"><strong>الخصومات والتكاليف المباشرة</strong></td></tr>
+            <tr><td>(-) الخصومات على الفواتير</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.discounts)}</td></tr>
             <tr><td>(-) المرتجعات</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.returns)}</td></tr>
-            <tr><td>(-) عمولات الأخصائيين</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.comm)}</td></tr>
+            <tr><td>(-) عمولات الأخصائيين (من الجلسات)</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.comm)}</td></tr>
             <tr><td>(-) نسبة البنك / رسوم الشبكة</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.bankFees)}</td></tr>
             <tr><td>(-) الضرائب</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.taxes)}</td></tr>
-            <tr><td>(-) المصروفات</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.expTotal)}</td></tr>
-            <tr><td>(-) تكلفة المواد</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.materialCost)}</td></tr>
-            <tr><td>(-) تكلفة التشغيل</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.operatingCost)}</td></tr>
-            <tr><td>(-) مصروفات أخرى</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.otherExpenses)}</td></tr>
-            <tr><td>(-) صافي رواتب تقديري</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.payrollEst)}</td></tr>
+            <tr><td>(-) تكلفة المواد (مخزون)</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(m.materialCost)}</td></tr>
+            <tr class="section-row"><td colspan="2"><strong>المصروفات المسجلة — ${global.fmtMoney(m.expTotal)}</strong></td></tr>
+            ${(m.expenseBreakdown || []).map((row) => `<tr><td style="padding-right:18px">↳ ${row.cat}</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(row.amount)}</td></tr>`).join('') || '<tr><td style="padding-right:18px">↳ لا مصروفات</td><td class="currency">0.00</td></tr>'}
+            <tr class="section-row"><td colspan="2"><strong>الرواتب والمستحقات التقديرية — ${global.fmtMoney(m.payrollEst)}</strong></td></tr>
+            ${(m.payrollRows || []).map((row) => `<tr><td style="padding-right:18px">↳ ${row.name}</td><td class="currency" style="color:var(--danger)">${global.fmtMoney(row.amount)}</td></tr>`).join('') || '<tr><td style="padding-right:18px">↳ لا رواتب</td><td class="currency">0.00</td></tr>'}
             <tr class="totals-row"><td>صافي الربح الحقيقي</td><td class="currency">${global.fmtMoney(m.netProfit)}</td></tr>
           </tbody>
         </table>
@@ -336,17 +367,19 @@
         ${global.mbox ? global.mbox('Net Profit', 'صافي الربح الحقيقي', global.fmtMoney(m.netProfit)) : ''}
       </div>
       <table><thead><tr><th>البند</th><th>المبلغ</th></tr></thead><tbody>
+        <tr><td colspan="2"><strong>الإيرادات</strong></td></tr>
         <tr><td>إيرادات الفترة</td><td class="money">${global.fmtMoney(m.revenue)}</td></tr>
-        <tr><td>الخصومات</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.discounts)}</td></tr>
+        <tr><td colspan="2"><strong>الخصومات والتكاليف المباشرة</strong></td></tr>
+        <tr><td>الخصومات على الفواتير</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.discounts)}</td></tr>
         <tr><td>المرتجعات</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.returns)}</td></tr>
-        <tr><td>عمولات الأخصائيين</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.comm)}</td></tr>
+        <tr><td>عمولات الأخصائيين (من الجلسات)</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.comm)}</td></tr>
         <tr><td>رسوم البنك</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.bankFees)}</td></tr>
         <tr><td>الضرائب</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.taxes)}</td></tr>
-        <tr><td>المصاريف</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.expTotal)}</td></tr>
-        <tr><td>تكلفة المواد</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.materialCost)}</td></tr>
-        <tr><td>تكلفة التشغيل</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.operatingCost)}</td></tr>
-        <tr><td>مصروفات أخرى</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.otherExpenses)}</td></tr>
-        <tr><td>رواتب تقديرية</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.payrollEst)}</td></tr>
+        <tr><td>تكلفة المواد (مخزون)</td><td class="money" style="color:#c00">- ${global.fmtMoney(m.materialCost)}</td></tr>
+        <tr><td colspan="2"><strong>المصروفات المسجلة — ${global.fmtMoney(m.expTotal)}</strong></td></tr>
+        ${(m.expenseBreakdown || []).map((row) => `<tr><td style="padding-right:16px">↳ ${row.cat}</td><td class="money" style="color:#c00">- ${global.fmtMoney(row.amount)}</td></tr>`).join('') || '<tr><td style="padding-right:16px">↳ لا مصروفات</td><td class="money">0.00</td></tr>'}
+        <tr><td colspan="2"><strong>الرواتب والمستحقات التقديرية — ${global.fmtMoney(m.payrollEst)}</strong></td></tr>
+        ${(m.payrollRows || []).map((row) => `<tr><td style="padding-right:16px">↳ ${row.name}</td><td class="money" style="color:#c00">- ${global.fmtMoney(row.amount)}</td></tr>`).join('') || '<tr><td style="padding-right:16px">↳ لا رواتب</td><td class="money">0.00</td></tr>'}
         <tr class="tr-total"><td>صافي الربح الحقيقي</td><td class="money">${global.fmtMoney(m.netProfit)}</td></tr>
       </tbody></table>
       ${global.printFooterDiv?.() || ''}`;

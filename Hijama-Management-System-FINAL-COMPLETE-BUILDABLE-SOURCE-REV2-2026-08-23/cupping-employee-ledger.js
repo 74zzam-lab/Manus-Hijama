@@ -77,6 +77,7 @@
   let _syncTimer = null;
   let _listPage = 1;
   let _renderTimer = null;
+  let _reconcilingVouchers = false;
 
   function notify(msg, type) { if (typeof global.notify === 'function') global.notify(msg, type); }
   function fmtMoney(v) { return typeof global.fmtMoney === 'function' ? global.fmtMoney(v) : String(v); }
@@ -98,7 +99,9 @@
     }
     return global.BranchContexts?.getOperationalWriteBranch?.()
       || global.BranchScope?.getViewBranchFilter?.()
-      || null;
+      || global.BranchScope?.getActiveBranchId?.()
+      || global.BranchScope?.DEFAULT_BRANCH_ID
+      || 'BR-MAIN';
   }
 
   function isLedgerAggregateView() {
@@ -110,12 +113,7 @@
     if (!Array.isArray(records)) return [];
     if (isLedgerAggregateView()) return records.slice();
     const bid = resolveLedgerBranchId();
-    if (!bid) {
-      if (typeof global.BranchScope === 'undefined' && typeof global.BranchAuthority === 'undefined') {
-        return records.slice();
-      }
-      return [];
-    }
+    if (!bid) return records.slice();
     if (global.BranchScope?.filterByBranch) {
       return global.BranchScope.filterByBranch(records, bid);
     }
@@ -126,11 +124,123 @@
     });
   }
 
+  function allLedgerPaymentsFromDb() {
+    return global.DB?.get('employeeLedgerPayments', []) || [];
+  }
+
   function stampLedgerBranch(record) {
     if (!record || typeof record !== 'object') return record;
     const bid = resolveLedgerBranchId();
     if (bid && !record.branchId) record.branchId = bid;
     return record;
+  }
+
+  function allocationPeriodLabel(a, payment) {
+    const srcM = a.originMonth || a.periodMonth || payment?.periodMonth;
+    const srcY = a.originYear || a.periodYear || payment?.periodYear;
+    const payM = payment?.periodMonth;
+    const payY = payment?.periodYear;
+    const isCarried = a.isCarryover
+      || (srcM && payM && normMonth(srcM) !== normMonth(payM))
+      || (srcY && payY && normYear(srcY) !== normYear(payY));
+    if (isCarried && srcM && srcY) {
+      return `مرحّل — ${MONTH_NAMES[normMonth(srcM)] || srcM} ${srcY}`;
+    }
+    if (srcM && srcY) return `${MONTH_NAMES[normMonth(srcM)] || srcM} ${srcY}`;
+    if (payM && payY) return `${MONTH_NAMES[normMonth(payM)] || payM} ${payY}`;
+    return '—';
+  }
+
+  function paymentMatchesDoctorPeriod(payment, doctorId, month, year) {
+    if (!payment || payment.doctorId !== doctorId) return false;
+    if (periodMatches(payment, month, year)) return true;
+    return (payment.allocations || []).some((a) =>
+      normMonth(a.periodMonth) === normMonth(month) && normYear(a.periodYear) === normYear(year)
+    );
+  }
+
+  function hydratePaymentsFromEntries(allPayments) {
+    const byId = new Map((allPayments || []).filter(p => p && p.id).map(p => [p.id, p]));
+    entries.forEach((e) => {
+      if (!e.paymentId || !byId.has(e.paymentId)) return;
+      if (payments.some(p => p.id === e.paymentId)) return;
+      payments.push(byId.get(e.paymentId));
+    });
+  }
+
+  function reconcileMissingPaymentVouchers(allPayments) {
+    const pool = Array.isArray(allPayments) ? allPayments : allLedgerPaymentsFromDb();
+    const paidGroups = new Map();
+    accruals.forEach((a) => {
+      if (a.status === 'void' || !(a.paidAmount > 0.001)) return;
+      const key = `${a.doctorId}|${normYear(a.periodYear)}|${normMonth(a.periodMonth)}`;
+      if (!paidGroups.has(key)) {
+        paidGroups.set(key, {
+          doctorId: a.doctorId,
+          doctorName: a.doctorName,
+          month: normMonth(a.periodMonth),
+          year: normYear(a.periodYear),
+          allocations: []
+        });
+      }
+      paidGroups.get(key).allocations.push({
+        accrualId: a.id,
+        type: a.type,
+        typeLabel: a.typeLabel,
+        periodMonth: a.periodMonth,
+        periodYear: a.periodYear,
+        originMonth: a.originMonth,
+        originYear: a.originYear,
+        isCarryover: a.isCarryover,
+        amount: a.paidAmount
+      });
+    });
+
+    let changed = false;
+    paidGroups.forEach((group) => {
+      const hasVoucher = pool.some((p) => paymentMatchesDoctorPeriod(p, group.doctorId, group.month, group.year))
+        || payments.some((p) => paymentMatchesDoctorPeriod(p, group.doctorId, group.month, group.year));
+      if (hasVoucher) return;
+
+      const payEntry = entries.find((e) =>
+        e.entryType === 'payment'
+        && e.doctorId === group.doctorId
+        && periodMatches(e, group.month, group.year)
+        && e.paymentId
+      );
+      if (payEntry) {
+        const fromDb = pool.find(p => p.id === payEntry.paymentId);
+        if (fromDb && !payments.some(p => p.id === fromDb.id)) {
+          payments.push(fromDb);
+          changed = true;
+        }
+        return;
+      }
+
+      const total = round2(group.allocations.reduce((s, a) => s + (a.amount || 0), 0));
+      if (total <= 0) return;
+      const payment = stampLedgerBranch({
+        id: uid(),
+        voucherNo: nextVoucherNo(),
+        doctorId: group.doctorId,
+        doctorName: group.doctorName,
+        totalAmount: total,
+        paymentMethod: 'cash',
+        notes: 'سند مُستعاد تلقائياً من بنود مدفوعة بلا سجل سند',
+        paymentKind: 'full',
+        paidAt: new Date().toISOString(),
+        paidBy: user()?.id || '',
+        paidByName: user()?.fullName || user()?.username || 'system',
+        allocations: group.allocations,
+        periodMonth: group.month,
+        periodYear: group.year,
+        settlementStatus: 'full',
+        backfilled: true
+      });
+      payments.push(payment);
+      changed = true;
+    });
+    return changed;
   }
 
   function invalidateBranchCache() {
@@ -479,10 +589,16 @@
   }
 
   function loadStore() {
+    const allPayments = allLedgerPaymentsFromDb();
     accruals = filterLedgerRecords(global.DB?.get('employeeLedgerAccruals', []) || []);
-    payments = filterLedgerRecords(global.DB?.get('employeeLedgerPayments', []) || []);
+    payments = filterLedgerRecords(allPayments);
     entries = filterLedgerRecords(global.DB?.get('employeeLedgerEntries', []) || []);
     ensureLedgerSettings();
+    hydratePaymentsFromEntries(allPayments);
+    if (!_reconcilingVouchers && reconcileMissingPaymentVouchers(allPayments)) {
+      _reconcilingVouchers = true;
+      try { saveStore(); } finally { _reconcilingVouchers = false; }
+    }
     if (!entries.length && (accruals.length || payments.length)) rebuildEntriesFromLegacy();
   }
 
@@ -1011,12 +1127,37 @@
 
   function getDoctorAccruals(doctorId, month, year) {
     loadStore();
+    const m = month ? normMonth(month) : 0;
+    const y = year ? normYear(year) : 0;
     return accruals.filter(a => {
       if (a.status === 'void') return false;
       if (doctorId && a.doctorId !== doctorId) return false;
-      if (month && year) return a.periodMonth === month && a.periodYear === year;
+      if (m && y) return normMonth(a.periodMonth) === m && normYear(a.periodYear) === y;
       return true;
     }).sort((a, b) => (a.priority || 0) - (b.priority || 0));
+  }
+
+  function countPaymentsForPeriod(month, year) {
+    loadStore();
+    const m = normMonth(month);
+    const y = normYear(year);
+    const ids = new Set();
+    const consider = (list) => {
+      (list || []).forEach((p) => {
+        if (!p?.id || ids.has(p.id)) return;
+        if (periodMatches(p, m, y) || (p.allocations || []).some((a) =>
+          normMonth(a.periodMonth) === m && normYear(a.periodYear) === y
+        )) ids.add(p.id);
+      });
+    };
+    consider(payments);
+    consider(allLedgerPaymentsFromDb());
+    entries.forEach((e) => {
+      if (e.status === 'void' || e.entryType !== 'payment' || !e.paymentId) return;
+      if (!periodMatches(e, m, y)) return;
+      ids.add(e.paymentId);
+    });
+    return ids.size;
   }
 
   function getSummary(doctorId, month, year) {
@@ -1055,7 +1196,7 @@
       totalCarried: round2(totalCarried),
       employeesWithBalance: withBalance, topFive: ranking.slice(0, 5),
       entryCount: entries.filter(e => e.status !== 'void' && e.periodMonth === month && e.periodYear === year).length,
-      voucherCount: payments.filter(p => periodMatches(p, month, year)).length,
+      voucherCount: countPaymentsForPeriod(month, year),
       monthClosed: isMonthClosed(month, year)
     };
   }
@@ -1103,7 +1244,12 @@
     pool.forEach(a => {
       if (left <= 0) return;
       const take = Math.min(remaining(a), left);
-      allocations.push({ accrualId: a.id, type: a.type, typeLabel: a.typeLabel, periodMonth: a.periodMonth, periodYear: a.periodYear, amount: take });
+      allocations.push({
+        accrualId: a.id, type: a.type, typeLabel: a.typeLabel,
+        periodMonth: a.periodMonth, periodYear: a.periodYear,
+        originMonth: a.originMonth, originYear: a.originYear,
+        isCarryover: a.isCarryover, amount: take
+      });
       left = round2(left - take);
     });
     return { allocations, unallocated: left };
@@ -1116,7 +1262,9 @@
       .sort((a, b) => (a.priority || 0) - (b.priority || 0))
       .map(a => ({
         accrualId: a.id, type: a.type, typeLabel: a.typeLabel,
-        periodMonth: a.periodMonth, periodYear: a.periodYear, amount: remaining(a)
+        periodMonth: a.periodMonth, periodYear: a.periodYear,
+        originMonth: a.originMonth, originYear: a.originYear,
+        isCarryover: a.isCarryover, amount: remaining(a)
       }));
     const total = round2(allocations.reduce((s, a) => s + a.amount, 0));
     return { allocations, total };
@@ -1263,9 +1411,9 @@
     const itemNames = (payment.allocations || []).map(a => a.typeLabel).join(' و') || 'مستحقات';
     const amountWords = amountToArabicWords(payment.totalAmount);
     const rows = (payment.allocations || []).map((a, i) =>
-      `<tr><td class="center">${i + 1}</td><td>${a.typeLabel}</td><td class="money">${fmtMoney(a.amount)}</td></tr>`
+      `<tr><td class="center">${i + 1}</td><td>${a.typeLabel}${a.isCarryover ? ' <span style="color:#856404">(مرحّل)</span>' : ''}</td><td>${allocationPeriodLabel(a, payment)}</td><td class="money">${fmtMoney(a.amount)}</td></tr>`
     ).join('');
-    const itemsTable = rows ? `<table style="width:100%;margin-top:14px;border-collapse:collapse"><thead><tr><th>#</th><th>البند</th><th>المبلغ</th></tr></thead><tbody>${rows}</tbody></table>` : '';
+    const itemsTable = rows ? `<table style="width:100%;margin-top:14px;border-collapse:collapse"><thead><tr><th>#</th><th>البند</th><th>عن شهر / المصدر</th><th>المبلغ</th></tr></thead><tbody>${rows}</tbody></table>` : '';
 
     if (thermal) {
       return `<div class="thermal-receipt" style="text-align:center;font-family:Cairo,sans-serif">
@@ -1383,10 +1531,17 @@
     else printPayslip(doctorId, month, year);
   }
 
+  function findPaymentById(paymentId) {
+    if (!paymentId) return null;
+    loadStore();
+    return payments.find(x => x.id === paymentId)
+      || allLedgerPaymentsFromDb().find(x => x.id === paymentId)
+      || null;
+  }
+
   function previewVoucher(paymentId) {
     if (!hasPerm('ledger.print') && !hasPerm('reports.print') && !hasPerm('ledger.view')) return;
-    loadStore();
-    const p = payments.find(x => x.id === paymentId);
+    const p = findPaymentById(paymentId);
     if (!p) { notify('⚠️ السند غير موجود', 'warning'); return; }
     const html = buildVoucherHtml(p);
     const title = `سند إقرار استلام — ${p.doctorName || '—'} — ${p.voucherNo || ''}`;
@@ -1406,24 +1561,25 @@
 
   function findLatestPaymentForPeriod(doctorId, month, year, paymentId) {
     loadStore();
-    if (paymentId) {
-      const fromMem = payments.find(x => x.id === paymentId);
-      if (fromMem) return fromMem;
-      const all = global.DB?.get('employeeLedgerPayments', []) || [];
-      return all.find(x => x.id === paymentId) || null;
-    }
+    if (paymentId) return findPaymentById(paymentId);
     const m = normMonth(month);
     const y = normYear(year);
-    const pool = payments.length ? payments : (global.DB?.get('employeeLedgerPayments', []) || []);
-    return pool
-      .filter(p => p.doctorId === doctorId && periodMatches(p, m, y))
-      .sort((a, b) => String(b.paidAt || b.createdAt || '').localeCompare(String(a.paidAt || a.createdAt || '')))[0] || null;
+    const pool = [...payments, ...allLedgerPaymentsFromDb()].filter((p, i, arr) =>
+      p && p.id && arr.findIndex(x => x.id === p.id) === i
+    );
+    const fromPayments = pool
+      .filter(p => paymentMatchesDoctorPeriod(p, doctorId, m, y))
+      .sort((a, b) => String(b.paidAt || b.createdAt || '').localeCompare(String(a.paidAt || a.createdAt || '')));
+    if (fromPayments.length) return fromPayments[0];
+    const entryPayId = entries
+      .filter(e => e.status !== 'void' && e.entryType === 'payment' && e.doctorId === doctorId && periodMatches(e, m, y) && e.paymentId)
+      .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0]?.paymentId;
+    return entryPayId ? findPaymentById(entryPayId) : null;
   }
 
   function printVoucher(paymentId, thermal) {
     if (!hasPerm('ledger.print') && !hasPerm('reports.print')) { notify('⛔ لا صلاحية للطباعة', 'danger'); return; }
-    loadStore();
-    const p = payments.find(x => x.id === paymentId);
+    const p = findPaymentById(paymentId);
     if (!p) { notify('⚠️ السند غير موجود', 'warning'); return; }
     const html = buildVoucherHtml(p, thermal);
     if (thermal && global.printThermalDoc) global.printThermalDoc(html);

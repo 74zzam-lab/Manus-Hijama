@@ -68,6 +68,7 @@
     { id: 'late_deduction', label: 'خصم تأخير', priority: 220, category: 'deduction' },
     { id: 'short_deduction', label: 'خصم نقص دوام', priority: 230, category: 'deduction' },
     { id: 'insurance', label: 'تأمينات', priority: 240, category: 'deduction' },
+    { id: 'salary_advance', label: 'سلفة', priority: 250, category: 'deduction' },
     { id: 'manual_adjustment', label: 'تسوية يدوية', priority: 900, category: 'adjustment' }
   ];
 
@@ -634,6 +635,41 @@
     return global.settings.employeeLedger.accrualTypes.find(t => t.id === typeId)
       || DEFAULT_ACCRUAL_TYPES.find(t => t.id === typeId)
       || { id: typeId, label: typeId, priority: 500, category: 'earning' };
+  }
+
+  function resolveAllocationLabel(a, payment) {
+    if (!a) return '—';
+    if (payment?.paymentKind === 'advance' || a.type === 'salary_advance') return 'سلفة';
+    const def = getTypeDef(a.type);
+    return a.typeLabel || def.label || a.type || '—';
+  }
+
+  function normalizeAllocation(allocation, paymentKind) {
+    allocation = allocation || {};
+    if (paymentKind === 'advance') {
+      return {
+        ...allocation,
+        type: 'salary_advance',
+        typeLabel: 'سلفة'
+      };
+    }
+    const def = getTypeDef(allocation.type);
+    return {
+      ...allocation,
+      typeLabel: allocation.typeLabel || def.label || allocation.type || '—'
+    };
+  }
+
+  function buildAdvanceAllocations(doctorId, month, year, amount) {
+    const amt = round2(amount);
+    if (amt <= 0) return [];
+    return [{
+      type: 'salary_advance',
+      typeLabel: 'سلفة',
+      periodMonth: month,
+      periodYear: year,
+      amount: amt
+    }];
   }
 
   function registerAccrualType(def) {
@@ -1244,12 +1280,12 @@
     pool.forEach(a => {
       if (left <= 0) return;
       const take = Math.min(remaining(a), left);
-      allocations.push({
+      allocations.push(normalizeAllocation({
         accrualId: a.id, type: a.type, typeLabel: a.typeLabel,
         periodMonth: a.periodMonth, periodYear: a.periodYear,
         originMonth: a.originMonth, originYear: a.originYear,
         isCarryover: a.isCarryover, amount: take
-      });
+      }));
       left = round2(left - take);
     });
     return { allocations, unallocated: left };
@@ -1260,7 +1296,7 @@
     const allocations = getDoctorAccruals(doctorId, month, year)
       .filter(a => ids.has(a.id) && a.category !== 'deduction' && remaining(a) > 0.001)
       .sort((a, b) => (a.priority || 0) - (b.priority || 0))
-      .map(a => ({
+      .map(a => normalizeAllocation({
         accrualId: a.id, type: a.type, typeLabel: a.typeLabel,
         periodMonth: a.periodMonth, periodYear: a.periodYear,
         originMonth: a.originMonth, originYear: a.originYear,
@@ -1288,11 +1324,15 @@
     if (!doctor) { notify('⚠️ الموظف غير موجود', 'danger'); return null; }
     const amount = round2(parseFloat(opts.amount) || 0);
     if (amount <= 0) { notify('⚠️ أدخل مبلغاً صحيحاً', 'danger'); return null; }
-    let allocations = opts.allocations || [];
+    let allocations = (opts.allocations || []).map((a) => normalizeAllocation(a, opts.paymentKind));
     if (!allocations.length) {
-      const auto = autoAllocate(opts.doctorId, amount, opts.month, opts.year, opts.typeFilter);
-      allocations = auto.allocations;
-      if (auto.unallocated > 0.01 && !hasPerm('ledger.partial_pay')) notify(`⚠️ لم يُخصص ${fmtMoney(auto.unallocated)}`, 'danger');
+      if (opts.paymentKind === 'advance') {
+        allocations = buildAdvanceAllocations(opts.doctorId, opts.month, opts.year, amount);
+      } else {
+        const auto = autoAllocate(opts.doctorId, amount, opts.month, opts.year, opts.typeFilter);
+        allocations = auto.allocations;
+        if (auto.unallocated > 0.01 && !hasPerm('ledger.partial_pay')) notify(`⚠️ لم يُخصص ${fmtMoney(auto.unallocated)}`, 'danger');
+      }
     }
     const allocTotal = round2(allocations.reduce((s, a) => s + a.amount, 0));
     if (allocTotal <= 0) { notify('⚠️ لا توجد بنود قابلة للصرف', 'danger'); return null; }
@@ -1312,8 +1352,22 @@
       row.paidAmount = round2((row.paidAmount || 0) + al.amount);
       row.status = remaining(row) <= 0.001 ? 'paid' : 'partial';
     });
+    if (opts.paymentKind === 'advance') {
+      upsertAccrual({
+        doctorId: doctor.id,
+        doctorName: doctor.name,
+        type: 'salary_advance',
+        amount: allocTotal,
+        periodMonth: opts.month,
+        periodYear: opts.year,
+        sourceType: 'payment',
+        sourceId: payment.id,
+        description: `سلفة مستحقة الاسترداد — ${payment.voucherNo}`,
+        syncKey: `advance-ded|${payment.id}`
+      });
+    }
     reconcileCarryoversAfterPayment(allocations);
-    const allocDetail = allocations.map(a => a.typeLabel).join(' + ');
+    const allocDetail = allocations.map(a => resolveAllocationLabel(a, payment)).join(' + ');
     const kindLabel = PAYMENT_KIND_LABELS[payment.paymentKind] || 'صرف';
     postEntry({
       doctorId: doctor.id, doctorName: doctor.name, entryType: 'payment', refType: 'payment',
@@ -1401,7 +1455,8 @@
   function buildAllocationAckLine(a, payment) {
     const period = allocationPeriodLabel(a, payment);
     const carryNote = a.isCarryover ? ' <span style="color:#856404;font-size:12px">(مرحّل من شهر سابق)</span>' : '';
-    return `• <strong>${a.typeLabel}</strong> عن شهر <strong>${period}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong>${carryNote}`;
+    const label = resolveAllocationLabel(a, payment);
+    return `• <strong>${label}</strong> عن شهر <strong>${period}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong>${carryNote}`;
   }
 
   function buildVoucherHtml(payment, thermal) {
@@ -1419,9 +1474,10 @@
       ? allocations.map((a) => buildAllocationAckLine(a, payment)).join('<br>')
       : '';
     const amountWords = amountToArabicWords(payment.totalAmount);
-    const rows = (payment.allocations || []).map((a, i) =>
-      `<tr><td class="center">${i + 1}</td><td>${a.typeLabel}${a.isCarryover ? ' <span style="color:#856404">(مرحّل)</span>' : ''}</td><td>${allocationPeriodLabel(a, payment)}</td><td class="money">${fmtMoney(a.amount)}</td></tr>`
-    ).join('');
+    const rows = (payment.allocations || []).map((a, i) => {
+      const label = resolveAllocationLabel(a, payment);
+      return `<tr><td class="center">${i + 1}</td><td>${label}${a.isCarryover ? ' <span style="color:#856404">(مرحّل)</span>' : ''}</td><td>${allocationPeriodLabel(a, payment)}</td><td class="money">${fmtMoney(a.amount)}</td></tr>`;
+    }).join('');
     const itemsTable = rows ? `<table style="width:100%;margin-top:14px;border-collapse:collapse"><thead><tr><th>#</th><th>البند</th><th>عن شهر / المصدر</th><th>المبلغ</th></tr></thead><tbody>${rows}</tbody></table>` : '';
 
     if (thermal) {
@@ -1953,13 +2009,16 @@
       const picked = allocateByAccrualIds(doctorId, month, year, getSelectedPaymentItemIds());
       allocations = picked.allocations;
       amount = picked.total;
+    } else if (kind === 'advance') {
+      amount = parseFloat(amountEl?.value) || 0;
+      if (amount > 0) allocations = buildAdvanceAllocations(doctorId, month, year, amount);
     } else {
       amount = parseFloat(amountEl?.value) || 0;
       if (amount > 0) allocations = autoAllocate(doctorId, amount, month, year).allocations;
     }
     const rem = s ? Math.max(0, round2(s.remaining - amount)) : 0;
     if (!amount && !allocations.length) { el.textContent = ''; return; }
-    el.innerHTML = (allocations.map(a => `${a.typeLabel}: ${fmtMoney(a.amount)}`).join(' · ') || 'لا بنود مفتوحة')
+    el.innerHTML = (allocations.map(a => `${resolveAllocationLabel(a, { paymentKind: kind })}: ${fmtMoney(a.amount)}`).join(' · ') || 'لا بنود مفتوحة')
       + (amount > 0 ? `<br><strong>إجمالي الصرف:</strong> <span dir="ltr">${fmtMoney(amount)}</span>` : '')
       + (amount > 0 ? `<br><strong>المتبقي بعد الصرف:</strong> <span dir="ltr">${fmtMoney(rem)}</span>` : '');
     if (rem > 0.001 && amount > 0) {
@@ -1997,9 +2056,15 @@
       allocations = picked.allocations;
       amount = picked.total;
       if (!allocations.length) { notify('⚠️ اختر بنداً واحداً على الأقل', 'danger'); return; }
+    } else if (kind === 'advance') {
+      if (amount <= 0) { notify('⚠️ أدخل مبلغ السلفة', 'danger'); return; }
+      allocations = buildAdvanceAllocations(doctorId, month, year, amount);
     }
     if (amount <= 0) { notify('⚠️ أدخل مبلغاً أكبر من صفر', 'danger'); return; }
-    if (amount > s.remaining + 0.01) { notify(`⚠️ المبلغ يتجاوز المتبقي (${fmtMoney(s.remaining)})`, 'danger'); return; }
+    if (kind !== 'advance' && amount > s.remaining + 0.01) {
+      notify(`⚠️ المبلغ يتجاوز المتبقي (${fmtMoney(s.remaining)})`, 'danger');
+      return;
+    }
     const method = document.getElementById('lp-method').value;
     const p = recordPayment({
       doctorId,

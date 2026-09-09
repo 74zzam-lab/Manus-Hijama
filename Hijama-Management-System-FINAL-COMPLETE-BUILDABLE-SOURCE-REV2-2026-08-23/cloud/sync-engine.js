@@ -854,6 +854,9 @@
       }
 
       const result = await applyRemoteVersions(remoteRes.data, options);
+      try {
+        await global.LicenseCloud?.pullAndMergeFromDrive?.({ centerId, mergeDevices: true });
+      } catch { /* device registry refresh is best-effort */ }
       global.SyncState?.touchPoll?.();
       emit('synced', { direction: 'poll', ...result });
       return { ok: true, ...result };

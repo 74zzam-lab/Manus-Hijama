@@ -557,7 +557,24 @@ body.app-locked #sidebar-overlay {
 .main-scroll { overflow-x: hidden; }
 .modal { max-height: calc(100dvh - (2 * clamp(24px, 5vh, 48px))); overflow-y: auto; }
 .table-wrap { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; }
-@media (max-width: 1366px) { .page { padding: var(--space-lg) 20px; } }
+@media (max-width: 1366px) {
+  .page { padding: var(--space-lg) 16px; }
+  .backup-status-card { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)); gap: 10px; }
+  .backup-status-item { min-width: 0; }
+  .backup-status-item strong { font-size: 13px; word-break: break-word; }
+  .backup-combined-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .backup-combined-actions .btn { flex: 1 1 auto; min-width: 9.5rem; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .form-grid-4, .form-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+@media (max-height: 768px) {
+  .page { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+  .modal-shell { max-height: min(88vh, calc(100dvh - 16px)) !important; }
+  .dash-kpi-row .kpi-card { min-height: 78px; padding: 10px 12px; }
+  .topbar.workspace-topbar.glass-topbar { padding-block: 8px; }
+}
 @media (max-width: 768px)  { .page { padding: var(--space-md) var(--space-md); } }
 
 /* ── STATS GRID ── */
@@ -4163,6 +4180,10 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
 /* Dashboard grid — follows existing project breakpoints */
 @media (max-width: 1400px) {
   .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1366px) {
+  .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .dash-kpi-row .stat-value { font-size: 20px; }
 }
 @media (max-width: 1100px) {
   .dash-kpi-row { grid-template-columns: repeat(2, 1fr); }
@@ -20133,6 +20154,7 @@ async function runCloudV2SyncNow() {
       });
     }
     notify('⏳ جاري تحديث البيانات بين الأجهزة...', 'warning');
+    try { await LicenseCloud?.pullAndMergeFromDrive?.({ mergeDevices: true }); } catch { /* empty */ }
     const res = await SyncEngine.runOnce({ force: true });
     if (!res?.ok) {
       emitBackupUiStatus('sync-failed', { error: res?.message || res?.error || 'sync_failed' });
@@ -20623,7 +20645,9 @@ function renderCloudV2BackupStatus() {
     : '—';
   const devName = dc?.deviceName || settings?.backup?.deviceName || '—';
   set('bk-cv2-device', `${branchLabel} / ${devName}`);
-  loadCloudV2PollIntervalUI();
+  if (!document.activeElement || document.activeElement.id !== 'bk-cv2-poll-interval') {
+    loadCloudV2PollIntervalUI();
+  }
   renderDriveMigrationStatusUI();
   renderLegacyBranchMigrationStatusUI();
   renderBackupStatusSummary();
@@ -20754,17 +20778,35 @@ async function runDriveBranchMigration(force) {
 function loadCloudV2PollIntervalUI() {
   const sel = document.getElementById('bk-cv2-poll-interval');
   if (!sel) return;
-  const ms = window.SyncState?.load?.()?.pollIntervalMs || tdwSyncEngine()?.DEFAULT_POLL_MS || 15000;
-  sel.value = String(ms);
+  const ms = Number(window.SyncState?.load?.()?.pollIntervalMs || tdwSyncEngine()?.DEFAULT_POLL_MS || 15000);
+  const val = String(ms);
+  let matched = false;
+  for (const opt of sel.options) {
+    if (opt.value === val) { matched = true; break; }
+  }
+  if (!matched) {
+    const custom = document.createElement('option');
+    custom.value = val;
+    custom.textContent = Math.round(ms / 1000) + ' ث';
+    custom.dataset.customPoll = '1';
+    sel.querySelectorAll('option[data-custom-poll="1"]').forEach((o) => o.remove());
+    sel.appendChild(custom);
+  }
+  sel.value = val;
 }
 
 function saveCloudV2PollInterval() {
   const sel = document.getElementById('bk-cv2-poll-interval');
+  if (!sel) return;
+  const raw = Number(sel.value) || 15000;
+  const bounded = Math.max(5000, Math.min(300000, raw));
+  const state = window.SyncState?.load?.() || window.SyncState?.defaultState?.() || {};
+  state.pollIntervalMs = bounded;
+  window.SyncState?.save?.(state);
   const syncEngine = tdwSyncEngine();
-  if (!sel || !syncEngine) return;
-  const ms = syncEngine.setPollIntervalMs?.(Number(sel.value)) || Number(sel.value);
+  const ms = syncEngine?.setPollIntervalMs?.(bounded) || bounded;
   notify('✅ فترة السحب: ' + Math.round(ms / 1000) + ' ثانية', 'success');
-  if (typeof renderCloudV2BackupStatus === 'function') renderCloudV2BackupStatus();
+  loadCloudV2PollIntervalUI();
   emitBackupUiStatus('poll-interval-saved', { pollIntervalMs: ms });
 }
 

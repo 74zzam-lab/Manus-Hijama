@@ -110,6 +110,34 @@
     try { global.DB?.remove?.(REMOTE_REPLICATION_KEY); } catch { global.DB?.set?.(REMOTE_REPLICATION_KEY, null); }
   }
 
+  function getRegisteredDevices(doc) {
+    return Array.isArray(doc?.devices?.registered) ? doc.devices.registered : [];
+  }
+
+  /** Union device registry rows — prefer newer lastSeenAt / registeredAt per UUID. */
+  function mergeLicenseDocs(local, remote) {
+    if (!local) return remote;
+    if (!remote) return local;
+    const pickBase = (Number(remote.licenseVersion) || 0) >= (Number(local.licenseVersion) || 0) ? remote : local;
+    const other = pickBase === remote ? local : remote;
+    const merged = { ...pickBase };
+    const byUuid = new Map();
+    for (const d of [...getRegisteredDevices(merged), ...getRegisteredDevices(other)]) {
+      if (!d?.deviceUuid) continue;
+      const prev = byUuid.get(d.deviceUuid);
+      const score = String(d.lastSeenAt || d.registeredAt || d.updatedAt || '');
+      const prevScore = prev ? String(prev.lastSeenAt || prev.registeredAt || prev.updatedAt || '') : '';
+      if (!prev || score >= prevScore) byUuid.set(d.deviceUuid, { ...prev, ...d });
+    }
+    merged.devices = { registered: Array.from(byUuid.values()) };
+    merged.licenseVersion = Math.max(Number(local.licenseVersion) || 0, Number(remote.licenseVersion) || 0);
+    if (!merged.branches?.length && Array.isArray(other.branches) && other.branches.length) {
+      merged.branches = other.branches;
+    }
+    if (!merged.centerName && other.centerName) merged.centerName = other.centerName;
+    return merged;
+  }
+
   function drivePath(centerId) {
     return global.DriveLayout?.licenseJson?.(centerId) || '';
   }
@@ -218,8 +246,19 @@
       saveLocal(doc);
     }
 
-    const push = await pushToDrive(doc);
+    const push = await pushToDrive(doc, options);
     return push;
+  }
+
+  /** Pull license.json from Drive and merge device registry with local cache. */
+  async function pullAndMergeFromDrive(options) {
+    options = options || {};
+    const centerId = options.centerId || loadLocal()?.centerId || global.CenterId?.getStoredCenterId?.();
+    if (!centerId) return { ok: false, error: 'no_center_id' };
+    if (typeof global.Bootstrap?.fetchLicenseFromDrive === 'function') {
+      return global.Bootstrap.fetchLicenseFromDrive(centerId, { ...options, mergeDevices: true });
+    }
+    return { ok: false, error: 'bootstrap_unavailable' };
   }
 
   global.LicenseCloud = {
@@ -236,6 +275,8 @@
     drivePath,
     pushToDrive,
     ensurePushedToDrive,
+    pullAndMergeFromDrive,
+    mergeLicenseDocs,
     defaultBranches
   };
 })(typeof window !== 'undefined' ? window : globalThis);

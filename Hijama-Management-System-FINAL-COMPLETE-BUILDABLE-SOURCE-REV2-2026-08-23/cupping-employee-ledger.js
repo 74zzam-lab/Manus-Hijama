@@ -1398,6 +1398,12 @@
     return { paid: 'tag-green', partial: 'tag-gold', unpaid: 'tag-red', none: 'tag-gray' }[status] || 'tag-gray';
   }
 
+  function buildAllocationAckLine(a, payment) {
+    const period = allocationPeriodLabel(a, payment);
+    const carryNote = a.isCarryover ? ' <span style="color:#856404;font-size:12px">(مرحّل من شهر سابق)</span>' : '';
+    return `• <strong>${a.typeLabel}</strong> عن شهر <strong>${period}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong>${carryNote}`;
+  }
+
   function buildVoucherHtml(payment, thermal) {
     const cn = global.settings?.centerName || 'مركز الحجامة';
     const logoSrc = global.resolvePrintAssetUrl?.(global.getCenterBrandLogo?.() || global.settings?.brandLogo || 'branding/Center-Logo.png') || 'branding/Center-Logo.png';
@@ -1408,7 +1414,10 @@
     const methodL = { cash: 'كاش', transfer: 'تحويل بنكي', check: 'شيك', other: 'أخرى' };
     const periodLabel = payment.periodMonth ? `${MONTH_NAMES[payment.periodMonth]} ${payment.periodYear}` : '';
     const nationalId = getDoctorNationalId(payment.doctorId);
-    const itemNames = (payment.allocations || []).map(a => a.typeLabel).join(' و') || 'مستحقات';
+    const allocations = payment.allocations || [];
+    const allocationLines = allocations.length
+      ? allocations.map((a) => buildAllocationAckLine(a, payment)).join('<br>')
+      : '';
     const amountWords = amountToArabicWords(payment.totalAmount);
     const rows = (payment.allocations || []).map((a, i) =>
       `<tr><td class="center">${i + 1}</td><td>${a.typeLabel}${a.isCarryover ? ' <span style="color:#856404">(مرحّل)</span>' : ''}</td><td>${allocationPeriodLabel(a, payment)}</td><td class="money">${fmtMoney(a.amount)}</td></tr>`
@@ -1433,10 +1442,10 @@
       </div>
       <p style="font-size:14px;text-align:justify;margin:18px 0">
         أقر أنا الموقع أدناه / <strong>${payment.doctorName}</strong>، رقم الهوية / الإقامة <strong dir="ltr">${nationalId}</strong>،
-        بأنني قد استلمت من <strong>${cn}</strong> مبلغاً وقدره <strong dir="ltr">${fmtMoney(payment.totalAmount)}</strong>
-        و (<strong>${amountWords}</strong>)، وذلك مقابل <strong>${itemNames}</strong>
-        ${periodLabel ? ` عن شهر <strong>${periodLabel}</strong>` : ''}.
+        بأنني قد استلمت من <strong>${cn}</strong> المبالغ المبيّنة أدناه، بإجمالي قدره <strong dir="ltr">${fmtMoney(payment.totalAmount)}</strong>
+        و (<strong>${amountWords}</strong>)${periodLabel ? `، وذلك عن فترة الصرف <strong>${periodLabel}</strong>` : ''}.
       </p>
+      ${allocationLines ? `<div style="font-size:13px;line-height:1.9;margin:0 0 16px;padding:12px 14px;background:#f8faf9;border:1px solid #d8e8df;border-radius:8px">${allocationLines}</div>` : ''}
       ${itemsTable}
       ${payment.notes ? `<p style="font-size:12px;color:#666"><strong>ملاحظات:</strong> ${payment.notes}</p>` : ''}
       <p style="font-size:11px;color:#666">طريقة الدفع: ${methodL[payment.paymentMethod] || payment.paymentMethod || '—'} · أُعد بواسطة: ${payment.paidByName || '—'}</p>

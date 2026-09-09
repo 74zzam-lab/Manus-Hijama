@@ -123,6 +123,28 @@ body { min-width: 320px; color: var(--text, var(--tdw-color-neutral-900)); }
 @media (max-width: 1366px) {
   :root { --tdw-control-height: 2.625rem; }
   .page { padding-inline: var(--tdw-space-5) !important; }
+  .backup-status-card,
+  #bk-status-summary .backup-status-card,
+  #bk-cloudv2-card .backup-status-card,
+  #cloud-db-status {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)) !important;
+    gap: var(--tdw-space-2) !important;
+  }
+  .backup-status-item { min-inline-size: 0; }
+  .backup-status-item strong { font-size: 13px; word-break: break-word; }
+  .card-header { flex-wrap: wrap; gap: var(--tdw-space-2); }
+  .form-grid-4, .form-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .topbar.workspace-topbar.glass-topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "start actions" "search search";
+    row-gap: 8px;
+    height: auto;
+    min-height: var(--topbar-height, 56px);
+    padding-block: 10px;
+  }
+  .topbar-start { grid-area: start; }
+  .topbar-center { grid-area: search; max-width: none; width: 100%; }
+  .topbar-actions { grid-area: actions; flex-wrap: wrap; justify-content: flex-end; }
 }
 @media (max-width: 900px) {
   .form-row, .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }

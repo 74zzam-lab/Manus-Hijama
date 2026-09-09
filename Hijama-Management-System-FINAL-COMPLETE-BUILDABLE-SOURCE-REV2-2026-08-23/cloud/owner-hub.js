@@ -990,11 +990,25 @@
     scheduleRefresh('owner-mutation:' + String(detail?.type || 'changed'));
   }
 
-  function refresh() {
+  async function refresh(options) {
+    options = options || {};
     const root = document.querySelector('#owner-hub-body .oh-workspace');
     if (root) _ohActiveSection = root.getAttribute('data-oh-section') || _ohActiveSection;
     _ohLastUpdatedAt = Date.now();
     bindStatusEvents();
+    if (options.pullLicense !== false) {
+      const centerId = global.LicenseCloud?.loadLocal?.()?.centerId;
+      if (centerId) {
+        try {
+          if (typeof global.DriveAdapter?.ensureConnected === 'function') {
+            await global.DriveAdapter.ensureConnected().catch(() => false);
+          }
+          if (global.DriveAdapter?.isConnected?.()) {
+            await global.LicenseCloud?.pullAndMergeFromDrive?.({ centerId, mergeDevices: true });
+          }
+        } catch { /* offline — render local cache */ }
+      }
+    }
     renderOwnerHubPage();
     showSection(_ohActiveSection);
   }

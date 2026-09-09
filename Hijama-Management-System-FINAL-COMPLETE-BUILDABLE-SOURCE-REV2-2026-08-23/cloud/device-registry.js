@@ -50,6 +50,20 @@
     return doc;
   }
 
+  async function replicateLicenseDoc(doc, options) {
+    options = options || {};
+    if (!doc || typeof global.LicenseCloud?.pushToDrive !== 'function') return { ok: false, skipped: true };
+    try {
+      const push = await global.LicenseCloud.pushToDrive(doc, { skipOwnerGate: options.skipOwnerGate !== false });
+      if (push?.ok && typeof global.OwnerHub?.notifyStatusChanged === 'function') {
+        global.OwnerHub.notifyStatusChanged('license-replicated', { remotePublished: true });
+      }
+      return push || { ok: false, skipped: true };
+    } catch (e) {
+      return { ok: false, error: String(e.message || e) };
+    }
+  }
+
   async function touchDevice(doc, deviceUuid, patch) {
     patch = patch || {};
     const list = getRegistered(doc).slice();
@@ -64,6 +78,7 @@
     doc.licenseVersion = (Number(doc.licenseVersion) || 0) + 1;
     const signed = await resignDoc(doc);
     global.LicenseCloud?.saveLocal?.(signed);
+    await replicateLicenseDoc(signed).catch(() => {});
     return { ok: true, device: list[idx], doc: signed };
   }
 
@@ -109,6 +124,7 @@
     doc.licenseVersion = (Number(doc.licenseVersion) || 0) + 1;
     const signed = await resignDoc(doc);
     global.LicenseCloud?.saveLocal?.(signed);
+    await replicateLicenseDoc(signed).catch(() => {});
 
     if (typeof global.AuditLogger?.log === 'function') {
       global.AuditLogger.log({
@@ -206,6 +222,7 @@
     doc.licenseVersion = (Number(doc.licenseVersion) || 0) + 1;
     const signed = await resignDoc(doc);
     global.LicenseCloud?.saveLocal?.(signed);
+    await replicateLicenseDoc(signed).catch(() => {});
     if (typeof global.AuditLogger?.log === 'function') {
       global.AuditLogger.log({
         action: 'DEVICE_ENROLLMENT_REQUESTED',

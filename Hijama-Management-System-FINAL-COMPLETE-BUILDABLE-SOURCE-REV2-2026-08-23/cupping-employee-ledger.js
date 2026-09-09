@@ -639,18 +639,19 @@
 
   function resolveAllocationLabel(a, payment) {
     if (!a) return '—';
+    if (payment?.advanceSettle === 'deferred') return 'سلفة مؤجلة';
     if (payment?.paymentKind === 'advance' || a.type === 'salary_advance') return 'سلفة';
     const def = getTypeDef(a.type);
     return a.typeLabel || def.label || a.type || '—';
   }
 
-  function normalizeAllocation(allocation, paymentKind) {
+  function normalizeAllocation(allocation, paymentKind, advanceSettle) {
     allocation = allocation || {};
     if (paymentKind === 'advance') {
       return {
         ...allocation,
-        type: 'salary_advance',
-        typeLabel: 'سلفة'
+        type: advanceSettle === 'deferred' ? 'salary_advance' : (allocation.type || 'salary_advance'),
+        typeLabel: advanceSettle === 'deferred' ? 'سلفة مؤجلة' : 'سلفة'
       };
     }
     const def = getTypeDef(allocation.type);
@@ -660,16 +661,32 @@
     };
   }
 
-  function buildAdvanceAllocations(doctorId, month, year, amount) {
+  function buildCurrentAdvanceAllocations(doctorId, month, year, amount) {
+    const auto = autoAllocate(doctorId, amount, month, year);
+    return {
+      allocations: auto.allocations.map((a) => ({ ...a, typeLabel: 'سلفة' })),
+      unallocated: auto.unallocated
+    };
+  }
+
+  function buildDeferredAdvanceAllocations(month, year, amount, deductMonth, deductYear) {
     const amt = round2(amount);
     if (amt <= 0) return [];
     return [{
       type: 'salary_advance',
-      typeLabel: 'سلفة',
+      typeLabel: 'سلفة مؤجلة',
       periodMonth: month,
       periodYear: year,
+      deductMonth: deductMonth || month,
+      deductYear: deductYear || year,
       amount: amt
     }];
+  }
+
+  function advanceDeductPeriodLabel(payment) {
+    const m = payment?.deductPeriodMonth || payment?.periodMonth;
+    const y = payment?.deductPeriodYear || payment?.periodYear;
+    return m && y ? `${MONTH_NAMES[m]} ${y}` : '—';
   }
 
   function registerAccrualType(def) {
@@ -1324,10 +1341,35 @@
     if (!doctor) { notify('⚠️ الموظف غير موجود', 'danger'); return null; }
     const amount = round2(parseFloat(opts.amount) || 0);
     if (amount <= 0) { notify('⚠️ أدخل مبلغاً صحيحاً', 'danger'); return null; }
-    let allocations = (opts.allocations || []).map((a) => normalizeAllocation(a, opts.paymentKind));
+    const advanceSettle = opts.paymentKind === 'advance' ? (opts.advanceSettle || 'current') : null;
+    const isDeferredAdvance = opts.paymentKind === 'advance' && advanceSettle === 'deferred';
+    const isCurrentAdvance = opts.paymentKind === 'advance' && !isDeferredAdvance;
+    const deductMonth = isDeferredAdvance ? (parseInt(opts.deductMonth, 10) || opts.month) : opts.month;
+    const deductYear = isDeferredAdvance ? (parseInt(opts.deductYear, 10) || opts.year) : opts.year;
+
+    if (isCurrentAdvance) {
+      const summary = getSummary(opts.doctorId, opts.month, opts.year);
+      if (amount > summary.remaining + 0.01) {
+        notify(`⚠️ السلفة تتجاوز المتبقي من راتب هذا الشهر (${fmtMoney(summary.remaining)})`, 'danger');
+        return null;
+      }
+    }
+
+    let allocations = (opts.allocations || []).map((a) => normalizeAllocation(a, opts.paymentKind, advanceSettle));
     if (!allocations.length) {
-      if (opts.paymentKind === 'advance') {
-        allocations = buildAdvanceAllocations(opts.doctorId, opts.month, opts.year, amount);
+      if (isCurrentAdvance) {
+        const built = buildCurrentAdvanceAllocations(opts.doctorId, opts.month, opts.year, amount);
+        allocations = built.allocations;
+        if (!allocations.length) {
+          notify('⚠️ لا يوجد رصيد راتب مفتوح في هذا الشهر لصرف السلفة منه', 'danger');
+          return null;
+        }
+        if (built.unallocated > 0.01) {
+          notify(`⚠️ الحد الأقصى للسلفة من راتب هذا الشهر: ${fmtMoney(amount - built.unallocated)}`, 'danger');
+          return null;
+        }
+      } else if (isDeferredAdvance) {
+        allocations = buildDeferredAdvanceAllocations(opts.month, opts.year, amount, deductMonth, deductYear);
       } else {
         const auto = autoAllocate(opts.doctorId, amount, opts.month, opts.year, opts.typeFilter);
         allocations = auto.allocations;
@@ -1341,6 +1383,9 @@
       id: uid(), voucherNo: nextVoucherNo(), doctorId: doctor.id, doctorName: doctor.name,
       totalAmount: allocTotal, paymentMethod: opts.paymentMethod || 'cash', notes: opts.notes || '',
       paymentKind: opts.paymentKind || (allocTotal >= amount - 0.01 ? 'full' : 'partial'),
+      advanceSettle: advanceSettle || undefined,
+      deductPeriodMonth: isDeferredAdvance ? deductMonth : undefined,
+      deductPeriodYear: isDeferredAdvance ? deductYear : undefined,
       paidAt: new Date().toISOString(), paidBy: u?.id || '', paidByName: u?.fullName || u?.username || '—',
       allocations, periodMonth: opts.month, periodYear: opts.year,
       settlementStatus: allocTotal >= amount - 0.01 ? 'full' : 'partial'
@@ -1352,18 +1397,18 @@
       row.paidAmount = round2((row.paidAmount || 0) + al.amount);
       row.status = remaining(row) <= 0.001 ? 'paid' : 'partial';
     });
-    if (opts.paymentKind === 'advance') {
+    if (isDeferredAdvance) {
       upsertAccrual({
         doctorId: doctor.id,
         doctorName: doctor.name,
         type: 'salary_advance',
         amount: allocTotal,
-        periodMonth: opts.month,
-        periodYear: opts.year,
+        periodMonth: deductMonth,
+        periodYear: deductYear,
         sourceType: 'payment',
         sourceId: payment.id,
-        description: `سلفة مستحقة الاسترداد — ${payment.voucherNo}`,
-        syncKey: `advance-ded|${payment.id}`
+        description: `سلفة مؤجلة — تُخصم من ${MONTH_NAMES[deductMonth]} ${deductYear} — ${payment.voucherNo}`,
+        syncKey: `advance-deferred|${payment.id}`
       });
     }
     reconcileCarryoversAfterPayment(allocations);
@@ -1456,7 +1501,11 @@
     const period = allocationPeriodLabel(a, payment);
     const carryNote = a.isCarryover ? ' <span style="color:#856404;font-size:12px">(مرحّل من شهر سابق)</span>' : '';
     const label = resolveAllocationLabel(a, payment);
-    return `• <strong>${label}</strong> عن شهر <strong>${period}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong>${carryNote}`;
+    if (payment?.advanceSettle === 'deferred') {
+      const deductLabel = advanceDeductPeriodLabel(payment);
+      return `• <strong>${label}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong> — تُخصم من راتب شهر <strong>${deductLabel}</strong>`;
+    }
+    return `• <strong>${label}</strong> من راتب شهر <strong>${period}</strong> بمبلغ <strong dir="ltr">${fmtMoney(a.amount)}</strong>${carryNote}`;
   }
 
   function buildVoucherHtml(payment, thermal) {
@@ -1946,6 +1995,21 @@
           <option value="advance">سلفة</option>
         </select></div>
       <div class="form-group" id="lp-amount-wrap"><label class="form-label">المبلغ</label><input class="form-control" id="lp-amount" type="number" min="0" step="0.01"></div>
+      <div class="form-group" id="lp-advance-wrap" style="display:none">
+        <label class="form-label">تسوية السلفة</label>
+        <select class="form-control" id="lp-advance-settle" onchange="EmployeeLedger.onAdvanceSettleChange()">
+          <option value="current">خصم من راتب الشهر الحالي (افتراضي)</option>
+          <option value="deferred">سلفة مؤجلة — خصم من شهر محدد</option>
+        </select>
+        <div id="lp-advance-deferred-wrap" style="display:none;margin-top:10px">
+          <label class="form-label">شهر خصم السلفة</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <select class="form-control" id="lp-advance-deduct-month"></select>
+            <input class="form-control" id="lp-advance-deduct-year" type="number" min="2000" max="2100" step="1">
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);margin:8px 0 0">لن يُخصم المبلغ من راتب الشهر الحالي — يُسجَّل خصم في الشهر المختار عند صرف راتبه.</p>
+        </div>
+      </div>
       <div class="form-group" id="lp-items-wrap" style="display:none">
         <label class="form-label">اختر البنود المراد صرفها</label>
         <div id="lp-items-list"></div>
@@ -1963,6 +2027,21 @@
     document.body.appendChild(el);
     document.getElementById('lp-amount')?.addEventListener('input', updatePaymentPreview);
     document.getElementById('lp-items-list')?.addEventListener('change', updatePaymentPreview);
+    document.getElementById('lp-advance-deduct-month')?.addEventListener('change', updatePaymentPreview);
+    document.getElementById('lp-advance-deduct-year')?.addEventListener('input', updatePaymentPreview);
+    const monthSel = document.getElementById('lp-advance-deduct-month');
+    if (monthSel && !monthSel.options.length) {
+      monthSel.innerHTML = MONTH_NAMES.slice(1).map((name, i) => `<option value="${i + 1}">${name}</option>`).join('');
+    }
+  }
+
+  function getAdvanceSettleOptions() {
+    const settle = document.getElementById('lp-advance-settle')?.value || 'current';
+    const deductMonth = parseInt(document.getElementById('lp-advance-deduct-month')?.value, 10)
+      || parseInt(document.getElementById('lp-month')?.value, 10);
+    const deductYear = parseInt(document.getElementById('lp-advance-deduct-year')?.value, 10)
+      || parseInt(document.getElementById('lp-year')?.value, 10);
+    return { settle, deductMonth, deductYear };
   }
 
   function renderPaymentItemsList(doctorId, month, year) {
@@ -1987,8 +2066,18 @@
     const kind = document.getElementById('lp-kind')?.value || 'partial';
     const amountWrap = document.getElementById('lp-amount-wrap');
     const itemsWrap = document.getElementById('lp-items-wrap');
+    const advanceWrap = document.getElementById('lp-advance-wrap');
     if (amountWrap) amountWrap.style.display = kind === 'items' ? 'none' : '';
     if (itemsWrap) itemsWrap.style.display = kind === 'items' ? '' : 'none';
+    if (advanceWrap) advanceWrap.style.display = kind === 'advance' ? '' : 'none';
+    if (kind === 'advance') onAdvanceSettleChange();
+    updatePaymentPreview();
+  }
+
+  function onAdvanceSettleChange() {
+    const settle = document.getElementById('lp-advance-settle')?.value || 'current';
+    const deferredWrap = document.getElementById('lp-advance-deferred-wrap');
+    if (deferredWrap) deferredWrap.style.display = settle === 'deferred' ? '' : 'none';
     updatePaymentPreview();
   }
 
@@ -2011,18 +2100,34 @@
       amount = picked.total;
     } else if (kind === 'advance') {
       amount = parseFloat(amountEl?.value) || 0;
-      if (amount > 0) allocations = buildAdvanceAllocations(doctorId, month, year, amount);
+      const adv = getAdvanceSettleOptions();
+      if (amount > 0) {
+        if (adv.settle === 'deferred') {
+          allocations = buildDeferredAdvanceAllocations(month, year, amount, adv.deductMonth, adv.deductYear);
+        } else {
+          allocations = buildCurrentAdvanceAllocations(doctorId, month, year, amount).allocations;
+        }
+      }
     } else {
       amount = parseFloat(amountEl?.value) || 0;
       if (amount > 0) allocations = autoAllocate(doctorId, amount, month, year).allocations;
     }
-    const rem = s ? Math.max(0, round2(s.remaining - amount)) : 0;
+    const adv = kind === 'advance' ? getAdvanceSettleOptions() : null;
+    const rem = (s && kind === 'advance' && adv?.settle === 'deferred')
+      ? s.remaining
+      : (s ? Math.max(0, round2(s.remaining - amount)) : 0);
     if (!amount && !allocations.length) { el.textContent = ''; return; }
-    el.innerHTML = (allocations.map(a => `${resolveAllocationLabel(a, { paymentKind: kind })}: ${fmtMoney(a.amount)}`).join(' · ') || 'لا بنود مفتوحة')
-      + (amount > 0 ? `<br><strong>إجمالي الصرف:</strong> <span dir="ltr">${fmtMoney(amount)}</span>` : '')
-      + (amount > 0 ? `<br><strong>المتبقي بعد الصرف:</strong> <span dir="ltr">${fmtMoney(rem)}</span>` : '');
-    if (rem > 0.001 && amount > 0) {
-      el.innerHTML += `<br><span style="color:var(--warning)">سيظهر المتبقي في صف: باقي مستحقات راتب ${MONTH_NAMES[month]} ${year}</span>`;
+    const previewPayment = { paymentKind: kind, advanceSettle: adv?.settle };
+    el.innerHTML = (allocations.map(a => `${resolveAllocationLabel(a, previewPayment)}: ${fmtMoney(a.amount)}`).join(' · ') || 'لا بنود مفتوحة')
+      + (amount > 0 ? `<br><strong>إجمالي الصرف:</strong> <span dir="ltr">${fmtMoney(amount)}</span>` : '');
+    if (kind === 'advance' && adv?.settle === 'deferred') {
+      el.innerHTML += `<br><strong>رصيد الشهر الحالي بعد السلفة:</strong> <span dir="ltr">${fmtMoney(s?.remaining || 0)}</span> (بدون تغيير)`
+        + `<br><span style="color:var(--warning)">سيُخصم المبلغ من راتب ${MONTH_NAMES[adv.deductMonth]} ${adv.deductYear}</span>`;
+    } else if (amount > 0) {
+      el.innerHTML += `<br><strong>المتبقي من راتب ${MONTH_NAMES[month]} ${year}:</strong> <span dir="ltr">${fmtMoney(rem)}</span>`;
+      if (rem > 0.001) {
+        el.innerHTML += `<br><span style="color:var(--text-muted)">يمكن صرف المتبقي لاحقاً من نفس الشهر</span>`;
+      }
     }
   }
 
@@ -2038,6 +2143,12 @@
     if (hint) hint.innerHTML = `<strong>المتبقي:</strong> <span dir="ltr">${fmtMoney(s.remaining)}</span> · <strong>المستحق:</strong> <span dir="ltr">${fmtMoney(s.due)}</span> · <strong>المدفوع:</strong> <span dir="ltr">${fmtMoney(s.paid)}</span>`;
     document.getElementById('lp-kind').value = 'full';
     document.getElementById('lp-amount').value = s.remaining > 0 ? s.remaining : '';
+    const advanceSettle = document.getElementById('lp-advance-settle');
+    if (advanceSettle) advanceSettle.value = 'current';
+    const deductMonth = document.getElementById('lp-advance-deduct-month');
+    const deductYear = document.getElementById('lp-advance-deduct-year');
+    if (deductMonth) deductMonth.value = String(month);
+    if (deductYear) deductYear.value = String(year);
     renderPaymentItemsList(doctorId, month, year);
     onPaymentKindChange();
     document.getElementById('ledgerPaymentModal').classList.add('open');
@@ -2058,13 +2169,28 @@
       if (!allocations.length) { notify('⚠️ اختر بنداً واحداً على الأقل', 'danger'); return; }
     } else if (kind === 'advance') {
       if (amount <= 0) { notify('⚠️ أدخل مبلغ السلفة', 'danger'); return; }
-      allocations = buildAdvanceAllocations(doctorId, month, year, amount);
+      const adv = getAdvanceSettleOptions();
+      if (adv.settle === 'deferred') {
+        allocations = buildDeferredAdvanceAllocations(month, year, amount, adv.deductMonth, adv.deductYear);
+      } else if (amount > s.remaining + 0.01) {
+        notify(`⚠️ السلفة تتجاوز المتبقي من راتب هذا الشهر (${fmtMoney(s.remaining)})`, 'danger');
+        return;
+      } else {
+        const built = buildCurrentAdvanceAllocations(doctorId, month, year, amount);
+        allocations = built.allocations;
+        if (!allocations.length) { notify('⚠️ لا يوجد رصيد راتب مفتوح في هذا الشهر', 'danger'); return; }
+        if (built.unallocated > 0.01) {
+          notify(`⚠️ الحد الأقصى للسلفة من راتب هذا الشهر: ${fmtMoney(amount - built.unallocated)}`, 'danger');
+          return;
+        }
+      }
     }
     if (amount <= 0) { notify('⚠️ أدخل مبلغاً أكبر من صفر', 'danger'); return; }
     if (kind !== 'advance' && amount > s.remaining + 0.01) {
       notify(`⚠️ المبلغ يتجاوز المتبقي (${fmtMoney(s.remaining)})`, 'danger');
       return;
     }
+    const advOpts = kind === 'advance' ? getAdvanceSettleOptions() : null;
     const method = document.getElementById('lp-method').value;
     const p = recordPayment({
       doctorId,
@@ -2073,6 +2199,9 @@
       amount,
       allocations: allocations || undefined,
       paymentKind: kind,
+      advanceSettle: advOpts?.settle,
+      deductMonth: advOpts?.deductMonth,
+      deductYear: advOpts?.deductYear,
       paymentMethod: method,
       notes: document.getElementById('lp-notes').value
     });
@@ -2263,7 +2392,7 @@
   global.EmployeeLedger = {
     init: extInit, isModuleEnabled, syncMonth, carryOverToMonth, getSummary, getDashboardStats, recordPayment,
     doctorHasPeriodData, monthHasAnyPayrollData, reconcileCarryoversForTargetMonth,
-    openPaymentModal, submitPayment, updatePaymentPreview, onPaymentKindChange, openLedgerForDoctor, renderLedgerPage, renderDashboardCard,
+    openPaymentModal, submitPayment, updatePaymentPreview, onPaymentKindChange, onAdvanceSettleChange, openLedgerForDoctor, renderLedgerPage, renderDashboardCard,
     populateLedgerFilters, enhancePayrollCards, onPayrollGenerated, onSourceChange, queueSyncForDate,
     printVoucher, printPeriodVoucher, printPayslip, printStatement, previewStatement, previewVoucher, previewPeriodVoucher, previewPayslip, previewReport, printReport, registerAccrualType, reverseEntry, createAdjustment,
     closeMonth, reopenMonth, isMonthClosed, canEditPeriod, openSourceDocument, saveFilters,

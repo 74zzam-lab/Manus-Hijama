@@ -1,0 +1,11 @@
+{
+  "id": 15,
+  "name": "interrupted_push",
+  "result": "PASS",
+  "ms": 12594,
+  "detail": {
+    "remainingAfterPartial": 1,
+    "remainingFinal": 0
+  },
+  "secretsPrinted": false
+}

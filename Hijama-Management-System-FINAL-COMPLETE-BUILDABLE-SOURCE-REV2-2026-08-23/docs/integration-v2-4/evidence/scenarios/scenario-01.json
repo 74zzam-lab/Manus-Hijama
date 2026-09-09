@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "name": "bootstrap_owner_center",
+  "result": "PASS",
+  "ms": 15176,
+  "detail": {
+    "flushed": 2
+  },
+  "secretsPrinted": false
+}

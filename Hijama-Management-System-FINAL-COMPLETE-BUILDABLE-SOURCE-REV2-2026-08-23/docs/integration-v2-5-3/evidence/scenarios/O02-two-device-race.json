@@ -1,0 +1,12 @@
+{
+  "id": "O02-two-device-race",
+  "title": "Two-device bootstrap race — one winner",
+  "result": "PASS",
+  "ms": 6,
+  "evidence": {
+    "wins": 1,
+    "errors": [
+      "bootstrap_already_consumed"
+    ]
+  }
+}

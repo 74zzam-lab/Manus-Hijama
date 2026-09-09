@@ -1,0 +1,11 @@
+{
+  "id": "U05-i18n-a11y",
+  "title": "AR RTL / EN LTR + critical dialog a11y",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "ar": "rtl",
+    "en": "ltr",
+    "role": "alertdialog"
+  }
+}

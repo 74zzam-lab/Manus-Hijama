@@ -1,0 +1,11 @@
+{
+  "id": "P04-db-maintenance",
+  "title": "ANALYZE/indexes/VACUUM/WAL/FK/integrity",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "indexes": 13,
+    "busyTimeout": 5000,
+    "wal": "PASSIVE"
+  }
+}

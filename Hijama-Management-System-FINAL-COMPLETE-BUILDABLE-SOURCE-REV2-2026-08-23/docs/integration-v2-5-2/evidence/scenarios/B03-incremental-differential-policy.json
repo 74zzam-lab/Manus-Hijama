@@ -1,0 +1,18 @@
+{
+  "id": "B03-incremental-differential-policy",
+  "title": "Incremental/differential documented unsupported",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "fullSnapshot": true,
+    "incremental": {
+      "supported": false,
+      "reason": "dr_unit_is_full_tdw_snapshot; deltas_via_cloud_sync"
+    },
+    "differential": {
+      "supported": false,
+      "reason": "not_required_while_full_snapshot_and_sync_exist"
+    },
+    "versionHistory": "local_mtime_list_plus_manifest_createdAt"
+  }
+}

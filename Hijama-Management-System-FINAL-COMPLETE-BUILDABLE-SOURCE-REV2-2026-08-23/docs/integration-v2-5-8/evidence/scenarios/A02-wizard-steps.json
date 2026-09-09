@@ -1,0 +1,10 @@
+{
+  "id": "A02-wizard-steps",
+  "title": "Unified stepper Google→…→Ready",
+  "result": "PASS",
+  "ms": 2,
+  "evidence": {
+    "steps": 8,
+    "version": "v2-5.9"
+  }
+}

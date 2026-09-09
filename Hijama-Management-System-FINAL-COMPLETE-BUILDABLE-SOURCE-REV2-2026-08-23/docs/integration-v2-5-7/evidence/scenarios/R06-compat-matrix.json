@@ -1,0 +1,10 @@
+{
+  "id": "R06-compat-matrix",
+  "title": "Windows 10/11 + scale/locale compat evidence",
+  "result": "PASS",
+  "ms": 1,
+  "evidence": {
+    "win11": "windows-2022",
+    "win10Policy": true
+  }
+}

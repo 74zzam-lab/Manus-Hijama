@@ -1,0 +1,30 @@
+{
+  "id": "A07-responsive-css",
+  "title": "Modal max-height + resolution media queries",
+  "result": "PASS",
+  "ms": 5,
+  "evidence": {
+    "resolutionsTargeted": [
+      1024,
+      1280,
+      1366,
+      1440,
+      1600,
+      1920,
+      2560
+    ],
+    "css": {
+      "maxHeightViewport": true,
+      "safeArea": true,
+      "modalShell": true,
+      "media1024": true,
+      "media1280": true,
+      "media1100": true,
+      "media900": true,
+      "media720": true,
+      "media600": true,
+      "overflowXHidden": true,
+      "stickyFooter": true
+    }
+  }
+}

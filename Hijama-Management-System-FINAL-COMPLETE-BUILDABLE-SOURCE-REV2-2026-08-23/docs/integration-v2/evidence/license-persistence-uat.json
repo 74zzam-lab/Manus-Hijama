@@ -1,0 +1,31 @@
+{
+  "startedAt": "2026-07-29T23:43:15.676Z",
+  "ok": true,
+  "steps": {
+    "issue": {
+      "status": 0,
+      "stdout": "RzIiwicGF5cm9sbCIsInJlcG9ydHMiXSwiaXNzdWVkQXQiOiIyMDI2LTA3LTI5VDIzOjQzOjE1LjczOVoiLCJrZXlJZCI6ImRldi1lZDI1NTE5LTIwMjYiLCJsaWNlbnNlSWQiOiJURFctVUFULVYyMzUtMDAwMSIsImxpbWl0cyI6eyJicmFuY2hlcyI6MywidXNlcnMiOjV9LCJub25jZSI6IjZiOGY5YjlkODVlYzA0MDMyYTFmYTcyYWE1ZTIxMWU1IiwicGFja2FnZUlkIjoiUFJPIiwic2NoZW1hVmVyc2lvbiI6Nn0.OD0sto8Py77qQY5715zW-ERHoH3AeyuxoYYVUoiDNb-6qGANDP104LvEzpyf-2UL4-2eiPNkiQlli5JPoA1SCQ",
+      "stderr": ""
+    },
+    "verify": {
+      "status": 0,
+      "stdout": "OK: signature valid\n{\"expiresAt\":\"2027-07-29T23:43:15.739Z\",\"licenseId\":\"TDW-UAT-V235-0001\",\"packageId\":\"PRO\"}",
+      "stderr": ""
+    },
+    "invalidRejected": {
+      "status": 1,
+      "rejected": true
+    },
+    "expiredOrTamperedRejected": {
+      "status": 1,
+      "rejected": true
+    }
+  },
+  "licensePath": "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\lic-uat-0qLs8i\\uat-v2-3-5-license.json",
+  "licenseExists": true,
+  "licenseSha256": "2b49b871758c7f172f41719d75f6ffe982e5955d25fd27773257fef98cdaf254",
+  "activatedPath": "C:\\Users\\runneradmin\\AppData\\Roaming\\Cupping Center\\license\\active-uat-v2-3-5.json",
+  "activatedSha256": "2b49b871758c7f172f41719d75f6ffe982e5955d25fd27773257fef98cdaf254",
+  "activateMatch": true,
+  "finishedAt": "2026-07-29T23:43:15.909Z"
+}

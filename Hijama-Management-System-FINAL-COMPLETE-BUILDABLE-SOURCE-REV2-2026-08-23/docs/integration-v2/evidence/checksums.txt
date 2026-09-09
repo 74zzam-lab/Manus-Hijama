@@ -1,0 +1,3 @@
+9b1fbf0c11c520ae714af8aa9af12cfd48503eedecd7398d8992ee94d1b4dc37  D:\a\Cupping-System-Management\Cupping-System-Management\dist\win-unpacked\resources\elevate.exe
+a07bc8b66423ece22d07dc72619adb2808ecb39cf0aca75d835a8f6dc121b009  D:\a\Cupping-System-Management\Cupping-System-Management\dist\win-unpacked\Hijama Management System.exe
+693a4e9aca91c425761548b90c92361ca070f4c2023a6cf73e94f5953c3af13c  D:\a\Cupping-System-Management\Cupping-System-Management\dist\HijamaManagement-Setup-2.0.1.exe

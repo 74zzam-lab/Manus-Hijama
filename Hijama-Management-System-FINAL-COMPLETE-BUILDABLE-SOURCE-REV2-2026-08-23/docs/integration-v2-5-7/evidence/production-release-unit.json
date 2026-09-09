@@ -1,0 +1,16 @@
+{
+  "at": "2026-08-23T13:57:32.940Z",
+  "ok": false,
+  "phase": "V2-5.7",
+  "errors": [
+    "migration harness exit 0"
+  ],
+  "checks": {
+    "artifacts": true,
+    "migration": false,
+    "lifecycle": true,
+    "icons": true,
+    "secrets": true,
+    "portableUnsupported": true
+  }
+}

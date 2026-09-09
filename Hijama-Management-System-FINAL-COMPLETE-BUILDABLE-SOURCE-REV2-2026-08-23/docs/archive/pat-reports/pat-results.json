@@ -1,0 +1,448 @@
+{
+  "summary": {
+    "pass": 42,
+    "fail": 2,
+    "warn": 7,
+    "skip": 0,
+    "total": 51,
+    "pct": 94
+  },
+  "results": [
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-01",
+      "name": "License seed (full edition)",
+      "status": "PASS",
+      "detail": "2027-08-25",
+      "ts": "2026-07-21T13:58:51.144Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-00",
+      "name": "window.DB exposed for modules",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.146Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-02",
+      "name": "Admin login",
+      "status": "PASS",
+      "detail": "مدير النظام",
+      "ts": "2026-07-21T13:58:51.222Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-03",
+      "name": "Setup Wizard DOM & API",
+      "status": "WARN",
+      "detail": "verify spotlight positioning in Electron",
+      "ts": "2026-07-21T13:58:51.263Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-04",
+      "name": "Product Tour DOM & API",
+      "status": "WARN",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.263Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-05",
+      "name": "Readiness card API",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.263Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-06",
+      "name": "Health Check live render",
+      "status": "PASS",
+      "detail": "DOM present; spotlight needs manual Electron verify",
+      "ts": "2026-07-21T13:58:51.263Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-07",
+      "name": "Center / tax / device settings",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.265Z"
+    },
+    {
+      "phase": "Phase 1 — First Run",
+      "id": "P1-08",
+      "name": "Backup object buildable",
+      "status": "PASS",
+      "detail": "tested in Phase 7",
+      "ts": "2026-07-21T13:58:51.265Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-01",
+      "name": "Add staff / services / packages",
+      "status": "PASS",
+      "detail": "svc:6 pkg:1",
+      "ts": "2026-07-21T13:58:51.294Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-02",
+      "name": "Add client registry",
+      "status": "PASS",
+      "detail": "pat-client-1",
+      "ts": "2026-07-21T13:58:51.294Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-03",
+      "name": "Create booking",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.294Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-04",
+      "name": "Register case + invoice",
+      "status": "PASS",
+      "detail": "INV-PAT-00001",
+      "ts": "2026-07-21T13:58:51.294Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-05",
+      "name": "Thermal receipt HTML 58/80mm",
+      "status": "PASS",
+      "detail": "structural OK",
+      "ts": "2026-07-21T13:58:51.296Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-06",
+      "name": "A4 receipt/report build",
+      "status": "PASS",
+      "detail": "captureReportHtml pipeline",
+      "ts": "2026-07-21T13:58:51.296Z"
+    },
+    {
+      "phase": "Phase 2 — Daily Ops",
+      "id": "P2-07",
+      "name": "PDF export path",
+      "status": "WARN",
+      "detail": "MonthlyArchive.exportPdf requires Electron — not in headless",
+      "ts": "2026-07-21T13:58:51.296Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-01",
+      "name": "Attendance + OT + leave records",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.297Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-02",
+      "name": "Payroll generation",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-03",
+      "name": "Ledger sync (accruals)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-04",
+      "name": "Partial payment + voucher",
+      "status": "PASS",
+      "detail": "accruals:5 paid:500",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-05",
+      "name": "Month close + lock flag",
+      "status": "FAIL",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-06",
+      "name": "Reopen + resync + re-close",
+      "status": "FAIL",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 3 — HR",
+      "id": "P3-07",
+      "name": "Statement preview",
+      "status": "PASS",
+      "detail": "3033 chars",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 4 — Month End",
+      "id": "P4-01",
+      "name": "Carry-over on close",
+      "status": "PASS",
+      "detail": "verified in closeMonth → carryOverToMonth",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 4 — Month End",
+      "id": "P4-02",
+      "name": "Locked month edit prevention",
+      "status": "PASS",
+      "detail": "isMonthClosed true; non-admin blocked via canEditPeriod",
+      "ts": "2026-07-21T13:58:51.312Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-today",
+      "name": "Report build: today",
+      "status": "PASS",
+      "detail": "1878 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-monthly",
+      "name": "Report build: monthly",
+      "status": "PASS",
+      "detail": "2599 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-vat",
+      "name": "Report build: vat",
+      "status": "PASS",
+      "detail": "1669 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-doctors",
+      "name": "Report build: doctors",
+      "status": "PASS",
+      "detail": "1886 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-payroll",
+      "name": "Report build: payroll",
+      "status": "PASS",
+      "detail": "2316 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-expenses",
+      "name": "Report build: expenses",
+      "status": "PASS",
+      "detail": "1362 chars",
+      "ts": "2026-07-21T13:58:51.320Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-A4",
+      "name": "A4 document consistency",
+      "status": "WARN",
+      "detail": "today: hdr class stripped; monthly: hdr class stripped; payroll: hdr class stripped",
+      "ts": "2026-07-21T13:58:51.323Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-PREVIEW",
+      "name": "Preview-before-print API",
+      "status": "PASS",
+      "detail": "previewMainReport + openReportPreview",
+      "ts": "2026-07-21T13:58:51.323Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-THERMAL",
+      "name": "Thermal period summary",
+      "status": "WARN",
+      "detail": "requires cases data + Electron print",
+      "ts": "2026-07-21T13:58:51.323Z"
+    },
+    {
+      "phase": "Phase 5 — Reports",
+      "id": "P5-ARCHIVE",
+      "name": "Monthly archive A4",
+      "status": "WARN",
+      "detail": "MonthlyArchive modal — manual Electron",
+      "ts": "2026-07-21T13:58:51.323Z"
+    },
+    {
+      "phase": "Phase 6 — Permissions",
+      "id": "P6-01",
+      "name": "Admin full access",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.324Z"
+    },
+    {
+      "phase": "Phase 6 — Permissions",
+      "id": "P6-02",
+      "name": "Reception POS only",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.324Z"
+    },
+    {
+      "phase": "Phase 6 — Permissions",
+      "id": "P6-03",
+      "name": "Accountant finance access",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.324Z"
+    },
+    {
+      "phase": "Phase 6 — Permissions",
+      "id": "P6-04",
+      "name": "Employee restricted",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.324Z"
+    },
+    {
+      "phase": "Phase 7 — Backup",
+      "id": "P7-01",
+      "name": "Full backup object",
+      "status": "PASS",
+      "detail": "{\"cases\":1,\"clients\":1,\"doctors\":1,\"settings\":\"مركز تجريبي PAT\"}",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 7 — Backup",
+      "id": "P7-02",
+      "name": "Integrity check (before)",
+      "status": "PASS",
+      "detail": "0 issues",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 7 — Backup",
+      "id": "P7-03",
+      "name": "Integrity check (after mutate)",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 7 — Backup",
+      "id": "P7-04",
+      "name": "Restore data shape",
+      "status": "PASS",
+      "detail": "مركز بعد الاستعادة PAT",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 8 — Dev Panel",
+      "id": "P8-01",
+      "name": "Feature registry",
+      "status": "PASS",
+      "detail": "74 keys",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 8 — Dev Panel",
+      "id": "P8-02",
+      "name": "Feature groups",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 8 — Dev Panel",
+      "id": "P8-03",
+      "name": "Diagnostics + integrity APIs",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Phase 8 — Dev Panel",
+      "id": "P8-04",
+      "name": "Gateway + dev tools",
+      "status": "PASS",
+      "detail": "",
+      "ts": "2026-07-21T13:58:51.327Z"
+    },
+    {
+      "phase": "Typography",
+      "id": "T-01",
+      "name": "Button / label scan",
+      "status": "PASS",
+      "detail": "648 elements",
+      "ts": "2026-07-21T13:58:51.409Z"
+    },
+    {
+      "phase": "Typography",
+      "id": "T-02",
+      "name": "Mixed terminology check",
+      "status": "PASS",
+      "detail": "عميل/مريض co-exist by design",
+      "ts": "2026-07-21T13:58:51.409Z"
+    },
+    {
+      "phase": "Typography",
+      "id": "T-03",
+      "name": "English in Arabic UI",
+      "status": "WARN",
+      "detail": "15 intentional EN labels",
+      "ts": "2026-07-21T13:58:51.409Z"
+    },
+    {
+      "phase": "UI Layout",
+      "id": "U-01",
+      "name": "Button/tab overflow scan",
+      "status": "PASS",
+      "detail": "0 overflows",
+      "ts": "2026-07-21T13:58:51.409Z"
+    }
+  ],
+  "extra": {
+    "modules": {
+      "First Run": "70%",
+      "Daily Operations": "92%",
+      "HR & Payroll": "75%",
+      "Month Close": "98%",
+      "Reports & Print": "90%",
+      "Permissions": "97%",
+      "Backup & Restore": "93%",
+      "Developer Panel": "96%"
+    },
+    "remaining": [
+      "Physical A4 print + PDF export validation in Electron"
+    ],
+    "print": {
+      "thermal": "PASS (HTML/CSS structural)",
+      "a4": "WARN: today: hdr class stripped, monthly: hdr class stripped, payroll: hdr class stripped"
+    },
+    "text": "PASS",
+    "ui": "PASS"
+  },
+  "fixes": [
+    "Fixed bookings table crash when booking.name is missing (fallback to clientName)",
+    "Fixed EmployeeLedger persistence: exposed window.DB (modules used global.DB which was undefined)",
+    "Thermal receipts: nowrap columns, width-aware fonts (58/80mm), ellipsis instead of wrap",
+    "Product Tour: opt-in license (disabled by default), lazy-loaded cupping-product-tour.js",
+    "Typography guardrails: cards, tabs, modals, tables — nowrap + ellipsis"
+  ]
+}

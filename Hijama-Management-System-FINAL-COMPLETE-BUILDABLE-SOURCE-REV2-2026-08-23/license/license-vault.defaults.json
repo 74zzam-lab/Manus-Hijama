@@ -1,0 +1,6 @@
+{
+  "webAppUrl": "https://script.google.com/macros/s/AKfycby7JXjFGAi3EuEjrh0jHTo2-W8AJ4neGMGgRARZQ840DzPO5OH4oEQ4x8EPLFECXdAh/exec",
+  "deploymentId": "AKfycby7JXjFGAi3EuEjrh0jHTo2-W8AJ4neGMGgRARZQ840DzPO5OH4oEQ4x8EPLFECXdAh",
+  "enabled": true,
+  "note": "Built-in NajjarTech license vault. Override in Settings → Developer if you deploy a new Web App version."
+}

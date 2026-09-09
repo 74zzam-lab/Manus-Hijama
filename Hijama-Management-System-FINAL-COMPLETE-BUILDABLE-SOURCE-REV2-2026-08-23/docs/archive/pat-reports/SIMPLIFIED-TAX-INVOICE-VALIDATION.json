@@ -1,0 +1,108 @@
+{
+  "passed": 20,
+  "failed": 0,
+  "total": 20,
+  "results": [
+    {
+      "id": "VAT-01",
+      "status": "PASS",
+      "msg": "100 SAR → preTax 86.96, VAT 13.04, total 100.00"
+    },
+    {
+      "id": "VAT-02",
+      "status": "PASS",
+      "msg": "Uses stored preTax/vat when consistent"
+    },
+    {
+      "id": "QR-01",
+      "status": "PASS",
+      "msg": "ZATCA simplified QR Base64 generated"
+    },
+    {
+      "id": "ID-01",
+      "status": "PASS",
+      "msg": "Unified report header includes center name, title, identity class"
+    },
+    {
+      "id": "ID-02",
+      "status": "PASS",
+      "msg": "Unified header includes center logo element"
+    },
+    {
+      "id": "STI-01",
+      "status": "PASS",
+      "msg": "title present"
+    },
+    {
+      "id": "STI-02",
+      "status": "PASS",
+      "msg": "invoice number"
+    },
+    {
+      "id": "STI-03",
+      "status": "PASS",
+      "msg": "pre-tax amount"
+    },
+    {
+      "id": "STI-04",
+      "status": "PASS",
+      "msg": "VAT amount"
+    },
+    {
+      "id": "STI-05",
+      "status": "PASS",
+      "msg": "QR block"
+    },
+    {
+      "id": "STI-06",
+      "status": "PASS",
+      "msg": "tax registration number"
+    },
+    {
+      "id": "STI-07",
+      "status": "PASS",
+      "msg": "no product branding in operational invoice"
+    },
+    {
+      "id": "THM-01",
+      "status": "PASS",
+      "msg": "Thermal tax title at top"
+    },
+    {
+      "id": "THM-02",
+      "status": "PASS",
+      "msg": "Thermal ZATCA QR without text labels"
+    },
+    {
+      "id": "THM-03",
+      "status": "PASS",
+      "msg": "Contact QR hidden when showContactQrOnThermal false"
+    },
+    {
+      "id": "CFG-01",
+      "status": "PASS",
+      "msg": "Simplified tax invoice disabled by default"
+    },
+    {
+      "id": "FILE-cupping-simplified-tax-invoice.js",
+      "status": "PASS",
+      "msg": "exists"
+    },
+    {
+      "id": "FILE-cupping-report-identity.js",
+      "status": "PASS",
+      "msg": "exists"
+    },
+    {
+      "id": "REG-01",
+      "status": "PASS",
+      "msg": "buildReceiptHTML preserved in index.html"
+    },
+    {
+      "id": "REG-02",
+      "status": "PASS",
+      "msg": "Settings toggles present; invoice master toggle separate from detail sections"
+    }
+  ],
+  "at": "2026-07-21T12:42:39.238Z"
+}

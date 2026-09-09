@@ -1,0 +1,10 @@
+{
+  "id": "R03-migration-failure",
+  "title": "Corrupt DB refuses empty replace via DatabaseOpenError",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "errorCode": "DATABASE_PRAGMA_FAILED",
+    "preserved": true
+  }
+}

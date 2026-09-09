@@ -1,0 +1,9 @@
+{
+  "at": "2026-07-31T22:11:53.365Z",
+  "ok": true,
+  "npmTest": "96/96",
+  "windowsSetupExe": false,
+  "readyForRelease": false,
+  "readyForMain": false,
+  "note": "Gate fails while LIVE UAT UNVERIFIED"
+}

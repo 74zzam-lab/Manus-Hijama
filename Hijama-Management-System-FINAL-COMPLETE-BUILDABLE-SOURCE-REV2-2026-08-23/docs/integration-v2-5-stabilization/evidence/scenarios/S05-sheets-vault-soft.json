@@ -1,0 +1,11 @@
+{
+  "id": "S05-sheets-vault-soft",
+  "title": "Sheets via vault only; soft network, hard activation_already_used",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "transport": "google_apps_script_webapp",
+    "softOk": true,
+    "hardOk": true
+  }
+}

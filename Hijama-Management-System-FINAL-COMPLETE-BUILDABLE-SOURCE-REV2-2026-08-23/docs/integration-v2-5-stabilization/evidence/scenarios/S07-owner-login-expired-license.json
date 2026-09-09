@@ -1,0 +1,9 @@
+{
+  "id": "S07-owner-login-expired-license",
+  "title": "All roles can log in read-only when license expired/none",
+  "result": "PASS",
+  "ms": 8,
+  "evidence": {
+    "ownerBypassExpired": true
+  }
+}

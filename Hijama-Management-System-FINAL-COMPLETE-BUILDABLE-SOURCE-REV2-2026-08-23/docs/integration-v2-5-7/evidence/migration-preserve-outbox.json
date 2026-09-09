@@ -1,0 +1,18 @@
+{
+  "id": "MIG-257-004",
+  "ok": true,
+  "outboxBefore": [
+    {
+      "event_id": "EVT-LEGACY-1",
+      "status": "pending",
+      "record_id": "C-LEGACY-1"
+    }
+  ],
+  "outboxAfter": [
+    {
+      "event_id": "EVT-LEGACY-1",
+      "status": "pending",
+      "record_id": "C-LEGACY-1"
+    }
+  ]
+}

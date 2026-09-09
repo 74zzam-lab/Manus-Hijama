@@ -1,0 +1,49 @@
+{
+  "scenarios": [
+    {
+      "id": "B01-full-local-backup",
+      "ms": 312,
+      "result": "PASS"
+    },
+    {
+      "id": "B02-cloud-upload-and-quota",
+      "ms": 418,
+      "result": "PASS"
+    },
+    {
+      "id": "B03-incremental-differential-policy",
+      "ms": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "B04-retention-prune",
+      "ms": 857,
+      "result": "PASS"
+    },
+    {
+      "id": "B05-upload-resume",
+      "ms": 63,
+      "result": "PASS"
+    },
+    {
+      "id": "S01-ab-roundtrip",
+      "ms": 20,
+      "result": "PASS"
+    },
+    {
+      "id": "S02-device-c-catchup",
+      "ms": 17,
+      "result": "PASS"
+    },
+    {
+      "id": "S03-offline-queue-reconnect",
+      "ms": 8,
+      "result": "PASS"
+    },
+    {
+      "id": "S04-obs-counts-audit",
+      "ms": 7,
+      "result": "PASS"
+    }
+  ]
+}

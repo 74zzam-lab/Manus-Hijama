@@ -1,0 +1,10 @@
+{
+  "id": "A01-unit-suite",
+  "title": "Activation unit suite exit 0",
+  "result": "PASS",
+  "ms": 25,
+  "evidence": {
+    "exitCode": 0,
+    "at": "2026-08-23T13:57:34.427Z"
+  }
+}

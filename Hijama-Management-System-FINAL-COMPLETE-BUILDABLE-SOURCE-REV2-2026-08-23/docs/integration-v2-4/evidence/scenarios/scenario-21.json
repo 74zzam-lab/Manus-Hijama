@@ -1,0 +1,10 @@
+{
+  "id": 21,
+  "name": "wipe_local_remote_preserved",
+  "result": "PASS",
+  "ms": 2892,
+  "detail": {
+    "tables": 5
+  },
+  "secretsPrinted": false
+}

@@ -1,0 +1,10 @@
+{
+  "id": "S10-no-silent-empty-fallback",
+  "title": "No silent empty DB when restore fails",
+  "result": "PASS",
+  "ms": 11,
+  "evidence": {
+    "beforeClients": 1,
+    "afterClients": 1
+  }
+}

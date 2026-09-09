@@ -1,0 +1,164 @@
+{
+  "at": "2026-08-23T13:57:28.294Z",
+  "roles": {
+    "product": [
+      "owner",
+      "admin",
+      "reception",
+      "accountant",
+      "employee",
+      "custom"
+    ],
+    "legacyOrLocal": [
+      "hq_admin",
+      "branch_manager",
+      "doctor",
+      "practitioner"
+    ],
+    "rolePolicy": {
+      "organizationOwner": [
+        "owner",
+        "hq_admin"
+      ],
+      "manager": [
+        "owner",
+        "hq_admin",
+        "admin"
+      ]
+    }
+  },
+  "permissions": {
+    "keys": [
+      "cases.view",
+      "cases.edit",
+      "reports.view",
+      "reports.print",
+      "cash.edit",
+      "settings.view",
+      "users.manage"
+    ],
+    "defs": {
+      "cases.view": "v",
+      "cases.edit": "e",
+      "reports.view": "r",
+      "reports.print": "p",
+      "cash.edit": "c",
+      "settings.view": "s",
+      "users.manage": "u"
+    },
+    "presets": [
+      "reception",
+      "employee",
+      "accountant"
+    ]
+  },
+  "screens": {
+    "pagePermissions": [
+      "dashboard",
+      "reports",
+      "users",
+      "employee"
+    ],
+    "pageAccessModules": [
+      "dashboard",
+      "reports"
+    ]
+  },
+  "sidebar": {
+    "navItems": ".nav-item[data-page]",
+    "adminOnly": ".admin-only",
+    "employeeOnly": ".employee-only",
+    "dataPerm": "[data-perm]",
+    "ownerHub": "#nav-owner-hub, [data-page=\"owner-hub\"]"
+  },
+  "dashboardWidgets": [
+    "kpiCards",
+    "charts",
+    "timeline",
+    "ledgerDashCard",
+    "zReportButton",
+    "cashDrawerQuick"
+  ],
+  "reports": [
+    "mainReport",
+    "zReport",
+    "employeeReport",
+    "ledgerReport"
+  ],
+  "exports": [
+    "exportToday",
+    "ledger.export",
+    "logs.export",
+    "database:exportSnapshot",
+    "backup:saveLocal",
+    "backup:v2:create"
+  ],
+  "imports": [
+    "importStudio",
+    "importWizard",
+    "database:migrateFromBackup",
+    "backup:v2:restore"
+  ],
+  "prints": [
+    "printReport",
+    "printZReport",
+    "previewMainReport",
+    "devices:printThermal",
+    "devices:printA4",
+    "ledger.print"
+  ],
+  "search": [
+    "topbarSearch",
+    "clientSearch",
+    "caseSearch"
+  ],
+  "ipc": {
+    "public": [
+      "app:getRuntimeInfo",
+      "database:status",
+      "messaging:getStatus",
+      "devices:getStatus"
+    ],
+    "privileged": [
+      "database:persistTable",
+      "database:persistKv",
+      "database:migrateFromBackup",
+      "database:exportSnapshot",
+      "database:syncOp",
+      "backup:saveLocal",
+      "backup:uploadCloud",
+      "backup:v2:create",
+      "backup:v2:restore",
+      "backup:v2:restoreLatest",
+      "app:wipePersistentLicenseData",
+      "license:writeLicenseShard",
+      "license:writeActivationBundle",
+      "cloudOAuth:saveSettings",
+      "devices:openCashDrawer",
+      "devices:printThermal",
+      "devices:printA4"
+    ]
+  },
+  "services": [
+    "Repository",
+    "BranchScope",
+    "RolePolicy",
+    "PermissionPolicy",
+    "OwnerHub",
+    "SyncEngine",
+    "DeviceRegistry",
+    "LicenseCloud",
+    "EmployeeLedger",
+    "AppointmentService"
+  ],
+  "repositoryOps": [
+    "get",
+    "getScoped",
+    "upsert",
+    "set",
+    "setAll",
+    "delete",
+    "query",
+    "queryScoped"
+  ]
+}

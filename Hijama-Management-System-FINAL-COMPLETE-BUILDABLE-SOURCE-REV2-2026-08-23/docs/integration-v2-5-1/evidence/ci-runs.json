@@ -1,0 +1,13 @@
+{
+  "at": "2026-07-30T20:25:23.751Z",
+  "branch": "cursor/v2-5-1-restore-dr-c2ea",
+  "headSha": "4fbda53",
+  "runs": [
+    {
+      "name": "V2-5.1 Release Gate",
+      "id": 30578753617,
+      "url": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30578753617",
+      "conclusion": "success"
+    }
+  ]
+}

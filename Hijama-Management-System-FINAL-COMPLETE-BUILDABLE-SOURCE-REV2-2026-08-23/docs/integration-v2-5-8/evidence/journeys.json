@@ -1,0 +1,50 @@
+{
+  "at": "2026-08-23T13:57:34.668Z",
+  "ok": true,
+  "newUser": {
+    "steps": [
+      "CleanInstall",
+      "OpenApp",
+      "ConnectGoogle",
+      "License",
+      "Org",
+      "CreateFirstBranch",
+      "CreateOwner",
+      "StartEmpty",
+      "InitialSync",
+      "DashboardGate",
+      "Logout",
+      "LoginOwnerPassword",
+      "Restart"
+    ],
+    "automatedWiring": "PASS",
+    "interactiveGoogleOAuth": "REQUIRES_REAL_GOOGLE_ACCOUNT_ON_WINDOWS_EXE"
+  },
+  "existingData": {
+    "steps": [
+      "CleanInstallDeviceB",
+      "Google",
+      "License",
+      "SelectOrg",
+      "SelectBranch",
+      "Restore",
+      "Sync",
+      "Verify",
+      "Dashboard",
+      "Restart"
+    ],
+    "automatedWiring": "PASS",
+    "interactiveGoogleOAuth": "REQUIRES_REAL_GOOGLE_ACCOUNT_ON_WINDOWS_EXE"
+  },
+  "failurePaths": [
+    "oauth cancel/timeout",
+    "license invalid",
+    "empty owner password",
+    "duplicate branch click",
+    "restore interrupt",
+    "sync interrupt",
+    "offline",
+    "small resolution",
+    "scaling 175%"
+  ]
+}

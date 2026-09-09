@@ -1,0 +1,17 @@
+{
+  "id": "P05-reliability",
+  "title": "Crash markers, backoff, queue bound, soak, disk/mem, logs",
+  "result": "PASS",
+  "ms": 61,
+  "evidence": {
+    "backoff": [
+      8000,
+      16000,
+      32000,
+      64000,
+      128000
+    ],
+    "queuePending": 2000,
+    "soakMs": 60
+  }
+}

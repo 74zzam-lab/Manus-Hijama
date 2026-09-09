@@ -1,0 +1,2936 @@
+{
+  "generatedAt": "2026-07-01T11:51:39.923Z",
+  "version": "1.2.0",
+  "gate": "independent-zero-trust",
+  "authorized": true,
+  "clonePath": "/tmp/tadawi-verify-ioDk2p/repo",
+  "summary": {
+    "passed": 538,
+    "failed": 0,
+    "warned": 2
+  },
+  "reports": {
+    "Clean Environment": {
+      "passed": 3,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "fresh-clone",
+          "status": "PASS",
+          "detail": "/tmp/tadawi-verify-ioDk2p/repo"
+        },
+        {
+          "id": "no-node_modules",
+          "status": "PASS",
+          "detail": "clean"
+        },
+        {
+          "id": "runtime-data-cleared",
+          "status": "PASS",
+          "detail": "activations, shards, custom packages"
+        }
+      ]
+    },
+    "Deterministic Build": {
+      "passed": 7,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "hash-match:feature",
+          "status": "PASS",
+          "detail": "233b59c6a6f3c107"
+        },
+        {
+          "id": "hash-match:capability",
+          "status": "PASS",
+          "detail": "da2b9d19f90e176c"
+        },
+        {
+          "id": "hash-match:package",
+          "status": "PASS",
+          "detail": "9373131485d46582"
+        },
+        {
+          "id": "hash-match:subscription",
+          "status": "PASS",
+          "detail": "91f724d1068e83bb"
+        },
+        {
+          "id": "hash-match:action",
+          "status": "PASS",
+          "detail": "2e3667dcf17bff58"
+        },
+        {
+          "id": "hash-match:template",
+          "status": "PASS",
+          "detail": "a990f4b54e58b341"
+        },
+        {
+          "id": "structural-determinism",
+          "status": "PASS",
+          "detail": "normalized registry content identical across generate runs"
+        }
+      ]
+    },
+    "CI/CD Verification": {
+      "passed": 6,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "pipeline:license:test",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "pipeline:license:validate",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "pipeline:license:certify",
+          "status": "PASS",
+          "detail": "exit 0"
+        },
+        {
+          "id": "pipeline-exit-zero",
+          "status": "PASS",
+          "detail": "all steps exit 0"
+        },
+        {
+          "id": "no-interactive-prompts",
+          "status": "PASS",
+          "detail": "non-interactive"
+        },
+        {
+          "id": "github-actions-ready",
+          "status": "PASS",
+          "detail": "npm ci + license:*"
+        }
+      ]
+    },
+    "Diagnostics Verification": {
+      "passed": 2,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "security-via-certify",
+          "status": "PASS",
+          "detail": "covered in license:certify pipeline"
+        },
+        {
+          "id": "stress-via-certify",
+          "status": "PASS",
+          "detail": "10000 ops in license:certify"
+        }
+      ]
+    },
+    "Security Verification": {
+      "passed": 1,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "negative-tests-via-certify",
+          "status": "PASS",
+          "detail": "covered in license:certify"
+        }
+      ]
+    },
+    "Stress Verification": {
+      "passed": 1,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "stress-via-certify",
+          "status": "PASS",
+          "detail": "10000 ops in license:certify"
+        }
+      ]
+    },
+    "Runtime Verification": {
+      "passed": 13,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generate",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CXU"
+        },
+        {
+          "id": "activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "restart-persistence",
+          "status": "PASS",
+          "detail": "localStorage cleared and restored"
+        },
+        {
+          "id": "post-restart-activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "renew",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "upgrade",
+          "status": "PASS",
+          "detail": "04"
+        },
+        {
+          "id": "downgrade",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "delete",
+          "status": "PASS",
+          "detail": "license removed"
+        },
+        {
+          "id": "recover",
+          "status": "PASS",
+          "detail": "from backup"
+        },
+        {
+          "id": "import-export",
+          "status": "PASS",
+          "detail": "roundtrip"
+        },
+        {
+          "id": "final-restart-consistency",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "electron-shard",
+          "status": "PASS",
+          "detail": "on disk"
+        },
+        {
+          "id": "electron-bundle",
+          "status": "PASS",
+          "detail": "on disk"
+        }
+      ]
+    },
+    "Feature Verification": {
+      "passed": 431,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "dynamic-count",
+          "status": "PASS",
+          "detail": "72 features"
+        },
+        {
+          "id": "001:id-unique",
+          "status": "PASS",
+          "detail": "001"
+        },
+        {
+          "id": "001:uuid-unique",
+          "status": "PASS",
+          "detail": "5af80ebc-c8d2-4ea7-a5cb-84ff1ca935fd"
+        },
+        {
+          "id": "001:key-unique",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:registry",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:v1",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "002:id-unique",
+          "status": "PASS",
+          "detail": "002"
+        },
+        {
+          "id": "002:uuid-unique",
+          "status": "PASS",
+          "detail": "ac5ecd68-bd16-4fea-a1f9-0e54bce9dbf4"
+        },
+        {
+          "id": "002:key-unique",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:registry",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:v1",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "003:id-unique",
+          "status": "PASS",
+          "detail": "003"
+        },
+        {
+          "id": "003:uuid-unique",
+          "status": "PASS",
+          "detail": "65b505ed-0975-4034-85e7-7c15898fe126"
+        },
+        {
+          "id": "003:key-unique",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:registry",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:v1",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "004:id-unique",
+          "status": "PASS",
+          "detail": "004"
+        },
+        {
+          "id": "004:uuid-unique",
+          "status": "PASS",
+          "detail": "63f1ed9d-7d3c-4b44-ac95-af8990d2da9d"
+        },
+        {
+          "id": "004:key-unique",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:registry",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:v1",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "005:id-unique",
+          "status": "PASS",
+          "detail": "005"
+        },
+        {
+          "id": "005:uuid-unique",
+          "status": "PASS",
+          "detail": "bc47b186-e2b2-447a-bbb8-1bc550d2bf54"
+        },
+        {
+          "id": "005:key-unique",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:registry",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:v1",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "006:id-unique",
+          "status": "PASS",
+          "detail": "006"
+        },
+        {
+          "id": "006:uuid-unique",
+          "status": "PASS",
+          "detail": "dd9b017f-ef13-4fa6-8302-ca4d43f7efb1"
+        },
+        {
+          "id": "006:key-unique",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:registry",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:v1",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "007:id-unique",
+          "status": "PASS",
+          "detail": "007"
+        },
+        {
+          "id": "007:uuid-unique",
+          "status": "PASS",
+          "detail": "a6b7a64b-9dd9-4cf0-912c-2f66cfbfcd08"
+        },
+        {
+          "id": "007:key-unique",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:registry",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:v1",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "008:id-unique",
+          "status": "PASS",
+          "detail": "008"
+        },
+        {
+          "id": "008:uuid-unique",
+          "status": "PASS",
+          "detail": "120b37e0-e5c9-4c74-afc5-5f1070787dd7"
+        },
+        {
+          "id": "008:key-unique",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:registry",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:v1",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "009:id-unique",
+          "status": "PASS",
+          "detail": "009"
+        },
+        {
+          "id": "009:uuid-unique",
+          "status": "PASS",
+          "detail": "c1ec17f9-65cd-41bc-9fed-32947a8b53a6"
+        },
+        {
+          "id": "009:key-unique",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:registry",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:v1",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "010:id-unique",
+          "status": "PASS",
+          "detail": "010"
+        },
+        {
+          "id": "010:uuid-unique",
+          "status": "PASS",
+          "detail": "96fec28e-6434-4c61-945c-2064df415e1e"
+        },
+        {
+          "id": "010:key-unique",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:registry",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:v1",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "011:id-unique",
+          "status": "PASS",
+          "detail": "011"
+        },
+        {
+          "id": "011:uuid-unique",
+          "status": "PASS",
+          "detail": "d8d38ced-4a42-462e-83e8-d3434da7cd4c"
+        },
+        {
+          "id": "011:key-unique",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:registry",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:v1",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "012:id-unique",
+          "status": "PASS",
+          "detail": "012"
+        },
+        {
+          "id": "012:uuid-unique",
+          "status": "PASS",
+          "detail": "0d329c69-2e7a-42d7-904b-08339cdd49fa"
+        },
+        {
+          "id": "012:key-unique",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:registry",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:v1",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:cap:cap_booking",
+          "status": "PASS",
+          "detail": "cap_booking"
+        },
+        {
+          "id": "013:id-unique",
+          "status": "PASS",
+          "detail": "013"
+        },
+        {
+          "id": "013:uuid-unique",
+          "status": "PASS",
+          "detail": "f2e53b07-4a27-4484-9f54-e25d2386c3b3"
+        },
+        {
+          "id": "013:key-unique",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:registry",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:v1",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "014:id-unique",
+          "status": "PASS",
+          "detail": "014"
+        },
+        {
+          "id": "014:uuid-unique",
+          "status": "PASS",
+          "detail": "e4e63f30-607f-4b0f-bbd5-b8df0315feeb"
+        },
+        {
+          "id": "014:key-unique",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:registry",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:v1",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "015:id-unique",
+          "status": "PASS",
+          "detail": "015"
+        },
+        {
+          "id": "015:uuid-unique",
+          "status": "PASS",
+          "detail": "9a549420-ed49-46fc-98f3-c7f8b724ee00"
+        },
+        {
+          "id": "015:key-unique",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:registry",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:v1",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "016:id-unique",
+          "status": "PASS",
+          "detail": "016"
+        },
+        {
+          "id": "016:uuid-unique",
+          "status": "PASS",
+          "detail": "cf6b1146-c189-4792-bb64-3a57b2687fa5"
+        },
+        {
+          "id": "016:key-unique",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:registry",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:v1",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "017:id-unique",
+          "status": "PASS",
+          "detail": "017"
+        },
+        {
+          "id": "017:uuid-unique",
+          "status": "PASS",
+          "detail": "c58d9ec9-4dee-4746-9411-f4146a77073b"
+        },
+        {
+          "id": "017:key-unique",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:registry",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:v1",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "018:id-unique",
+          "status": "PASS",
+          "detail": "018"
+        },
+        {
+          "id": "018:uuid-unique",
+          "status": "PASS",
+          "detail": "be45cd39-88dd-43a8-80a0-cc97454258fe"
+        },
+        {
+          "id": "018:key-unique",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:registry",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:v1",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "019:id-unique",
+          "status": "PASS",
+          "detail": "019"
+        },
+        {
+          "id": "019:uuid-unique",
+          "status": "PASS",
+          "detail": "8620e6a8-b30c-4776-b963-cd6cf6789633"
+        },
+        {
+          "id": "019:key-unique",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:registry",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:v1",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "020:id-unique",
+          "status": "PASS",
+          "detail": "020"
+        },
+        {
+          "id": "020:uuid-unique",
+          "status": "PASS",
+          "detail": "d42a7275-2342-4847-838b-f18ebe7e471c"
+        },
+        {
+          "id": "020:key-unique",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:registry",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:v1",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "021:id-unique",
+          "status": "PASS",
+          "detail": "021"
+        },
+        {
+          "id": "021:uuid-unique",
+          "status": "PASS",
+          "detail": "16c56b4e-fe6a-499c-a12f-23a0d534b78f"
+        },
+        {
+          "id": "021:key-unique",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:registry",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:v1",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "022:id-unique",
+          "status": "PASS",
+          "detail": "022"
+        },
+        {
+          "id": "022:uuid-unique",
+          "status": "PASS",
+          "detail": "29b7f362-f708-42ce-9a1a-46d4bc3f90ca"
+        },
+        {
+          "id": "022:key-unique",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:registry",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:v1",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "023:id-unique",
+          "status": "PASS",
+          "detail": "023"
+        },
+        {
+          "id": "023:uuid-unique",
+          "status": "PASS",
+          "detail": "3469bfff-9e75-48cc-a42a-d4d0697bce29"
+        },
+        {
+          "id": "023:key-unique",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:registry",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:v1",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "024:id-unique",
+          "status": "PASS",
+          "detail": "024"
+        },
+        {
+          "id": "024:uuid-unique",
+          "status": "PASS",
+          "detail": "afbfb49a-88f2-490f-974d-0ea748873cec"
+        },
+        {
+          "id": "024:key-unique",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:registry",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:v1",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "025:id-unique",
+          "status": "PASS",
+          "detail": "025"
+        },
+        {
+          "id": "025:uuid-unique",
+          "status": "PASS",
+          "detail": "37cc8acf-dc1b-4bfa-a9aa-274eae8e38c9"
+        },
+        {
+          "id": "025:key-unique",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:registry",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:v1",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "026:id-unique",
+          "status": "PASS",
+          "detail": "026"
+        },
+        {
+          "id": "026:uuid-unique",
+          "status": "PASS",
+          "detail": "65cb1d42-dbb5-423c-b397-13afac2744d7"
+        },
+        {
+          "id": "026:key-unique",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:registry",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:v1",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "027:id-unique",
+          "status": "PASS",
+          "detail": "027"
+        },
+        {
+          "id": "027:uuid-unique",
+          "status": "PASS",
+          "detail": "f416dd6c-d35e-485b-b62d-6510b2489bd1"
+        },
+        {
+          "id": "027:key-unique",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:registry",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:v1",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "028:id-unique",
+          "status": "PASS",
+          "detail": "028"
+        },
+        {
+          "id": "028:uuid-unique",
+          "status": "PASS",
+          "detail": "faa3ab4f-2d6d-4b8e-a624-316ccbffbe87"
+        },
+        {
+          "id": "028:key-unique",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:registry",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:v1",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "029:id-unique",
+          "status": "PASS",
+          "detail": "029"
+        },
+        {
+          "id": "029:uuid-unique",
+          "status": "PASS",
+          "detail": "6ed28f4f-49fc-4682-9afd-822463f88366"
+        },
+        {
+          "id": "029:key-unique",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:registry",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:v1",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "030:id-unique",
+          "status": "PASS",
+          "detail": "030"
+        },
+        {
+          "id": "030:uuid-unique",
+          "status": "PASS",
+          "detail": "74b96755-17b7-4951-ab69-446a2c6e5f32"
+        },
+        {
+          "id": "030:key-unique",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:registry",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:v1",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "031:id-unique",
+          "status": "PASS",
+          "detail": "031"
+        },
+        {
+          "id": "031:uuid-unique",
+          "status": "PASS",
+          "detail": "f7a9bc7a-374e-479a-b3be-8ede123d2d74"
+        },
+        {
+          "id": "031:key-unique",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:registry",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:v1",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "032:id-unique",
+          "status": "PASS",
+          "detail": "032"
+        },
+        {
+          "id": "032:uuid-unique",
+          "status": "PASS",
+          "detail": "02bf6632-721e-4ce2-9c67-cb56fcc22d0e"
+        },
+        {
+          "id": "032:key-unique",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:registry",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:v1",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "033:id-unique",
+          "status": "PASS",
+          "detail": "033"
+        },
+        {
+          "id": "033:uuid-unique",
+          "status": "PASS",
+          "detail": "a8bcd1d9-ffd8-4896-84ea-bfe9882727d9"
+        },
+        {
+          "id": "033:key-unique",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:registry",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:v1",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "034:id-unique",
+          "status": "PASS",
+          "detail": "034"
+        },
+        {
+          "id": "034:uuid-unique",
+          "status": "PASS",
+          "detail": "0bb03c66-4289-4d3a-a52f-522b91d33905"
+        },
+        {
+          "id": "034:key-unique",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:registry",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:v1",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "035:id-unique",
+          "status": "PASS",
+          "detail": "035"
+        },
+        {
+          "id": "035:uuid-unique",
+          "status": "PASS",
+          "detail": "8b403194-e2cf-4acb-beed-f212e41f4212"
+        },
+        {
+          "id": "035:key-unique",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:registry",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:v1",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "036:id-unique",
+          "status": "PASS",
+          "detail": "036"
+        },
+        {
+          "id": "036:uuid-unique",
+          "status": "PASS",
+          "detail": "2f6c46aa-19c1-492e-bd19-8322cfa90658"
+        },
+        {
+          "id": "036:key-unique",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:registry",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:v1",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "037:id-unique",
+          "status": "PASS",
+          "detail": "037"
+        },
+        {
+          "id": "037:uuid-unique",
+          "status": "PASS",
+          "detail": "5e3159ca-bc8d-42bc-87bd-160426feb45f"
+        },
+        {
+          "id": "037:key-unique",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:registry",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:v1",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "038:id-unique",
+          "status": "PASS",
+          "detail": "038"
+        },
+        {
+          "id": "038:uuid-unique",
+          "status": "PASS",
+          "detail": "d204c249-fa63-4eaf-b97e-b28fcaab5356"
+        },
+        {
+          "id": "038:key-unique",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:registry",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:v1",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "039:id-unique",
+          "status": "PASS",
+          "detail": "039"
+        },
+        {
+          "id": "039:uuid-unique",
+          "status": "PASS",
+          "detail": "41882bcb-69fc-42de-ad8c-021426c9d926"
+        },
+        {
+          "id": "039:key-unique",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:registry",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:v1",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "040:id-unique",
+          "status": "PASS",
+          "detail": "040"
+        },
+        {
+          "id": "040:uuid-unique",
+          "status": "PASS",
+          "detail": "dc75ad92-acb0-451e-a87d-fae7d645202f"
+        },
+        {
+          "id": "040:key-unique",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:registry",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:v1",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "041:id-unique",
+          "status": "PASS",
+          "detail": "041"
+        },
+        {
+          "id": "041:uuid-unique",
+          "status": "PASS",
+          "detail": "192bea9f-b500-43e4-81fa-b8df39eb6730"
+        },
+        {
+          "id": "041:key-unique",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:registry",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:v1",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "042:id-unique",
+          "status": "PASS",
+          "detail": "042"
+        },
+        {
+          "id": "042:uuid-unique",
+          "status": "PASS",
+          "detail": "dc4eacc0-5b28-434a-b70d-29537e3728c0"
+        },
+        {
+          "id": "042:key-unique",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:registry",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:v1",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "043:id-unique",
+          "status": "PASS",
+          "detail": "043"
+        },
+        {
+          "id": "043:uuid-unique",
+          "status": "PASS",
+          "detail": "31118064-ad4b-4ecb-9adc-be3ff19cc8e4"
+        },
+        {
+          "id": "043:key-unique",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:registry",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:v1",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "044:id-unique",
+          "status": "PASS",
+          "detail": "044"
+        },
+        {
+          "id": "044:uuid-unique",
+          "status": "PASS",
+          "detail": "19bf74a8-3c4d-49ee-87e2-d54f0d6f0039"
+        },
+        {
+          "id": "044:key-unique",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:registry",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:v1",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "045:id-unique",
+          "status": "PASS",
+          "detail": "045"
+        },
+        {
+          "id": "045:uuid-unique",
+          "status": "PASS",
+          "detail": "b551414a-cf10-49ea-acdd-563bce28468d"
+        },
+        {
+          "id": "045:key-unique",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:registry",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:v1",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "046:id-unique",
+          "status": "PASS",
+          "detail": "046"
+        },
+        {
+          "id": "046:uuid-unique",
+          "status": "PASS",
+          "detail": "a885e801-63f0-45b5-bd27-9ea4bf8f7ed1"
+        },
+        {
+          "id": "046:key-unique",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:registry",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:v1",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "047:id-unique",
+          "status": "PASS",
+          "detail": "047"
+        },
+        {
+          "id": "047:uuid-unique",
+          "status": "PASS",
+          "detail": "df5c01b6-dd94-4e93-aefe-892ac5324d2a"
+        },
+        {
+          "id": "047:key-unique",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:registry",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:v1",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "048:id-unique",
+          "status": "PASS",
+          "detail": "048"
+        },
+        {
+          "id": "048:uuid-unique",
+          "status": "PASS",
+          "detail": "9dda7d0b-3541-4262-b3c9-10b98a121193"
+        },
+        {
+          "id": "048:key-unique",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:registry",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:v1",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "049:id-unique",
+          "status": "PASS",
+          "detail": "049"
+        },
+        {
+          "id": "049:uuid-unique",
+          "status": "PASS",
+          "detail": "28476afe-81b4-4add-b9ce-c21ebe15276f"
+        },
+        {
+          "id": "049:key-unique",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:registry",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:v1",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "050:id-unique",
+          "status": "PASS",
+          "detail": "050"
+        },
+        {
+          "id": "050:uuid-unique",
+          "status": "PASS",
+          "detail": "85bbb1a1-b1bc-472c-ab93-ebac7c66315a"
+        },
+        {
+          "id": "050:key-unique",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:registry",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:v1",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "051:id-unique",
+          "status": "PASS",
+          "detail": "051"
+        },
+        {
+          "id": "051:uuid-unique",
+          "status": "PASS",
+          "detail": "37a7e41b-3398-48b2-a175-3abc4650c129"
+        },
+        {
+          "id": "051:key-unique",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:registry",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:v1",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "052:id-unique",
+          "status": "PASS",
+          "detail": "052"
+        },
+        {
+          "id": "052:uuid-unique",
+          "status": "PASS",
+          "detail": "9c864083-3c65-4e28-9043-5605f3be1c5a"
+        },
+        {
+          "id": "052:key-unique",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:registry",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:v1",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "053:id-unique",
+          "status": "PASS",
+          "detail": "053"
+        },
+        {
+          "id": "053:uuid-unique",
+          "status": "PASS",
+          "detail": "f0dde31f-3a2f-4f45-9753-3cdd6b50becf"
+        },
+        {
+          "id": "053:key-unique",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:registry",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:v1",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "054:id-unique",
+          "status": "PASS",
+          "detail": "054"
+        },
+        {
+          "id": "054:uuid-unique",
+          "status": "PASS",
+          "detail": "0afc817a-4560-4b74-9d5e-08a8c43607bf"
+        },
+        {
+          "id": "054:key-unique",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:registry",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:v1",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "055:id-unique",
+          "status": "PASS",
+          "detail": "055"
+        },
+        {
+          "id": "055:uuid-unique",
+          "status": "PASS",
+          "detail": "45cb4c49-ef4c-43fc-8082-9aa4cac79174"
+        },
+        {
+          "id": "055:key-unique",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:registry",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:v1",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "056:id-unique",
+          "status": "PASS",
+          "detail": "056"
+        },
+        {
+          "id": "056:uuid-unique",
+          "status": "PASS",
+          "detail": "916e21f0-6e74-4967-a991-0f15830213df"
+        },
+        {
+          "id": "056:key-unique",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:registry",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:v1",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "057:id-unique",
+          "status": "PASS",
+          "detail": "057"
+        },
+        {
+          "id": "057:uuid-unique",
+          "status": "PASS",
+          "detail": "1a8c17eb-0f4a-4da7-991a-bca9cc8805d7"
+        },
+        {
+          "id": "057:key-unique",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:registry",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:v1",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "058:id-unique",
+          "status": "PASS",
+          "detail": "058"
+        },
+        {
+          "id": "058:uuid-unique",
+          "status": "PASS",
+          "detail": "f55d73d1-ef63-491b-a61b-9519639504d2"
+        },
+        {
+          "id": "058:key-unique",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:registry",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:v1",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "059:id-unique",
+          "status": "PASS",
+          "detail": "059"
+        },
+        {
+          "id": "059:uuid-unique",
+          "status": "PASS",
+          "detail": "98ef3736-d77b-4ed0-a76b-9517f861ebbd"
+        },
+        {
+          "id": "059:key-unique",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:registry",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:v1",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "060:id-unique",
+          "status": "PASS",
+          "detail": "060"
+        },
+        {
+          "id": "060:uuid-unique",
+          "status": "PASS",
+          "detail": "bd6338fd-3d53-4494-b0f1-dccd2bc84d4a"
+        },
+        {
+          "id": "060:key-unique",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:registry",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:v1",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "061:id-unique",
+          "status": "PASS",
+          "detail": "061"
+        },
+        {
+          "id": "061:uuid-unique",
+          "status": "PASS",
+          "detail": "e17858ec-3e42-43ae-9e9e-ffa19aeea4ec"
+        },
+        {
+          "id": "061:key-unique",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:registry",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:v1",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "062:id-unique",
+          "status": "PASS",
+          "detail": "062"
+        },
+        {
+          "id": "062:uuid-unique",
+          "status": "PASS",
+          "detail": "69406769-22d8-4575-8e60-a43ac64de3ce"
+        },
+        {
+          "id": "062:key-unique",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:registry",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:v1",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "063:id-unique",
+          "status": "PASS",
+          "detail": "063"
+        },
+        {
+          "id": "063:uuid-unique",
+          "status": "PASS",
+          "detail": "37f24a34-4f9a-4c97-baa7-41f4a97bf55b"
+        },
+        {
+          "id": "063:key-unique",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:registry",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:v1",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "064:id-unique",
+          "status": "PASS",
+          "detail": "064"
+        },
+        {
+          "id": "064:uuid-unique",
+          "status": "PASS",
+          "detail": "f6c5e4c7-97a9-44d0-baa9-08a1df0675db"
+        },
+        {
+          "id": "064:key-unique",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:registry",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:v1",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "065:id-unique",
+          "status": "PASS",
+          "detail": "065"
+        },
+        {
+          "id": "065:uuid-unique",
+          "status": "PASS",
+          "detail": "7f1406da-2f2b-4fbd-935d-c5fe05165e2d"
+        },
+        {
+          "id": "065:key-unique",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:registry",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:v1",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "066:id-unique",
+          "status": "PASS",
+          "detail": "066"
+        },
+        {
+          "id": "066:uuid-unique",
+          "status": "PASS",
+          "detail": "d1aa1124-3c76-480d-99b6-0d0d3b5364d0"
+        },
+        {
+          "id": "066:key-unique",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:registry",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:v1",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "067:id-unique",
+          "status": "PASS",
+          "detail": "067"
+        },
+        {
+          "id": "067:uuid-unique",
+          "status": "PASS",
+          "detail": "07b1075a-9bf1-4385-ae40-c2d5810db6cd"
+        },
+        {
+          "id": "067:key-unique",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:registry",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:v1",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "068:id-unique",
+          "status": "PASS",
+          "detail": "068"
+        },
+        {
+          "id": "068:uuid-unique",
+          "status": "PASS",
+          "detail": "0360e6da-99a9-41a8-a5d5-f5532cc48ffe"
+        },
+        {
+          "id": "068:key-unique",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:registry",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:v1",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "069:id-unique",
+          "status": "PASS",
+          "detail": "069"
+        },
+        {
+          "id": "069:uuid-unique",
+          "status": "PASS",
+          "detail": "4f94ce1c-40a2-4016-b7d4-d0188da83568"
+        },
+        {
+          "id": "069:key-unique",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:registry",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:v1",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "070:id-unique",
+          "status": "PASS",
+          "detail": "070"
+        },
+        {
+          "id": "070:uuid-unique",
+          "status": "PASS",
+          "detail": "079e914c-8c88-4d4b-87c8-1c9522a25f30"
+        },
+        {
+          "id": "070:key-unique",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:registry",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:v1",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "071:id-unique",
+          "status": "PASS",
+          "detail": "071"
+        },
+        {
+          "id": "071:uuid-unique",
+          "status": "PASS",
+          "detail": "6654134c-36d1-41c8-a6ba-1110e48cf2c4"
+        },
+        {
+          "id": "071:key-unique",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:registry",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:v1",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        },
+        {
+          "id": "072:id-unique",
+          "status": "PASS",
+          "detail": "072"
+        },
+        {
+          "id": "072:uuid-unique",
+          "status": "PASS",
+          "detail": "7fe30f60-e0f8-4225-b434-a36d6668a717"
+        },
+        {
+          "id": "072:key-unique",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:registry",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:v1",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:cap:cap_pos",
+          "status": "PASS",
+          "detail": "cap_pos"
+        }
+      ]
+    },
+    "Package Verification": {
+      "passed": 38,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "dynamic-count",
+          "status": "PASS",
+          "detail": "8 packages"
+        },
+        {
+          "id": "01:defined",
+          "status": "PASS",
+          "detail": "Starter"
+        },
+        {
+          "id": "01:devices",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "01:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "02:defined",
+          "status": "PASS",
+          "detail": "Standard"
+        },
+        {
+          "id": "02:devices",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "02:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "02:inherits",
+          "status": "PASS",
+          "detail": "01"
+        },
+        {
+          "id": "03:defined",
+          "status": "PASS",
+          "detail": "Professional"
+        },
+        {
+          "id": "03:devices",
+          "status": "PASS",
+          "detail": "3"
+        },
+        {
+          "id": "03:branches",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "03:inherits",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "03:cap:cap_hr",
+          "status": "PASS",
+          "detail": "cap_hr"
+        },
+        {
+          "id": "03:cap:cap_reports",
+          "status": "PASS",
+          "detail": "cap_reports"
+        },
+        {
+          "id": "03:cap:cap_finance",
+          "status": "PASS",
+          "detail": "cap_finance"
+        },
+        {
+          "id": "04:defined",
+          "status": "PASS",
+          "detail": "Enterprise"
+        },
+        {
+          "id": "04:devices",
+          "status": "PASS",
+          "detail": "5"
+        },
+        {
+          "id": "04:branches",
+          "status": "PASS",
+          "detail": "5"
+        },
+        {
+          "id": "04:inherits",
+          "status": "PASS",
+          "detail": "03"
+        },
+        {
+          "id": "04:cap:cap_backup",
+          "status": "PASS",
+          "detail": "cap_backup"
+        },
+        {
+          "id": "04:cap:cap_communication",
+          "status": "PASS",
+          "detail": "cap_communication"
+        },
+        {
+          "id": "05:defined",
+          "status": "PASS",
+          "detail": "Ultimate"
+        },
+        {
+          "id": "05:devices",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "05:branches",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "05:inherits",
+          "status": "PASS",
+          "detail": "04"
+        },
+        {
+          "id": "06:defined",
+          "status": "PASS",
+          "detail": "Developer"
+        },
+        {
+          "id": "06:devices",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "06:branches",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "06:inherits",
+          "status": "PASS",
+          "detail": "05"
+        },
+        {
+          "id": "06:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "cap_diagnostics"
+        },
+        {
+          "id": "99:defined",
+          "status": "PASS",
+          "detail": "Custom"
+        },
+        {
+          "id": "10:defined",
+          "status": "PASS",
+          "detail": "Test Package 10"
+        },
+        {
+          "id": "10:devices",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "10:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "10:inherits",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "template:hijama_starter",
+          "status": "PASS",
+          "detail": "pkg=01"
+        },
+        {
+          "id": "template:clinic_medium",
+          "status": "PASS",
+          "detail": "pkg=02"
+        },
+        {
+          "id": "template:dental_pro",
+          "status": "PASS",
+          "detail": "pkg=03"
+        }
+      ]
+    },
+    "Developer Workflow": {
+      "passed": 9,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generator:FEATURE_REGISTRY",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "generator:buildCapabilityRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "generator:buildPackageRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "generator:buildTemplateRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "generator:buildSubscriptionRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "generator:buildActionRegistry",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "no-hardcoded-features",
+          "status": "PASS",
+          "detail": "resolver reads registries"
+        },
+        {
+          "id": "regenerate-without-engine",
+          "status": "PASS",
+          "detail": "license:generate exit 0"
+        },
+        {
+          "id": "post-regenerate-tests",
+          "status": "PASS",
+          "detail": "license:test exit 0"
+        }
+      ]
+    },
+    "Production Audit": {
+      "passed": 20,
+      "failed": 0,
+      "warned": 2,
+      "items": [
+        {
+          "id": "scan:license/data/activations/L000001.bundle.json",
+          "status": "WARN",
+          "detail": "/\\bmock\\b/i"
+        },
+        {
+          "id": "repo-scan",
+          "status": "WARN",
+          "detail": "1 pattern hits"
+        },
+        {
+          "id": "import:license/core/license-constants.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/core/license-crypto.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/core/registry-integrity.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/core/license-codec-v5.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/feature-resolver.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-persistence.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-store.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/audit-log.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/activation-bundle.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/commercial-bridge.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-generator-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-validator-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-upgrade.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-downgrade.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-migration.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/engine/license-engine-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/license-router.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/ui/license-v2-drawer.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/ui/upgrade-wizard.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "import:license/ui/package-builder.js",
+          "status": "PASS",
+          "detail": "exists"
+        }
+      ]
+    },
+    "Final Production Validation": {
+      "passed": 7,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "license:validate",
+          "status": "PASS",
+          "detail": "1850+ pass"
+        },
+        {
+          "id": "license:certify",
+          "status": "PASS",
+          "detail": "681+ pass"
+        },
+        {
+          "id": "app:isFeatureEnabled",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "app:licResolveLicensedFeatures",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "app:licParseActivationCode",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "app:CommercialLicense.router",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "v1-paths-preserved",
+          "status": "PASS",
+          "detail": "V3/V4/Legacy + V5 bridge"
+        }
+      ]
+    }
+  },
+  "deterministic": {
+    "generate1": {
+      "feature": "233b59c6a6f3c107ded50e9bb75b320f2b451573dd21f5ee693df7a1a953df32",
+      "feature:sig": "7c8b094ad4f6c5c3cd257b3e14880b0042babb05d996e4dcef26b85d6021e58e",
+      "feature:features": 72,
+      "capability": "da2b9d19f90e176cf6d16cecdb77c594b8751fb1dabe7378ea55a2553a58df15",
+      "capability:sig": "c71e99982654b336668361e410353e5e467a55370ef22de349287577da13cb7b",
+      "capability:features": 8,
+      "package": "9373131485d465829678401d935ab7c283e34b1b2bf63617b561fdbf17dc93da",
+      "package:sig": "254f3736a7006274ee287867d2e47887c170dbf809a5d8c5b61159dd369edc83",
+      "package:features": 7,
+      "subscription": "91f724d1068e83bb6c8bf7bf2cd2015e0e962d6a520a9b3fb0546dd76491c695",
+      "subscription:sig": "844e5d72759e73718146ed4f68f9359472f67bce0623a1cab2ad2d4bc201515b",
+      "subscription:features": 9,
+      "action": "2e3667dcf17bff58cf04a0c48a49ba16c99cb796ec49591695e8973649c19f03",
+      "action:sig": "80d3d96f5f56654feacc60f6811d7029704ad351def090926cf939cad1cd3490",
+      "action:features": 13,
+      "template": "a990f4b54e58b3418cfbff0edd126fe03349377914c071d2ef683a45aa67abe9",
+      "template:sig": "aa311c1d9647b7a0db54f54372c4306d4064a6aff3c94a715f7b4b4c3acb78b9",
+      "template:features": 3
+    },
+    "generate2": {
+      "feature": "233b59c6a6f3c107ded50e9bb75b320f2b451573dd21f5ee693df7a1a953df32",
+      "feature:sig": "dc0d1a7be67df55dc1cf073764baf713b69accace507850b4f078e853a495826",
+      "feature:features": 72,
+      "capability": "da2b9d19f90e176cf6d16cecdb77c594b8751fb1dabe7378ea55a2553a58df15",
+      "capability:sig": "468922156ff2d8bb4171cb328e6be23997a464c5b83960d0b0ca8a835073f34c",
+      "capability:features": 8,
+      "package": "9373131485d465829678401d935ab7c283e34b1b2bf63617b561fdbf17dc93da",
+      "package:sig": "316e0b64206f0655c48c6854819304647604a43841f7f977c82a20d94039da89",
+      "package:features": 7,
+      "subscription": "91f724d1068e83bb6c8bf7bf2cd2015e0e962d6a520a9b3fb0546dd76491c695",
+      "subscription:sig": "a51f316ebdfb55b25c5eddbc4a3a2129c289d0b42ad056c5ccaee64c9b307e68",
+      "subscription:features": 9,
+      "action": "2e3667dcf17bff58cf04a0c48a49ba16c99cb796ec49591695e8973649c19f03",
+      "action:sig": "a5216b05f889146eb55bfed4c2fd95fa3fbfce0b7c44d580409ce49f420c2e3b",
+      "action:features": 13,
+      "template": "a990f4b54e58b3418cfbff0edd126fe03349377914c071d2ef683a45aa67abe9",
+      "template:sig": "45d54b3c51d9a0b727313c67d0a2f243e38cb0c6468d05f747dc3d0c700e4ceb",
+      "template:features": 3
+    },
+    "structuralMatch": true,
+    "note": "generatedAt/registrySig vary; body normalized"
+  },
+  "pipeline": [
+    {
+      "label": "det:npm-ci",
+      "cmd": "npm ci",
+      "exit": 0,
+      "ok": true,
+      "stderr": "are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me\nnpm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me\n"
+    },
+    {
+      "label": "det:generate-1",
+      "cmd": "npm run license:generate",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "det:generate-2",
+      "cmd": "npm run license:generate",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "pipeline-1:license:test",
+      "cmd": "npm run license:test",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "pipeline-1:license:validate",
+      "cmd": "npm run license:validate",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "pipeline-1:license:certify",
+      "cmd": "npm run license:certify",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "dev-workflow-regen",
+      "cmd": "npm run license:generate",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "dev-workflow-test",
+      "cmd": "npm run license:test",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "final-validate",
+      "cmd": "npm run license:validate",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "label": "final-certify",
+      "cmd": "npm run license:certify",
+      "exit": 0,
+      "ok": true,
+      "stderr": ""
+    }
+  ],
+  "ci": {
+    "nonInteractive": true,
+    "env": "CI=1",
+    "steps": [
+      {
+        "name": "license:test",
+        "ok": true,
+        "status": 0
+      },
+      {
+        "name": "license:validate",
+        "ok": true,
+        "status": 0
+      },
+      {
+        "name": "license:certify",
+        "ok": true,
+        "status": 0
+      }
+    ],
+    "allExitZero": true
+  }
+}

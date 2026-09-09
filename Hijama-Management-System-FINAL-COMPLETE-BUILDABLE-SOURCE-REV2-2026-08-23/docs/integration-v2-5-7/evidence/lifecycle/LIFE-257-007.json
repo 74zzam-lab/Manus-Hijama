@@ -1,0 +1,12 @@
+{
+  "id": "LIFE-257-007",
+  "title": "Reinstall restores app access",
+  "ok": true,
+  "result": "PASS",
+  "at": "2026-08-23T13:57:32.934Z",
+  "evidence": {
+    "policy": "App-only uninstall leaves userData; reinstall recreates INSTDIR and reads existing Cupping Center data+license",
+    "uninstallPreserve": true,
+    "updatePreserve": true
+  }
+}

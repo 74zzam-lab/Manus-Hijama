@@ -1,0 +1,10 @@
+{
+  "id": "MIG-257-009",
+  "ok": true,
+  "backup": {
+    "path": "/tmp/v257-mig-harness-2EfX1R/backup-before-upgrade.db",
+    "size": 327680,
+    "sha256": "a86d0b071de9b3be1a2341e2d1bb8412dfad9b5f8bb3d64c40627d2802c9768f",
+    "at": "2026-08-18T19:27:54.975Z"
+  }
+}

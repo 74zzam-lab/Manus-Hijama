@@ -1,0 +1,93 @@
+{
+  "at": "2026-08-03T14:06:47.762Z",
+  "program": "v2-5.10",
+  "suite": "setup-state-sync-auth-smoke",
+  "checks": [
+    {
+      "name": "file:cloud/setup-state-service.js",
+      "ok": true,
+      "detail": "/workspace/cloud/setup-state-service.js"
+    },
+    {
+      "name": "file:cloud/setup-state-dom.js",
+      "ok": true,
+      "detail": "/workspace/cloud/setup-state-dom.js"
+    },
+    {
+      "name": "file:cloud/sync-engine.js",
+      "ok": true,
+      "detail": "/workspace/cloud/sync-engine.js"
+    },
+    {
+      "name": "file:cloud/boot-flow-ui.js",
+      "ok": true,
+      "detail": "/workspace/cloud/boot-flow-ui.js"
+    },
+    {
+      "name": "file:cloud/activation-sync-defaults.js",
+      "ok": true,
+      "detail": "/workspace/cloud/activation-sync-defaults.js"
+    },
+    {
+      "name": "file:electron/preload.js",
+      "ok": true,
+      "detail": "/workspace/electron/preload.js"
+    },
+    {
+      "name": "sync_runOnce_present",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "sync_getReadiness_present",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "single_ready_cta",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no_duplicate_finish",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "password_persist_path",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "login_boot_cta_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "setup_state_dom_script",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "screens_gated_by_setup_state_dom",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "password_sync_revision_merge",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "readiness_arabic_labels",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "installed_exe_present_or_non_windows",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "ok": true
+}

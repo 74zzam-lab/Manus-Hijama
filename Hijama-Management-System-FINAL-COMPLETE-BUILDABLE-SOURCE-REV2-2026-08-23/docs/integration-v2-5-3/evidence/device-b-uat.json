@@ -1,0 +1,16 @@
+{
+  "device": "B",
+  "role": "race-and-transfer-uat",
+  "startedAt": "2026-08-23T13:57:27.708Z",
+  "finishedAt": "2026-08-23T13:57:28.066Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "scenarios": [
+    "O02-two-device-race",
+    "I02-device-transfer-sync-block"
+  ],
+  "result": "PASS"
+}

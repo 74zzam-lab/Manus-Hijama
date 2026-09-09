@@ -1,0 +1,10 @@
+{
+  "id": 20,
+  "name": "reinstall_pull_remote",
+  "result": "PASS",
+  "ms": 2236,
+  "detail": {
+    "restored": true
+  },
+  "secretsPrinted": false
+}

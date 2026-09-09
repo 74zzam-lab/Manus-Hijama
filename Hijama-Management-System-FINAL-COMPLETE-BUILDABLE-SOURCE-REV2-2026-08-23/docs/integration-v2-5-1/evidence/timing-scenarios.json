@@ -1,0 +1,69 @@
+{
+  "scenarios": [
+    {
+      "id": "S01-clean-install-restore",
+      "ms": 75,
+      "result": "PASS"
+    },
+    {
+      "id": "S02-license-org-branch-restore",
+      "ms": 64,
+      "result": "PASS"
+    },
+    {
+      "id": "S03-manual-selected-restore",
+      "ms": 79,
+      "result": "PASS"
+    },
+    {
+      "id": "S04-auto-latest-authorized",
+      "ms": 628,
+      "result": "PASS"
+    },
+    {
+      "id": "S05-sqlite-attachments-settings",
+      "ms": 5,
+      "result": "PASS"
+    },
+    {
+      "id": "S06-reject-wrong-center-branch",
+      "ms": 129,
+      "result": "PASS"
+    },
+    {
+      "id": "S07-corrupt-atomic-rollback",
+      "ms": 135,
+      "result": "PASS"
+    },
+    {
+      "id": "S08-delete-sqlite-dr",
+      "ms": 75,
+      "result": "PASS"
+    },
+    {
+      "id": "S09-new-device-cloud-only",
+      "ms": 73,
+      "result": "PASS"
+    },
+    {
+      "id": "S10-no-silent-empty-fallback",
+      "ms": 11,
+      "result": "PASS"
+    },
+    {
+      "id": "S11-stable-ids-and-gate",
+      "ms": 4,
+      "result": "PASS"
+    },
+    {
+      "id": "S12-resume-after-interrupt",
+      "ms": 65,
+      "result": "PASS"
+    },
+    {
+      "id": "S13-restore-then-no-duplicate-ids",
+      "ms": 1,
+      "result": "PASS"
+    }
+  ]
+}

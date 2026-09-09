@@ -1,0 +1,77 @@
+{
+  "id": "MIG-257-001",
+  "ok": true,
+  "before": {
+    "schemaVersion": 4,
+    "clients": 1,
+    "visits": 1,
+    "attachments": 1,
+    "outbox": 0,
+    "meta": {
+      "ownerUserId": "OWNER-001",
+      "branchId": "BR-MAIN",
+      "licenseId": "LIC-V24-TEST",
+      "deviceId": "DEV-A-001",
+      "schemaVersion": "4"
+    },
+    "users": [
+      {
+        "id": "OWNER-001",
+        "role": "owner",
+        "name": "Owner"
+      }
+    ],
+    "attachmentRows": [
+      {
+        "id": "ATT-LEGACY-1",
+        "path": "attachments/C-LEGACY-1/note.bin",
+        "entity_id": "C-LEGACY-1"
+      }
+    ],
+    "outboxRows": []
+  },
+  "after": {
+    "schemaVersion": 5,
+    "clients": 1,
+    "visits": 1,
+    "attachments": 1,
+    "outbox": 0,
+    "meta": {
+      "ownerUserId": "OWNER-001",
+      "branchId": "BR-MAIN",
+      "licenseId": "LIC-V24-TEST",
+      "deviceId": "DEV-A-001",
+      "schemaVersion": "5"
+    },
+    "users": [
+      {
+        "id": "OWNER-001",
+        "role": "owner",
+        "name": "Owner"
+      }
+    ],
+    "attachmentRows": [
+      {
+        "id": "ATT-LEGACY-1",
+        "path": "attachments/C-LEGACY-1/note.bin",
+        "entity_id": "C-LEGACY-1"
+      }
+    ],
+    "outboxRows": []
+  },
+  "compare": {
+    "ok": true,
+    "errors": []
+  },
+  "backup": {
+    "path": "/tmp/v257-mig-harness-2EfX1R/backup-before-002.db",
+    "size": 245760,
+    "sha256": "cd566cdc76dd48e7b4a0ccbcd30c85bc88ee995a687aacce77be1a157b4d4a04",
+    "at": "2026-08-18T19:27:54.944Z"
+  },
+  "migrations": [
+    "001_initial",
+    "002_sync_platform"
+  ],
+  "at": "2026-08-18T19:27:54.981Z"
+}

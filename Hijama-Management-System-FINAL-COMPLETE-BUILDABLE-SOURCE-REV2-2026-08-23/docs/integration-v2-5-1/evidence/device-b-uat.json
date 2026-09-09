@@ -1,0 +1,31 @@
+{
+  "device": "B",
+  "role": "new-device-restore-uat",
+  "startedAt": "2026-07-30T20:18:57.783Z",
+  "finishedAt": "2026-07-30T20:19:00.991Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+"
+  },
+  "scenario": "S09-new-device-cloud-only",
+  "scenariosExit": 0,
+  "build": {
+    "platform": "linux",
+    "arch": "x64",
+    "installer": {
+      "path": "dist/HijamaManagement-Setup-2.0.1.exe",
+      "size": 554328,
+      "sha256": "73adfa5ce40123916f92efb1971b7b125e601b34a1a3f0fcbe9c53fa87d8d2a7"
+    },
+    "winUnpacked": {
+      "path": "dist/win-unpacked/Hijama Management System.exe",
+      "size": 225949696,
+      "sha256": "8fe1a2c82d281c9e30167377ed0e69c84b414686e25c84ca9e4c0ed1a711869e"
+    }
+  },
+  "result": "PASS",
+  "evidence": {
+    "scenario": "docs/integration-v2-5-1/evidence/scenarios/S09-new-device-cloud-only.json"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "U03-ops-status",
+  "title": "Offline/reconnect + counts + long names",
+  "result": "PASS",
+  "ms": 8,
+  "evidence": {
+    "offline": "Offline",
+    "pendingLabel": "1,500",
+    "deviceNameLen": 32,
+    "online": "ok"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": 18,
+  "name": "backup_restore_sync",
+  "result": "PASS",
+  "ms": 7457,
+  "detail": {
+    "before": 3,
+    "after": 12,
+    "secondApplied": 0
+  },
+  "secretsPrinted": false
+}

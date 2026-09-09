@@ -1,0 +1,20 @@
+{
+  "at": "2026-08-23T13:57:29.597Z",
+  "ok": true,
+  "phase": "V2-5.6",
+  "errors": [],
+  "checks": {
+    "honestProgress": true,
+    "pauseResumeCancelRetry": true,
+    "restoreWizard": true,
+    "dangerWipe": true,
+    "opsStatus": true,
+    "backupHistory": true,
+    "errorRecovery": true,
+    "redact": true,
+    "i18n": true,
+    "a11y": true,
+    "indexWiring": true,
+    "fontQr": true
+  }
+}

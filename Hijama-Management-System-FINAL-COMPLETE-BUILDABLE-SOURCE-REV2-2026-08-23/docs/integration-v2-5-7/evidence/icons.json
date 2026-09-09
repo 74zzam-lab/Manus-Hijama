@@ -1,0 +1,33 @@
+{
+  "at": "2026-08-23T13:57:32.816Z",
+  "icons": {
+    "appIcon": "build/Program-Icon.ico",
+    "winIcon": "build/Program-Icon.ico",
+    "installerIcon": "build/Program-Icon.ico",
+    "uninstallerIcon": "build/Program-Icon.ico",
+    "installerHeaderIcon": "build/Program-Icon.ico",
+    "exists": {
+      "appIcon": true,
+      "winIcon": true,
+      "installerIcon": true,
+      "uninstallerIcon": true,
+      "installerHeaderIcon": true
+    }
+  },
+  "iconInspect": {
+    "ok": true,
+    "exePath": "/home/ubuntu/clinic_audit/Final-Clinic-Production-cursor-rc-hotfix-round7-unified-backup-restore-7c71/dist/win-unpacked/Hijama Management System.exe",
+    "sizeBytes": 225949696,
+    "iconGroupCount": 1,
+    "iconResourceEntries": 8,
+    "groups": [
+      {
+        "id": 1,
+        "lang": 1033,
+        "iconCount": 7
+      }
+    ],
+    "inspectedAt": "2026-08-23T13:57:32.727Z"
+  },
+  "ok": true
+}

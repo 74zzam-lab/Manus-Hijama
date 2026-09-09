@@ -1,0 +1,16 @@
+{
+  "centerId": "CTR-UAT-V24-SCEN-66a021",
+  "clients": [
+    "c-a1",
+    "c-off"
+  ],
+  "bookings": [
+    "bk-b1"
+  ],
+  "attachments": [
+    "0edd1efc17f8d5d4a288248764edbe2746b5395dc54d7b0d74be745636e3a8d7"
+  ],
+  "createdAt": "2026-07-30T07:55:28.143Z",
+  "bootstrap": true,
+  "secretsPrinted": false
+}

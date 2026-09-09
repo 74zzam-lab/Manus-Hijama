@@ -1,0 +1,13 @@
+{
+  "at": "2026-08-23T13:57:29.780Z",
+  "paths": [
+    "cancel mid restore → RestoreWizard.cancel → cancelled",
+    "setRatio(1) without markComplete → percent stays <100",
+    "wrong overwrite phrase → confirmOverwrite ok:false",
+    "wrong wipe phrase → wipeConfirm ok:false",
+    "token_expired / permission_denied / quota → leak-safe recovery copy",
+    "ops export → OpsLogRedact strips email/bearer/password keys",
+    "offline status → reconnect hint + tone offline"
+  ],
+  "result": "PASS"
+}

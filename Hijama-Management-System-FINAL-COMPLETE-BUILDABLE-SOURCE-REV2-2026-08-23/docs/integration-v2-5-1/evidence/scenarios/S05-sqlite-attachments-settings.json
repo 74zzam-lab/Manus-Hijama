@@ -1,0 +1,14 @@
+{
+  "id": "S05-sqlite-attachments-settings",
+  "title": "SQLite + attachments/images/docs/settings",
+  "result": "PASS",
+  "ms": 5,
+  "evidence": {
+    "attachmentFiles": [
+      "a1-doc.pdf",
+      "a1-img.bin",
+      "a1-note.txt"
+    ],
+    "settingsOk": true
+  }
+}

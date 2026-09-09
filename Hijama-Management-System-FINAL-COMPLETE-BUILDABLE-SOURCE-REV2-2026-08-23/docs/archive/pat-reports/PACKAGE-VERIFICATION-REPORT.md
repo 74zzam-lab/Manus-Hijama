@@ -1,0 +1,42 @@
+# Package Verification Report
+
+Passed: 38 | Failed: 0
+
+- PASS dynamic-count: 8 packages
+- PASS 01:defined: Starter
+- PASS 01:devices: 1
+- PASS 01:branches: 1
+- PASS 02:defined: Standard
+- PASS 02:devices: 2
+- PASS 02:branches: 1
+- PASS 02:inherits: 01
+- PASS 03:defined: Professional
+- PASS 03:devices: 3
+- PASS 03:branches: 2
+- PASS 03:inherits: 02
+- PASS 03:cap:cap_hr: cap_hr
+- PASS 03:cap:cap_reports: cap_reports
+- PASS 03:cap:cap_finance: cap_finance
+- PASS 04:defined: Enterprise
+- PASS 04:devices: 5
+- PASS 04:branches: 5
+- PASS 04:inherits: 03
+- PASS 04:cap:cap_backup: cap_backup
+- PASS 04:cap:cap_communication: cap_communication
+- PASS 05:defined: Ultimate
+- PASS 05:devices: 0
+- PASS 05:branches: 0
+- PASS 05:inherits: 04
+- PASS 06:defined: Developer
+- PASS 06:devices: 0
+- PASS 06:branches: 0
+- PASS 06:inherits: 05
+- PASS 06:cap:cap_diagnostics: cap_diagnostics
+- PASS 99:defined: Custom
+- PASS 10:defined: Test Package 10
+- PASS 10:devices: 2
+- PASS 10:branches: 1
+- PASS 10:inherits: 02
+- PASS template:hijama_starter: pkg=01
+- PASS template:clinic_medium: pkg=02
+- PASS template:dental_pro: pkg=03

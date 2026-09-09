@@ -1,0 +1,276 @@
+{
+  "at": "2026-08-23T13:57:34.471Z",
+  "ok": true,
+  "total": 10,
+  "passed": 10,
+  "failed": [],
+  "results": [
+    {
+      "id": "A01-unit-suite",
+      "title": "Activation unit suite exit 0",
+      "result": "PASS",
+      "ms": 25,
+      "evidence": {
+        "exitCode": 0,
+        "at": "2026-08-23T13:57:34.427Z"
+      }
+    },
+    {
+      "id": "A02-wizard-steps",
+      "title": "Unified stepper Google→…→Ready",
+      "result": "PASS",
+      "ms": 2,
+      "evidence": {
+        "steps": 8,
+        "version": "v2-5.9"
+      }
+    },
+    {
+      "id": "A03-owner-password",
+      "title": "Owner password mandatory + mismatch/empty/weak",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "min": 8
+      }
+    },
+    {
+      "id": "A04-duplicate-prevention",
+      "title": "OAuth/license/branch/owner in-flight locks",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "locks": 4
+      }
+    },
+    {
+      "id": "A05-dashboard-gate",
+      "title": "Dashboard/login blocked until activation complete",
+      "result": "PASS",
+      "ms": 4,
+      "evidence": {
+        "finishLoginGate": true,
+        "showPageGate": true
+      }
+    },
+    {
+      "id": "A06-inventory",
+      "title": "Screen inventory KEEP/MERGE/DELETE",
+      "result": "PASS",
+      "ms": 22,
+      "evidence": {
+        "at": "2026-08-23T13:57:34.458Z",
+        "ok": true,
+        "kept": 14,
+        "merged": 1,
+        "replaced": 1,
+        "deleted": 2,
+        "items": [
+          {
+            "id": "bootFlowOverlay",
+            "file": "cloud/boot-flow-ui.js",
+            "action": "KEEP",
+            "note": "Canonical V2-5.8 unified activation wizard",
+            "proof": "wizard-v258",
+            "ok": true
+          },
+          {
+            "id": "loginScreen",
+            "file": "index.html",
+            "action": "KEEP",
+            "note": "Post-wizard credential login only",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "login-drive-bootstrap-panel",
+            "file": "index.html",
+            "action": "DELETE",
+            "note": "Hidden via design-system.css; BootFlow owns Google",
+            "proof": "css-hidden",
+            "ok": true
+          },
+          {
+            "id": "lic-drive-bootstrap-panel",
+            "file": "index.html",
+            "action": "KEEP",
+            "note": "V2-5.8/5.9 License Recovery — must remain visible (not globally CSS-hidden)",
+            "proof": "recovery-visible",
+            "ok": true
+          },
+          {
+            "id": "cloudConnectModal",
+            "file": "index.html",
+            "action": "KEEP",
+            "note": "Shared OAuth confirm",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "centerSetupModal",
+            "file": "cloud/center-setup-ui.js",
+            "action": "MERGE",
+            "note": "Post-login manage only; auto-open suppressed during BootFlow",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "licenseScreen",
+            "file": "index.html",
+            "action": "KEEP",
+            "note": "Dev/admin licensing tool; not customer first-run",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "userModal",
+            "file": "index.html",
+            "action": "KEEP",
+            "note": "User admin registration",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "OwnerCreateForm",
+            "file": "cloud/owner-create-form.js",
+            "action": "KEEP",
+            "note": "Mandatory Owner password form",
+            "proof": "module",
+            "ok": true
+          },
+          {
+            "id": "OwnerManagement",
+            "file": "cloud/owner-management.js",
+            "action": "KEEP",
+            "note": "Single createOwner() + repair helpers; BootFlow/Hub/Emergency share API",
+            "proof": "module",
+            "ok": true
+          },
+          {
+            "id": "devtools-owner-emergency",
+            "file": "license/ui/developer-panel.js",
+            "action": "KEEP",
+            "note": "Emergency Recovery only — not primary Owner create path",
+            "proof": "emergency-wired",
+            "ok": true
+          },
+          {
+            "id": "owner-hub-accounts",
+            "file": "cloud/owner-hub.js",
+            "action": "KEEP",
+            "note": "Day-to-day Owner CRUD after first Owner exists",
+            "proof": "hub-crud",
+            "ok": true
+          },
+          {
+            "id": "boot-flow-self-heal-owner",
+            "file": "cloud/boot-flow-ui.js",
+            "action": "KEEP",
+            "note": "ensureOwnerBootstrapWizard when org has no Owner",
+            "proof": "self-heal",
+            "ok": true
+          },
+          {
+            "id": "branchLockModal",
+            "file": "cloud/branch-lock-ui.js",
+            "action": "KEEP",
+            "note": "Select existing branch helper",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "ops-ux-restore-wizard",
+            "file": "cloud/ops-ux-bridge.js",
+            "action": "KEEP",
+            "note": "Restore step host",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "fr-wizard-overlay",
+            "file": "cupping-first-run.js",
+            "action": "KEEP",
+            "note": "Post-dashboard product setup only",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "OwnerHub.skip during activation",
+            "file": "cloud/owner-hub.js",
+            "action": "REPLACE",
+            "note": "Blocked while BootFlow.needsBootScreen",
+            "proof": "present",
+            "ok": true
+          },
+          {
+            "id": "prompt()-based Owner create in boot",
+            "file": "cloud/boot-flow-ui.js",
+            "action": "DELETE",
+            "note": "Replaced by OwnerCreateForm",
+            "proof": "removed",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "A07-responsive-css",
+      "title": "Modal max-height + resolution media queries",
+      "result": "PASS",
+      "ms": 5,
+      "evidence": {
+        "resolutionsTargeted": [
+          1024,
+          1280,
+          1366,
+          1440,
+          1600,
+          1920,
+          2560
+        ],
+        "css": {
+          "maxHeightViewport": true,
+          "safeArea": true,
+          "modalShell": true,
+          "media1024": true,
+          "media1280": true,
+          "media1100": true,
+          "media900": true,
+          "media720": true,
+          "media600": true,
+          "overflowXHidden": true,
+          "stickyFooter": true
+        }
+      }
+    },
+    {
+      "id": "A08-error-catalog",
+      "title": "User-facing errors without raw stack/secrets",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "codes": 36,
+        "diagnosticCode": "TDW-ACT-oauth_timeout-MT5VG8LJ"
+      }
+    },
+    {
+      "id": "A09-branch-enrollment-wizard",
+      "title": "activation_wizard first branch + reject second",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "ok": true
+      }
+    },
+    {
+      "id": "A10-prior-gates-present",
+      "title": "V2-4 and V2-5 gate scripts still present",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "count": 4
+      }
+    }
+  ],
+  "exitCode": 0
+}

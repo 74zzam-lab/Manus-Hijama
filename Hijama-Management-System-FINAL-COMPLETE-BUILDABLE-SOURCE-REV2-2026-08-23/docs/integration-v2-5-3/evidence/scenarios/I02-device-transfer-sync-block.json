@@ -1,0 +1,10 @@
+{
+  "id": "I02-device-transfer-sync-block",
+  "title": "Device transfer revokes sync, DB intact",
+  "result": "PASS",
+  "ms": 2,
+  "evidence": {
+    "fromBlocked": true,
+    "dbIntact": true
+  }
+}

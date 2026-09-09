@@ -1,0 +1,11 @@
+{
+  "id": "R01-inventory-snapshot",
+  "title": "RBAC inventory snapshot complete",
+  "result": "PASS",
+  "ms": 27,
+  "evidence": {
+    "roles": 6,
+    "perms": 7,
+    "ipc": 17
+  }
+}

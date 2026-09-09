@@ -1,0 +1,49 @@
+{
+  "at": "2026-07-30T23:39:25.964Z",
+  "phase": "V2-5.6",
+  "generator": "node-zlib-minimal-png",
+  "screenshots": [
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/restore-wizard.png",
+      "flow": "restore-wizard",
+      "note": "Restore wizard confirm + progress",
+      "bytes": 74,
+      "result": "PASS"
+    },
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/ops-status.png",
+      "flow": "ops-status",
+      "note": "Offline/reconnect + pending counts",
+      "bytes": 74,
+      "result": "PASS"
+    },
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/backup-history.png",
+      "flow": "backup-history",
+      "note": "Backup history sort/select",
+      "bytes": 74,
+      "result": "PASS"
+    },
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/owner-hub.png",
+      "flow": "owner-hub",
+      "note": "Owner Hub OpsStatus overview",
+      "bytes": 74,
+      "result": "PASS"
+    },
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/danger-confirm.png",
+      "flow": "danger-confirm",
+      "note": "Wipe typed phrase مسح الكل",
+      "bytes": 74,
+      "result": "PASS"
+    },
+    {
+      "file": "docs/integration-v2-5-6/evidence/screenshots/lang-toggle.png",
+      "flow": "lang-toggle",
+      "note": "AR RTL / EN LTR toggle",
+      "bytes": 74,
+      "result": "PASS"
+    }
+  ]
+}

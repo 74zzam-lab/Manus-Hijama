@@ -1,0 +1,213 @@
+'use strict';
+
+/**
+ * V2-4 data sync catalog — every operational/synced table must have an explicit policy.
+ */
+
+const CATALOG = Object.freeze({
+  clientsRegistry: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'field-aware',
+    delete: 'tombstone',
+    conflict: 'manual-on-overlap',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'high',
+    autoMergeFields: ['phone', 'notes'],
+    manualFields: ['name', 'nationalId'],
+  },
+  cases: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'append-focused',
+    delete: 'tombstone',
+    conflict: 'manual-financial',
+    versionBucket: 'operational',
+    attachments: true,
+    pii: 'high',
+    autoMergeFields: [],
+    manualFields: ['total', 'status', 'items'],
+  },
+  bookings: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'status-time',
+    delete: 'tombstone',
+    conflict: 'time-status',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'medium',
+    autoMergeFields: ['notes'],
+    manualFields: ['date', 'time', 'status'],
+  },
+  expenses: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'revision',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'operational',
+    attachments: true,
+    pii: 'low',
+    autoMergeFields: [],
+    manualFields: ['amount', 'category'],
+  },
+  attendance: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'event-based',
+    delete: 'tombstone',
+    conflict: 'keep-both-events',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'medium',
+    autoMergeFields: [],
+    manualFields: [],
+  },
+  doctors: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'field-aware',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'medium',
+    autoMergeFields: ['phone'],
+    manualFields: ['name', 'role'],
+  },
+  inventoryItems: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'revision',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'none',
+    autoMergeFields: ['name'],
+    manualFields: ['sku', 'reorderLevel'],
+  },
+  inventorySuppliers: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'field-aware',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'low',
+    autoMergeFields: [],
+    manualFields: ['name', 'phone'],
+  },
+  inventoryMovements: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'append-only',
+    delete: 'tombstone-only',
+    conflict: 'no-balance-edit',
+    versionBucket: 'operational',
+    attachments: false,
+    pii: 'none',
+    autoMergeFields: [],
+    manualFields: [],
+  },
+  settings: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'owner-admin',
+    delete: 'forbidden',
+    conflict: 'explicit',
+    versionBucket: 'configuration',
+    attachments: false,
+    pii: 'low',
+    autoMergeFields: [],
+    manualFields: ['*'],
+  },
+  services: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'versioned-config',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'configuration',
+    attachments: false,
+    pii: 'none',
+    autoMergeFields: [],
+    manualFields: ['price', 'name'],
+  },
+  packages: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'versioned-config',
+    delete: 'tombstone',
+    conflict: 'manual',
+    versionBucket: 'configuration',
+    attachments: false,
+    pii: 'none',
+    autoMergeFields: [],
+    manualFields: ['price', 'sessions'],
+  },
+  users: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'authorization-sensitive',
+    delete: 'tombstone',
+    conflict: 'remote-trusted-policy',
+    versionBucket: 'configuration',
+    attachments: false,
+    pii: 'high',
+    autoMergeFields: [],
+    manualFields: ['role', 'permissions'],
+  },
+  attachments_meta: {
+    sync: 'incremental',
+    branchScope: true,
+    mergeKey: 'id',
+    merge: 'content-hash',
+    delete: 'tombstone-retention',
+    conflict: 'hash-mismatch-manual',
+    versionBucket: 'attachments',
+    attachments: true,
+    pii: 'high',
+    autoMergeFields: [],
+    manualFields: ['filename'],
+  },
+});
+
+function getPolicy(table) {
+  return CATALOG[table] || null;
+}
+
+function listSyncedTables() {
+  return Object.keys(CATALOG);
+}
+
+function assertCatalogComplete(requiredTables) {
+  const missing = [];
+  for (const t of requiredTables || []) {
+    if (!CATALOG[t]) missing.push(t);
+  }
+  return { ok: missing.length === 0, missing };
+}
+
+module.exports = {
+  CATALOG,
+  getPolicy,
+  listSyncedTables,
+  assertCatalogComplete,
+};

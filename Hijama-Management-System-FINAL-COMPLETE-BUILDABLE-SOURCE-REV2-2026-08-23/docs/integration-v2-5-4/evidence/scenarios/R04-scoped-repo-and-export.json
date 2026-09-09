@@ -1,0 +1,10 @@
+{
+  "id": "R04-scoped-repo-and-export",
+  "title": "Scoped repository + export path wiring",
+  "result": "PASS",
+  "ms": 4,
+  "evidence": {
+    "exportGuarded": true,
+    "scoped": true
+  }
+}

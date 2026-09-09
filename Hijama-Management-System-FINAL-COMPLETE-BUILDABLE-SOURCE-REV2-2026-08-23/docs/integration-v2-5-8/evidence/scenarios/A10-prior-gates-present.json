@@ -1,0 +1,9 @@
+{
+  "id": "A10-prior-gates-present",
+  "title": "V2-4 and V2-5 gate scripts still present",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "count": 4
+  }
+}

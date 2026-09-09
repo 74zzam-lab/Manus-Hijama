@@ -1,0 +1,25 @@
+Hijama Management System — Remediation Source Integrity Manifest
+Generated: 2026-08-23 GMT+3
+Scope excludes node_modules, dist, audit-output, docs/archive, downloads, archives and transient logs.
+
+== Canonical source tree SHA-256 ==
+65fc3ec88be817301df99123afb7f232177c9b17cd3b7899a85cbfef14a7cd9d  -
+
+== Key remediation files ==
+484e8368d457e8060626a092deb704188df1b84e7539de104e467b3af637e7b5  index.html
+fd16af7e31c953eaf5885fb1f29fd7b0e429efcb887e92142ec3dc81485d6a43  cloud/auth-credential-truth.js
+108875ccbac2a3a11a9992324a798451cb4de540984f8d34633004b96cb1edd4  cloud/record-metadata.js
+b44b9b8a6ab061aa26d6d4ac15652cd262a59c0063e488e995e75240cd25a8f8  cloud/sync-engine.js
+2a229c4bbb2b6ded3c2c7efd9c4bf94140c66ba7144e267b6a8bf89bf21466c4  cloud/drive-adapter.js
+198eddadcee8b91886ec18bb1e590cda3397d8749a5f7323bd9e93b72d378add  cloud/ux-a11y.js
+371149d08e2856c71cb70e49df1ea413a4f9036c1e7401905aab12099487146d  electron/rbac-session.js
+5f90dd7df656fc7ad0fba238789e0354781d0a0e819fe357570ee8debb96a760  scripts/verify-cloud-v2.js
+4126d86b575a551a7d4db945c52209fa64a40b2d5012780839f0e50f9b462b8e  tests/run-all.js
+ad68fe1bff0ec071c4feafc498f48a45a0f03cbe256b2d2607767fc5084687a7  FINAL-REMEDIATION-EXECUTION-AR.md
+09aa28bed81edbd4145f34eb459b3d969c398795786a452de5d77c5b8058bd6f  UPDATED-AS-BUILT-SPECIFICATION-AR.md
+ab053020d13681d3cc702f380c488ec61d5c3d018aa8fb618f415ba4be3ff504  MASTER-REMEDIATION-PROGRAM-AR.md
+
+== Rebuild ==
+npm ci
+npm run build:dir
+npm test  # native SQLite SIGSEGV is blocked on this Linux/Node 22 environment; see FINAL-REMEDIATION-EXECUTION-AR.md

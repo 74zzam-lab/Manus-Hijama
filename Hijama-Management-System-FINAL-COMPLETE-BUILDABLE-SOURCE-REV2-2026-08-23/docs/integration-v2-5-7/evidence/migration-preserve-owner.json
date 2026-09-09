@@ -1,0 +1,13 @@
+{
+  "id": "MIG-257-005",
+  "ok": true,
+  "ownerBefore": "OWNER-001",
+  "ownerAfter": "OWNER-001",
+  "users": [
+    {
+      "id": "OWNER-001",
+      "role": "owner",
+      "name": "Owner"
+    }
+  ]
+}

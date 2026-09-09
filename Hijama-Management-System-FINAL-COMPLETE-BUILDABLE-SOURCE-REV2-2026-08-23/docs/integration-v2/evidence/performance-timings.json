@@ -1,0 +1,62 @@
+[
+  {
+    "step": "clean_install_run_1",
+    "seconds": 14.281
+  },
+  {
+    "step": "clean_install_run_2",
+    "seconds": 11.822
+  },
+  {
+    "step": "clean_install_run_3",
+    "seconds": 11.593
+  },
+  {
+    "step": "update_run_1",
+    "seconds": 12.565
+  },
+  {
+    "step": "update_run_2",
+    "seconds": 12.597
+  },
+  {
+    "step": "update_run_3",
+    "seconds": 12.847
+  },
+  {
+    "step": "repair_run_1",
+    "seconds": 12.883
+  },
+  {
+    "step": "uninstall_app_only_run_1",
+    "seconds": 2.138
+  },
+  {
+    "step": "uninstall_app_only_run_2",
+    "seconds": 1.612
+  },
+  {
+    "step": "uninstall_app_only_run_3",
+    "seconds": 1.581
+  },
+  {
+    "step": "interrupted_update_kill",
+    "seconds": 5.013
+  },
+  {
+    "step": "installer_startup_run_1",
+    "seconds": 0.721
+  },
+  {
+    "step": "installer_startup_run_2",
+    "seconds": 0.464
+  },
+  {
+    "step": "installer_startup_run_3",
+    "seconds": 0.438
+  },
+  {
+    "step": "full_wipe_silent",
+    "seconds": 91.089
+  }
+]

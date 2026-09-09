@@ -1,0 +1,63 @@
+{
+  "at": "2026-08-23T13:57:34.668Z",
+  "ok": true,
+  "resolutions": [
+    {
+      "resolution": "1024x768",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "1280x720",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "1366x768",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "1440x900",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "1600x900",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "1920x1080",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "resolution": "2560x1440",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    }
+  ],
+  "scaling": [
+    {
+      "scaling": "100%",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "scaling": "125%",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "scaling": "150%",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    },
+    {
+      "scaling": "175%",
+      "cssHarness": "PASS",
+      "interactivePixelProof": "REQUIRES_WINDOWS_DISPLAY"
+    }
+  ]
+}

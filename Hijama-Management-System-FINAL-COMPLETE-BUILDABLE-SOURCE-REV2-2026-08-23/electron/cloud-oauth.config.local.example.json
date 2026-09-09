@@ -1,0 +1,10 @@
+{
+  "google": {
+    "clientId": "393099979986-nbt694pvof6bs7nslnug3ndh1k75mvfo.apps.googleusercontent.com",
+    "clientSecret": "PASTE_YOUR_CLIENT_SECRET_HERE",
+    "redirectPort": 42813,
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "phase": "V2-5.6",
+  "startedAt": "2026-08-23T13:57:29.489Z",
+  "finishedAt": "2026-08-23T13:57:29.606Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "id": "U01-restore-wizard",
+      "title": "Restore wizard happy path + cancel",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "step": "done",
+        "cancel": "cancelled",
+        "phrase": "استعادة"
+      }
+    },
+    {
+      "id": "U02-progress-honesty",
+      "title": "Honest progress + pause/resume/cancel/retry",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "backup": {
+          "beforeComplete": 99,
+          "after": 100
+        },
+        "sync": {
+          "beforeComplete": 99,
+          "after": 100
+        },
+        "restore": {
+          "beforeComplete": 99,
+          "after": 100
+        },
+        "controls": "pause/resume/cancel/retry"
+      }
+    },
+    {
+      "id": "U03-ops-status",
+      "title": "Offline/reconnect + counts + long names",
+      "result": "PASS",
+      "ms": 8,
+      "evidence": {
+        "offline": "Offline",
+        "pendingLabel": "1,500",
+        "deviceNameLen": 32,
+        "online": "ok"
+      }
+    },
+    {
+      "id": "U04-redact-export",
+      "title": "Ops log redact email/bearer/password",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "redacted": true,
+        "exportCount": 1
+      }
+    },
+    {
+      "id": "U05-i18n-a11y",
+      "title": "AR RTL / EN LTR + critical dialog a11y",
+      "result": "PASS",
+      "ms": 1,
+      "evidence": {
+        "ar": "rtl",
+        "en": "ltr",
+        "role": "alertdialog"
+      }
+    },
+    {
+      "id": "U06-owner-hub-wiring",
+      "title": "Owner Hub uses OpsStatus + index scripts",
+      "result": "PASS",
+      "ms": 102,
+      "evidence": {
+        "ownerHubOpsStatus": true,
+        "unitOk": true
+      }
+    }
+  ]
+}

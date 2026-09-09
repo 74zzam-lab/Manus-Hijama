@@ -1,0 +1,14 @@
+{
+  "at": "2026-08-23T13:57:33.348Z",
+  "ok": true,
+  "errors": [],
+  "publicChannels": [
+    "backup:listCloudProviders",
+    "license:readActivationBundle",
+    "cloudOAuth:getSettings",
+    "cache:readLicense"
+  ],
+  "sheetsApiInElectron": false,
+  "pkce": true,
+  "ownerIndependentRole": true
+}

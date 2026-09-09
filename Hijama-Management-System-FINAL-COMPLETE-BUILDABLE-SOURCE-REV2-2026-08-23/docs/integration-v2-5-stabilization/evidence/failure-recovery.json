@@ -1,0 +1,42 @@
+{
+  "at": "2026-08-23T13:57:33.553Z",
+  "cases": [
+    {
+      "id": "oauth_access_denied",
+      "handled": true,
+      "crash": false
+    },
+    {
+      "id": "oauth_timeout",
+      "handled": true,
+      "crash": false
+    },
+    {
+      "id": "rbac_session_required_soft",
+      "handled": true,
+      "crash": false
+    },
+    {
+      "id": "vault_unreachable",
+      "handled": true,
+      "crash": false
+    },
+    {
+      "id": "activation_already_used",
+      "handled": true,
+      "soft": false,
+      "crash": false
+    },
+    {
+      "id": "folder_not_found_list",
+      "handled": true,
+      "crash": false
+    },
+    {
+      "id": "rate_limit",
+      "handled": true,
+      "crash": false
+    }
+  ],
+  "ok": true
+}

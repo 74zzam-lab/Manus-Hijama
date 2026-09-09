@@ -1,0 +1,10 @@
+{
+  "id": 12,
+  "name": "token_refresh_mid_sync",
+  "result": "PASS",
+  "ms": 7936,
+  "detail": {
+    "expiresIn": 3599
+  },
+  "secretsPrinted": false
+}

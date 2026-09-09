@@ -1,0 +1,15 @@
+{
+  "source": "GitHub Actions windows-2022",
+  "runId": 30704022454,
+  "job": "v2-5-9-gate",
+  "commit": "c3bb345",
+  "at": "2026-08-01T14:39:24Z",
+  "setupExe": "dist/HijamaManagement-Setup-2.0.1.exe",
+  "setupSizeBytes": 106794966,
+  "setupSha256": "a7ecd568bfd0095fefc7c5e84949c2fdf3456b305eddda2b72b5d7227a4ec9e5",
+  "validNsis": true,
+  "installStep": "FAILED_PARSER (Unicode em-dash in PS1; fixed in follow-up commit)",
+  "scenariosAtoE": "UNVERIFIED",
+  "artifactUpload": "FAILED (GitHub Actions artifact storage quota)",
+  "note": "Valid Windows NSIS Setup EXE proven in CI logs. Silent install + Scenario A-E live proof still required. Does not flip Requirement PASS."
+}

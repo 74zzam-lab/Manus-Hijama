@@ -1,0 +1,11 @@
+{
+  "id": 17,
+  "name": "corrupt_remote_drive",
+  "result": "PASS",
+  "ms": 4042,
+  "detail": {
+    "threw": true,
+    "quarantined": true
+  },
+  "secretsPrinted": false
+}

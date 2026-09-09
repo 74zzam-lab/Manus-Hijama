@@ -1,0 +1,3541 @@
+{
+  "generatedAt": "2026-07-01T10:39:02.528Z",
+  "version": "1.2.0",
+  "gate": "enterprise-release",
+  "certified": true,
+  "summary": {
+    "passed": 681,
+    "failed": 0,
+    "warned": 0
+  },
+  "reports": {
+    "Repository Integrity": {
+      "passed": 26,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "file:license/core/license-constants.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/core/license-crypto.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/core/registry-integrity.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/core/license-codec-v5.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/feature-resolver.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-persistence.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-store.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/audit-log.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/activation-bundle.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/commercial-bridge.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-generator-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-validator-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-upgrade.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-downgrade.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-migration.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/engine/license-engine-v2.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/license-router.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/ui/license-v2-drawer.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/ui/upgrade-wizard.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/ui/package-builder.js",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "file:license/ui/license-v2-drawer.css",
+          "status": "PASS",
+          "detail": "exists"
+        },
+        {
+          "id": "license-file-count",
+          "status": "PASS",
+          "detail": "33 files under license/"
+        },
+        {
+          "id": "no-orphans",
+          "status": "PASS",
+          "detail": "all files referenced or data artifacts"
+        },
+        {
+          "id": "feature-id-unique",
+          "status": "PASS",
+          "detail": "72 unique"
+        },
+        {
+          "id": "registry-drift-v1",
+          "status": "PASS",
+          "detail": "no drift"
+        },
+        {
+          "id": "registry-version-sync",
+          "status": "PASS",
+          "detail": "1.2.0"
+        }
+      ]
+    },
+    "Runtime Certification": {
+      "passed": 12,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generate",
+          "status": "PASS",
+          "detail": "TDWI2-P03AA-CXUAA-A9"
+        },
+        {
+          "id": "activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "renew",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "upgrade",
+          "status": "PASS",
+          "detail": "04"
+        },
+        {
+          "id": "upgrade-activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "downgrade",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "downgrade-activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "export",
+          "status": "PASS",
+          "detail": "state exported"
+        },
+        {
+          "id": "import",
+          "status": "PASS",
+          "detail": "state restored"
+        },
+        {
+          "id": "delete",
+          "status": "PASS",
+          "detail": "license removed"
+        },
+        {
+          "id": "recover-from-backup",
+          "status": "PASS",
+          "detail": "restored"
+        },
+        {
+          "id": "state-consistent",
+          "status": "PASS",
+          "detail": "key valid after full lifecycle"
+        }
+      ]
+    },
+    "Feature Certification": {
+      "passed": 563,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "feature-count-dynamic",
+          "status": "PASS",
+          "detail": "72 features"
+        },
+        {
+          "id": "001:registry",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:uuid",
+          "status": "PASS",
+          "detail": "5af80ebc-c8d2-4ea7-a5cb-84ff1ca935fd"
+        },
+        {
+          "id": "001:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "001:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "001:v1-compat",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:runtime-enable",
+          "status": "PASS",
+          "detail": "core_dashboard"
+        },
+        {
+          "id": "001:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "002:registry",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:uuid",
+          "status": "PASS",
+          "detail": "ac5ecd68-bd16-4fea-a1f9-0e54bce9dbf4"
+        },
+        {
+          "id": "002:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "002:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "002:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "002:v1-compat",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:runtime-enable",
+          "status": "PASS",
+          "detail": "core_pos"
+        },
+        {
+          "id": "002:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "003:registry",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:uuid",
+          "status": "PASS",
+          "detail": "65b505ed-0975-4034-85e7-7c15898fe126"
+        },
+        {
+          "id": "003:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "003:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "003:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "003:v1-compat",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:runtime-enable",
+          "status": "PASS",
+          "detail": "core_clients"
+        },
+        {
+          "id": "003:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "004:registry",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:uuid",
+          "status": "PASS",
+          "detail": "63f1ed9d-7d3c-4b44-ac95-af8990d2da9d"
+        },
+        {
+          "id": "004:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "004:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "004:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "004:v1-compat",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:runtime-enable",
+          "status": "PASS",
+          "detail": "core_staff"
+        },
+        {
+          "id": "004:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "005:registry",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:uuid",
+          "status": "PASS",
+          "detail": "bc47b186-e2b2-447a-bbb8-1bc550d2bf54"
+        },
+        {
+          "id": "005:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "005:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "005:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "005:v1-compat",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:runtime-enable",
+          "status": "PASS",
+          "detail": "core_packages"
+        },
+        {
+          "id": "005:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "006:registry",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:uuid",
+          "status": "PASS",
+          "detail": "dd9b017f-ef13-4fa6-8302-ca4d43f7efb1"
+        },
+        {
+          "id": "006:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "006:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "006:v1-compat",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:runtime-enable",
+          "status": "PASS",
+          "detail": "core_users"
+        },
+        {
+          "id": "006:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "007:registry",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:uuid",
+          "status": "PASS",
+          "detail": "a6b7a64b-9dd9-4cf0-912c-2f66cfbfcd08"
+        },
+        {
+          "id": "007:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "007:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "007:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "007:v1-compat",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:runtime-enable",
+          "status": "PASS",
+          "detail": "core_settings"
+        },
+        {
+          "id": "007:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "008:registry",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:uuid",
+          "status": "PASS",
+          "detail": "120b37e0-e5c9-4c74-afc5-5f1070787dd7"
+        },
+        {
+          "id": "008:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "008:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,99,10"
+        },
+        {
+          "id": "008:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "008:v1-compat",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:runtime-enable",
+          "status": "PASS",
+          "detail": "core_employee"
+        },
+        {
+          "id": "008:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "009:registry",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:uuid",
+          "status": "PASS",
+          "detail": "c1ec17f9-65cd-41bc-9fed-32947a8b53a6"
+        },
+        {
+          "id": "009:cap:cap_booking",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "009:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "009:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "009:v1-compat",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:runtime-enable",
+          "status": "PASS",
+          "detail": "book_schedule"
+        },
+        {
+          "id": "009:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "010:registry",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:uuid",
+          "status": "PASS",
+          "detail": "96fec28e-6434-4c61-945c-2064df415e1e"
+        },
+        {
+          "id": "010:cap:cap_booking",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "010:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "010:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "010:v1-compat",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:runtime-enable",
+          "status": "PASS",
+          "detail": "book_confirm"
+        },
+        {
+          "id": "010:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "011:registry",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:uuid",
+          "status": "PASS",
+          "detail": "d8d38ced-4a42-462e-83e8-d3434da7cd4c"
+        },
+        {
+          "id": "011:cap:cap_booking",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "011:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "011:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "011:v1-compat",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:runtime-enable",
+          "status": "PASS",
+          "detail": "book_no_show"
+        },
+        {
+          "id": "011:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "012:registry",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:uuid",
+          "status": "PASS",
+          "detail": "0d329c69-2e7a-42d7-904b-08339cdd49fa"
+        },
+        {
+          "id": "012:cap:cap_booking",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "012:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "012:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "012:v1-compat",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_book_kpi"
+        },
+        {
+          "id": "012:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "013:registry",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:uuid",
+          "status": "PASS",
+          "detail": "f2e53b07-4a27-4484-9f54-e25d2386c3b3"
+        },
+        {
+          "id": "013:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "013:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "013:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "013:v1-compat",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_shared_pkg"
+        },
+        {
+          "id": "013:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "014:registry",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:uuid",
+          "status": "PASS",
+          "detail": "e4e63f30-607f-4b0f-bbd5-b8df0315feeb"
+        },
+        {
+          "id": "014:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "014:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "014:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "014:v1-compat",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_multi_svc"
+        },
+        {
+          "id": "014:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "015:registry",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:uuid",
+          "status": "PASS",
+          "detail": "9a549420-ed49-46fc-98f3-c7f8b724ee00"
+        },
+        {
+          "id": "015:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "015:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "015:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "015:v1-compat",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:runtime-enable",
+          "status": "PASS",
+          "detail": "pos_receipt"
+        },
+        {
+          "id": "015:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "016:registry",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:uuid",
+          "status": "PASS",
+          "detail": "cf6b1146-c189-4792-bb64-3a57b2687fa5"
+        },
+        {
+          "id": "016:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "016:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "016:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "016:v1-compat",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_templates"
+        },
+        {
+          "id": "016:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "017:registry",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:uuid",
+          "status": "PASS",
+          "detail": "c58d9ec9-4dee-4746-9411-f4146a77073b"
+        },
+        {
+          "id": "017:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "017:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "017:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "017:v1-compat",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_bulk"
+        },
+        {
+          "id": "017:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "018:registry",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:uuid",
+          "status": "PASS",
+          "detail": "be45cd39-88dd-43a8-80a0-cc97454258fe"
+        },
+        {
+          "id": "018:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "018:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "018:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "018:v1-compat",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_auto"
+        },
+        {
+          "id": "018:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "019:registry",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:uuid",
+          "status": "PASS",
+          "detail": "8620e6a8-b30c-4776-b963-cd6cf6789633"
+        },
+        {
+          "id": "019:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "019:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "019:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "019:v1-compat",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:runtime-enable",
+          "status": "PASS",
+          "detail": "msg_retention"
+        },
+        {
+          "id": "019:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "020:registry",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:uuid",
+          "status": "PASS",
+          "detail": "d42a7275-2342-4847-838b-f18ebe7e471c"
+        },
+        {
+          "id": "020:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "020:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "020:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "020:v1-compat",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_msg_alert"
+        },
+        {
+          "id": "020:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "021:registry",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:uuid",
+          "status": "PASS",
+          "detail": "16c56b4e-fe6a-499c-a12f-23a0d534b78f"
+        },
+        {
+          "id": "021:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "021:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "021:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "021:v1-compat",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:runtime-enable",
+          "status": "PASS",
+          "detail": "crm_invoice_search"
+        },
+        {
+          "id": "021:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "022:registry",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:uuid",
+          "status": "PASS",
+          "detail": "29b7f362-f708-42ce-9a1a-46d4bc3f90ca"
+        },
+        {
+          "id": "022:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "022:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "022:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "022:v1-compat",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:runtime-enable",
+          "status": "PASS",
+          "detail": "crm_search"
+        },
+        {
+          "id": "022:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "023:registry",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:uuid",
+          "status": "PASS",
+          "detail": "3469bfff-9e75-48cc-a42a-d4d0697bce29"
+        },
+        {
+          "id": "023:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "023:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "023:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "023:v1-compat",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_client_file"
+        },
+        {
+          "id": "023:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "024:registry",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:uuid",
+          "status": "PASS",
+          "detail": "afbfb49a-88f2-490f-974d-0ea748873cec"
+        },
+        {
+          "id": "024:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "024:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "024:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "024:v1-compat",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_map_editor"
+        },
+        {
+          "id": "024:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "025:registry",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:uuid",
+          "status": "PASS",
+          "detail": "37cc8acf-dc1b-4bfa-a9aa-274eae8e38c9"
+        },
+        {
+          "id": "025:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "025:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "025:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "025:v1-compat",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_monthly"
+        },
+        {
+          "id": "025:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "026:registry",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:uuid",
+          "status": "PASS",
+          "detail": "65cb1d42-dbb5-423c-b397-13afac2744d7"
+        },
+        {
+          "id": "026:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "026:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "026:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "026:v1-compat",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_doctors"
+        },
+        {
+          "id": "026:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "027:registry",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:uuid",
+          "status": "PASS",
+          "detail": "f416dd6c-d35e-485b-b62d-6510b2489bd1"
+        },
+        {
+          "id": "027:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "027:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "027:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "027:v1-compat",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_vat"
+        },
+        {
+          "id": "027:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "028:registry",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:uuid",
+          "status": "PASS",
+          "detail": "faa3ab4f-2d6d-4b8e-a624-316ccbffbe87"
+        },
+        {
+          "id": "028:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "028:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "028:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "028:v1-compat",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_zreport"
+        },
+        {
+          "id": "028:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "029:registry",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:uuid",
+          "status": "PASS",
+          "detail": "6ed28f4f-49fc-4682-9afd-822463f88366"
+        },
+        {
+          "id": "029:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "029:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "029:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "029:v1-compat",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_profitability"
+        },
+        {
+          "id": "029:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "030:registry",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:uuid",
+          "status": "PASS",
+          "detail": "74b96755-17b7-4951-ab69-446a2c6e5f32"
+        },
+        {
+          "id": "030:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "030:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "030:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "030:v1-compat",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_sales"
+        },
+        {
+          "id": "030:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "031:registry",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:uuid",
+          "status": "PASS",
+          "detail": "f7a9bc7a-374e-479a-b3be-8ede123d2d74"
+        },
+        {
+          "id": "031:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "031:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "031:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "031:v1-compat",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_thermal_period"
+        },
+        {
+          "id": "031:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "032:registry",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:uuid",
+          "status": "PASS",
+          "detail": "02bf6632-721e-4ce2-9c67-cb56fcc22d0e"
+        },
+        {
+          "id": "032:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "032:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06,10"
+        },
+        {
+          "id": "032:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "032:v1-compat",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:runtime-enable",
+          "status": "PASS",
+          "detail": "rep_archive_a4"
+        },
+        {
+          "id": "032:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "033:registry",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:uuid",
+          "status": "PASS",
+          "detail": "a8bcd1d9-ffd8-4896-84ea-bfe9882727d9"
+        },
+        {
+          "id": "033:cap:cap_reports",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "033:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "033:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "033:v1-compat",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_print_pdf"
+        },
+        {
+          "id": "033:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "034:registry",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:uuid",
+          "status": "PASS",
+          "detail": "0bb03c66-4289-4d3a-a52f-522b91d33905"
+        },
+        {
+          "id": "034:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "034:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "034:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "034:v1-compat",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:runtime-enable",
+          "status": "PASS",
+          "detail": "exp_track"
+        },
+        {
+          "id": "034:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "035:registry",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:uuid",
+          "status": "PASS",
+          "detail": "8b403194-e2cf-4acb-beed-f212e41f4212"
+        },
+        {
+          "id": "035:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "035:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "035:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "035:v1-compat",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:runtime-enable",
+          "status": "PASS",
+          "detail": "exp_budget"
+        },
+        {
+          "id": "035:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "036:registry",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:uuid",
+          "status": "PASS",
+          "detail": "2f6c46aa-19c1-492e-bd19-8322cfa90658"
+        },
+        {
+          "id": "036:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "036:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "036:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "036:v1-compat",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:runtime-enable",
+          "status": "PASS",
+          "detail": "dash_exp_kpi"
+        },
+        {
+          "id": "036:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "037:registry",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:uuid",
+          "status": "PASS",
+          "detail": "5e3159ca-bc8d-42bc-87bd-160426feb45f"
+        },
+        {
+          "id": "037:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "037:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "037:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "037:v1-compat",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:runtime-enable",
+          "status": "PASS",
+          "detail": "pkg_bank"
+        },
+        {
+          "id": "037:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "038:registry",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:uuid",
+          "status": "PASS",
+          "detail": "d204c249-fa63-4eaf-b97e-b28fcaab5356"
+        },
+        {
+          "id": "038:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "038:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "038:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "038:v1-compat",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:runtime-enable",
+          "status": "PASS",
+          "detail": "fin_currency"
+        },
+        {
+          "id": "038:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "039:registry",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:uuid",
+          "status": "PASS",
+          "detail": "41882bcb-69fc-42de-ad8c-021426c9d926"
+        },
+        {
+          "id": "039:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "039:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "039:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "039:v1-compat",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:runtime-enable",
+          "status": "PASS",
+          "detail": "fin_cashfloat"
+        },
+        {
+          "id": "039:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "040:registry",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:uuid",
+          "status": "PASS",
+          "detail": "dc75ad92-acb0-451e-a87d-fae7d645202f"
+        },
+        {
+          "id": "040:cap:cap_finance",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "040:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "040:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "040:v1-compat",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:runtime-enable",
+          "status": "PASS",
+          "detail": "ops_inventory"
+        },
+        {
+          "id": "040:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "041:registry",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:uuid",
+          "status": "PASS",
+          "detail": "192bea9f-b500-43e4-81fa-b8df39eb6730"
+        },
+        {
+          "id": "041:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "041:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "041:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "041:v1-compat",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:runtime-enable",
+          "status": "PASS",
+          "detail": "att_daily"
+        },
+        {
+          "id": "041:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "042:registry",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:uuid",
+          "status": "PASS",
+          "detail": "dc4eacc0-5b28-434a-b70d-29537e3728c0"
+        },
+        {
+          "id": "042:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "042:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "042:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "042:v1-compat",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:runtime-enable",
+          "status": "PASS",
+          "detail": "att_leave"
+        },
+        {
+          "id": "042:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "043:registry",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:uuid",
+          "status": "PASS",
+          "detail": "31118064-ad4b-4ecb-9adc-be3ff19cc8e4"
+        },
+        {
+          "id": "043:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "043:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "043:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "043:v1-compat",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_leave_requests"
+        },
+        {
+          "id": "043:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "044:registry",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:uuid",
+          "status": "PASS",
+          "detail": "19bf74a8-3c4d-49ee-87e2-d54f0d6f0039"
+        },
+        {
+          "id": "044:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "044:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "044:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "044:v1-compat",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:runtime-enable",
+          "status": "PASS",
+          "detail": "att_overtime"
+        },
+        {
+          "id": "044:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "045:registry",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:uuid",
+          "status": "PASS",
+          "detail": "b551414a-cf10-49ea-acdd-563bce28468d"
+        },
+        {
+          "id": "045:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "045:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "045:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "045:v1-compat",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:runtime-enable",
+          "status": "PASS",
+          "detail": "pay_salary"
+        },
+        {
+          "id": "045:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "046:registry",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:uuid",
+          "status": "PASS",
+          "detail": "a885e801-63f0-45b5-bd27-9ea4bf8f7ed1"
+        },
+        {
+          "id": "046:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "046:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "046:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "046:v1-compat",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:runtime-enable",
+          "status": "PASS",
+          "detail": "pay_commission"
+        },
+        {
+          "id": "046:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "047:registry",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:uuid",
+          "status": "PASS",
+          "detail": "df5c01b6-dd94-4e93-aefe-892ac5324d2a"
+        },
+        {
+          "id": "047:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "047:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "047:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "047:v1-compat",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_ledger"
+        },
+        {
+          "id": "047:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "048:registry",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:uuid",
+          "status": "PASS",
+          "detail": "9dda7d0b-3541-4262-b3c9-10b98a121193"
+        },
+        {
+          "id": "048:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "048:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "048:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "048:v1-compat",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:runtime-enable",
+          "status": "PASS",
+          "detail": "att_report"
+        },
+        {
+          "id": "048:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "049:registry",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:uuid",
+          "status": "PASS",
+          "detail": "28476afe-81b4-4add-b9ce-c21ebe15276f"
+        },
+        {
+          "id": "049:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "049:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "049:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "049:v1-compat",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:runtime-enable",
+          "status": "PASS",
+          "detail": "att_policy"
+        },
+        {
+          "id": "049:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "050:registry",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:uuid",
+          "status": "PASS",
+          "detail": "85bbb1a1-b1bc-472c-ab93-ebac7c66315a"
+        },
+        {
+          "id": "050:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "050:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "050:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "050:v1-compat",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:runtime-enable",
+          "status": "PASS",
+          "detail": "pkg_commissions"
+        },
+        {
+          "id": "050:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "051:registry",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:uuid",
+          "status": "PASS",
+          "detail": "37a7e41b-3398-48b2-a175-3abc4650c129"
+        },
+        {
+          "id": "051:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "051:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "051:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "051:v1-compat",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_drawer"
+        },
+        {
+          "id": "051:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "052:registry",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:uuid",
+          "status": "PASS",
+          "detail": "9c864083-3c65-4e28-9043-5605f3be1c5a"
+        },
+        {
+          "id": "052:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "052:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "052:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "052:v1-compat",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_thermal"
+        },
+        {
+          "id": "052:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "053:registry",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:uuid",
+          "status": "PASS",
+          "detail": "f0dde31f-3a2f-4f45-9753-3cdd6b50becf"
+        },
+        {
+          "id": "053:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "053:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "053:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "053:v1-compat",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:runtime-enable",
+          "status": "PASS",
+          "detail": "hw_status"
+        },
+        {
+          "id": "053:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "054:registry",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:uuid",
+          "status": "PASS",
+          "detail": "0afc817a-4560-4b74-9d5e-08a8c43607bf"
+        },
+        {
+          "id": "054:cap:cap_backup",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "054:package-inclusion",
+          "status": "PASS",
+          "detail": "01,02,03,04,05,06,10"
+        },
+        {
+          "id": "054:template",
+          "status": "PASS",
+          "detail": "hijama_starter,clinic_medium,dental_pro"
+        },
+        {
+          "id": "054:v1-compat",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_local"
+        },
+        {
+          "id": "054:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "055:registry",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:uuid",
+          "status": "PASS",
+          "detail": "45cb4c49-ef4c-43fc-8082-9aa4cac79174"
+        },
+        {
+          "id": "055:cap:cap_backup",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "055:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "055:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "055:v1-compat",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_custom"
+        },
+        {
+          "id": "055:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "056:registry",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:uuid",
+          "status": "PASS",
+          "detail": "916e21f0-6e74-4967-a991-0f15830213df"
+        },
+        {
+          "id": "056:cap:cap_backup",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "056:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "056:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "056:v1-compat",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_cloud"
+        },
+        {
+          "id": "056:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "057:registry",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:uuid",
+          "status": "PASS",
+          "detail": "1a8c17eb-0f4a-4da7-991a-bca9cc8805d7"
+        },
+        {
+          "id": "057:cap:cap_backup",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "057:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "057:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "057:v1-compat",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:runtime-enable",
+          "status": "PASS",
+          "detail": "bk_drive"
+        },
+        {
+          "id": "057:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "058:registry",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:uuid",
+          "status": "PASS",
+          "detail": "f55d73d1-ef63-491b-a61b-9519639504d2"
+        },
+        {
+          "id": "058:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "058:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "058:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "058:v1-compat",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_import"
+        },
+        {
+          "id": "058:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "059:registry",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:uuid",
+          "status": "PASS",
+          "detail": "98ef3736-d77b-4ed0-a76b-9517f861ebbd"
+        },
+        {
+          "id": "059:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "059:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "059:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "059:v1-compat",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:runtime-enable",
+          "status": "PASS",
+          "detail": "tech_msg_api"
+        },
+        {
+          "id": "059:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "060:registry",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:uuid",
+          "status": "PASS",
+          "detail": "bd6338fd-3d53-4494-b0f1-dccd2bc84d4a"
+        },
+        {
+          "id": "060:cap:cap_communication",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "060:v1-compat",
+          "status": "PASS",
+          "detail": "tech_gateway"
+        },
+        {
+          "id": "060:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded from standard"
+        },
+        {
+          "id": "061:registry",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:uuid",
+          "status": "PASS",
+          "detail": "e17858ec-3e42-43ae-9e9e-ffa19aeea4ec"
+        },
+        {
+          "id": "061:cap:cap_hr",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "061:package-inclusion",
+          "status": "PASS",
+          "detail": "03,04,05,06"
+        },
+        {
+          "id": "061:template",
+          "status": "PASS",
+          "detail": "dental_pro"
+        },
+        {
+          "id": "061:v1-compat",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:runtime-enable",
+          "status": "PASS",
+          "detail": "hr_leave_balance"
+        },
+        {
+          "id": "061:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "062:registry",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:uuid",
+          "status": "PASS",
+          "detail": "69406769-22d8-4575-8e60-a43ac64de3ce"
+        },
+        {
+          "id": "062:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "062:package-inclusion",
+          "status": "PASS",
+          "detail": "02,03,04,05,06,10"
+        },
+        {
+          "id": "062:template",
+          "status": "PASS",
+          "detail": "clinic_medium,dental_pro"
+        },
+        {
+          "id": "062:v1-compat",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_setup_wizard"
+        },
+        {
+          "id": "062:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "063:registry",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:uuid",
+          "status": "PASS",
+          "detail": "37f24a34-4f9a-4c97-baa7-41f4a97bf55b"
+        },
+        {
+          "id": "063:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "063:v1-compat",
+          "status": "PASS",
+          "detail": "sys_product_tour"
+        },
+        {
+          "id": "063:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded from standard"
+        },
+        {
+          "id": "064:registry",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:uuid",
+          "status": "PASS",
+          "detail": "f6c5e4c7-97a9-44d0-baa9-08a1df0675db"
+        },
+        {
+          "id": "064:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "064:v1-compat",
+          "status": "PASS",
+          "detail": "sys_health_check"
+        },
+        {
+          "id": "064:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded from standard"
+        },
+        {
+          "id": "065:registry",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:uuid",
+          "status": "PASS",
+          "detail": "7f1406da-2f2b-4fbd-935d-c5fe05165e2d"
+        },
+        {
+          "id": "065:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "065:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "065:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "065:v1-compat",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_readiness"
+        },
+        {
+          "id": "065:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "066:registry",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:uuid",
+          "status": "PASS",
+          "detail": "d1aa1124-3c76-480d-99b6-0d0d3b5364d0"
+        },
+        {
+          "id": "066:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "066:v1-compat",
+          "status": "PASS",
+          "detail": "sys_integrity"
+        },
+        {
+          "id": "066:runtime-disable",
+          "status": "PASS",
+          "detail": "opt-in excluded from standard"
+        },
+        {
+          "id": "067:registry",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:uuid",
+          "status": "PASS",
+          "detail": "07b1075a-9bf1-4385-ae40-c2d5810db6cd"
+        },
+        {
+          "id": "067:cap:cap_diagnostics",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "067:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "067:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "067:v1-compat",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:runtime-enable",
+          "status": "PASS",
+          "detail": "sys_logs"
+        },
+        {
+          "id": "067:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "068:registry",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:uuid",
+          "status": "PASS",
+          "detail": "0360e6da-99a9-41a8-a5d5-f5532cc48ffe"
+        },
+        {
+          "id": "068:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "068:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "068:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "068:v1-compat",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_board"
+        },
+        {
+          "id": "068:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "069:registry",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:uuid",
+          "status": "PASS",
+          "detail": "4f94ce1c-40a2-4016-b7d4-d0188da83568"
+        },
+        {
+          "id": "069:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "069:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "069:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "069:v1-compat",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_print"
+        },
+        {
+          "id": "069:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "070:registry",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:uuid",
+          "status": "PASS",
+          "detail": "079e914c-8c88-4d4b-87c8-1c9522a25f30"
+        },
+        {
+          "id": "070:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "070:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "070:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "070:v1-compat",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_queue_display"
+        },
+        {
+          "id": "070:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "071:registry",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:uuid",
+          "status": "PASS",
+          "detail": "6654134c-36d1-41c8-a6ba-1110e48cf2c4"
+        },
+        {
+          "id": "071:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "071:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "071:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "071:v1-compat",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_vip"
+        },
+        {
+          "id": "071:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        },
+        {
+          "id": "072:registry",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:uuid",
+          "status": "PASS",
+          "detail": "7fe30f60-e0f8-4225-b434-a36d6668a717"
+        },
+        {
+          "id": "072:cap:cap_pos",
+          "status": "PASS",
+          "detail": "mapped"
+        },
+        {
+          "id": "072:package-inclusion",
+          "status": "PASS",
+          "detail": "04,05,06"
+        },
+        {
+          "id": "072:template",
+          "status": "PASS",
+          "detail": "n/a"
+        },
+        {
+          "id": "072:v1-compat",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:runtime-enable",
+          "status": "PASS",
+          "detail": "lux_rush"
+        },
+        {
+          "id": "072:bundle-sig",
+          "status": "PASS",
+          "detail": "present"
+        }
+      ]
+    },
+    "Package Certification": {
+      "passed": 47,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "01:expand",
+          "status": "PASS",
+          "detail": "18 features"
+        },
+        {
+          "id": "01:devices",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "01:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "01:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "01:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "02:expand",
+          "status": "PASS",
+          "detail": "30 features"
+        },
+        {
+          "id": "02:devices",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "02:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "02:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "02:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "02:upgrade-compat",
+          "status": "PASS",
+          "detail": "02"
+        },
+        {
+          "id": "03:expand",
+          "status": "PASS",
+          "detail": "53 features"
+        },
+        {
+          "id": "03:devices",
+          "status": "PASS",
+          "detail": "3"
+        },
+        {
+          "id": "03:branches",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "03:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "03:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "03:upgrade-compat",
+          "status": "PASS",
+          "detail": "03"
+        },
+        {
+          "id": "04:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "04:devices",
+          "status": "PASS",
+          "detail": "5"
+        },
+        {
+          "id": "04:branches",
+          "status": "PASS",
+          "detail": "5"
+        },
+        {
+          "id": "04:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "04:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "04:upgrade-compat",
+          "status": "PASS",
+          "detail": "04"
+        },
+        {
+          "id": "05:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "05:devices",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "05:branches",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "05:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "05:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "05:upgrade-compat",
+          "status": "PASS",
+          "detail": "05"
+        },
+        {
+          "id": "06:expand",
+          "status": "PASS",
+          "detail": "68 features"
+        },
+        {
+          "id": "06:devices",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "06:branches",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "06:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "06:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "06:upgrade-compat",
+          "status": "PASS",
+          "detail": "06"
+        },
+        {
+          "id": "99:expand",
+          "status": "PASS",
+          "detail": "8 features"
+        },
+        {
+          "id": "99:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "99:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "10:expand",
+          "status": "PASS",
+          "detail": "31 features"
+        },
+        {
+          "id": "10:devices",
+          "status": "PASS",
+          "detail": "2"
+        },
+        {
+          "id": "10:branches",
+          "status": "PASS",
+          "detail": "1"
+        },
+        {
+          "id": "10:activate",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "10:bundle",
+          "status": "PASS",
+          "detail": "signed"
+        },
+        {
+          "id": "10:upgrade-compat",
+          "status": "PASS",
+          "detail": "10"
+        },
+        {
+          "id": "tpl:hijama_starter:override",
+          "status": "PASS",
+          "detail": "+0/-0 → 18 features"
+        },
+        {
+          "id": "tpl:clinic_medium:override",
+          "status": "PASS",
+          "detail": "+1/-0 → 31 features"
+        },
+        {
+          "id": "tpl:dental_pro:override",
+          "status": "PASS",
+          "detail": "+2/-1 → 54 features"
+        }
+      ]
+    },
+    "Diagnostics Certification": {
+      "passed": 6,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "cache-invalidation",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "registry-reload",
+          "status": "PASS",
+          "detail": "1.2.0"
+        },
+        {
+          "id": "bundle-recreation",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "backup-restoration",
+          "status": "PASS",
+          "detail": "ok"
+        },
+        {
+          "id": "audit-replay",
+          "status": "PASS",
+          "detail": "27 entries"
+        },
+        {
+          "id": "corruption-recovery",
+          "status": "PASS",
+          "detail": "tampered registry rejected"
+        }
+      ]
+    },
+    "Security Certification": {
+      "passed": 10,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "invalid-registry-sig",
+          "status": "PASS",
+          "detail": "registry_tampered"
+        },
+        {
+          "id": "missing-registrySig",
+          "status": "PASS",
+          "detail": "registry_sig_missing"
+        },
+        {
+          "id": "wrong-schemaVersion",
+          "status": "PASS",
+          "detail": "registry_tampered"
+        },
+        {
+          "id": "invalid-mac",
+          "status": "PASS",
+          "detail": "rejected"
+        },
+        {
+          "id": "invalid-bundle",
+          "status": "PASS",
+          "detail": "bundle_tampered"
+        },
+        {
+          "id": "invalid-feature-hash-cp",
+          "status": "PASS",
+          "detail": "stored"
+        },
+        {
+          "id": "invalid-license-id",
+          "status": "PASS",
+          "detail": "rejected"
+        },
+        {
+          "id": "malformed-key",
+          "status": "PASS",
+          "detail": "rejected"
+        },
+        {
+          "id": "invalid-subscription-key",
+          "status": "PASS",
+          "detail": "rejected"
+        },
+        {
+          "id": "negative-testing-complete",
+          "status": "PASS",
+          "detail": "all invalid inputs fail safely"
+        }
+      ]
+    },
+    "Stress Test": {
+      "passed": 5,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "generate-10000",
+          "status": "PASS",
+          "detail": "1.36ms avg"
+        },
+        {
+          "id": "validate-10000",
+          "status": "PASS",
+          "detail": "all passed"
+        },
+        {
+          "id": "no-timing-degradation",
+          "status": "PASS",
+          "detail": "1.28 → 1.90 ms"
+        },
+        {
+          "id": "memory-stable",
+          "status": "PASS",
+          "detail": "9.97MB delta"
+        },
+        {
+          "id": "resolve-500",
+          "status": "PASS",
+          "detail": "cache intact"
+        }
+      ]
+    },
+    "Production Readiness": {
+      "passed": 4,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "no-todo",
+          "status": "PASS",
+          "detail": "0"
+        },
+        {
+          "id": "licOnKeyInput-v5-typing",
+          "status": "PASS",
+          "detail": "TDWI2-P01AA-K7H9P-T9389-8VPMP"
+        },
+        {
+          "id": "licOnKeyInput-v5-detect",
+          "status": "PASS",
+          "detail": "v5"
+        },
+        {
+          "id": "license:test",
+          "status": "PASS",
+          "detail": "128 pass"
+        }
+      ]
+    },
+    "Developer Experience": {
+      "passed": 8,
+      "failed": 0,
+      "warned": 0,
+      "items": [
+        {
+          "id": "registry-generator",
+          "status": "PASS",
+          "detail": "scripts/generate-license-registries.mjs"
+        },
+        {
+          "id": "feature-from-v1",
+          "status": "PASS",
+          "detail": "reads FEATURE_REGISTRY"
+        },
+        {
+          "id": "sign-registries",
+          "status": "PASS",
+          "detail": "signs output"
+        },
+        {
+          "id": "engine-registry-driven:license-generator-v2.js",
+          "status": "PASS",
+          "detail": "uses registries"
+        },
+        {
+          "id": "engine-registry-driven:feature-resolver.js",
+          "status": "PASS",
+          "detail": "uses registries"
+        },
+        {
+          "id": "engine-constants-driven:license-codec-v5.js",
+          "status": "PASS",
+          "detail": "uses constants not feature lists"
+        },
+        {
+          "id": "add-feature-workflow",
+          "status": "PASS",
+          "detail": "edit FEATURE_REGISTRY → npm run license:generate"
+        },
+        {
+          "id": "add-package-workflow",
+          "status": "PASS",
+          "detail": "edit package-registry.json → re-sign via generator"
+        }
+      ]
+    }
+  },
+  "nonBlockingWarnings": [
+    {
+      "id": "FPV-PG-03",
+      "scope": "App-wide",
+      "reason": "Hidden legacy page-search flagged — pre-existing, not licensing"
+    },
+    {
+      "id": "FPV-HY-03/04/05",
+      "scope": "App hygiene",
+      "reason": "console.log, dist/, manus-reference — outside licensing scope"
+    },
+    {
+      "id": "FPV-EL-01",
+      "scope": "Electron",
+      "reason": "Manual Electron runtime checklist — requires desktop environment"
+    },
+    {
+      "id": "FPV-PAT-*",
+      "scope": "PAT browser",
+      "reason": "DOM/Playwright tests for Setup Wizard, Tour, PDF, Thermal — browser-only"
+    },
+    {
+      "id": "FPA-LIC-04",
+      "scope": "V1 addons",
+      "reason": "Module-level addons (sys_product_tour etc.) — V1 opt-in policy, not V5 regression"
+    },
+    {
+      "id": "FPA-E-01",
+      "scope": "Electron",
+      "reason": "Electron runtime validation requires manual/desktop verification"
+    },
+    {
+      "id": "FPA-PA-LEG",
+      "scope": "Legacy paths",
+      "reason": "Intentional legacy compatibility paths preserved per architecture"
+    },
+    {
+      "id": "CERT-UI-BROWSER",
+      "scope": "Licensing UI",
+      "reason": "License Builder 6-step click-through validated structurally; V5 typing now fixed"
+    }
+  ],
+  "performance": {
+    "stress": {
+      "count": 10000,
+      "totalMs": 13567,
+      "avgMs": 1.36,
+      "first100Avg": 1.28,
+      "last100Avg": 1.9,
+      "heapDeltaMB": 9.97
+    }
+  },
+  "stress": {
+    "count": 10000,
+    "totalMs": 13567,
+    "avgMs": 1.36,
+    "first100Avg": 1.28,
+    "last100Avg": 1.9,
+    "heapDeltaMB": 9.97
+  }
+}

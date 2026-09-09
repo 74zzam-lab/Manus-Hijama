@@ -1,0 +1,33 @@
+{
+  "id": "S03-offline-queue-reconnect",
+  "title": "Offline queue durable + requeue dead-letter",
+  "result": "PASS",
+  "ms": 8,
+  "evidence": {
+    "before": {
+      "pending": 0,
+      "inflight": 0,
+      "sent": 0,
+      "dead-letter": 1,
+      "acked": 0,
+      "total": 1
+    },
+    "after": {
+      "pending": 0,
+      "inflight": 0,
+      "sent": 0,
+      "dead-letter": 1,
+      "acked": 0,
+      "total": 1
+    },
+    "counts": {
+      "pending": 1,
+      "inflight": 0,
+      "sent": 0,
+      "dead-letter": 0,
+      "acked": 0,
+      "total": 1
+    },
+    "dead": 1
+  }
+}

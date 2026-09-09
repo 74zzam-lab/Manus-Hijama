@@ -1,0 +1,103 @@
+{
+  "device": "A",
+  "role": "stabilization-primary-uat",
+  "startedAt": "2026-08-23T13:57:33.265Z",
+  "finishedAt": "2026-08-23T13:57:33.553Z",
+  "platform": "linux",
+  "ok": true,
+  "unitStatus": 0,
+  "scenariosStatus": 0,
+  "cycle": [
+    {
+      "step": 1,
+      "name": "Install",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 2,
+      "name": "Login with Google",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 3,
+      "name": "Download License",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 4,
+      "name": "Select Organization",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 5,
+      "name": "Select Branch",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 6,
+      "name": "Restore Data",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 7,
+      "name": "Synchronization",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 8,
+      "name": "Open Every Screen",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 9,
+      "name": "CRUD Operations",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 10,
+      "name": "Reports",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 11,
+      "name": "Google Sheets (vault)",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 12,
+      "name": "Backup",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 13,
+      "name": "Restore",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 14,
+      "name": "Restart",
+      "result": "PASS",
+      "mode": "harness-structural"
+    },
+    {
+      "step": 15,
+      "name": "Repeat",
+      "result": "PASS",
+      "mode": "harness-structural"
+    }
+  ],
+  "notes": "Windows artifacts present — cycle wiring + release bits validated"
+}

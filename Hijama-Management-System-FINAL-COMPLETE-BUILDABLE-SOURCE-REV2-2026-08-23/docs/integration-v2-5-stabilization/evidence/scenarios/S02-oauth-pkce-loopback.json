@@ -1,0 +1,11 @@
+{
+  "id": "S02-oauth-pkce-loopback",
+  "title": "OAuth PKCE + flexible loopback + soft connect errors",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "pkce": true,
+    "flexiblePort": true,
+    "softErrors": true
+  }
+}

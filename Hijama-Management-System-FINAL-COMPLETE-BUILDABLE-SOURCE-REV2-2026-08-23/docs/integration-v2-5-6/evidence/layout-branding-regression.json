@@ -1,0 +1,24 @@
+{
+  "at": "2026-07-30T23:39:25.974Z",
+  "designSystemCssLinked": true,
+  "designSystemCssExists": true,
+  "brandingPaths": [
+    {
+      "path": "branding/Center-Logo.png",
+      "exists": true
+    },
+    {
+      "path": "assets/NajjarTech-Logo.png",
+      "exists": true
+    },
+    {
+      "path": "branding.config.json",
+      "exists": true
+    },
+    {
+      "path": "renderer/styles/design-system.css",
+      "exists": true
+    }
+  ],
+  "result": "PASS"
+}

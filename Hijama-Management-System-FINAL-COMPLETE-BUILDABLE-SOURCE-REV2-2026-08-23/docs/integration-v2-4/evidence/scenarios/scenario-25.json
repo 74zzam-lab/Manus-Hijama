@@ -1,0 +1,11 @@
+{
+  "id": 25,
+  "name": "mixed_app_versions",
+  "result": "PASS",
+  "ms": 9263,
+  "detail": {
+    "oldVersion": "2.3.0",
+    "newVersion": "2.4.1"
+  },
+  "secretsPrinted": false
+}

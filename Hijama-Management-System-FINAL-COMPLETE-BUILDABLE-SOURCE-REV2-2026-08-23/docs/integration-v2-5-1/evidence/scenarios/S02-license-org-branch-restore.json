@@ -1,0 +1,23 @@
+{
+  "id": "S02-license-org-branch-restore",
+  "title": "Restore with license/org/branch identity meta",
+  "result": "PASS",
+  "ms": 64,
+  "evidence": {
+    "source": {
+      "centerName": "",
+      "deviceName": "",
+      "organizationId": "CTR-A",
+      "centerId": "CTR-A",
+      "branchId": "BR-1",
+      "deviceId": ""
+    },
+    "scope": {
+      "type": "organization",
+      "organizationId": "CTR-A",
+      "branchIds": [
+        "BR-1"
+      ]
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "phase": "V2-5.2",
+  "startedAt": "2026-07-30T20:50:30.156Z",
+  "finishedAt": "2026-07-30T20:50:31.861Z",
+  "host": {
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "results": [
+    {
+      "id": "B01-full-local-backup",
+      "title": "Full local Backup V2",
+      "result": "PASS",
+      "ms": 312,
+      "evidence": {
+        "hash": "f03ef01f2491d05a6149d6373da2c55c2abbd8dad638e1eafe26de1a54e0a50e",
+        "files": 3
+      }
+    },
+    {
+      "id": "B02-cloud-upload-and-quota",
+      "title": "Cloud upload success + quota local-ok",
+      "result": "PASS",
+      "ms": 418,
+      "evidence": {
+        "cloudOk": true,
+        "quotaLocalOk": true,
+        "quota": true
+      }
+    },
+    {
+      "id": "B03-incremental-differential-policy",
+      "title": "Incremental/differential documented unsupported",
+      "result": "PASS",
+      "ms": 0,
+      "evidence": {
+        "fullSnapshot": true,
+        "incremental": {
+          "supported": false,
+          "reason": "dr_unit_is_full_tdw_snapshot; deltas_via_cloud_sync"
+        },
+        "differential": {
+          "supported": false,
+          "reason": "not_required_while_full_snapshot_and_sync_exist"
+        },
+        "versionHistory": "local_mtime_list_plus_manifest_createdAt"
+      }
+    },
+    {
+      "id": "B04-retention-prune",
+      "title": "Retention prune keeps newest N",
+      "result": "PASS",
+      "ms": 857,
+      "evidence": {
+        "ok": true,
+        "pruned": 2,
+        "kept": 2,
+        "removed": [
+          "p-1.tdw",
+          "p-0.tdw"
+        ],
+        "files": [
+          "p-3.tdw",
+          "p-2.tdw"
+        ]
+      }
+    },
+    {
+      "id": "B05-upload-resume",
+      "title": "Interrupted upload resume",
+      "result": "PASS",
+      "ms": 63,
+      "evidence": {
+        "bytes": 6814,
+        "sha256": "f03ef01f2491d05a6149d6373da2c55c2abbd8dad638e1eafe26de1a54e0a50e"
+      }
+    },
+    {
+      "id": "S01-ab-roundtrip",
+      "title": "A↔B FileRemote round trip",
+      "result": "PASS",
+      "ms": 20,
+      "evidence": {
+        "flushAOk": true,
+        "pullBOk": true,
+        "flushBOk": true,
+        "pullAOk": true,
+        "fromA": true,
+        "fromB": true
+      }
+    },
+    {
+      "id": "S02-device-c-catchup",
+      "title": "Device C catch-up",
+      "result": "PASS",
+      "ms": 17,
+      "evidence": {
+        "applied": [
+          {
+            "table": "clientsRegistry",
+            "revision": 1,
+            "duplicate": false
+          }
+        ],
+        "got": true
+      }
+    },
+    {
+      "id": "S03-offline-queue-reconnect",
+      "title": "Offline queue durable + requeue dead-letter",
+      "result": "PASS",
+      "ms": 8,
+      "evidence": {
+        "before": {
+          "pending": 0,
+          "inflight": 0,
+          "sent": 0,
+          "dead-letter": 1,
+          "acked": 0,
+          "total": 1
+        },
+        "after": {
+          "pending": 0,
+          "inflight": 0,
+          "sent": 0,
+          "dead-letter": 1,
+          "acked": 0,
+          "total": 1
+        },
+        "counts": {
+          "pending": 1,
+          "inflight": 0,
+          "sent": 0,
+          "dead-letter": 0,
+          "acked": 0,
+          "total": 1
+        },
+        "dead": 1
+      }
+    },
+    {
+      "id": "S04-obs-counts-audit",
+      "title": "OBS counts + audit",
+      "result": "PASS",
+      "ms": 7,
+      "evidence": {
+        "counts": {
+          "pending": 1,
+          "inflight": 0,
+          "sent": 0,
+          "dead-letter": 0,
+          "acked": 0,
+          "total": 1
+        }
+      }
+    }
+  ]
+}

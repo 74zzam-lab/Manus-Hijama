@@ -1,0 +1,9 @@
+{
+  "id": "A04-duplicate-prevention",
+  "title": "OAuth/license/branch/owner in-flight locks",
+  "result": "PASS",
+  "ms": 0,
+  "evidence": {
+    "locks": 4
+  }
+}

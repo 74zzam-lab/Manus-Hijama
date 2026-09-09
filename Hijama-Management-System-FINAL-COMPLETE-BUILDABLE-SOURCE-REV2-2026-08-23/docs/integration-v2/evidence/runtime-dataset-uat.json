@@ -1,0 +1,37 @@
+{
+  "dataset": "UAT-V2-3-5",
+  "userData": "C:\\Users\\runneradmin\\AppData\\Roaming\\Cupping Center",
+  "dbPath": "C:\\Users\\runneradmin\\AppData\\Roaming\\Cupping Center\\database\\tadawi.db",
+  "startedAt": "2026-07-29T23:43:14.331Z",
+  "ok": true,
+  "countsBeforeClose": {
+    "clients": 3,
+    "visits": 4,
+    "invoices": 3,
+    "appointments": 2,
+    "employees": 2
+  },
+  "dbChecksumBefore": "4bfe5da3b18bc4264ac69f9030222d264b21132e706ff36b6219d3abac1b7025",
+  "licenseChecksum": "7511b9aa47e1ca0b5f82b43a0683c5df97ed4fb17b992f80880b868965f32471",
+  "deviceId": "UAT-DEVICE-001",
+  "branchId": "BR-MAIN",
+  "countsAfterReopen": {
+    "clients": 3,
+    "visits": 4,
+    "invoices": 3,
+    "appointments": 2,
+    "employees": 2
+  },
+  "dbChecksumAfterReopen": "4bfe5da3b18bc4264ac69f9030222d264b21132e706ff36b6219d3abac1b7025",
+  "backup": {
+    "ok": true,
+    "path": "C:\\Users\\runneradmin\\AppData\\Roaming\\Cupping Center\\backups\\uat-v2-3-5.tdw",
+    "hash": "56528db6690b68fd042651d0de7cf0f516bacf02bb84d823e64bbf5b5dfcb185"
+  },
+  "restore": {
+    "ok": true,
+    "dir": "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\uat-restore-1785368594997",
+    "restoredDbExists": true
+  },
+  "finishedAt": "2026-07-29T23:43:15.239Z"
+}

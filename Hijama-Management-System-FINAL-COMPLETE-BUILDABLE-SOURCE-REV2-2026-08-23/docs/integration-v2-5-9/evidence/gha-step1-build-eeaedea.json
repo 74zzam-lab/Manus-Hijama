@@ -1,0 +1,18 @@
+{
+  "step": "STEP1_BUILD",
+  "source": "GitHub Actions windows-2022",
+  "runId": 30723115721,
+  "runUrl": "https://github.com/7uzzam/Cupping-System-Management/actions/runs/30723115721",
+  "commit": "eeaedea",
+  "at": "2026-08-01T23:25:21Z",
+  "setupExe": "HijamaManagement-Setup-2.0.1.exe",
+  "setupSizeBytes": 106794739,
+  "setupSha256": "489c282fb4a07c391bd8def0af128d47e44631d55db9097f901de2faabdba1f5",
+  "validNsis": true,
+  "slimPackage": "PASS",
+  "artifactUpload": "FAILED_QUOTA_RECALC_LAG",
+  "artifactsApiTotal": 0,
+  "artifactPolicy": "slim-no-win-unpacked",
+  "scenariosAtoE": "UNVERIFIED",
+  "requirementPass": false
+}

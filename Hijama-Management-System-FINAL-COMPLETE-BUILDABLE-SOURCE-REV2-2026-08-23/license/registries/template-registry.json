@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.2.0",
+  "generatedAt": "2026-08-23T14:07:15.237Z",
+  "migratedFrom": null,
+  "templates": [
+    {
+      "id": "hijama_starter",
+      "displayName": "Hijama Starter",
+      "displayNameAr": "حجامة — بداية",
+      "package": "01",
+      "overrides": {
+        "add": [],
+        "remove": []
+      },
+      "subscription": "05",
+      "devices": 1,
+      "branches": 1
+    },
+    {
+      "id": "clinic_medium",
+      "displayName": "Clinic Medium",
+      "displayNameAr": "عيادة متوسطة",
+      "package": "02",
+      "overrides": {
+        "add": [
+          "032"
+        ],
+        "remove": []
+      },
+      "subscription": "05",
+      "devices": 3,
+      "branches": 1
+    },
+    {
+      "id": "dental_pro",
+      "displayName": "Dental Professional",
+      "displayNameAr": "أسنان احترافي",
+      "package": "03",
+      "overrides": {
+        "add": [
+          "024",
+          "040"
+        ],
+        "remove": [
+          "013"
+        ]
+      },
+      "subscription": "05",
+      "devices": 3,
+      "branches": 2
+    }
+  ],
+  "registrySig": "d45500e4c3e451c410f2a5cab9cbc2c3626b2af0e10827812db80a049a37bcc1"
+}

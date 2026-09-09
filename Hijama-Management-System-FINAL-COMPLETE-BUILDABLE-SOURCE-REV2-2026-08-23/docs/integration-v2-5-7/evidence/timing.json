@@ -1,0 +1,10 @@
+{
+  "at": "2026-08-23T13:57:33.124Z",
+  "note": "Release gate timing — artifact index + migration harness + lifecycle + scenarios",
+  "host": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.1.102"
+  },
+  "ok": false
+}

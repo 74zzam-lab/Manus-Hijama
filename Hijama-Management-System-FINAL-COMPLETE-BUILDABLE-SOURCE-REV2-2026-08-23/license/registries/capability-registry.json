@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.2.0",
+  "generatedAt": "2026-08-23T14:07:15.237Z",
+  "migratedFrom": null,
+  "capabilities": [
+    {
+      "id": "cap_pos",
+      "internalName": "pos",
+      "displayName": "Point of Sale",
+      "displayNameAr": "نقطة البيع",
+      "description": "تسجيل الجلسات، الفواتير، VIP، الذروة، الترقيم",
+      "featureIds": [
+        "002",
+        "013",
+        "014",
+        "015",
+        "068",
+        "069",
+        "070",
+        "071",
+        "072"
+      ]
+    },
+    {
+      "id": "cap_booking",
+      "internalName": "booking",
+      "displayName": "Booking & Scheduling",
+      "displayNameAr": "الحجوزات والجدولة",
+      "description": "جدولة المواعيد وتأكيدها ومؤشرات الحجز",
+      "featureIds": [
+        "009",
+        "010",
+        "011",
+        "012"
+      ]
+    },
+    {
+      "id": "cap_hr",
+      "internalName": "hr_payroll",
+      "displayName": "HR & Payroll",
+      "displayNameAr": "الموارد البشرية والرواتب",
+      "description": "الحضور، الإجازات، الرواتب، العمولات",
+      "featureIds": [
+        "004",
+        "008",
+        "041",
+        "042",
+        "043",
+        "044",
+        "045",
+        "046",
+        "047",
+        "048",
+        "049",
+        "050",
+        "061"
+      ]
+    },
+    {
+      "id": "cap_reports",
+      "internalName": "reports",
+      "displayName": "Reports & Printing",
+      "displayNameAr": "التقارير والطباعة",
+      "description": "تقارير تشغيلية وضريبية وطباعة PDF",
+      "featureIds": [
+        "025",
+        "026",
+        "027",
+        "028",
+        "029",
+        "030",
+        "031",
+        "032",
+        "033"
+      ]
+    },
+    {
+      "id": "cap_finance",
+      "internalName": "finance",
+      "displayName": "Finance & Expenses",
+      "displayNameAr": "المالية والمصروفات",
+      "description": "نفقات، ميزانية، بنوك، مخزون، عهدة كاش",
+      "featureIds": [
+        "005",
+        "034",
+        "035",
+        "036",
+        "037",
+        "038",
+        "039",
+        "040"
+      ]
+    },
+    {
+      "id": "cap_backup",
+      "internalName": "backup",
+      "displayName": "Backup & Restore",
+      "displayNameAr": "النسخ الاحتياطي",
+      "description": "نسخ محلي وسحابي ومزامنة",
+      "featureIds": [
+        "054",
+        "055",
+        "056",
+        "057",
+        "073",
+        "074"
+      ]
+    },
+    {
+      "id": "cap_communication",
+      "internalName": "communication",
+      "displayName": "CRM & Communication",
+      "displayNameAr": "العملاء والتواصل",
+      "description": "رسائل، CRM، بحث، ملفات العملاء، API",
+      "featureIds": [
+        "003",
+        "016",
+        "017",
+        "018",
+        "019",
+        "020",
+        "021",
+        "022",
+        "023",
+        "024",
+        "059",
+        "060"
+      ]
+    },
+    {
+      "id": "cap_diagnostics",
+      "internalName": "diagnostics",
+      "displayName": "Diagnostics & Developer Tools",
+      "displayNameAr": "التشخيص وأدوات المطور",
+      "description": "جاهزية النظام، أجهزة، استيراد، سجلات",
+      "featureIds": [
+        "007",
+        "051",
+        "052",
+        "053",
+        "058",
+        "062",
+        "063",
+        "064",
+        "065",
+        "066",
+        "067"
+      ]
+    }
+  ],
+  "registrySig": "f16160be005ec7c7039630b7facf1d308163111efed0f7011e243c8ff114bacf"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 16,
+  "name": "interrupted_pull_quarantine",
+  "result": "PASS",
+  "ms": 22,
+  "detail": {
+    "quarantined": true
+  },
+  "secretsPrinted": false
+}

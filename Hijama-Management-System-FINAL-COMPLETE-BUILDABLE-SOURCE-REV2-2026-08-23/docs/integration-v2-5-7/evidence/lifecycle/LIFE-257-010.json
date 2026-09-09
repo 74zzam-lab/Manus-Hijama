@@ -1,0 +1,12 @@
+{
+  "id": "LIFE-257-010",
+  "title": "Auto updater never full-wipes",
+  "ok": true,
+  "result": "PASS",
+  "at": "2026-08-23T13:57:32.935Z",
+  "evidence": {
+    "deleteAppDataOnUninstallFalse": true,
+    "silentDefaultsAppOnly": true,
+    "note": "Auto-updater / silent path cannot pass /FULLWIPE=1; deleteAppDataOnUninstall=false"
+  }
+}

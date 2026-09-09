@@ -1,0 +1,11 @@
+{
+  "phase": "V2-5.5",
+  "note": "Runtime evidence from scale/perf/reliability harnesses. No secrets.",
+  "generators": [
+    "tests/baseline/test-v2-5-5-performance.js",
+    "scripts/v2-5-5-scale-dataset.cjs",
+    "scripts/v2-5-5-perf-bench.cjs",
+    "scripts/v2-5-5-scenarios-all.cjs",
+    "scripts/windows-uat/v2-5-5-performance-runtime.cjs"
+  ]
+}

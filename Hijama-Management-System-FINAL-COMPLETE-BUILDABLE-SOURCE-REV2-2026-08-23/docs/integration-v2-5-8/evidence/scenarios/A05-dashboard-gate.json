@@ -1,0 +1,10 @@
+{
+  "id": "A05-dashboard-gate",
+  "title": "Dashboard/login blocked until activation complete",
+  "result": "PASS",
+  "ms": 4,
+  "evidence": {
+    "finishLoginGate": true,
+    "showPageGate": true
+  }
+}

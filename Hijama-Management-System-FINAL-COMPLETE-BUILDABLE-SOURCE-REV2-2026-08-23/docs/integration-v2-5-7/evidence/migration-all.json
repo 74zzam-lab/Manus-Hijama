@@ -1,0 +1,228 @@
+{
+  "phase": "V2-5.7",
+  "startedAt": "2026-08-18T19:27:54.920Z",
+  "tmpDir": "/tmp/v257-mig-harness-2EfX1R",
+  "proofs": {
+    "schemaStep001to002": {
+      "ok": true,
+      "before": {
+        "schemaVersion": 4,
+        "clients": 1,
+        "visits": 1,
+        "attachments": 1,
+        "outbox": 0,
+        "meta": {
+          "ownerUserId": "OWNER-001",
+          "branchId": "BR-MAIN",
+          "licenseId": "LIC-V24-TEST",
+          "deviceId": "DEV-A-001",
+          "schemaVersion": "4"
+        },
+        "users": [
+          {
+            "id": "OWNER-001",
+            "role": "owner",
+            "name": "Owner"
+          }
+        ],
+        "attachmentRows": [
+          {
+            "id": "ATT-LEGACY-1",
+            "path": "attachments/C-LEGACY-1/note.bin",
+            "entity_id": "C-LEGACY-1"
+          }
+        ],
+        "outboxRows": []
+      },
+      "after": {
+        "schemaVersion": 5,
+        "clients": 1,
+        "visits": 1,
+        "attachments": 1,
+        "outbox": 0,
+        "meta": {
+          "ownerUserId": "OWNER-001",
+          "branchId": "BR-MAIN",
+          "licenseId": "LIC-V24-TEST",
+          "deviceId": "DEV-A-001",
+          "schemaVersion": "5"
+        },
+        "users": [
+          {
+            "id": "OWNER-001",
+            "role": "owner",
+            "name": "Owner"
+          }
+        ],
+        "attachmentRows": [
+          {
+            "id": "ATT-LEGACY-1",
+            "path": "attachments/C-LEGACY-1/note.bin",
+            "entity_id": "C-LEGACY-1"
+          }
+        ],
+        "outboxRows": []
+      },
+      "compare": {
+        "ok": true,
+        "errors": []
+      },
+      "backup": {
+        "path": "/tmp/v257-mig-harness-2EfX1R/backup-before-002.db",
+        "size": 245760,
+        "sha256": "cd566cdc76dd48e7b4a0ccbcd30c85bc88ee995a687aacce77be1a157b4d4a04",
+        "at": "2026-08-18T19:27:54.944Z"
+      },
+      "migrations": [
+        "001_initial",
+        "002_sync_platform"
+      ]
+    },
+    "preserveUpgrade": {
+      "ok": true,
+      "before": {
+        "schemaVersion": 5,
+        "clients": 1,
+        "visits": 1,
+        "attachments": 1,
+        "outbox": 1,
+        "meta": {
+          "ownerUserId": "OWNER-001",
+          "branchId": "BR-MAIN",
+          "licenseId": "LIC-V24-TEST",
+          "deviceId": "DEV-A-001",
+          "schemaVersion": "5"
+        },
+        "users": [
+          {
+            "id": "OWNER-001",
+            "role": "owner",
+            "name": "Owner"
+          }
+        ],
+        "attachmentRows": [
+          {
+            "id": "ATT-LEGACY-1",
+            "path": "attachments/C-LEGACY-1/note.bin",
+            "entity_id": "C-LEGACY-1"
+          }
+        ],
+        "outboxRows": [
+          {
+            "event_id": "EVT-LEGACY-1",
+            "status": "pending",
+            "record_id": "C-LEGACY-1"
+          }
+        ]
+      },
+      "after": {
+        "schemaVersion": 5,
+        "clients": 1,
+        "visits": 1,
+        "attachments": 1,
+        "outbox": 1,
+        "meta": {
+          "ownerUserId": "OWNER-001",
+          "branchId": "BR-MAIN",
+          "licenseId": "LIC-V24-TEST",
+          "deviceId": "DEV-A-001",
+          "schemaVersion": "5"
+        },
+        "users": [
+          {
+            "id": "OWNER-001",
+            "role": "owner",
+            "name": "Owner"
+          }
+        ],
+        "attachmentRows": [
+          {
+            "id": "ATT-LEGACY-1",
+            "path": "attachments/C-LEGACY-1/note.bin",
+            "entity_id": "C-LEGACY-1"
+          }
+        ],
+        "outboxRows": [
+          {
+            "event_id": "EVT-LEGACY-1",
+            "status": "pending",
+            "record_id": "C-LEGACY-1"
+          }
+        ]
+      },
+      "compare": {
+        "ok": true,
+        "errors": []
+      },
+      "backup": {
+        "path": "/tmp/v257-mig-harness-2EfX1R/backup-before-upgrade.db",
+        "size": 327680,
+        "sha256": "a86d0b071de9b3be1a2341e2d1bb8412dfad9b5f8bb3d64c40627d2802c9768f",
+        "at": "2026-08-18T19:27:54.975Z"
+      }
+    },
+    "corruptRefuse": {
+      "ok": true,
+      "errorName": "DatabaseOpenError",
+      "errorCode": "DATABASE_PRAGMA_FAILED",
+      "message": "Database pragmas failed — original preserved.",
+      "preserved": true,
+      "refusedEmptyReplace": true
+    },
+    "preMigrationBackup": {
+      "ok": true,
+      "backup": {
+        "path": "/tmp/v257-mig-harness-2EfX1R/backup-before-upgrade.db",
+        "size": 327680,
+        "sha256": "a86d0b071de9b3be1a2341e2d1bb8412dfad9b5f8bb3d64c40627d2802c9768f",
+        "at": "2026-08-18T19:27:54.975Z"
+      }
+    },
+    "restoreOldBackup": {
+      "ok": true,
+      "integrity": {
+        "ok": true,
+        "detail": {
+          "integrity_check": "ok"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": 5,
+        "clients": 1,
+        "visits": 1,
+        "attachments": 1,
+        "outbox": 1,
+        "meta": {
+          "ownerUserId": "OWNER-001",
+          "branchId": "BR-MAIN",
+          "licenseId": "LIC-V24-TEST",
+          "deviceId": "DEV-A-001",
+          "schemaVersion": "5"
+        },
+        "users": [
+          {
+            "id": "OWNER-001",
+            "role": "owner",
+            "name": "Owner"
+          }
+        ],
+        "attachmentRows": [
+          {
+            "id": "ATT-LEGACY-1",
+            "path": "attachments/C-LEGACY-1/note.bin",
+            "entity_id": "C-LEGACY-1"
+          }
+        ],
+        "outboxRows": [
+          {
+            "event_id": "EVT-LEGACY-1",
+            "status": "pending",
+            "record_id": "C-LEGACY-1"
+          }
+        ]
+      }
+    }
+  },
+  "ok": true,
+  "finishedAt": "2026-08-18T19:27:54.981Z"
+}

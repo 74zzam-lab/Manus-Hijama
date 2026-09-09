@@ -1,0 +1,16 @@
+{
+  "id": "S04-obs-counts-audit",
+  "title": "OBS counts + audit",
+  "result": "PASS",
+  "ms": 7,
+  "evidence": {
+    "counts": {
+      "pending": 1,
+      "inflight": 0,
+      "sent": 0,
+      "dead-letter": 0,
+      "acked": 0,
+      "total": 1
+    }
+  }
+}

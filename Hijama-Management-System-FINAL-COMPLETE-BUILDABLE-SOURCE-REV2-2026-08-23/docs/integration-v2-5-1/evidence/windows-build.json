@@ -1,0 +1,18 @@
+{
+  "at": "2026-07-30T20:19:39.437Z",
+  "hostPlatform": "linux",
+  "winUnpacked": {
+    "path": "dist/win-unpacked/Hijama Management System.exe",
+    "size": 225949696,
+    "sha256": "8fe1a2c82d281c9e30167377ed0e69c84b414686e25c84ca9e4c0ed1a711869e",
+    "status": "VALID_CROSS_COMPILE"
+  },
+  "installerNsis": {
+    "path": "dist/HijamaManagement-Setup-2.0.1.exe",
+    "size": 554328,
+    "sha256": "73adfa5ce40123916f92efb1971b7b125e601b34a1a3f0fcbe9c53fa87d8d2a7",
+    "status": "INCOMPLETE_ON_LINUX_WINE",
+    "note": "Full NSIS installer is produced by windows-2022 GHA job v2-5-1-release-gate; Linux wine cannot finalize NSIS."
+  },
+  "commit": "4185bc403d81e97f9bf69cd6596669523760a654"
+}

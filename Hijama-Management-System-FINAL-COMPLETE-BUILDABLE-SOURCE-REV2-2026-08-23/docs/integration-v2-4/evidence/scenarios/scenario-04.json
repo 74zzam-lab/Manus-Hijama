@@ -1,0 +1,10 @@
+{
+  "id": 4,
+  "name": "B_to_A_sync",
+  "result": "PASS",
+  "ms": 6940,
+  "detail": {
+    "ok": true
+  },
+  "secretsPrinted": false
+}

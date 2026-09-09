@@ -1,0 +1,50 @@
+{
+  "at": "2026-08-02T23:01:53.384Z",
+  "coreTables": [
+    "clientsRegistry",
+    "cases",
+    "bookings",
+    "doctors",
+    "attendance",
+    "expenses"
+  ],
+  "kvMirror": [
+    "users",
+    "settings",
+    "packages",
+    "services",
+    "otRecords",
+    "budget",
+    "invoiceCounter",
+    "clientFileCounter",
+    "nextSessions",
+    "employeeLeaveRequests",
+    "employeeLedgerAccruals",
+    "employeeLedgerPayments",
+    "employeeLedgerEntries",
+    "importHistory",
+    "inventoryItems",
+    "inventorySuppliers",
+    "inventoryMovements",
+    "__tdw_conflict_queue__",
+    "__tdw_conflict_archive__",
+    "__tdw_attachment_manifest__"
+  ],
+  "repositorySyncedTables": [
+    "cases",
+    "clientsRegistry",
+    "bookings",
+    "users",
+    "doctors",
+    "settings",
+    "expenses",
+    "packages",
+    "services",
+    "attendance",
+    "inventoryItems",
+    "inventorySuppliers",
+    "inventoryMovements"
+  ],
+  "syncedNotInBridge": [],
+  "note": "Gaps are Category B candidates for SQLite KV/core migration — not Requirement PASS."
+}

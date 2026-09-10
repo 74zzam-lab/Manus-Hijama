@@ -119,6 +119,7 @@ assert.match(extSrc, /function persistSystemLogsBestEffort/, 'system log persist
 const bridgeSrc = fs.readFileSync(path.join(root, 'cupping-sqlite-bridge.js'), 'utf8');
 assert.match(bridgeSrc, /SyncEngine\?\.schedulePush\?\.\(tableKey/, 'local table writes enqueue push');
 assert.match(bridgeSrc, /SyncEngine\?\.schedulePush\?\.\(key/, 'local kv writes enqueue push');
+assert.match(bridgeSrc, /commitBundle[\s\S]*?SyncEngine\?\.schedulePush\?\.\(tableKey/, 'bundle commits enqueue push');
 
 const sandbox = { window: {}, globalThis: {}, console, setTimeout, clearTimeout };
 sandbox.window = sandbox;

@@ -791,6 +791,13 @@
       global.VersionsIndex?.saveLocal?.({ ...local, ...remote, centerId: centerId || local?.centerId });
     }
 
+    if (pulled.length > 0) {
+      try { global.reloadClientStoreFromDb?.(); } catch { /* empty */ }
+      try { global.syncAppGlobals?.(); } catch { /* empty */ }
+      try { global.refreshCaseDerivedViews?.(); } catch { /* empty */ }
+      try { global.refreshServicesTable?.(); } catch { /* empty */ }
+    }
+
     return {
       ok: true,
       changes: changes.length,

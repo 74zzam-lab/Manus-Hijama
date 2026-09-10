@@ -13436,6 +13436,10 @@ function saveSetting(key) {
   if (typeof BranchDataIsolation !== 'undefined' && BranchDataIsolation.persistActiveBranchSettings) {
     BranchDataIsolation.persistActiveBranchSettings();
   }
+  try {
+    SyncEngine?.schedulePush?.('settings');
+    if (key === 'cupPrice') SyncEngine?.schedulePush?.('services');
+  } catch { /* empty */ }
   notify('✅ تم حفظ الإعداد بنجاح');
 }
 
@@ -15759,6 +15763,11 @@ function saveCase() {
           try {
             notify('⚠️ فشل حفظ الجلسة في SQLite — ' + (res?.error || 'bundle_commit_failed'), 'danger');
           } catch { /* empty */ }
+        } else if (res?.ok) {
+          try {
+            SyncEngine?.schedulePush?.('cases');
+            SyncEngine?.schedulePush?.('clientsRegistry');
+          } catch { /* empty */ }
         }
         releaseBusy();
       }).catch(() => releaseBusy());
@@ -15988,6 +15997,11 @@ function saveSharedPackageCase() {
         if (!res?.ok && !res?.skipped) {
           try {
             notify('⚠️ فشل حفظ الجلسة المشتركة في SQLite — ' + (res?.error || 'bundle_commit_failed'), 'danger');
+          } catch { /* empty */ }
+        } else if (res?.ok) {
+          try {
+            SyncEngine?.schedulePush?.('cases');
+            SyncEngine?.schedulePush?.('clientsRegistry');
           } catch { /* empty */ }
         }
         releaseBusy();
@@ -20165,6 +20179,13 @@ async function runCloudV2SyncNow() {
       return res;
     }
     emitBackupUiStatus('sync-completed', { ok: true });
+    try {
+      if (typeof reloadClientStoreFromDb === 'function') reloadClientStoreFromDb();
+      if (typeof syncAppGlobals === 'function') syncAppGlobals();
+      if (typeof refreshCaseDerivedViews === 'function') refreshCaseDerivedViews();
+      if (typeof refreshServicesTable === 'function') refreshServicesTable();
+      if (typeof renderBackupUI === 'function') renderBackupUI();
+    } catch { /* empty */ }
     notify('✅ اكتمل تحديث البيانات بين الأجهزة', 'success');
     return res;
   } catch (e) {
@@ -20645,7 +20666,8 @@ function renderCloudV2BackupStatus() {
     : '—';
   const devName = dc?.deviceName || settings?.backup?.deviceName || '—';
   set('bk-cv2-device', `${branchLabel} / ${devName}`);
-  if (!document.activeElement || document.activeElement.id !== 'bk-cv2-poll-interval') {
+  const pollPinned = window._tdwPollIntervalPinnedUntil && Date.now() < window._tdwPollIntervalPinnedUntil;
+  if (!pollPinned && (!document.activeElement || document.activeElement.id !== 'bk-cv2-poll-interval')) {
     loadCloudV2PollIntervalUI();
   }
   renderDriveMigrationStatusUI();
@@ -20778,6 +20800,10 @@ async function runDriveBranchMigration(force) {
 function loadCloudV2PollIntervalUI() {
   const sel = document.getElementById('bk-cv2-poll-interval');
   if (!sel) return;
+  if (window._tdwPollIntervalPinnedUntil && Date.now() < window._tdwPollIntervalPinnedUntil && window._tdwPollIntervalPinnedMs) {
+    sel.value = String(window._tdwPollIntervalPinnedMs);
+    return;
+  }
   const ms = Number(window.SyncState?.load?.()?.pollIntervalMs || tdwSyncEngine()?.DEFAULT_POLL_MS || 15000);
   const val = String(ms);
   let matched = false;
@@ -20800,13 +20826,15 @@ function saveCloudV2PollInterval() {
   if (!sel) return;
   const raw = Number(sel.value) || 15000;
   const bounded = Math.max(5000, Math.min(300000, raw));
+  window._tdwPollIntervalPinnedMs = bounded;
+  window._tdwPollIntervalPinnedUntil = Date.now() + 5000;
   const state = window.SyncState?.load?.() || window.SyncState?.defaultState?.() || {};
   state.pollIntervalMs = bounded;
   window.SyncState?.save?.(state);
   const syncEngine = tdwSyncEngine();
   const ms = syncEngine?.setPollIntervalMs?.(bounded) || bounded;
+  sel.value = String(ms);
   notify('✅ فترة السحب: ' + Math.round(ms / 1000) + ' ثانية', 'success');
-  loadCloudV2PollIntervalUI();
   emitBackupUiStatus('poll-interval-saved', { pollIntervalMs: ms });
 }
 

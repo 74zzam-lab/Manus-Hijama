@@ -21,6 +21,7 @@ const checks = [
   { name: 'service persistBundle op', ok: /persistBundle/.test(read('electron/database/service.js')) },
   { name: 'bridge beginBundle', ok: /function beginBundle/.test(read('cupping-sqlite-bridge.js')) },
   { name: 'bridge commitBundle', ok: /function commitBundle/.test(read('cupping-sqlite-bridge.js')) },
+  { name: 'bridge commitBundle schedules push', ok: /commitBundle[\s\S]*?SyncEngine\?\.schedulePush\?\.\(tableKey/.test(read('cupping-sqlite-bridge.js')) },
   { name: 'saveCase uses bundle', ok: /beginBundle/.test(read('index.html')) && /commitBundle/.test(read('index.html')) },
 ];
 

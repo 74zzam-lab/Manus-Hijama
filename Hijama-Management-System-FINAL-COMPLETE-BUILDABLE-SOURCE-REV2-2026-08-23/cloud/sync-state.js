@@ -5,6 +5,7 @@
   'use strict';
 
   const SYNC_STATE_KEY = '__tdw_sync_state__';
+  const POLL_INTERVAL_KEY = '__tdw_poll_interval_ms__';
   const DEFAULT_POLL_MS = 15000;
   /** Hard cap — prevent unbounded pendingPushes under sustained failure (REL-255-010). */
   const MAX_PENDING_PUSHES = 2000;
@@ -22,13 +23,33 @@
     };
   }
 
+  function readPollIntervalMs(stored) {
+    try {
+      const direct = localStorage.getItem(POLL_INTERVAL_KEY);
+      if (direct != null && direct !== '') {
+        const n = Number(direct);
+        if (n >= 5000 && n <= 300000) return n;
+      }
+    } catch { /* empty */ }
+    const fromState = Number(stored?.pollIntervalMs);
+    if (fromState >= 5000 && fromState <= 300000) return fromState;
+    return DEFAULT_POLL_MS;
+  }
+
   function load() {
     const raw = global.DB?.get?.(SYNC_STATE_KEY, null);
-    if (raw && typeof raw === 'object') return { ...defaultState(), ...raw };
-    return defaultState();
+    const merged = raw && typeof raw === 'object'
+      ? { ...defaultState(), ...raw }
+      : defaultState();
+    merged.pollIntervalMs = readPollIntervalMs(merged);
+    return merged;
   }
 
   function save(state) {
+    state = state && typeof state === 'object' ? { ...state } : defaultState();
+    if (state.pollIntervalMs != null) {
+      try { localStorage.setItem(POLL_INTERVAL_KEY, String(state.pollIntervalMs)); } catch { /* empty */ }
+    }
     global.DB?.set?.(SYNC_STATE_KEY, state);
     return state;
   }
@@ -121,6 +142,7 @@
 
   global.SyncState = {
     SYNC_STATE_KEY,
+    POLL_INTERVAL_KEY,
     DEFAULT_POLL_MS,
     MAX_PENDING_PUSHES,
     defaultState,

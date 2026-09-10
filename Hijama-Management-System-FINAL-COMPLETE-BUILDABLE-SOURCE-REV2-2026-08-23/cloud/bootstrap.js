@@ -149,6 +149,10 @@
       };
     }
 
+    if (local?.centerId && data.centerId === local.centerId && (options.mergeDevices || global.LicenseCloud?.mergeLicenseDocs)) {
+      data = global.LicenseCloud.mergeLicenseDocs(local, data);
+    }
+
     global.LicenseCloud?.saveLocal?.(data);
     await global.DeviceCache?.syncLicenseToMainCache?.(data).catch(() => ({ ok: false }));
     if (data?.centerId && global.CloudMeta) {
@@ -394,6 +398,25 @@
     return persisted;
   }
 
+  function branchConfigNeedsHydration(branchId) {
+    branchId = getBranchId(branchId);
+    const s = global.settings || global.DB?.get?.('settings', {}) || {};
+    const hasCenterName = !!(s.centerName || global.LicenseCloud?.loadLocal?.()?.centerName);
+    const hasPrices = !!(s.prices && Object.keys(s.prices).length)
+      || !!(global.DB?.get?.('settings', {})?.prices && Object.keys(global.DB.get('settings').prices || {}).length);
+    const hasPackages = Array.isArray(global.packages) && global.packages.length > 0;
+    return !hasCenterName || !hasPrices || !hasPackages;
+  }
+
+  function applyLicenseCenterToSettings(license) {
+    if (!license?.centerName) return;
+    if (!global.settings) global.settings = global.DB?.get?.('settings', {}) || {};
+    if (!global.settings.centerName) {
+      global.settings.centerName = license.centerName;
+      try { global.DB?.set?.('settings', global.settings); } catch { /* empty */ }
+    }
+  }
+
   async function downloadBranchConfiguration(branchId) {
     branchId = getBranchId(branchId);
     const files = global.ConfigLayer?.CONFIG_FILES || ['settings.json', 'prices.json', 'services.json', 'packages.json', 'users.json'];
@@ -486,21 +509,23 @@
     }
 
     const versionsRes = await global.DriveAdapter.downloadVersions(centerId, branchId);
+    let versionsApplied = false;
     if (versionsRes?.ok && versionsRes.data) {
       const applied = await global.SyncEngine?.applyRemoteVersions?.(versionsRes.data, { branchId });
       out.steps.push({ step: 'versions', ok: !!applied?.ok, pulled: applied?.pulled?.length || 0 });
-      if (applied?.ok && (applied.pulled?.length || 0) > 0) {
-        await global.DeviceCache?.snapshotFromLocal?.(branchId).catch(() => {});
-        if (options.markComplete !== false) markBootstrapComplete(branchId);
-        return out;
-      }
+      versionsApplied = !!(applied?.ok && (applied.pulled?.length || 0) > 0);
     }
 
-    const cfg = await downloadBranchConfiguration(branchId);
+    const needsConfig = options.forceConfig !== false && (options.forceConfig === true || branchConfigNeedsHydration(branchId));
+    const cfg = needsConfig || !versionsApplied
+      ? await downloadBranchConfiguration(branchId)
+      : { ok: true, branchId, skipped: true, reason: 'versions_hydrated' };
     out.steps.push({ step: 'config', ...cfg });
 
     const ops = await downloadOperationalData(branchId);
     out.steps.push({ step: 'operational', ...ops });
+
+    applyLicenseCenterToSettings(global.LicenseCloud?.loadLocal?.());
 
     if (versionsRes?.ok && versionsRes.data) {
       global.VersionsIndex?.saveLocal?.({

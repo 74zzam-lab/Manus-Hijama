@@ -416,15 +416,20 @@
         for (const k of keys) restoreLastCommit(k);
         return { ok: false, error: state.lastError, res };
       }
+      const branchId = capturedBranch || getOperationalWriteBranchId();
       for (const op of ops) {
         if (op.kind === 'table') {
-          mergeBranchSliceIntoCommitted(op.key, op.records, capturedBranch || getOperationalWriteBranchId());
+          mergeBranchSliceIntoCommitted(op.key, op.records, branchId);
         } else {
           applyCommittedToView(op.key, op.value);
         }
       }
+      const pushedTables = new Set(ops.map((op) => op.key).filter(Boolean));
+      pushedTables.forEach((tableKey) => {
+        try { global.SyncEngine?.schedulePush?.(tableKey, branchId); } catch { /* empty */ }
+      });
       state.lastError = null;
-      return { ok: true, count: ops.length, bundle: true, outbox: entries.length };
+      return { ok: true, count: ops.length, bundle: true, outbox: entries.length, pushed: [...pushedTables] };
     } catch (e) {
       state.lastError = String(e?.message || e);
       for (const k of keys) restoreLastCommit(k);

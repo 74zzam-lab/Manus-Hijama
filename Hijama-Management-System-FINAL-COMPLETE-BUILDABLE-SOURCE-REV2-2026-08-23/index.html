@@ -557,7 +557,24 @@ body.app-locked #sidebar-overlay {
 .main-scroll { overflow-x: hidden; }
 .modal { max-height: calc(100dvh - (2 * clamp(24px, 5vh, 48px))); overflow-y: auto; }
 .table-wrap { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; }
-@media (max-width: 1366px) { .page { padding: var(--space-lg) 20px; } }
+@media (max-width: 1366px) {
+  .page { padding: var(--space-lg) 16px; }
+  .backup-status-card { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)); gap: 10px; }
+  .backup-status-item { min-width: 0; }
+  .backup-status-item strong { font-size: 13px; word-break: break-word; }
+  .backup-combined-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .backup-combined-actions .btn { flex: 1 1 auto; min-width: 9.5rem; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .form-grid-4, .form-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+@media (max-height: 768px) {
+  .page { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+  .modal-shell { max-height: min(88vh, calc(100dvh - 16px)) !important; }
+  .dash-kpi-row .kpi-card { min-height: 78px; padding: 10px 12px; }
+  .topbar.workspace-topbar.glass-topbar { padding-block: 8px; }
+}
 @media (max-width: 768px)  { .page { padding: var(--space-md) var(--space-md); } }
 
 /* ── STATS GRID ── */
@@ -4164,6 +4181,10 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
 @media (max-width: 1400px) {
   .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+@media (max-width: 1366px) {
+  .dash-kpi-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .dash-kpi-row .stat-value { font-size: 20px; }
+}
 @media (max-width: 1100px) {
   .dash-kpi-row { grid-template-columns: repeat(2, 1fr); }
   .dash-revenue-grid { grid-template-columns: 1fr; }
@@ -7204,8 +7225,8 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <textarea class="form-control" id="msg-followup" rows="3" placeholder="نص المتابعة"></textarea>
         </div>
         <div class="msg-media-box msg-media-box--compact">
-          <label class="form-label">📎 صورة/فيديو خاص برسالة المتابعة</label>
-          <input class="form-control" type="file" id="msg-followup-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'followup')">
+          <label class="form-label">📎 صور/فيديو لرسالة المتابعة (حتى 5)</label>
+          <input class="form-control" type="file" id="msg-followup-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, 'followup')">
           <div class="msg-media-preview" id="msg-followup-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('followup')">💾 حفظ</button>
@@ -7217,8 +7238,8 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <textarea class="form-control" id="msg-promo" rows="3" placeholder="نص العروض"></textarea>
         </div>
         <div class="msg-media-box msg-media-box--compact">
-          <label class="form-label">📎 صورة/فيديو خاص برسالة العروض</label>
-          <input class="form-control" type="file" id="msg-promo-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'promo')">
+          <label class="form-label">📎 صور/فيديو لرسالة العروض (حتى 5)</label>
+          <input class="form-control" type="file" id="msg-promo-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, 'promo')">
           <div class="msg-media-preview" id="msg-promo-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('promo')">💾 حفظ</button>
@@ -7230,8 +7251,8 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <textarea class="form-control" id="msg-appointment" rows="3" placeholder="نص تذكير الموعد"></textarea>
         </div>
         <div class="msg-media-box msg-media-box--compact">
-          <label class="form-label">📎 صورة/فيديو خاص بتذكير الموعد</label>
-          <input class="form-control" type="file" id="msg-appointment-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'appointment')">
+          <label class="form-label">📎 صور/فيديو لتذكير الموعد (حتى 5)</label>
+          <input class="form-control" type="file" id="msg-appointment-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, 'appointment')">
           <div class="msg-media-preview" id="msg-appointment-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('appointment')">💾 حفظ</button>
@@ -7243,8 +7264,8 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
           <textarea class="form-control" id="msg-overdue" rows="3" placeholder="نص تنبيه الغياب"></textarea>
         </div>
         <div class="msg-media-box msg-media-box--compact">
-          <label class="form-label">📎 صورة/فيديو خاص بتنبيه الغياب</label>
-          <input class="form-control" type="file" id="msg-overdue-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'overdue')">
+          <label class="form-label">📎 صور/فيديو لتنبيه الغياب (حتى 5)</label>
+          <input class="form-control" type="file" id="msg-overdue-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, 'overdue')">
           <div class="msg-media-preview" id="msg-overdue-media-preview"></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveMsgTemplate('overdue')">💾 حفظ</button>
@@ -7253,10 +7274,10 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
 
     <div class="card" style="margin-bottom:20px" data-feature="msg_templates">
       <div class="card-header"><div class="card-title">📎 وسائط الرسائل — كل الأنواع</div></div>
-      <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px;line-height:1.7">صورة أو فيديو <strong>مثبّت يُرسل مع كل أنواع الرسائل</strong> (متابعة، عروض، تذكير موعد، تنبيه غياب). يمكنك إضافة مرفق مختلف في بطاقة كل نوع — يُرسل المرفق المشترك أولاً ثم مرفق النوع مع نص الرسالة.</p>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px;line-height:1.7">يمكنك إرفاق <strong>عدة صور أو فيديوهات</strong> مشتركة تُرسل مع كل أنواع الرسائل، ثم إضافة مرفقات إضافية في بطاقة كل نوع. يُرسل المرفق المشترك أولاً ثم مرفقات النوع (واتساب: صورة لكل رسالة أو الصق/أرفق من المجلد).</p>
       <div class="msg-media-box" style="margin:0">
-        <label class="form-label">صورة أو فيديو مشترك لكل الرسائل</label>
-        <input class="form-control" type="file" id="msg-shared-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, 'shared')">
+        <label class="form-label">وسائط مشتركة لكل الرسائل (حتى 5)</label>
+        <input class="form-control" type="file" id="msg-shared-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, 'shared')">
         <div class="msg-media-preview" id="msg-shared-media-preview"></div>
       </div>
     </div>
@@ -7357,10 +7378,10 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
         <div id="manual-bulk-list" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
       <div class="msg-media-box" style="margin:0 0 14px">
-        <label class="form-label">📎 مرفق إضافي لنوع الرسالة المحددة أعلاه (يُرسل مع المرفق المشترك لكل الأنواع)</label>
-        <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" onchange="onMessageMediaPicked(this, document.getElementById('bulk-msg-type').value)">
+        <label class="form-label">📎 وسائط إضافية لنوع الرسالة المحددة (حتى 5 — مع المشترك)</label>
+        <input class="form-control" type="file" id="msg-bulk-media" accept="image/*,video/*" multiple onchange="onMessageMediaPicked(this, document.getElementById('bulk-msg-type').value)">
         <div class="msg-media-preview" id="msg-bulk-media-preview"></div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">يظهر هنا المرفق المشترك + مرفق النوع المختار. مع واتساب عبر الرابط: تُنسخ الصورة للحافظة للصقها (Ctrl+V). مزود واتساب API يرسل المرفقين مع الرسالة.</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px">يظهر هنا كل المرفقات المشتركة + مرفقات النوع. في واتساب: تُنسخ آخر صورة للحافظة وتُفتح مجلد المرفقات للإرفاق. مزود API يرسل كل مرفق في رسالة.</div>
       </div>
       <div class="table-wrap msg-bulk-table-wrap">
         <table class="table-compact table-reports msg-bulk-table">
@@ -8728,6 +8749,26 @@ body.license-readonly-mode .page-readonly #page-manual-msg button {
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeLeaveRequestModal()">إلغاء</button>
       <button class="btn btn-primary" onclick="saveLeaveRequest()">💾 حفظ الطلب</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANUAL SEND CONFIRMATION -->
+<div class="modal-overlay" id="manualSendConfirmModal" onclick="if(event.target===this)resolveManualSendConfirm(false)">
+  <div class="modal modal-shell" style="max-width:min(480px,calc(100vw - 24px))">
+    <div class="modal-header">
+      <div class="modal-title">✅ تأكيد الإرسال</div>
+      <button class="modal-close" type="button" onclick="resolveManualSendConfirm(false)">✕</button>
+    </div>
+    <div class="modal-body" style="font-size:14px;line-height:1.75">
+      <p style="margin:0 0 10px">تم فتح واتساب مع نص الرسالة والمرفقات.</p>
+      <p style="margin:0 0 10px"><strong>هل أرسلت الرسالة فعلاً للعميل؟</strong></p>
+      <p id="manual-send-confirm-client" style="margin:0;color:var(--text-muted);font-size:13px"></p>
+      <p style="margin:10px 0 0;font-size:12px;color:var(--text-muted)">يُسجّل الإرسال فقط عند التأكيد — إلغاء يعني أن العميل يبقى في قائمة المستحقين.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" type="button" onclick="resolveManualSendConfirm(false)">↩️ لم أرسل — إلغاء</button>
+      <button class="btn btn-primary" type="button" onclick="resolveManualSendConfirm(true)">✅ نعم، أرسلت</button>
     </div>
   </div>
 </div>
@@ -13395,6 +13436,10 @@ function saveSetting(key) {
   if (typeof BranchDataIsolation !== 'undefined' && BranchDataIsolation.persistActiveBranchSettings) {
     BranchDataIsolation.persistActiveBranchSettings();
   }
+  try {
+    SyncEngine?.schedulePush?.('settings');
+    if (key === 'cupPrice') SyncEngine?.schedulePush?.('services');
+  } catch { /* empty */ }
   notify('✅ تم حفظ الإعداد بنجاح');
 }
 
@@ -13724,23 +13769,16 @@ function toggleOverdueClientRow(key) {
   renderOverdueClientsPanel(collectOverdueClients());
 }
 
-function sendOverdueFollowupMessage(key, phone, name, lastDate) {
-  let opened = false;
-  if (typeof openQuickClientMessage === 'function') {
-    opened = openQuickClientMessage('overdue', phone, name, lastDate);
-    if (opened === false) opened = openQuickClientMessage('followup', phone, name, lastDate);
+async function sendOverdueFollowupMessage(key, phone, name, lastDate) {
+  const refId = key ? ('overdue_' + key) : '';
+  if (typeof sendManualClientMessage === 'function') {
+    const sent = await sendManualClientMessage('overdue', phone, name, lastDate, refId, '');
+    if (!sent && typeof openQuickClientMessage === 'function') {
+      await openQuickClientMessage('followup', phone, name, lastDate, { refId: 'followup_' + key, fileNo: '' });
+    }
+    return;
   }
-  if (opened === false && typeof openWhatsApp === 'function') {
-    opened = openWhatsApp(phone, name) === true;
-  }
-  if (!opened) return;
-  persistOverdueFollowupMessage({
-    phone, clientName: name, clientKey: key, channel: 'whatsapp',
-    preview: 'متابعة عميل لم يزر المركز (واتساب)'
-  });
-  notify('💬 تم فتح واتساب وتسجيل أن الرسالة أُرسلت للمتابعة');
-  refreshClientsView(false);
-  if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
+  if (typeof openWhatsApp === 'function') openWhatsApp(phone, name);
 }
 
 function markOverdueClientFollowed(key, phone, name) {
@@ -15725,6 +15763,11 @@ function saveCase() {
           try {
             notify('⚠️ فشل حفظ الجلسة في SQLite — ' + (res?.error || 'bundle_commit_failed'), 'danger');
           } catch { /* empty */ }
+        } else if (res?.ok) {
+          try {
+            SyncEngine?.schedulePush?.('cases');
+            SyncEngine?.schedulePush?.('clientsRegistry');
+          } catch { /* empty */ }
         }
         releaseBusy();
       }).catch(() => releaseBusy());
@@ -15954,6 +15997,11 @@ function saveSharedPackageCase() {
         if (!res?.ok && !res?.skipped) {
           try {
             notify('⚠️ فشل حفظ الجلسة المشتركة في SQLite — ' + (res?.error || 'bundle_commit_failed'), 'danger');
+          } catch { /* empty */ }
+        } else if (res?.ok) {
+          try {
+            SyncEngine?.schedulePush?.('cases');
+            SyncEngine?.schedulePush?.('clientsRegistry');
           } catch { /* empty */ }
         }
         releaseBusy();
@@ -17719,19 +17767,27 @@ const MessagingBridge = {
     if (payloadMeta.deferLaunch && !apiReady) {
       return { ok: true, mode: 'queued', launch, reason: 'single_slot' };
     }
-    if (apiReady && getCuppingElectron()?.communication?.send) {
-      try { return await getCuppingElectron().communication.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta }); }
-      catch (e) { return { ok: false, reason: e.message }; }
+    const electronComm = getCuppingElectron()?.communication;
+    if (this.isElectron() && electronComm?.send) {
+      try {
+        const res = await electronComm.send(cfg, { phone: formatted, message: text, channel: 'whatsapp', ...payloadMeta });
+        if (res && res.ok !== false) return res;
+        if (apiReady) return res || { ok: false, reason: 'send_failed' };
+      } catch (e) {
+        if (apiReady) return { ok: false, reason: e.message };
+      }
     }
     if (apiReady && getCuppingElectron()?.messaging?.sendWhatsApp) {
       try { return await getCuppingElectron().messaging.sendWhatsApp(formatted, text, cfg, payloadMeta); }
       catch (e) { return { ok: false, reason: e.message }; }
     }
-    if (payloadMeta.media && typeof copyMessageMediaToClipboard === 'function') {
-      const clip = (payloadMeta.mediaList && payloadMeta.mediaList.length)
-        ? payloadMeta.mediaList.slice().reverse().find((m) => m && m.kind !== 'video') || payloadMeta.mediaList[payloadMeta.mediaList.length - 1]
-        : payloadMeta.media;
-      await copyMessageMediaToClipboard(clip);
+    if (payloadMeta.mediaList?.length && typeof copyMessageMediaListToClipboard === 'function') {
+      const clipRes = await copyMessageMediaListToClipboard(payloadMeta.mediaList);
+      if (clipRes.count > 1 && clipRes.copied) {
+        payloadMeta._clipHint = `تم نسخ آخر صورة — أرفق ${clipRes.count} مرفق/مرفقات في واتساب`;
+      }
+    } else if (payloadMeta.media && typeof copyMessageMediaToClipboard === 'function') {
+      await copyMessageMediaToClipboard(payloadMeta.media);
     }
     const launchUrl = (typeof WaFollowup !== 'undefined' && WaFollowup.buildWhatsAppSendUrl)
       ? WaFollowup.buildWhatsAppSendUrl(formatted, text, launch === 'auto' ? 'web' : launch)
@@ -17756,7 +17812,10 @@ const MessagingBridge = {
       catch (e) { return { ok: false, reason: e.message }; }
     }
     const opened = window.open(launchUrl, slotName);
-    return { ok: !!opened, mode: 'named-window', launch };
+    const hint = payloadMeta._clipHint || (payloadMeta.mediaList?.length > 1
+      ? `أرفق ${payloadMeta.mediaList.length} مرفق/مرفقات في واتساب بعد فتح المحادثة`
+      : '');
+    return { ok: !!opened, mode: 'named-window', launch, mediaHint: hint || undefined };
   },
   async sendSMS(phone, text, meta) {
     if (!phone) return { ok: false, reason: 'invalid_phone' };
@@ -20109,6 +20168,7 @@ async function runCloudV2SyncNow() {
       });
     }
     notify('⏳ جاري تحديث البيانات بين الأجهزة...', 'warning');
+    try { await LicenseCloud?.pullAndMergeFromDrive?.({ mergeDevices: true }); } catch { /* empty */ }
     const res = await SyncEngine.runOnce({ force: true });
     if (!res?.ok) {
       emitBackupUiStatus('sync-failed', { error: res?.message || res?.error || 'sync_failed' });
@@ -20119,6 +20179,13 @@ async function runCloudV2SyncNow() {
       return res;
     }
     emitBackupUiStatus('sync-completed', { ok: true });
+    try {
+      if (typeof reloadClientStoreFromDb === 'function') reloadClientStoreFromDb();
+      if (typeof syncAppGlobals === 'function') syncAppGlobals();
+      if (typeof refreshCaseDerivedViews === 'function') refreshCaseDerivedViews();
+      if (typeof refreshServicesTable === 'function') refreshServicesTable();
+      if (typeof renderBackupUI === 'function') renderBackupUI();
+    } catch { /* empty */ }
     notify('✅ اكتمل تحديث البيانات بين الأجهزة', 'success');
     return res;
   } catch (e) {
@@ -20599,7 +20666,10 @@ function renderCloudV2BackupStatus() {
     : '—';
   const devName = dc?.deviceName || settings?.backup?.deviceName || '—';
   set('bk-cv2-device', `${branchLabel} / ${devName}`);
-  loadCloudV2PollIntervalUI();
+  const pollPinned = window._tdwPollIntervalPinnedUntil && Date.now() < window._tdwPollIntervalPinnedUntil;
+  if (!pollPinned && (!document.activeElement || document.activeElement.id !== 'bk-cv2-poll-interval')) {
+    loadCloudV2PollIntervalUI();
+  }
   renderDriveMigrationStatusUI();
   renderLegacyBranchMigrationStatusUI();
   renderBackupStatusSummary();
@@ -20730,17 +20800,41 @@ async function runDriveBranchMigration(force) {
 function loadCloudV2PollIntervalUI() {
   const sel = document.getElementById('bk-cv2-poll-interval');
   if (!sel) return;
-  const ms = window.SyncState?.load?.()?.pollIntervalMs || tdwSyncEngine()?.DEFAULT_POLL_MS || 15000;
-  sel.value = String(ms);
+  if (window._tdwPollIntervalPinnedUntil && Date.now() < window._tdwPollIntervalPinnedUntil && window._tdwPollIntervalPinnedMs) {
+    sel.value = String(window._tdwPollIntervalPinnedMs);
+    return;
+  }
+  const ms = Number(window.SyncState?.load?.()?.pollIntervalMs || tdwSyncEngine()?.DEFAULT_POLL_MS || 15000);
+  const val = String(ms);
+  let matched = false;
+  for (const opt of sel.options) {
+    if (opt.value === val) { matched = true; break; }
+  }
+  if (!matched) {
+    const custom = document.createElement('option');
+    custom.value = val;
+    custom.textContent = Math.round(ms / 1000) + ' ث';
+    custom.dataset.customPoll = '1';
+    sel.querySelectorAll('option[data-custom-poll="1"]').forEach((o) => o.remove());
+    sel.appendChild(custom);
+  }
+  sel.value = val;
 }
 
 function saveCloudV2PollInterval() {
   const sel = document.getElementById('bk-cv2-poll-interval');
+  if (!sel) return;
+  const raw = Number(sel.value) || 15000;
+  const bounded = Math.max(5000, Math.min(300000, raw));
+  window._tdwPollIntervalPinnedMs = bounded;
+  window._tdwPollIntervalPinnedUntil = Date.now() + 5000;
+  const state = window.SyncState?.load?.() || window.SyncState?.defaultState?.() || {};
+  state.pollIntervalMs = bounded;
+  window.SyncState?.save?.(state);
   const syncEngine = tdwSyncEngine();
-  if (!sel || !syncEngine) return;
-  const ms = syncEngine.setPollIntervalMs?.(Number(sel.value)) || Number(sel.value);
+  const ms = syncEngine?.setPollIntervalMs?.(bounded) || bounded;
+  sel.value = String(ms);
   notify('✅ فترة السحب: ' + Math.round(ms / 1000) + ' ثانية', 'success');
-  if (typeof renderCloudV2BackupStatus === 'function') renderCloudV2BackupStatus();
   emitBackupUiStatus('poll-interval-saved', { pollIntervalMs: ms });
 }
 
@@ -23527,6 +23621,7 @@ function wasMessageSent(refId, type, cooldownDays) {
   const entry = messageLog
     .filter(m => m.refId === refId && m.type === type && (m.status === 'sent' || m.status === 'queued'))
     .sort((a, b) => (b.sentAt || '').localeCompare(a.sentAt || ''))[0];
+  // status 'opened' or 'cancelled' does not count as sent
   if (!entry) return false;
   if (!cooldownDays) return true;
   const daysSince = (Date.now() - new Date(entry.sentAt).getTime()) / 86400000;
@@ -24160,11 +24255,75 @@ function getClientLastMessage(phone) {
 function renderMsgStatusTag(status) {
   if (status === 'sent') return '<span class="tag tag-green">تم الإرسال</span>';
   if (status === 'queued') return '<span class="tag tag-gold">في الطابور</span>';
+  if (status === 'opened') return '<span class="tag tag-gold">فُتح واتساب</span>';
+  if (status === 'cancelled') return '<span class="tag tag-gray">أُلغي</span>';
   if (status === 'failed') return '<span class="tag tag-red">فشل</span>';
   return '<span class="tag tag-gray">—</span>';
 }
 
-async function openQuickClientMessage(type, phone, clientName, lastDate) {
+let _manualSendConfirmResolver = null;
+
+function promptManualSendConfirmation(meta) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('manualSendConfirmModal');
+    const clientEl = document.getElementById('manual-send-confirm-client');
+    if (!modal) {
+      resolve(confirm('تم فتح واتساب — هل أرسلت الرسالة فعلاً للعميل؟'));
+      return;
+    }
+    _manualSendConfirmResolver = resolve;
+    modal.dataset.type = meta?.type || '';
+    modal.dataset.phone = meta?.phone || '';
+    modal.dataset.refId = meta?.refId || '';
+    modal.dataset.name = meta?.clientName || '';
+    modal.dataset.fileNo = meta?.fileNo || '';
+    modal.dataset.body = meta?.body || '';
+    if (clientEl) {
+      clientEl.textContent = [meta?.clientName, meta?.phone, meta?.type ? (MSG_TYPE_LABELS[meta.type] || meta.type) : ''].filter(Boolean).join(' · ');
+    }
+    modal.classList.add('open');
+  });
+}
+
+function resolveManualSendConfirm(confirmed) {
+  const modal = document.getElementById('manualSendConfirmModal');
+  if (modal) modal.classList.remove('open');
+  if (_manualSendConfirmResolver) {
+    const fn = _manualSendConfirmResolver;
+    _manualSendConfirmResolver = null;
+    fn(!!confirmed);
+  }
+}
+
+function logManualMessageSent(meta) {
+  if (typeof logMessage !== 'function') return;
+  const body = meta.body || '';
+  logMessage({
+    clientName: meta.clientName || '—',
+    phone: meta.phone || '',
+    type: meta.type || 'followup',
+    channel: 'whatsapp',
+    refId: meta.refId || ('manual_' + (meta.type || 'msg') + '_' + Date.now()),
+    preview: body.slice(0, 80) + (body.length > 80 ? '…' : ''),
+    body,
+    fileNo: meta.fileNo || (typeof lookupClientFileNo === 'function' ? lookupClientFileNo(meta.phone) : '') || undefined,
+    hasMedia: !!(meta.mediaCount > 0),
+    status: meta.status || 'sent',
+    confirmedByUser: meta.confirmedByUser !== false,
+    detail: meta.result || null,
+  });
+}
+
+function refreshMessageStatusViews() {
+  if (typeof loadManualMessagingBoard === 'function') loadManualMessagingBoard();
+  if (typeof refreshBulkTable === 'function') refreshBulkTable(false);
+  if (typeof refreshMessageLog === 'function') refreshMessageLog(false);
+  if (typeof refreshFollowupDueTable === 'function') refreshFollowupDueTable();
+  if (typeof refreshClientsView === 'function') refreshClientsView(false);
+}
+
+async function openQuickClientMessage(type, phone, clientName, lastDate, opts) {
+  opts = opts || {};
   if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_templates', 'msg_bulk', 'msg_auto'])) {
     notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
     return false;
@@ -24179,12 +24338,53 @@ async function openQuickClientMessage(type, phone, clientName, lastDate) {
   }
   const mediaList = typeof getMessageMediaList === 'function' ? getMessageMediaList(type) : [];
   const media = mediaList.length ? mediaList[mediaList.length - 1] : (typeof getMessageMediaMeta === 'function' ? getMessageMediaMeta(type) : null);
-  const result = await MessagingBridge.sendWhatsApp(phone, body, { type, attachMedia: true, mediaList: mediaList.length ? mediaList : undefined, media: media || undefined });
+  const result = await MessagingBridge.sendWhatsApp(phone, body, {
+    type,
+    refId: opts.refId,
+    attachMedia: true,
+    mediaList: mediaList.length ? mediaList : undefined,
+    media: media || undefined,
+  });
+  if (result?.ok === false) {
+    notify('⚠️ تعذّر فتح واتساب — ' + (result.reason || ''), 'danger');
+    return false;
+  }
   if (result?.mediaHint) notify(result.mediaHint, 'info');
-  return result?.ok !== false;
+
+  const isApiSend = result?.mode === 'api' || result?.mode === 'queued';
+  if (isApiSend) {
+    logManualMessageSent({
+      type, phone, clientName, refId: opts.refId, fileNo: opts.fileNo, body,
+      mediaCount: mediaList.length, result, status: result?.mode === 'queued' ? 'queued' : 'sent',
+    });
+    refreshMessageStatusViews();
+    notify('✅ تم إرسال الرسالة وتسجيلها', 'success');
+    return true;
+  }
+
+  if (opts.skipConfirm) return true;
+
+  const confirmed = await promptManualSendConfirmation({
+    type, phone, clientName, refId: opts.refId, fileNo: opts.fileNo, body, mediaCount: mediaList.length,
+  });
+  if (confirmed) {
+    logManualMessageSent({
+      type, phone, clientName, refId: opts.refId, fileNo: opts.fileNo, body,
+      mediaCount: mediaList.length, result, status: 'sent', confirmedByUser: true,
+    });
+    refreshMessageStatusViews();
+    notify('✅ تم تسجيل الإرسال — سيختفي العميل من قائمة المستحقين', 'success');
+    return true;
+  }
+  notify('ℹ️ لم يُسجّل الإرسال — العميل يبقى في القائمة', 'info');
+  return false;
 }
 
-function openMsgPreviewModal(type, phone, clientName, lastDate) {
+async function sendManualClientMessage(type, phone, name, lastDate, refId, fileNo) {
+  return openQuickClientMessage(type, phone, name, lastDate, { refId, fileNo });
+}
+
+function openMsgPreviewModal(type, phone, clientName, lastDate, refId, fileNo) {
   if (typeof isFeatureEnabled === 'function' && !isAnyFeatureEnabled(['msg_templates', 'msg_bulk', 'msg_auto'])) {
     notify('⛔ ميزة رسائل العملاء غير متاحة في إصدار ترخيصك', 'danger');
     return;
@@ -24204,6 +24404,8 @@ function openMsgPreviewModal(type, phone, clientName, lastDate) {
   modal.dataset.phone = phone || '';
   modal.dataset.name = clientName || '';
   modal.dataset.lastdate = lastDate || '';
+  modal.dataset.refid = refId || '';
+  modal.dataset.fileno = fileNo || '';
   const previewMedia = document.getElementById('msg-preview-media');
   if (previewMedia && typeof renderMessageMediaList === 'function') {
     renderMessageMediaList(previewMedia, typeof getMessageMediaList === 'function' ? getMessageMediaList(type) : []);
@@ -24260,18 +24462,9 @@ async function confirmMsgPreviewSend() {
   const phone = modal.dataset.phone;
   const name = modal.dataset.name;
   const lastDate = modal.dataset.lastdate;
-  const opened = await openQuickClientMessage(type, phone, name, lastDate);
-  if (opened && (type === 'overdue' || type === 'followup')) {
-    persistOverdueFollowupMessage({
-      phone,
-      clientName: name,
-      clientKey: '',
-      channel: 'whatsapp',
-      preview: type === 'overdue' ? 'متابعة عميل لم يزر المركز (واتساب)' : 'رسالة متابعة (واتساب)'
-    });
-    if (typeof refreshClientsView === 'function') refreshClientsView(false);
-    if (typeof refreshDashboardAlerts === 'function') refreshDashboardAlerts();
-  }
+  const refId = modal.dataset.refid || '';
+  const fileNo = modal.dataset.fileno || '';
+  await openQuickClientMessage(type, phone, name, lastDate, { refId, fileNo });
   closeMsgPreviewModal();
 }
 
@@ -24905,17 +25098,28 @@ function onListSortChange(listId, value) {
 }
 
 const MESSAGE_MEDIA_MAX_BYTES = 6 * 1024 * 1024;
+const MESSAGE_MEDIA_MAX_PER_SLOT = (typeof MessageMedia !== 'undefined' && MessageMedia.MAX_PER_SLOT) ? MessageMedia.MAX_PER_SLOT : 5;
 let _messageMediaByType = (typeof MessageMedia !== 'undefined' && MessageMedia.emptyStore)
   ? MessageMedia.emptyStore()
-  : { shared: null, followup: null, promo: null, appointment: null, overdue: null };
+  : { shared: [], followup: [], promo: [], appointment: [], overdue: [] };
+
+function normalizeMessageMediaStore() {
+  Object.keys(_messageMediaByType).forEach((key) => {
+    const v = _messageMediaByType[key];
+    if (Array.isArray(v)) return;
+    _messageMediaByType[key] = v ? [v] : [];
+  });
+}
+normalizeMessageMediaStore();
 
 function getMessageMediaList(type) {
+  normalizeMessageMediaStore();
   if (typeof MessageMedia !== 'undefined' && MessageMedia.collectMediaList) {
     return MessageMedia.collectMediaList(_messageMediaByType, type);
   }
   const list = [];
-  if (_messageMediaByType.shared) list.push(_messageMediaByType.shared);
-  if (type && type !== 'shared' && _messageMediaByType[type]) list.push(_messageMediaByType[type]);
+  (_messageMediaByType.shared || []).forEach((m) => { if (m) list.push(m); });
+  if (type && type !== 'shared') (_messageMediaByType[type] || []).forEach((m) => { if (m) list.push(m); });
   return list;
 }
 
@@ -24930,24 +25134,29 @@ function messageMediaSlotLabel(slot) {
     || 'مرفق';
 }
 
-function renderMessageMediaPreview(el, media, slot) {
+function renderMessageMediaPreview(el, mediaOrList, slot) {
   if (!el) return;
-  if (!media || !media.dataUrl) {
+  const items = Array.isArray(mediaOrList)
+    ? mediaOrList.filter((m) => m && m.dataUrl)
+    : (mediaOrList && mediaOrList.dataUrl ? [mediaOrList] : []);
+  if (!items.length) {
     el.classList.remove('has-media');
     el.innerHTML = '';
     return;
   }
   el.classList.add('has-media');
-  const isVideo = media.kind === 'video';
-  const tag = isVideo
-    ? `<video src="${media.dataUrl}" controls muted></video>`
-    : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
-  const clearSlot = slot || media.slot || 'shared';
-  el.innerHTML = `${tag}<div class="msg-media-chip">
-    <div><strong>${media.name || 'مرفق'}</strong></div>
-    <div>${messageMediaSlotLabel(clearSlot)} — ${isVideo ? 'فيديو' : 'صورة'}</div>
-    <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${clearSlot}')">إزالة المرفق</button>
-  </div>`;
+  el.innerHTML = items.map((media, index) => {
+    const isVideo = media.kind === 'video';
+    const tag = isVideo
+      ? `<video src="${media.dataUrl}" controls muted></video>`
+      : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
+    const clearSlot = slot || media.slot || 'shared';
+    return `<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px">${tag}<div class="msg-media-chip">
+      <div><strong>${media.name || 'مرفق'}</strong></div>
+      <div>${messageMediaSlotLabel(clearSlot)} — ${isVideo ? 'فيديو' : 'صورة'} · ${index + 1}/${items.length}</div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${clearSlot}', ${index})">إزالة</button>
+    </div></div>`;
+  }).join('');
 }
 
 function renderMessageMediaList(el, list) {
@@ -24959,21 +25168,25 @@ function renderMessageMediaList(el, list) {
     return;
   }
   el.classList.add('has-media');
+  const slotCounts = {};
   el.innerHTML = items.map((media) => {
     const isVideo = media.kind === 'video';
     const tag = isVideo
       ? `<video src="${media.dataUrl}" controls muted></video>`
       : `<img src="${media.dataUrl}" alt="${media.name || 'مرفق'}">`;
     const slot = media.slot || 'shared';
-    return `<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">${tag}<div class="msg-media-chip">
+    const idx = slotCounts[slot] || 0;
+    slotCounts[slot] = idx + 1;
+    return `<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px">${tag}<div class="msg-media-chip">
       <div><strong>${media.name || 'مرفق'}</strong></div>
       <div>${messageMediaSlotLabel(slot)} — ${isVideo ? 'فيديو' : 'صورة'}</div>
-      <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${slot}')">إزالة</button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="clearMessageMedia('${slot}', ${idx})">إزالة</button>
     </div></div>`;
   }).join('');
 }
 
 function refreshMessageMediaPreviews() {
+  normalizeMessageMediaStore();
   renderMessageMediaPreview(document.getElementById('msg-shared-media-preview'), _messageMediaByType.shared, 'shared');
   ['followup', 'promo', 'appointment', 'overdue'].forEach((slot) => {
     renderMessageMediaPreview(document.getElementById(`msg-${slot}-media-preview`), _messageMediaByType[slot], slot);
@@ -24984,9 +25197,15 @@ function refreshMessageMediaPreviews() {
   if (previewType) renderMessageMediaList(document.getElementById('msg-preview-media'), getMessageMediaList(previewType));
 }
 
-function clearMessageMedia(slot) {
+function clearMessageMedia(slot, index) {
   const key = slot || 'shared';
-  if (Object.prototype.hasOwnProperty.call(_messageMediaByType, key)) _messageMediaByType[key] = null;
+  normalizeMessageMediaStore();
+  if (!Object.prototype.hasOwnProperty.call(_messageMediaByType, key)) return;
+  if (index != null && index !== '' && Array.isArray(_messageMediaByType[key])) {
+    _messageMediaByType[key].splice(Number(index), 1);
+  } else {
+    _messageMediaByType[key] = [];
+  }
   const ids = key === 'shared'
     ? ['msg-shared-media']
     : [`msg-${key}-media`, 'msg-bulk-media'];
@@ -24999,38 +25218,55 @@ function clearMessageMedia(slot) {
 
 function onMessageMediaPicked(input, slot) {
   const key = slot || input?.dataset?.slot || 'shared';
-  const file = input && input.files && input.files[0];
-  if (!file) { clearMessageMedia(key); return; }
-  const mime = file.type || '';
-  const isImage = mime.startsWith('image/');
-  const isVideo = mime.startsWith('video/');
-  if (!isImage && !isVideo) {
-    notify('⚠️ اختر صورة أو فيديو فقط', 'danger');
-    input.value = '';
+  const files = input && input.files ? Array.from(input.files) : [];
+  normalizeMessageMediaStore();
+  if (!files.length) return;
+  if (!Array.isArray(_messageMediaByType[key])) _messageMediaByType[key] = [];
+  let added = 0;
+  let skipped = 0;
+  const pending = [];
+  files.forEach((file) => {
+    const mime = file.type || '';
+    const isImage = mime.startsWith('image/');
+    const isVideo = mime.startsWith('video/');
+    if (!isImage && !isVideo) { skipped++; return; }
+    if (file.size > MESSAGE_MEDIA_MAX_BYTES) { skipped++; return; }
+    if (_messageMediaByType[key].length + pending.length >= MESSAGE_MEDIA_MAX_PER_SLOT) { skipped++; return; }
+    pending.push({ file, mime, isImage, isVideo });
+  });
+  if (!pending.length) {
+    if (skipped) notify('⚠️ لم تُضف ملفات — تحقق من النوع (صورة/فيديو) والحجم (6MB) والحد الأقصى ' + MESSAGE_MEDIA_MAX_PER_SLOT, 'danger');
+    if (input) input.value = '';
     return;
   }
-  if (file.size > MESSAGE_MEDIA_MAX_BYTES) {
-    notify('⚠️ حجم الملف أكبر من 6 ميغابايت', 'danger');
-    input.value = '';
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function () {
-    _messageMediaByType[key] = {
-      name: file.name,
-      mime: mime || (isVideo ? 'video/mp4' : 'image/jpeg'),
-      kind: isVideo ? 'video' : 'image',
-      dataUrl: String(reader.result || ''),
-      size: file.size,
-      slot: key,
+  let done = 0;
+  pending.forEach(({ file, mime, isVideo }) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      _messageMediaByType[key].push({
+        name: file.name,
+        mime: mime || (isVideo ? 'video/mp4' : 'image/jpeg'),
+        kind: isVideo ? 'video' : 'image',
+        dataUrl: String(reader.result || ''),
+        size: file.size,
+        slot: key,
+      });
+      done++;
+      if (done === pending.length) {
+        refreshMessageMediaPreviews();
+        const total = _messageMediaByType[key].length;
+        notify(`✅ تم إرفاق ${pending.length} مرفق — الإجمالي ${total} في ${messageMediaSlotLabel(key)}`);
+        if (skipped) notify(`ℹ️ تم تخطي ${skipped} ملف`, 'warning');
+        if (input) input.value = '';
+      }
     };
-    refreshMessageMediaPreviews();
-    notify(isVideo ? '✅ تم إرفاق الفيديو' : '✅ تم إرفاق الصورة');
-  };
-  reader.onerror = function () {
-    notify('⚠️ تعذر قراءة الملف', 'danger');
-  };
-  reader.readAsDataURL(file);
+    reader.onerror = function () {
+      skipped++;
+      done++;
+      if (done === pending.length) refreshMessageMediaPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 async function copyMessageMediaToClipboard(media) {
@@ -25046,6 +25282,15 @@ async function copyMessageMediaToClipboard(media) {
     return false;
   }
   return false;
+}
+
+async function copyMessageMediaListToClipboard(mediaList) {
+  const list = Array.isArray(mediaList) ? mediaList : [];
+  const images = list.filter((m) => m && m.kind !== 'video' && m.dataUrl);
+  if (!images.length) return { copied: false, count: 0 };
+  const last = images[images.length - 1];
+  const copied = await copyMessageMediaToClipboard(last);
+  return { copied, count: images.length, last };
 }
 
 function lookupClientFileNo(phone) {
@@ -25537,6 +25782,8 @@ function renderManualMessagingColumn(type, items) {
     const nm = escMmAttr(item.name);
     const ph = escMmAttr(item.phone);
     const ld = escMmAttr(item.lastDate || '');
+    const rid = escMmAttr(item.refId || '');
+    const fn = escMmAttr(item.fileNo || '');
     const cls = item.urgency === 'due' ? 'is-due' : 'is-upcoming';
     const tcls = item.urgency === 'due' ? 'due' : 'upcoming';
     return `<div class="mm-client-card ${cls}">
@@ -25545,8 +25792,8 @@ function renderManualMessagingColumn(type, items) {
       <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
       <span class="mm-timing ${tcls}">${item.timing || '—'}</span>
       <div class="mm-client-actions">
-        <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}')">👁️ معاينة</button>
-        <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="openQuickClientMessage('${item.type}','${ph}','${nm}','${ld}')">📤 إرسال</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('${item.type}','${ph}','${nm}','${ld}','${rid}','${fn}')">👁️ معاينة</button>
+        <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="sendManualClientMessage('${item.type}','${ph}','${nm}','${ld}','${rid}','${fn}')">📤 إرسال</button>
       </div>
     </div>`;
   }).join('');
@@ -25578,6 +25825,7 @@ function getClientLastPromoMessage(phone) {
   for (let i = 0; i < messageLog.length; i++) {
     const m = messageLog[i];
     if (m.type !== 'promo' || norm(m.phone) !== target) continue;
+    if (m.status && m.status !== 'sent' && m.status !== 'queued') continue;
     if (!best || String(m.sentAt || '') > String(best.sentAt || '')) best = m;
   }
   return best;
@@ -25710,8 +25958,8 @@ function renderManualPromoColumn(resetSelection) {
         <div class="mm-client-meta" dir="ltr">${item.phone || '—'}</div>
         <span class="mm-timing promo">آخر عرض: ${lastPromo}</span>
         <div class="mm-client-actions">
-          <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}')">👁️ معاينة</button>
-          <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="openQuickClientMessage('promo','${ph}','${nm}','${ld}')">📤 إرسال</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="openMsgPreviewModal('promo','${ph}','${nm}','${ld}','promo_mm_${escMmAttr(item.key)}','${escMmAttr(item.fileNo || '')}')">👁️ معاينة</button>
+          <button type="button" class="btn btn-primary btn-sm" data-readonly-ok onclick="sendManualClientMessage('promo','${ph}','${nm}','${ld}','promo_mm_${escMmAttr(item.key)}','${escMmAttr(item.fileNo || '')}')">📤 إرسال</button>
         </div>
       </div>
     </div>`;
